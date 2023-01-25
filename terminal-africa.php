@@ -26,6 +26,9 @@ define('TERMINAL_AFRICA_PLUGIN_URL', untrailingslashit(plugins_url(basename(plug
 define('TERMINAL_AFRICA_PLUGIN_ASSETS_URL', TERMINAL_AFRICA_PLUGIN_URL . '/assets');
 //api endpoint
 define('TERMINAL_AFRICA_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/');
+//slug
+define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
+
 
 
 // Include the main Terminal Africa class.
@@ -34,3 +37,7 @@ if (!class_exists('TerminalAfricaShippingPlugin')) {
     //add settings page
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('TerminalAfricaShippingPlugin', 'add_settings_link'));
 }
+
+// Register hooks that are fired when the plugin is activated or deactivated.
+// register_activation_hook(__FILE__, array('TerminalAfricaShippingPlugin', 'activate'));
+register_deactivation_hook(__FILE__, array('TerminalAfricaShippingPlugin', 'deactivate'));

@@ -19,6 +19,8 @@ class TerminalAfricaShippingPlugin
         add_filter('woocommerce_countries', array(self::class, 'woocommerce_countries'), 999);
         //woocommerce_states
         add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 999);
+        //plugin loaded
+        add_action('plugins_loaded', array(self::class, 'activate'));
     }
 
     //add_settings_page
@@ -258,6 +260,35 @@ class TerminalAfricaShippingPlugin
         }
         $states["NGA"] = $states_d;
         return $states;
+    }
+
+    //activate
+    public static function activate()
+    {
+        //check if current page is plugin settings page
+        if (isset($_GET['page']) && $_GET['page'] == 'terminal-africa') {
+            //return
+            return;
+        }
+        //check if merchant id is set
+        if (!get_option('terminal_africa_merchant_id')) {
+            //redirect to plugin settings page
+            wp_redirect(admin_url('admin.php?page=terminal-africa'));
+        }
+    }
+
+    //deactivate
+    public static function deactivate()
+    {
+        //delete terminal_africa_merchant_id
+        delete_option('terminal_africa_merchant_id');
+        //delete terminal_africa_skkey
+        delete_option('terminal_africa_skkey');
+        //delete terminal_africa_countries
+        delete_option('terminal_africa_countries');
+        //delete terminal_africa_states like
+        global $wpdb;
+        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE ?;", ['terminal_africa_states%']);
     }
 }
 
