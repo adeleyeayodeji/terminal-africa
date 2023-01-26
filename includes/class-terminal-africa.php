@@ -20,7 +20,7 @@ class TerminalAfricaShippingPlugin
         //woocommerce_states
         add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 999);
         //plugin loaded
-        add_action('plugins_loaded', array(self::class, 'activate'));
+        // add_action('plugins_loaded', array(self::class, 'activate'));
     }
 
     //add_settings_page
@@ -67,16 +67,6 @@ class TerminalAfricaShippingPlugin
             'terminal-africa-wallet',
             array(self::class, 'settings_page')
         );
-
-        //customer
-        add_submenu_page(
-            'terminal-africa',
-            'Customers - Terminal Africa Shipping',
-            'Customers',
-            'manage_options',
-            'terminal-africa-customers',
-            array(self::class, 'settings_page')
-        );
     }
 
     //settings_page
@@ -97,9 +87,6 @@ class TerminalAfricaShippingPlugin
                 break;
             case 'terminal-africa-wallet':
                 $page = 'wallet';
-                break;
-            case 'terminal-africa-customers':
-                $page = 'customers';
                 break;
             default:
                 $page = 'dashboard';
