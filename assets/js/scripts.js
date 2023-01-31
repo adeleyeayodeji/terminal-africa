@@ -7,7 +7,7 @@ jQuery(document).ready(function ($) {
     //confirm swal
     Swal.fire({
       title: "Action required!",
-      text: "Terminal Africa will overwrite your existing shipping address, are you sure you want to continue?",
+      text: "Terminal Africa will overwrite your existing shipping location to ensure accurate address information",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
