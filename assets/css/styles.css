@@ -1,0 +1,102 @@
+#wpbody {
+  background: #f4f4f4;
+}
+
+.main-logo-image {
+  height: 56px;
+  margin-bottom: 10px;
+}
+.t-container {
+  max-width: 100%;
+}
+
+/* centered content .t-content-auth */
+.t-content-auth {
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 50px;
+  text-align: center;
+}
+
+.t-auth-text {
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 10px;
+}
+
+/* card .form-area */
+.t-form-area {
+  background-color: #fff;
+  max-width: 400px;
+  width: 80;
+  margin: 20px auto 20px auto;
+  padding: 10px 40px 30px 30px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e7e7e7;
+  border-radius: 10px;
+}
+
+/* form-group */
+.t-form-group {
+  margin-bottom: 20px;
+}
+
+.t-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.t-form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.t-form-group input:focus {
+  outline: none;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 5px #e7e7e7;
+}
+
+.t-form-group button[type="submit"] {
+  display: block;
+  width: 90%;
+  margin-top: 0px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-style: none;
+  border-radius: 10px;
+  background-color: #f90;
+  font-family: Lato, sans-serif;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* hover button */
+.t-form-group button[type="submit"]:hover {
+  background-color: #f60;
+}
+
+/* floating input */
+.t-form-group input[type="text"]:focus ~ label,
+.t-form-group input[type="email"]:focus ~ label,
+.t-form-group input[type="password"]:focus ~ label {
+  color: #000;
+  font-size: 12px;
+  font-weight: 600;
+  left: 10px;
+  position: relative;
+  top: -10px;
+  transition: all 0.2s ease-in-out;
+}

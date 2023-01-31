@@ -18,14 +18,15 @@ if (!defined('WPINC')) {
 }
 
 // Define constants.
-define('TERMINAL_AFRICA_VERSION', '1.0.0');
+define('TERMINAL_AFRICA_VERSION', time());
 define('TERMINAL_AFRICA_PLUGIN_FILE', __FILE__);
 define('TERMINAL_AFRICA_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('TERMINAL_AFRICA_PLUGIN_DIR', untrailingslashit(dirname(__FILE__)));
 define('TERMINAL_AFRICA_PLUGIN_URL', untrailingslashit(plugins_url(basename(plugin_dir_path(__FILE__)), basename(__FILE__))));
 define('TERMINAL_AFRICA_PLUGIN_ASSETS_URL', TERMINAL_AFRICA_PLUGIN_URL . '/assets');
 //api endpoint
-define('TERMINAL_AFRICA_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/');
+define('TERMINAL_AFRICA_API_ENDPOINT', 'https://api.terminal.africa/v1/');
+define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/');
 //slug
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 

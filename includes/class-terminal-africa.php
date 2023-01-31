@@ -21,6 +21,73 @@ class TerminalAfricaShippingPlugin
         add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 999);
         //plugin loaded
         // add_action('plugins_loaded', array(self::class, 'activate'));
+        //enqueue scripts
+        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'));
+        //ajax terminal_africa_auth
+        add_action('wp_ajax_terminal_africa_auth', array(self::class, 'terminal_africa_auth'));
+        add_action('wp_ajax_nopriv_terminal_africa_auth', array(self::class, 'terminal_africa_auth'));
+    }
+
+    //terminal_africa_auth
+    public function terminal_africa_auth()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        $public_key = sanitize_text_field($_POST['public_key']);
+        $secret_key = sanitize_text_field($_POST['secret_key']);
+        if (empty($public_key) || empty($secret_key)) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Please enter your public key and secret key'
+            ]);
+        }
+        //validate keys
+        $validate_keys = $this->checkKeys($public_key, $secret_key);
+    }
+
+    //checkKeys
+    public function checkKeys($pk, $sk)
+    {
+        //check if keys has test in them
+        if (strpos($pk, 'test') !== false || strpos($sk, 'test') !== false) {
+            return [
+                'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                'mode' => 'test'
+            ];
+        } else if (strpos($pk, 'live') !== false || strpos($sk, 'live') !== false) {
+            return [
+                'endpoint' => TERMINAL_AFRICA_API_ENDPOINT,
+                'mode' => 'live'
+            ];
+        }
+        return [
+            'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+            'mode' => 'test'
+        ];
+    }
+
+    //enqueue_scripts
+    public static function enqueue_scripts()
+    {
+        //enqueue styles
+        wp_enqueue_style('terminal-africa-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/styles.css', array(), TERMINAL_AFRICA_VERSION);
+        //enqueue styles
+        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+        //enqueue scripts
+        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //enqueue scripts
+        wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //localize scripts
+        wp_localize_script('terminal-africa-scripts', 'terminal_africa', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('terminal_africa_nonce'),
+            'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+        ));
     }
 
     //add_settings_page
@@ -91,6 +158,11 @@ class TerminalAfricaShippingPlugin
             default:
                 $page = 'dashboard';
                 break;
+        }
+        //check if merchant id is set
+        if (!get_option('terminal_africa_merchant_id')) {
+            //load auth
+            $page = 'auth';
         }
         //require files
         require_once TERMINAL_AFRICA_PLUGIN_DIR . '/templates/' . $page . '.php';
