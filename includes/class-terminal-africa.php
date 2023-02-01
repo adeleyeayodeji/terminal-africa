@@ -8,8 +8,13 @@ class TerminalAfricaShippingPlugin
 
     public function __construct()
     {
-        //get skkey
-        self::$skkey = "sk_test_hmeZxKHvZdbWfkFb0oxh8coYx46j7rZS";
+        //check if terminal_africa_settings is set
+        if ($settings = get_option("terminal_africa_settings")) {
+            //set skkey
+            self::$skkey = $settings["secret_key"];
+        } else {
+            self::$skkey = null;
+        }
     }
     public function init()
     {
@@ -20,12 +25,12 @@ class TerminalAfricaShippingPlugin
         //woocommerce_states
         add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 999);
         //plugin loaded
-        // add_action('plugins_loaded', array(self::class, 'activate'));
+        add_action('plugins_loaded', array(self::class, 'activate'));
         //enqueue scripts
         add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'));
         //ajax terminal_africa_auth
-        add_action('wp_ajax_terminal_africa_auth', array(self::class, 'terminal_africa_auth'));
-        add_action('wp_ajax_nopriv_terminal_africa_auth', array(self::class, 'terminal_africa_auth'));
+        add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
+        add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));
     }
 
     //terminal_africa_auth
@@ -48,6 +53,33 @@ class TerminalAfricaShippingPlugin
         }
         //validate keys
         $validate_keys = $this->checkKeys($public_key, $secret_key);
+        $response = Requests::get($validate_keys["endpoint"] . "users/secrete", [
+            'Authorization' => 'Bearer ' . $secret_key
+        ]);
+        //check if response is 200
+        $body = json_decode($response->body);
+        if ($response->status_code == 200) {
+            //save keys
+            $settings = array(
+                'public_key' => $public_key,
+                'secret_key' => $secret_key,
+                'user_id' => $body->data->user->user_id,
+                'others' => $body->data
+            );
+            update_option('terminal_africa_settings', $settings);
+            //terminal_africa_merchant_id
+            update_option('terminal_africa_merchant_id', $body->data->user->user_id);
+            //return 
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Authentication successful'
+            ]);
+        } else {
+            wp_send_json([
+                'code' => 400,
+                'message' => $body->message
+            ]);
+        }
     }
 
     //checkKeys
@@ -87,6 +119,7 @@ class TerminalAfricaShippingPlugin
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('terminal_africa_nonce'),
             'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+            'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
         ));
     }
 
@@ -180,6 +213,10 @@ class TerminalAfricaShippingPlugin
     //get countries
     public static function get_countries()
     {
+        //check if self::$skkey
+        if (!self::$skkey) {
+            return [];
+        }
         //check if terminal_africa_countries is set
         if ($data = get_option('terminal_africa_countries')) {
             //return countries
@@ -205,6 +242,14 @@ class TerminalAfricaShippingPlugin
     //get states
     public static function get_states($countryCode = "NG")
     {
+        //check if self::$skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
         //check if terminal_africa_states.$countryCode is set
         if ($data = get_option('terminal_africa_states' . $countryCode)) {
             //return countries
@@ -243,6 +288,13 @@ class TerminalAfricaShippingPlugin
     //get cities
     public static function get_cities($countryCode = "NG", $state_code = "LA")
     {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
         //get countries
         $reponse  = new Requests;
         //sanitize countryCode
@@ -284,10 +336,10 @@ class TerminalAfricaShippingPlugin
     {
         //get countries
         $countries_raw = self::get_countries();
-        //empty countries
-        $countries = [];
         //check if countries is not empty
         if (!empty($countries_raw)) {
+            //empty countries
+            $countries = [];
             //loop through countries
             foreach ($countries_raw as $country) {
                 //add country to countries array
@@ -324,6 +376,11 @@ class TerminalAfricaShippingPlugin
     //activate
     public static function activate()
     {
+        //check if terminal_africa_redirected is set
+        if (get_option('terminal_africa_redirected')) {
+            //return
+            return;
+        }
         //check if current page is plugin settings page
         if (isset($_GET['page']) && $_GET['page'] == 'terminal-africa') {
             //return
@@ -331,8 +388,11 @@ class TerminalAfricaShippingPlugin
         }
         //check if merchant id is set
         if (!get_option('terminal_africa_merchant_id')) {
+            //save option redirected 
+            update_option('terminal_africa_redirected', true);
             //redirect to plugin settings page
             wp_redirect(admin_url('admin.php?page=terminal-africa'));
+            exit;
         }
     }
 
@@ -341,13 +401,15 @@ class TerminalAfricaShippingPlugin
     {
         //delete terminal_africa_merchant_id
         delete_option('terminal_africa_merchant_id');
-        //delete terminal_africa_skkey
-        delete_option('terminal_africa_skkey');
-        //delete terminal_africa_countries
+        //delete terminal_africa_settings
+        delete_option('terminal_africa_settings');
+        //terminal_africa_redirected
+        delete_option('terminal_africa_redirected');
+        //terminal_africa_countries
         delete_option('terminal_africa_countries');
-        //delete terminal_africa_states like
         global $wpdb;
-        $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE ?;", ['terminal_africa_states%']);
+        //use prepared statement
+        $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s;", ['terminal_africa_states%']);
     }
 }
 

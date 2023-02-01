@@ -100,3 +100,22 @@
   top: -10px;
   transition: all 0.2s ease-in-out;
 }
+
+.swal2-image {
+  height: 100px;
+}
+.swal2-popup.swal2-modal {
+  background: #f6f6f6;
+}
+
+.swal2-confirm.swal2-styled {
+  background-color: rgb(246 146 32);
+}
+
+.swal2-cancel.swal2-styled {
+  background-color: rgb(0 0 0);
+}
+
+.swal-text {
+  line-height: 23px;
+}

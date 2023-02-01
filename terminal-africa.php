@@ -30,8 +30,6 @@ define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/
 //slug
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 
-
-
 // Include the main Terminal Africa class.
 if (!class_exists('TerminalAfricaShippingPlugin')) {
     include_once dirname(__FILE__) . '/includes/class-terminal-africa.php';
