@@ -86,8 +86,14 @@ jQuery(document).ready(function ($) {
                 `
               }).then((result) => {
                 if (result.value) {
-                  //reload page
-                  location.reload();
+                  //check if terminal_africa.getting_started_url is none
+                  if (terminal_africa.getting_started_url == "none") {
+                    //reload page
+                    window.location.reload();
+                  } else {
+                    //redirect to getting started page
+                    window.location.href = terminal_africa.getting_started_url;
+                  }
                 }
               });
             } else {
@@ -568,3 +574,16 @@ jQuery(document).ready(function ($) {
     dropdownParent: $(".t-terminal-city").parent()
   });
 });
+
+let updateData = (elem, e, element_id) => {
+  //prevent default
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //get the value
+    let value = $(elem).val();
+    //get the element
+    let element = $(`#${element_id}`);
+    //update the value
+    element.text(value);
+  });
+};

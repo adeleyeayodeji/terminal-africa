@@ -193,12 +193,12 @@ trait Shipping
                 'last_name' => $last_name,
                 'email' => $email,
                 'phone' => $phone,
-                'line_1' => $line_1,
-                'line_2' => $line_2,
+                'line1' => $line_1,
+                'line2' => $line_2,
                 'city' => $city,
                 'state' => $state,
                 'country' => $country,
-                'zip_code' => $zip_code,
+                'zip' => $zip_code,
             ])
         );
         $body = json_decode($response->body);
@@ -250,12 +250,12 @@ trait Shipping
             'last_name' => $last_name,
             'email' => $email,
             'phone' => $phone,
-            'line_1' => $line_1,
-            'line_2' => $line_2,
+            'line1' => $line_1,
+            'line2' => $line_2,
             'city' => $city,
             'state' => $state,
             'country' => $country,
-            'zip_code' => $zip_code,
+            'zip' => $zip_code,
         ]));
         //decode response
         $body = json_decode($response->body);

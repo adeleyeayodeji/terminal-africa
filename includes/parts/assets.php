@@ -39,6 +39,7 @@ trait Assets
             'nonce' => wp_create_nonce('terminal_africa_nonce'),
             'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
             'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
+            'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
         ));
     }
 }

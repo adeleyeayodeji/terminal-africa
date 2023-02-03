@@ -77,7 +77,7 @@ trait Menus
                 break;
         }
         //check if address is set
-        if (!get_option('terminal_africa_address')) {
+        if (!get_option('terminal_africa_merchant_address_id')) {
             //load address
             $page = 'address';
         }

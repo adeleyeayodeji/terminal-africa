@@ -133,6 +133,8 @@ trait Ajax
             $update_address = updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
             //check if address is updated
             if ($update_address['code'] == 200) {
+                //save address
+                update_option('terminal_africa_merchant_address', $update_address['data']);
                 //return
                 wp_send_json([
                     'code' => 200,
