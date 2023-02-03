@@ -31,27 +31,27 @@ $saved_address_state = "LA";
                             <div class="t-address">
                                 <div class="t-address-card">
                                     <div class="t-row t-space-around">
-                                        <div class="t-col-5 t-col-lg-6 t-col-md-6 t-col-sm-12">
+                                        <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="first_name">First Name</label>
                                                 <input type="text" name="first_name" required id="first_name" class="t-form-control" placeholder="First Name" value="<?php echo $saved_address ? esc_html($saved_address->first_name) : ''; ?>" onkeyup="updateData(this,event, 't_first_name')">
                                             </div>
                                         </div>
-                                        <div class="t-col-5 t-col-lg-6 t-col-md-6 t-col-sm-12">
+                                        <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="last_name">Last Name</label>
                                                 <input type="text" name="last_name" required id="last_name" class="t-form-control" placeholder="Last Name" value="<?php echo $saved_address ? esc_html($saved_address->last_name) : ''; ?>" onkeyup="updateData(this,event, 't_last_name')">
                                             </div>
                                         </div>
 
-                                        <div class="t-col-5 t-col-lg-6 t-col-md-6 t-col-sm-12">
+                                        <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="email">Email</label>
                                                 <input type="email" name="email" required id="email" class="t-form-control" placeholder="Email" value="<?php echo $saved_address ? esc_html($saved_address->email) : ''; ?>" onkeyup="updateData(this,event, 't_email')">
                                             </div>
                                         </div>
 
-                                        <div class="t-col-5 t-col-lg-6 t-col-md-6 t-col-sm-12">
+                                        <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="phone">Phone</label>
                                                 <input type="text" name="phone" required id="phone" class="t-form-control" placeholder="Phone" value="<?php echo $saved_address ? esc_html($saved_address->phone) : ''; ?>" onkeyup="updateData(this,event, 't_phone')">
@@ -154,7 +154,7 @@ $saved_address_state = "LA";
                     </div>
                 </form>
             </div>
-            <div class="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12">
+            <div class="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12 t-d-xs-none">
                 <div class="t-display-information t-data-profile">
                     <h3 class="t-title">Personal Information</h3>
                     <p id="t_first_name">

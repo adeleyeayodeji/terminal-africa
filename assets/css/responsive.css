@@ -333,3 +333,69 @@
 .t-mt-6 {
   margin-top: 6rem;
 }
+
+/* d-none lg, md, sm, xs  responsive classes */
+
+@media (min-width: 1200px) {
+  .t-d-lg-none {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .t-d-md-none {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .t-d-sm-none {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .t-d-xs-none {
+    display: none;
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .t-col-33 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .t-col-33 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .t-col-33 {
+    flex: 0 0 50%;
+    max-width: 49%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .t-col-33 {
+    flex: 0 0 25%;
+    max-width: 24%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .t-col-33 {
+    flex: 0 0 25%;
+    max-width: 24%;
+  }
+}
