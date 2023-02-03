@@ -42,4 +42,12 @@ trait Assets
             'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
         ));
     }
+
+    //header
+    public static function header($icon, $title)
+    {
+        ob_start();
+        require TERMINAL_AFRICA_PLUGIN_PATH . '/templates/parts/header.php';
+        return ob_get_clean();
+    }
 }

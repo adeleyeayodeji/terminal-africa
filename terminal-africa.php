@@ -22,6 +22,8 @@ define('TERMINAL_AFRICA_VERSION', time());
 define('TERMINAL_AFRICA_PLUGIN_FILE', __FILE__);
 define('TERMINAL_AFRICA_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('TERMINAL_AFRICA_PLUGIN_DIR', untrailingslashit(dirname(__FILE__)));
+//TERMINAL_AFRICA_PLUGIN_PATH
+define('TERMINAL_AFRICA_PLUGIN_PATH', untrailingslashit(plugin_dir_path(__FILE__)));
 define('TERMINAL_AFRICA_PLUGIN_URL', untrailingslashit(plugins_url(basename(plugin_dir_path(__FILE__)), basename(__FILE__))));
 define('TERMINAL_AFRICA_PLUGIN_ASSETS_URL', TERMINAL_AFRICA_PLUGIN_URL . '/assets');
 //api endpoint

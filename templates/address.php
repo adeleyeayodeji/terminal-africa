@@ -8,20 +8,7 @@ $saved_address = get_option('terminal_africa_merchant_address', false);
 $saved_address_state = "LA";
 ?>
 <div class="t-container">
-    <div class="t-header">
-        <div class="t-row">
-            <div class="t-col-6">
-                <h2 class="t-title"><i class="fas fa-map" aria-hidden="true"></i> Pickup Address</h2>
-            </div>
-            <div class="t-col-6">
-                <div class="t-right">
-                    <a href="javascript:;">
-                        <i class="fa fa-power-off t-font-sign-out" aria-hidden="true"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php terminal_header("fas fa-map", "Pickup Address"); ?>
     <div class="t-body">
         <div class="t-row">
             <div class="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">

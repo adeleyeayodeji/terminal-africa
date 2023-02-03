@@ -2,4 +2,6 @@
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 ?>
-<h1>Wallet</h1>
+<div class="t-container">
+    <?php terminal_header("fas fa-book", "Wallet"); ?>
+</div>

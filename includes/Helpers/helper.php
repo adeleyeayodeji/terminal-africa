@@ -46,3 +46,12 @@ if (!function_exists('updateTerminalAddress')) {
         return TerminalAfricaShippingPlugin::updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
     }
 }
+
+//header
+if (!function_exists('terminal_header')) {
+    //terminal header
+    function terminal_header($title, $icon)
+    {
+        echo TerminalAfricaShippingPlugin::header($title, $icon);
+    }
+}

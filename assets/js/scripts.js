@@ -88,8 +88,7 @@ jQuery(document).ready(function ($) {
                 if (result.value) {
                   //check if terminal_africa.getting_started_url is none
                   if (terminal_africa.getting_started_url == "none") {
-                    //reload page
-                    window.location.reload();
+                    //do nothing
                   } else {
                     //redirect to getting started page
                     window.location.href = terminal_africa.getting_started_url;
