@@ -1,5 +1,16 @@
+/* import local Lato font */
+@font-face {
+  font-family: Lato;
+  src: url(../fonts/Lato/Lato-Light.ttf);
+}
+
 #wpbody {
-  background: #f4f4f4;
+  /* background: #f4f4f4; */
+  background: #f7f8f9;
+}
+
+#wpcontent {
+  padding-left: 0px !important;
 }
 
 .main-logo-image {
@@ -8,8 +19,127 @@
 }
 .t-container {
   max-width: 100%;
+  font-family: Lato, sans-serif;
 }
 
+.t-header {
+  background-color: #fff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.t-title {
+  font-family: Lato, sans-serif;
+  color: #8c8c8c;
+  font-size: 18px;
+}
+
+.t-right {
+  float: right;
+}
+
+.t-right a {
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.t-right a:hover {
+  color: #f90;
+}
+
+.t-right a i {
+  margin-right: 5px;
+}
+
+.t-right a i:hover {
+  color: #f90;
+}
+
+.t-right a i.fa-power-off {
+  color: #f90;
+}
+
+.t-btn {
+  background-color: #f90;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+a.t-btn {
+  text-decoration: none;
+}
+
+.t-btn:hover {
+  background-color: #f60;
+}
+
+.t-btn:focus {
+  outline: none;
+}
+
+.t-btn:active {
+  background-color: #f60;
+}
+
+.t-btn:disabled {
+  background-color: #f90;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.t-btn:disabled:hover {
+  background-color: #f90;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.t-btn:disabled:focus {
+  outline: none;
+}
+
+.t-btn-primary {
+  background-color: #f90;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.t-btn-primary:hover {
+  background-color: #f60;
+}
+
+.t-btn-primary:focus {
+  outline: none;
+}
+
+.t-btn-primary:active {
+  background-color: #f60;
+}
+
+.t-right a i.fa-power-off:hover {
+  color: #000;
+}
 /* centered content .t-content-auth */
 .t-content-auth {
   margin: 0 auto;
@@ -83,6 +213,96 @@
   cursor: pointer;
 }
 
+.t-form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+select.t-form-control {
+  display: block;
+  width: 100%;
+  height: 51px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #333333;
+  background-color: #f7f8f9;
+  border: none;
+}
+
+select.t-form-control:focus {
+  outline: none;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 5px #e7e7e7;
+}
+
+.t-card {
+  background-color: #fff;
+  max-width: 400px;
+  width: 80;
+  margin: 20px auto 20px auto;
+  padding: 10px 40px 30px 30px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e7e7e7;
+  border-radius: 10px;
+}
+
+.t-card-header {
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 10px;
+}
+
+.t-card-body {
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 10px;
+}
+
+.t-card-footer {
+  text-align: center;
+  font-size: 15px;
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 10px;
+}
+
+.t-card-footer a {
+  color: #f90;
+}
+
+.t-card-footer a:hover {
+  color: #f60;
+}
+
+.t-card-footer a:focus {
+  color: #f60;
+}
+
+.t-card-footer a:active {
+  color: #f60;
+}
+
+.t-card-footer a:disabled {
+  color: #f60;
+}
+
+.t-card-footer a:disabled:hover {
+  color: #f60;
+}
+
+.t-card-footer a:disabled:focus {
+  color: #f60;
+}
+
+.t-card-footer a:disabled:active {
+  color: #f60;
+}
+
 /* hover button */
 .t-form-group button[type="submit"]:hover {
   background-color: #f60;
@@ -118,4 +338,179 @@
 
 .swal-text {
   line-height: 23px;
+}
+
+.t-font-sign-out {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  margin-top: 13px;
+}
+
+.t-font-sign-out:hover {
+  color: rgb(246 146 32);
+}
+
+.t-font-sign-out:focus {
+  outline: none;
+}
+
+.t-font-sign-out:active {
+  color: rgb(246 146 32);
+}
+
+.t-font-sign-out:disabled {
+  color: rgb(246 146 32);
+}
+
+.t-display-information {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 40px;
+  overflow: auto;
+  width: 100%;
+  max-height: 600px;
+  max-width: 410px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #fff;
+  font-family: Lato, sans-serif;
+}
+
+.t-display-information .t-title {
+  font-family: Lato, sans-serif;
+  color: #333;
+  font-size: 17px;
+  padding: 0px;
+  margin: 0px;
+}
+.t-display-information p {
+  font-family: Lato, sans-serif;
+  color: #000000b3;
+  font-size: 14px;
+  font-weight: 300;
+  margin: 3px;
+}
+
+.t-display-information .t-card {
+  font-family: Lato, sans-serif;
+  color: #333;
+  font-size: 16px;
+}
+
+.t-body {
+  padding-top: 40px;
+}
+
+.t-address {
+  font-family: Lato, sans-serif;
+  width: 92%;
+  margin-left: 28px;
+}
+
+.t-flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+/* space arround */
+.t-space-around {
+  justify-content: space-around;
+}
+
+.t-space-between {
+  justify-content: space-between;
+}
+
+.t-space-evenly {
+  justify-content: space-evenly;
+}
+
+.t-address-card {
+  width: 100%;
+  padding: 10px;
+  padding-left: 0px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  font-size: 14px;
+  padding-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  background: #ffffff;
+  padding-top: 20px;
+}
+
+.t-address-card .t-form-group label {
+  font-family: Lato, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.t-address-card .t-form-group input {
+  border-style: none;
+  background-color: #f7f8f9;
+  padding-left: 16px;
+  font-size: 16px;
+  font-weight: lighter;
+}
+
+.t-address-save {
+  background: orange;
+  padding: 10px;
+  width: 100px;
+  display: block;
+  color: white;
+  font-size: 15px;
+  text-align: center;
+  margin-top: 10px;
+  margin-left: 29px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.t-address-save:hover {
+  background: #f60;
+  color: #fff;
+}
+
+.t-address-save:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  color: white;
+}
+
+.t-address-save:active {
+  background: #f60;
+  color: #fff;
+  outline: none;
+  border: none;
+}
+
+.t-address-save:disabled {
+  background: #f60;
+}
+
+.t-address-save:disabled:hover {
+  background: #f60;
+}
+
+.select2-container .select2-selection--single {
+  height: 50px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+  padding-top: 10px;
+}
+
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow {
+  height: 47px;
+}
+
+.select2-container--default .select2-selection--single {
+  background-color: #f7f8f9;
+  border: 1px solid #fff;
 }

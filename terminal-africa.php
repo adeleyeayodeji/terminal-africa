@@ -32,7 +32,13 @@ define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 
 // Include the main Terminal Africa class.
 if (!class_exists('TerminalAfricaShippingPlugin')) {
+    include_once dirname(__FILE__) . '/includes/parts/menus.php';
+    include_once dirname(__FILE__) . '/includes/parts/ajax.php';
+    include_once dirname(__FILE__) . '/includes/parts/assets.php';
+    include_once dirname(__FILE__) . '/includes/parts/activation.php';
+    include_once dirname(__FILE__) . '/includes/parts/shipping-address.php';
     include_once dirname(__FILE__) . '/includes/class-terminal-africa.php';
+    include_once dirname(__FILE__) . '/includes/Helpers/helper.php';
     //add settings page
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('TerminalAfricaShippingPlugin', 'add_settings_link'));
 }
