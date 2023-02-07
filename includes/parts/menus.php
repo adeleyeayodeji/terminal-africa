@@ -53,11 +53,25 @@ trait Menus
         );
     }
 
+    //custom header css
+    public static function cssHeaderCustom()
+    {
+?>
+        <style>
+            #wpcontent {
+                padding-left: 0px !important;
+            }
+        </style>
+<?php
+    }
+
     //settings_page
     public static function settings_page()
     {
         //get current page slug
         $current_page = isset($_GET['page']) ? $_GET['page'] : 'terminal-africa';
+        //add css
+        self::cssHeaderCustom();
         //switch pages
         switch ($current_page) {
             case 'terminal-africa':

@@ -50,19 +50,16 @@ jQuery(document).ready(function ($) {
             Swal.fire({
               title: "Authenticating...",
               text: "Please wait...",
-              imageUrl: terminal_africa.plugin_url,
+              imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
               allowOutsideClick: false,
               allowEscapeKey: false,
               allowEnterKey: false,
               showConfirmButton: false,
-              onOpen: () => {
-                Swal.showLoading();
-              },
               footer: `
-                <div>
-                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-                </div>
-              `
+            <div>
+              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+          `
             });
           },
           success: function (response) {
@@ -90,6 +87,21 @@ jQuery(document).ready(function ($) {
                   if (terminal_africa.getting_started_url == "none") {
                     //do nothing
                   } else {
+                    //show loading
+                    Swal.fire({
+                      title: "Redirecting...",
+                      text: "Please wait...",
+                      imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      allowEnterKey: false,
+                      showConfirmButton: false,
+                      footer: `
+                      <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                      </div>
+                    `
+                    });
                     //redirect to getting started page
                     window.location.href = terminal_africa.getting_started_url;
                   }
@@ -101,7 +113,7 @@ jQuery(document).ready(function ($) {
                 icon: "error",
 
                 title: "Oops...",
-                text: result.message,
+                text: response.message,
                 confirmButtonColor: "rgb(246 146 32)",
                 cancelButtonColor: "rgb(0 0 0)",
                 //footer
