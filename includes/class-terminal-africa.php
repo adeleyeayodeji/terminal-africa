@@ -53,6 +53,9 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_get_cities
         add_action('wp_ajax_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
         add_action('wp_ajax_nopriv_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
+        //ajax terminal_africa_sign_out
+        add_action('wp_ajax_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
+        add_action('wp_ajax_nopriv_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
     }
 }
 

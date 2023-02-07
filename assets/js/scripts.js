@@ -572,6 +572,181 @@ jQuery(document).ready(function ($) {
     //dropdown parent
     dropdownParent: $(".t-terminal-city").parent()
   });
+
+  //t-sign-out
+  $("#t-sign-out").on("click", function (e) {
+    //prevent default
+    e.preventDefault();
+    //swal confirm
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to sign out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(246 146 32)",
+      cancelButtonColor: "rgb(0 0 0)",
+      confirmButtonText: "Yes, sign out!",
+      cancelButtonText: "No, cancel!",
+      //footer
+      footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+    }).then((result) => {
+      //check result
+      if (result.value) {
+        //ajax
+        $.ajax({
+          type: "GET",
+          url: terminal_africa.ajax_url,
+          data: {
+            action: "terminal_africa_sign_out",
+            nonce: terminal_africa.nonce
+          },
+          dataType: "json",
+          beforeSend: function () {
+            // Swal loader
+            Swal.fire({
+              title: "Signing out...",
+              text: "Please wait...",
+              imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              allowEnterKey: false,
+              showConfirmButton: false,
+              footer: `
+            <div>
+              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+          `
+            });
+          },
+          success: function (response) {
+            //close loader
+            Swal.close();
+            //check response is 200
+            if (response.code == 200) {
+              //swal
+              Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: response.message,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              }).then(function () {
+                //reload
+                window.location.reload();
+              });
+            } else {
+              //swal error
+              Swal.fire({
+                icon: "error",
+
+                title: "Oops...",
+                text: response.message,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            }
+          },
+          error: function (error) {
+            //close loader
+            Swal.close();
+            //swal error
+            Swal.fire({
+              icon: "error",
+
+              title: "Oops...",
+              text: "Something went wrong!",
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              //footer
+              footer: `
+            <div>
+              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+          `
+            });
+          }
+        });
+      }
+    });
+  });
+
+  //t-dashboard-intro-list-item
+  $(".t-dashboard-intro-list-item").each(function (index, element) {
+    $(this).click(function (e) {
+      e.preventDefault();
+      //remove all active .t-products-active
+      $(".t-dashboard-intro-list-item").removeClass("t-products-active");
+      //add active
+      $(this).addClass("t-products-active");
+      //get data box
+      let data_box = $(this).attr("data-box");
+      //check if cuurent width is min 600px
+      if ($(window).width() <= 700) {
+        //hide .t-intro-list
+        $(".t-intro-list").hide();
+        //show .t-intro-content-block
+        $(".t-intro-content-block").show();
+      } else {
+        //hide .t-intro-list
+        $(".t-intro-list").show();
+        //show .t-intro-content-block
+        $(".t-intro-content-block").show();
+      }
+      //if data box is t-add-products
+      if (data_box == "t-add-products") {
+        //hide .t-get-support
+        $(".t-get-support").hide();
+        //show .t-add-products
+        $(".t-add-products").show();
+      } else {
+        //hide .t-add-products
+        $(".t-add-products").hide();
+        //show .t-get-support
+        $(".t-get-support").show();
+      }
+    });
+  });
+
+  //on window resize
+  $(window).resize(function () {
+    //check if cuurent width is min 600px
+    if ($(window).width() <= 700) {
+      //hide .t-intro-list
+      $(".t-intro-list").hide();
+      //show .t-intro-content-block
+      $(".t-intro-content-block").show();
+    } else {
+      //hide .t-intro-list
+      $(".t-intro-list").show();
+      //show .t-intro-content-block
+      $(".t-intro-content-block").show();
+    }
+  });
+
+  //click mobile-resources-back-link-block
+  $(".mobile-resources-back-link-block").click(function (e) {
+    e.preventDefault();
+    //hide .t-intro-content-block
+    $(".t-intro-content-block").hide();
+    //show .t-intro-list
+    $(".t-intro-list").show();
+  });
 });
 
 let updateData = (elem, e, element_id) => {

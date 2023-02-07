@@ -5,7 +5,7 @@
         </div>
         <div class="t-col-6">
             <div class="t-right">
-                <a href="javascript:;">
+                <a href="javascript:;" id="t-sign-out">
                     <i class="fa fa-power-off t-font-sign-out" aria-hidden="true"></i>
                 </a>
             </div>

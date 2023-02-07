@@ -209,4 +209,24 @@ trait Ajax
             'message' => 'Cities loaded',
         ]);
     }
+
+    //terminal_africa_sign_out
+    public static function terminal_africa_sign_out()
+    {
+        //nounce
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //delete options
+        self::deactivate();
+        //return
+        wp_send_json([
+            'code' => 200,
+            'message' => 'Signed out successfully',
+        ]);
+    }
 }
