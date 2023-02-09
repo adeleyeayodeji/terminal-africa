@@ -167,7 +167,7 @@ trait Shipping
                 $states_d[$state->isoCode] = $state->name;
             }
         }
-        $states["NGA"] = $states_d;
+        $states["NG"] = $states_d;
         return $states;
     }
 

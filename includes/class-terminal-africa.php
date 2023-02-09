@@ -41,6 +41,8 @@ class TerminalAfricaShippingPlugin
         add_action('plugins_loaded', array(self::class, 'activate'));
         //enqueue scripts
         add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'));
+        //enqueue scripts
+        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'));
         //ajax terminal_africa_auth
         add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
         add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));
@@ -56,6 +58,8 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_sign_out
         add_action('wp_ajax_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
         add_action('wp_ajax_nopriv_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
+        //wp head
+        add_action('wp_head', array(self::class, 'wp_head_checkout'));
     }
 }
 

@@ -198,7 +198,7 @@ trait Ajax
         if (empty($cities['data'])) {
             wp_send_json([
                 'code' => 400,
-                'data' => [],
+                'cities' => [],
                 'message' => 'No cities found, please select another state'
             ]);
         }
