@@ -351,11 +351,19 @@ trait Ajax
         $first_name = sanitize_text_field($_POST['first_name']);
         $last_name = sanitize_text_field($_POST['last_name']);
         $state  = sanitize_text_field($_POST['state']);
+        $stateCode  = sanitize_text_field($_POST['stateCode']);
         $city = sanitize_text_field($_POST['city']);
         $country = sanitize_text_field($_POST['countryCode']);
         $zip_code = "";
         $line_1 = sanitize_text_field($_POST['line_1']);
         $phone = sanitize_text_field($_POST['phone']);
+        //check if + is in $phone
+        if (strpos("+", $phone) === false) {
+            //add + and remove first number
+            $phone = substr($phone, 1);
+            //add + to phone
+            $phone = "+234" . $phone;
+        }
         $email = sanitize_text_field($_POST['email']);
         $line_2 = "";
         //check if merchant_address_id is set
@@ -381,6 +389,42 @@ trait Ajax
                 $address_from = $merchant_address_id;
                 $address_to = $create_address['data']->address_id;
                 $parcel = $parcel_id;
+                //create shipment
+                $create_shipment = createTerminalShipment($address_from, $address_to, $parcel);
+                //check if shipment is created
+                if ($create_shipment['code'] == 200) {
+                    //save shipment id
+                    update_option('terminal_africa_shipment_id', $create_shipment['data']->shipment_id);
+                    //get rates
+                    $get_rates = getTerminalRates($create_shipment['data']->shipment_id);
+                    //check if rates is gotten
+                    if ($get_rates['code'] == 200) {
+                        //return
+                        wp_send_json([
+                            'code' => 200,
+                            'message' => 'Rates gotten successfully',
+                            'data' => $get_rates['data']
+                        ]);
+                    } else {
+                        //wc notice
+                        wc_add_notice($get_rates['message'], 'error');
+                        //return error
+                        wp_send_json([
+                            'code' => 400,
+                            'message' => $get_rates['message'],
+                            'endpoint' => 'get_rates'
+                        ]);
+                    }
+                } else {
+                    //wc notice
+                    wc_add_notice($create_shipment['message'], 'error');
+                    //return error
+                    wp_send_json([
+                        'code' => 400,
+                        'message' => $create_shipment['message'],
+                        'endpoint' => 'create_shipment'
+                    ]);
+                }
                 //return
                 wp_send_json([
                     'code' => 200,
@@ -389,7 +433,8 @@ trait Ajax
             } else {
                 wp_send_json([
                     'code' => 400,
-                    'message' => $create_address['message']
+                    'message' => $create_address['message'],
+                    'endpoint' => 'create_address'
                 ]);
             }
         }

@@ -15,6 +15,18 @@ $saved_address_state = "LA";
                 <form method="post" id="t-form-submit">
                     <div class="t-row">
                         <div class="t-col-12">
+                            <div class="t-address-info">
+                                <!-- instructions -->
+                                <h3 class="t-title">
+                                    <strong>Instructions:</strong>
+                                </h3>
+                                <p class="t-text">
+                                    Please fill in your address details below. This address will be used to pick up your items from your location.
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="t-col-12">
                             <div class="t-address">
                                 <div class="t-address-card">
                                     <div class="t-row t-space-around">

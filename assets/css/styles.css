@@ -765,3 +765,14 @@ img.t-dashboard-intro-icon {
   padding-bottom: 0px;
   padding-left: 0px;
 }
+
+.t-address-info .t-text {
+  font-size: 16px !important;
+}
+.t-address-info h3 {
+  color: #000 !important;
+}
+.t-address-info {
+  padding-left: 28px;
+  padding-right: 30px;
+}

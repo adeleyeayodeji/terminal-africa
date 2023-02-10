@@ -1,9 +1,9 @@
 function terminalsetValue2(elem) {
   jQuery(document).ready(function ($) {
     var lga = $(elem).val();
-    var stateCode = $('select[name="terminal_custom_shipping_state2"]')
+    var stateText = $('select[name="terminal_custom_shipping_state2"]')
       .find("option:selected")
-      .val();
+      .text();
     var countryCode = $('select[name="billing_country"]').val();
     var state = $('select[name="terminal_custom_shipping_state2"]').val();
     var finaltext = lga + ", " + state;
@@ -39,6 +39,7 @@ function terminalsetValue2(elem) {
         'form[name="checkout"] input[name="billing_state"]'
       ).value = selected_option;
     }
+    //update woocommerce
     $(document.body).trigger("update_checkout");
     //process the terminal rates
     var email = $('input[name="billing_email"]').val();
@@ -46,13 +47,15 @@ function terminalsetValue2(elem) {
     var last_name = $('input[name="billing_last_name"]').val();
     var phone = $('input[name="billing_phone"]').val();
     var line_1 = $('input[name="billing_address_1"]').val();
+    //ajax
     $.ajax({
       type: "POST",
       url: terminal_africa.ajax_url,
       data: {
         action: "terminal_africa_process_terminal_rates",
         nonce: terminal_africa.nonce,
-        state: state,
+        state: stateText,
+        stateCode: state,
         countryCode: countryCode,
         city: lga,
         email: email,
@@ -62,8 +65,56 @@ function terminalsetValue2(elem) {
         line_1: line_1
       },
       dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "Getting Shipping Rates",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
       success: function (response) {
+        //Swal close
+        Swal.close();
         console.log(response);
+        //check response is 200
+        if (response.code === 200) {
+          //do something cool
+        } else {
+          //swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.message,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        }
+      },
+      error: function (error) {
+        //swal error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
       }
     });
     //end
@@ -132,12 +183,10 @@ jQuery(document).ready(function ($) {
         }
       ];
     }
-    var lga = "";
+    var lga = "<option value=''>Select City</option>";
     //create options
     $.each(datas, function (indexInArray, valueOfElement) {
-      lga += `<option value="${valueOfElement.name}" ${
-        valueOfElement.name == terminal_billing_city ? "selected" : ""
-      }>${valueOfElement.name}</option>`;
+      lga += `<option value="${valueOfElement.name}">${valueOfElement.name}</option>`;
     });
     //check if terminal_custom_shipping_lga2 element exists
     if (!$("#terminal_custom_shipping_lga2").length) {
