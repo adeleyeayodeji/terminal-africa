@@ -45,6 +45,13 @@ trait Activation
         delete_option('terminal_africa_merchant_address_id');
         //terminal_africa_merchant_address
         delete_option('terminal_africa_merchant_address');
+        //disable shipping method
+        //get shipping settings
+        $settings = get_option('woocommerce_terminal_delivery_settings');
+        //update shipping settings
+        $settings['enabled'] = 'no';
+        update_option('woocommerce_terminal_delivery_settings', $settings);
+        //delete terminal_africa_states
         global $wpdb;
         //use prepared statement
         $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s;", ['terminal_africa_states%']);

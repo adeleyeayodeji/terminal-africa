@@ -58,8 +58,24 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_sign_out
         add_action('wp_ajax_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
         add_action('wp_ajax_nopriv_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
+        //ajax terminal_africa_enable_terminal
+        add_action('wp_ajax_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
+        add_action('wp_ajax_nopriv_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
         //wp head
         add_action('wp_head', array(self::class, 'wp_head_checkout'));
+        add_action('woocommerce_checkout_update_order_review', array($this, 'checkout_update_refresh_shipping_methods'), 10, 1);
+        //ajax terminal_africa_save_cart_item
+        add_action('wp_ajax_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
+        add_action('wp_ajax_nopriv_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
+    }
+
+    public function checkout_update_refresh_shipping_methods($post_data)
+    {
+        //update shipping pricing realtime
+        $packages = WC()->cart->get_shipping_packages();
+        foreach ($packages as $package_key => $package) {
+            WC()->session->set('shipping_for_package_' . $package_key, false); // Or true
+        }
     }
 }
 

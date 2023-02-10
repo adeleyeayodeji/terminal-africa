@@ -55,3 +55,21 @@ if (!function_exists('terminal_header')) {
         echo TerminalAfricaShippingPlugin::header($title, $icon);
     }
 }
+
+//createTerminalParcel
+if (!function_exists('createTerminalParcel')) {
+    //create terminal parcel
+    function createTerminalParcel($body)
+    {
+        return TerminalAfricaShippingPlugin::createParcel($body);
+    }
+}
+
+//updateTerminalParcel
+if (!function_exists('updateTerminalParcel')) {
+    //create terminal parcel
+    function updateTerminalParcel($parcel_id, $body)
+    {
+        return TerminalAfricaShippingPlugin::updateParcel($parcel_id, $body);
+    }
+}

@@ -1,6 +1,10 @@
 function terminalsetValue2(elem) {
   jQuery(document).ready(function ($) {
     var lga = $(elem).val();
+    var stateCode = $('select[name="terminal_custom_shipping_state2"]')
+      .find("option:selected")
+      .val();
+    var countryCode = $('select[name="billing_country"]').val();
     var state = $('select[name="terminal_custom_shipping_state2"]').val();
     var finaltext = lga + ", " + state;
     //find select[name='billing_state'] option with value and set it to selected
@@ -133,14 +137,14 @@ jQuery(document).ready(function ($) {
         });
       } else {
         //destroy and update
-        $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
+        // $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
         $('select[name="terminal_custom_shipping_lga2"]').select2({
           placeholder: "Select City"
         });
       }
     } else {
       //destroy and update
-      $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
+      // $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
       //update select
       $('select[name="terminal_custom_shipping_lga2"]').html(lga);
       //update select2
@@ -244,17 +248,16 @@ jQuery(document).ready(function ($) {
     });
   };
 
-  //update on update_checkout event
-  $(document.body).on("update_checkout", function () {
+  //on ajax complete
+  $(document).ajaxComplete(function () {
     //select2 init
     setTimeout(() => {
-      //select2 destroy and init select terminal_custom_shipping_state2
-      $('select[name="terminal_custom_shipping_state2"]').select2("destroy");
+      //select2 update
       $('select[name="terminal_custom_shipping_state2"]').select2({
         placeholder: "Select State"
       });
       terminalButton();
-    }, 1000);
+    }, 700);
   });
 
   $('select[name="terminal_custom_shipping_state2"]').change(function (e) {

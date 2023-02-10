@@ -277,4 +277,86 @@ trait Shipping
             ];
         }
     }
+
+    //create parcel
+    public static function createParcel($body)
+    {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'parcels',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                $body
+            )
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //update parcel
+    public static function updateParcel($parcel_id, $body)
+    {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::put(
+            self::$enpoint . 'parcels' . "/" . $parcel_id,
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                $body
+            )
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
 }

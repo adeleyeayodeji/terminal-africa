@@ -12,6 +12,10 @@ trait Assets
     //enqueue_scripts
     public static function enqueue_scripts()
     {
+        //check if cuurent url has terminal
+        if (strpos($_SERVER['REQUEST_URI'], 'terminal') === false) {
+            return;
+        }
         //enqueue styles
         //font awesome 
         wp_enqueue_style('terminal-africa-font-awesome-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/fontawesome.min.css', array(), TERMINAL_AFRICA_VERSION);
@@ -54,6 +58,8 @@ trait Assets
                 wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
                 //checkout
                 wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+                //terminaldata
+                wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
                 //localize scripts
                 wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
                     'ajax_url' => admin_url('admin-ajax.php'),

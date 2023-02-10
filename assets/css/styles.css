@@ -191,7 +191,8 @@ a.t-btn {
   box-shadow: 0 0 5px #e7e7e7;
 }
 
-.t-form-group button[type="submit"] {
+.t-form-group button[type="submit"],
+.t-form-group button[type="button"] {
   display: block;
   width: 90%;
   margin-top: 0px;

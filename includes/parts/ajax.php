@@ -45,6 +45,11 @@ trait Ajax
             update_option('terminal_africa_settings', $settings);
             //terminal_africa_merchant_id
             update_option('terminal_africa_merchant_id', $body->data->user->user_id);
+            //get shipping settings
+            $settings = get_option('woocommerce_terminal_delivery_settings');
+            //update shipping settings
+            $settings['enabled'] = 'yes';
+            update_option('woocommerce_terminal_delivery_settings', $settings);
             //return 
             wp_send_json([
                 'code' => 200,
@@ -228,5 +233,107 @@ trait Ajax
             'code' => 200,
             'message' => 'Signed out successfully',
         ]);
+    }
+
+    //terminal_africa_enable_terminal
+    public static function terminal_africa_enable_terminal()
+    {
+        //nounce
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //get shipping settings
+        $settings = get_option('woocommerce_terminal_delivery_settings');
+        //update shipping settings
+        $settings['enabled'] = 'yes';
+        update_option('woocommerce_terminal_delivery_settings', $settings);
+        //return
+        wp_send_json([
+            'code' => 200,
+            'message' => 'Terminal enabled successfully',
+        ]);
+    }
+
+    //terminal_africa_save_cart_item
+    public function terminal_africa_save_cart_item()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //get cart item
+        global $woocommerce;
+        $cart_item = $woocommerce->cart->get_cart();
+        //check if cart item is empty
+        if (empty($cart_item)) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Cart is empty'
+            ]);
+        }
+        $data_items = [];
+        //loop through cart items
+        foreach ($cart_item as $item) {
+            $data_items[] = [
+                'name' => $item['data']->get_name(),
+                'quantity' => $item['quantity'],
+                'value' => $item['line_total'],
+                'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
+                'type' => 'parcel',
+                'currency' => get_woocommerce_currency(),
+                'weight' => $item['data']->get_weight() ?: 0.1,
+            ];
+        }
+        //arrange parcel
+        $parcel = [
+            'packaging' => "PA-88484599859",
+            'weight_unit' => 'kg',
+            'items' => $data_items,
+            'description' => 'Order from ' . get_bloginfo('name'),
+        ];
+        //check if terminal_africa_parcel_id is set
+        if ($parcel_id = get_option('terminal_africa_parcel_id')) {
+            //update parcel
+            $response = updateTerminalParcel($parcel_id, $parcel);
+            //check if response is 200
+            if ($response['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Parcel updated successfully',
+                ]);
+            } else {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $response['message']
+                ]);
+            }
+        }
+        //post request
+        $response = createTerminalParcel($parcel);
+        //check if response is 200
+        if ($response['code'] == 200) {
+            //save parcel
+            update_option('terminal_africa_parcel_id', $response['data']->parcel_id);
+            //packaging id
+            update_option('terminal_africa_packaging_id', $response['data']->packaging);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Parcel created successfully',
+            ]);
+        } else {
+            wp_send_json([
+                'code' => 400,
+                'message' => $response['message']
+            ]);
+        }
     }
 }

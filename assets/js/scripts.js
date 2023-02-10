@@ -759,6 +759,98 @@ jQuery(document).ready(function ($) {
     //show .t-intro-list
     $(".t-intro-list").show();
   });
+
+  //enableTerminal
+  $("#enableTerminal").click(function (e) {
+    //prevent default
+    e.preventDefault();
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_enable_terminal",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Enabling...",
+          text: "Please wait...",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //close loader
+        Swal.close();
+        //check response is 200
+        if (response.code == 200) {
+          //swal
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+          }).then(function () {
+            //reload
+            window.location.reload();
+          });
+        } else {
+          //swal error
+          Swal.fire({
+            icon: "error",
+
+            title: "Oops...",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+          });
+        }
+      },
+      error: function (error) {
+        //close loader
+        Swal.close();
+        //swal error
+        Swal.fire({
+          icon: "error",
+
+          title: "Oops...",
+          text: "Something went wrong!",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      }
+    });
+  });
 });
 
 let updateData = (elem, e, element_id) => {

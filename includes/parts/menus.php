@@ -99,6 +99,13 @@ trait Menus
         if (!get_option('terminal_africa_merchant_id')) {
             //load auth
             $page = 'auth';
+        } else {
+            $shipping = new \WC_Terminal_Delivery_Shipping_Method;
+            //check if shipping method is enabled 
+            if ($shipping->enabled == "no") {
+                //error page
+                $page = 'error';
+            }
         }
         //require files
         require_once TERMINAL_AFRICA_PLUGIN_DIR . '/templates/' . $page . '.php';
