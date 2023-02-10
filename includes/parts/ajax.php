@@ -336,4 +336,69 @@ trait Ajax
             ]);
         }
     }
+
+    //terminal_africa_process_terminal_rates
+    public function terminal_africa_process_terminal_rates()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $first_name = sanitize_text_field($_POST['first_name']);
+        $last_name = sanitize_text_field($_POST['last_name']);
+        $state  = sanitize_text_field($_POST['state']);
+        $city = sanitize_text_field($_POST['city']);
+        $country = sanitize_text_field($_POST['countryCode']);
+        $zip_code = "";
+        $line_1 = sanitize_text_field($_POST['line_1']);
+        $phone = sanitize_text_field($_POST['phone']);
+        $email = sanitize_text_field($_POST['email']);
+        $line_2 = "";
+        //check if merchant_address_id is set
+        $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+        if (!empty($merchant_address_id)) {
+            //check if not empty $parcel_id 
+            $parcel_id = get_option('terminal_africa_parcel_id');
+            if (empty($parcel_id)) {
+                //wc notice
+                wc_add_notice('Terminal Parcel is empty, please refresh the page and try again', 'error');
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Terminal Parcel is empty, please refresh the page and try again'
+                ]);
+            }
+            //create address
+            $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+            //check if address is created
+            if ($create_address['code'] == 200) {
+                //save address id
+                update_option('terminal_africa_guest_address_id', $create_address['data']->address_id);
+                $address_from = $merchant_address_id;
+                $address_to = $create_address['data']->address_id;
+                $parcel = $parcel_id;
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Address saved successfully'
+                ]);
+            } else {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $create_address['message']
+                ]);
+            }
+        }
+        //add wc notice
+        wc_add_notice("Terminal Merchant address not set, please contact the admin", 'error');
+        //return error
+        wp_send_json([
+            'code' => 400,
+            'message' => 'Terminal Merchant address not set'
+        ]);
+    }
 }

@@ -38,9 +38,35 @@ function terminalsetValue2(elem) {
       document.querySelector(
         'form[name="checkout"] input[name="billing_state"]'
       ).value = selected_option;
-      //custom
     }
     $(document.body).trigger("update_checkout");
+    //process the terminal rates
+    var email = $('input[name="billing_email"]').val();
+    var first_name = $('input[name="billing_first_name"]').val();
+    var last_name = $('input[name="billing_last_name"]').val();
+    var phone = $('input[name="billing_phone"]').val();
+    var line_1 = $('input[name="billing_address_1"]').val();
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_process_terminal_rates",
+        nonce: terminal_africa.nonce,
+        state: state,
+        countryCode: countryCode,
+        city: lga,
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        phone: phone,
+        line_1: line_1
+      },
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+      }
+    });
+    //end
   });
 }
 

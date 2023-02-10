@@ -52,6 +52,28 @@ trait Assets
     {
         if (function_exists('WC')) {
             if (is_checkout()) {
+                $enabled = true;
+                //check if address is set
+                if (!get_option('terminal_africa_merchant_address_id')) {
+                    //$enabled false
+                    $enabled = false;
+                }
+                //check if merchant id is set
+                if (!get_option('terminal_africa_merchant_id')) {
+                    //$enabled false
+                    $enabled = false;
+                } else {
+                    $shipping = new \WC_Terminal_Delivery_Shipping_Method;
+                    //check if shipping method is enabled 
+                    if ($shipping->enabled == "no") {
+                        //$enabled false
+                        $enabled = false;
+                    }
+                }
+                //check if enabled
+                if (!$enabled) {
+                    return;
+                }
                 //sweet alert styles
                 wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
                 //sweet alert scripts

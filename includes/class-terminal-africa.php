@@ -67,6 +67,9 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_save_cart_item
         add_action('wp_ajax_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
         add_action('wp_ajax_nopriv_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
+        //ajax terminal_africa_process_terminal_rates
+        add_action('wp_ajax_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
+        add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)
