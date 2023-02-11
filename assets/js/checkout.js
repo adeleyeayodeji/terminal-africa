@@ -6,14 +6,14 @@ function terminalsetValue2(elem) {
       .text();
     var countryCode = $('select[name="billing_country"]').val();
     var state = $('select[name="terminal_custom_shipping_state2"]').val();
-    var finaltext = lga + ", " + state;
+    var finaltext = lga + ", " + stateText;
     //find select[name='billing_state'] option with value and set it to selected
     $('select[name="billing_state"]')
       .find("option")
       .each(function (index, element) {
-        if ($(element).val() == finaltext) {
+        if ($(element).val() == state) {
           let element2 = document.querySelector('select[name="billing_state"]');
-          element2.value = finaltext;
+          element2.value = state;
           element2.dispatchEvent(new Event("change"));
         } else {
           $(element).removeAttr("selected");
@@ -23,12 +23,13 @@ function terminalsetValue2(elem) {
     var selected_option = $('select[name="billing_state"]')
       .find("option:selected")
       .val();
-    document.querySelector("#billing_city").value = selected_option;
+    console.log(selected_option, lga);
+    document.querySelector("#billing_city").value = finaltext;
     //form name="checkout" input name billing_city
     //custom
     document.querySelector(
       'form[name="checkout"] input[name="billing_city"]'
-    ).value = selected_option;
+    ).value = finaltext;
     //state
     if (
       document.querySelector(
@@ -39,14 +40,13 @@ function terminalsetValue2(elem) {
         'form[name="checkout"] input[name="billing_state"]'
       ).value = selected_option;
     }
-    //update woocommerce
-    $(document.body).trigger("update_checkout");
     //process the terminal rates
     var email = $('input[name="billing_email"]').val();
     var first_name = $('input[name="billing_first_name"]').val();
     var last_name = $('input[name="billing_last_name"]').val();
     var phone = $('input[name="billing_phone"]').val();
     var line_1 = $('input[name="billing_address_1"]').val();
+    var billing_postcode = $('input[name="billing_postcode"]').val();
     //ajax
     $.ajax({
       type: "POST",
@@ -62,10 +62,13 @@ function terminalsetValue2(elem) {
         first_name: first_name,
         last_name: last_name,
         phone: phone,
-        line_1: line_1
+        line_1: line_1,
+        billing_postcode: billing_postcode
       },
       dataType: "json",
       beforeSend: function () {
+        //update woocommerce
+        $(document.body).trigger("update_checkout");
         // Swal loader
         Swal.fire({
           title: "Please wait...",
@@ -85,10 +88,37 @@ function terminalsetValue2(elem) {
       success: function (response) {
         //Swal close
         Swal.close();
-        console.log(response);
         //check response is 200
         if (response.code === 200) {
           //do something cool
+          //clear .t-checkout-carriers
+          $(".t-checkout-carriers").remove();
+          let terminal_html = `
+          <div class="t-checkout-carriers">
+          `;
+          //loop through response.data
+          $.each(response.data, function (indexInArray, value) {
+            //append to terminal_html
+            terminal_html += `
+                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-rateid="${value.rate_id}">
+                <label for="shipping"><img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: 11px;
+                height: 12px;
+                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} <br> <b class="t-delivery-time">=> ${value.delivery_time}</b></label>
+                </p>
+            `;
+          });
+          //close div
+          terminal_html += `
+          </div>
+          `;
+          //append to terminal_html
+          var terminal_delivery_html = $(".Terminal-delivery-logo");
+          //find parent li
+          var terminal_delivery_li = terminal_delivery_html.parent().parent();
+          //save terminal_html to localstorage
+          localStorage.setItem("terminal_delivery_html", terminal_html);
+          //append to li
+          terminal_delivery_li.append(terminal_html);
         } else {
           //swal error
           Swal.fire({
@@ -323,16 +353,39 @@ jQuery(document).ready(function ($) {
     });
   };
 
+  let restoreCarriers = () => {
+    //check if local storage is not empty
+    if (localStorage.getItem("terminal_delivery_html") != null) {
+      //check if t-restore does not exist
+      if (!$(".t-restore").length) {
+        let terminal_html = `<div class="t-checkout-carriers t-restore" onclick="restoreCarrierData(this)">`;
+        terminal_html += `<b>Change Carrier</b>`;
+        terminal_html += `</div>`;
+        //append to terminal_html
+        var terminal_delivery_html = $(".Terminal-delivery-logo");
+        //find parent li
+        var terminal_delivery_li = terminal_delivery_html.parent().parent();
+        //append to li
+        terminal_delivery_li.append(terminal_html);
+      }
+    }
+  };
+
   //on ajax complete
-  $(document).ajaxComplete(function () {
-    //select2 init
-    setTimeout(() => {
-      //select2 update
-      $('select[name="terminal_custom_shipping_state2"]').select2({
-        placeholder: "Select State"
-      });
-      terminalButton();
-    }, 700);
+  $(document).ajaxComplete(function (event, xhr, settings) {
+    var url = settings.url;
+    //if url match update_order_review
+    if (url.indexOf("update_order_review") >= 0) {
+      //select2 init
+      setTimeout(() => {
+        restoreCarriers();
+        //select2 update
+        $('select[name="terminal_custom_shipping_state2"]').select2({
+          placeholder: "Select State"
+        });
+        terminalButton();
+      }, 700);
+    }
   });
 
   $('select[name="terminal_custom_shipping_state2"]').change(function (e) {

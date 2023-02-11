@@ -80,10 +80,11 @@ class WC_Terminal_Delivery
          */
 
         // create order when \WC_Order::payment_complete() is called
-        add_action('woocommerce_thankyou', array($this, 'create_order_shipping_task'));
-
+        // add_action('woocommerce_thankyou', array($this, 'create_order_shipping_task'));
 
         add_action('woocommerce_shipping_init', array($this, 'load_shipping_method'));
+
+        add_action('woocommerce_checkout_update_order_meta', array($this, 'save_terminal_delivery_order_meta'));
 
         // cancel a Terminal delivery task when an order is cancelled in WC
         // add_action('woocommerce_order_status_cancelled', array($this, 'cancel_order_shipping_task'));
@@ -91,19 +92,55 @@ class WC_Terminal_Delivery
         // adds tracking button(s) to the View Order page
         // add_action('woocommerce_order_details_after_order_table', array($this, 'add_view_order_tracking'));
 
+        //order edit page actions
+        add_action('woocommerce_admin_order_data_after_shipping_address', array($this, 'add_order_meta_box'));
+
         /**
          * Filters
          */
         // Add shipping icon to the shipping label
         add_filter('woocommerce_cart_shipping_method_full_label', array($this, 'add_shipping_icon'), PHP_INT_MAX, 2);
 
-        add_filter('woocommerce_checkout_fields', array($this, 'remove_address_2_checkout_fields'));
+        add_filter('woocommerce_checkout_fields', array($this, 'remove_address_2_checkout_fields'), 99999, 1);
 
         add_filter('woocommerce_shipping_methods', array($this, 'add_shipping_method'));
 
         add_filter('woocommerce_shipping_calculator_enable_city', '__return_true');
+    }
 
-        add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_false');
+    //add_order_meta_box
+    public function add_order_meta_box($order)
+    {
+        $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
+        $order_id = $order->get_id();
+        $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
+        $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
+        if (empty($shipment_id)) {
+            return;
+        }
+        //plugin url
+        $plugin_url = admin_url('admin.php?page=terminal-africa');
+        //arg
+        $arg = array(
+            'page' => 'terminal-africa',
+            'action' => 'edit',
+            'id' => esc_html($shipment_id),
+        );
+        $plugin_url = add_query_arg($arg, $plugin_url);
+        echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;'/>Terminal Delivery</h4>";
+        echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_carriername', true)) . "</p>";
+        echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html(get_post_meta($order_id, 'Terminal_africa_amount', true))) . "</p>";
+        echo "<p><strong>Delivery Duration: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_duration', true)) . "</p>";
+        echo "<p><strong>Delivery Rate ID: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_rateid', true)) . "</p>";
+        echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
+        echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
+        //manage shipping from terminal delivery
+        echo "<p><strong><a href='" . $plugin_url . "' target='_blank' style='background: orange;
+    text-decoration: none;
+    color: white;
+    padding: 3px 5px 3px 5px;
+    border-radius: 6px;
+    outline: none;'>Manage Shipping &rarr;</a></strong></p>";
     }
 
     /**
@@ -131,112 +168,56 @@ class WC_Terminal_Delivery
         return $label;
     }
 
-    public function create_order_shipping_task($order_id)
+    //save_terminal_delivery_order_meta
+    public function save_terminal_delivery_order_meta($order_id)
     {
-        if (get_post_meta($order_id, 'Terminal_reference', true)) {
+        //check if session exists
+        $terminal_africa_carriername = WC()->session->get('terminal_africa_carriername');
+        $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
+        $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
+        $guest_email = WC()->session->get('terminal_africa_guest_email');
+        $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
+        //if exist
+        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
+            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
+            //check if $terminal_africa_amount is not string
+            if (is_string($terminal_africa_amount)) {
+                $terminal_africa_amount = floatval($terminal_africa_amount);
+            }
+            //sanitize data
+            $terminal_africa_carriername = sanitize_text_field($terminal_africa_carriername);
+            $terminal_africa_amount = sanitize_text_field($terminal_africa_amount);
+            $terminal_africa_duration = sanitize_text_field($terminal_africa_duration);
+            $guest_email = sanitize_text_field($guest_email);
+            $terminal_africa_rateid = sanitize_text_field($terminal_africa_rateid);
+            $shipment_id = sanitize_text_field($shipment_id);
+
+            //save
+            update_post_meta($order_id, 'Terminal_africa_carriername', $terminal_africa_carriername);
+            update_post_meta($order_id, 'Terminal_africa_amount', $terminal_africa_amount);
+            update_post_meta($order_id, 'Terminal_africa_duration', $terminal_africa_duration);
+            update_post_meta($order_id, 'Terminal_africa_guest_email', $guest_email);
+            update_post_meta($order_id, 'Terminal_africa_rateid', $terminal_africa_rateid);
+            update_post_meta($order_id, 'Terminal_africa_shipment_id', $shipment_id);
+            //delete session
+            WC()->session->__unset('terminal_africa_carriername');
+            WC()->session->__unset('terminal_africa_amount');
+            WC()->session->__unset('terminal_africa_duration');
+            WC()->session->__unset('terminal_africa_guest_email');
+            WC()->session->__unset('terminal_africa_rateid');
+            WC()->session->__unset('terminal_africa_shipment_id' . $guest_email);
+            //delete terminal_africa_parcel_id
+            $terminal_africa_parcel_id = WC()->session->get('terminal_africa_parcel_id');
+            if ($terminal_africa_parcel_id) {
+                WC()->session->__unset('terminal_africa_parcel_id');
+            }
+            $address_id = WC()->session->get('terminal_africa_guest_address_id' . $guest_email);
+            if ($address_id) {
+                WC()->session->__unset('terminal_africa_guest_address_id' . $guest_email);
+            }
+        } else {
             return;
         }
-
-        $order = wc_get_order($order_id);
-        // $order_status    = $order->get_status();
-        $shipping_method = @array_shift($order->get_shipping_methods());
-
-        if (strpos($shipping_method->get_method_id(), 'terminal_delivery') !== false) {
-
-            $receiver_name      = $order->get_billing_first_name() . " " . $order->get_billing_last_name();
-            $receiver_email     = $order->get_billing_email();
-            $receiver_phone     = $order->get_billing_phone();
-            $delivery_base_address  = $order->get_billing_address_1();
-            $delivery_city      = $order->get_billing_city();
-            $delivery_state_code    = $order->get_billing_state();
-            $delivery_postcode    = $order->get_billing_postcode();
-            //get subtotal
-            $subtotal = $order->get_subtotal();
-            //get note
-            $note = $order->get_customer_note() ?: 'null';
-
-            $delivery_country_code  = $order->get_billing_country();
-            $delivery_state = WC()->countries->get_states($delivery_country_code)[$delivery_state_code];
-            $delivery_country = WC()->countries->get_countries()[$delivery_country_code];
-            $payment_method = $order->get_payment_method();
-
-            $name         = $this->settings['name'];
-            $email        = $this->settings['email'];
-            $pickup_address = $this->settings['pickup_address'];
-            $pickup_city         = $this->settings['pickup_city'];
-            $pickup_state        = $this->settings['pickup_state'];
-            $pickup_country      = $this->settings['pickup_country'];
-            $phone      = $this->settings['phone'];
-            if (trim($pickup_country) == '') {
-                $pickup_country = 'NG';
-            }
-
-            //full address 
-            $delivery_address = $delivery_base_address . ", " . $delivery_city . ", " . $delivery_state . ", " . $delivery_country;
-
-            // $api = $this->get_api();
-            // //check if $receiver_phone does not start with +
-            // if (strpos($receiver_phone, '+') !== 0) {
-            //     //remove the first 0
-            //     $receiver_phone = substr($receiver_phone, 1);
-            //     //add +234
-            //     $receiver_phone = '+234' . $receiver_phone;
-            // }
-
-            // //check if $phone does not start with +
-            // if (strpos($phone, '+') !== 0) {
-            //     //remove the first 0
-            //     $phone = substr($phone, 1);
-            //     //add +234
-            //     $phone = '+234' . $phone;
-            // }
-            // //metadata
-            // $senddata = [
-            //     "geoId" => $shipping_method->get_meta('geoId'),
-            //     "name" => $name,
-            //     "email" => $email,
-            //     "phone" => $phone,
-            //     "deliverToInformation" => [
-            //         [
-            //             "order" => $shipping_method->get_meta('dropoffLocationsID'),
-            //             "name" => $receiver_name,
-            //             "phone" => $receiver_phone,
-            //             "packageValue" => strval($subtotal),
-            //             "packageType" => "sum",
-            //             "packageDetail" => "ecommerce",
-            //             //not more than 100 characters
-            //             "deliveryNotes" => (strlen($note) > 100) ? substr($note, 0, 100) : $note
-            //         ]
-            //     ],
-            //     "state" => $pickup_state,
-            //     "country" => $pickup_country,
-            //     "city" => $pickup_city,
-            //     "localGovt" => $pickup_city
-            // ];
-
-            // $order->add_order_note("Terminal Delivery: " . "Creating shipping task for order " . $order_id);
-            // //send request
-            // $response = $api->send_request_curl($senddata);
-            // if (isset($response["trackingId"]) && $response["trackingId"] != '') {
-            //     //add post meta
-            //     if (isset($response["request"])) {
-            //         update_post_meta($order_id, 'Terminal_request', $response["request"]);
-            //     }
-            //     update_post_meta($order_id, 'Terminal_reference', $response["trackingId"]);
-            //     //created noted
-            //     $order->add_order_note(
-            //         "Terminal Delivery: " . "Shipping task created for order " . $order_id . " with reference " . $response["trackingId"]
-            //     );
-            // } else {
-            //     $order->add_order_note(
-            //         "Terminal Delivery: " . "Shipping task creation failed for order " . $order_id . " with error"
-            //     );
-            // }
-        }
-    }
-
-    public function getStatus()
-    {
     }
 
     /**
@@ -251,36 +232,20 @@ class WC_Terminal_Delivery
     public function add_view_order_tracking($order)
     {
         $order = wc_get_order($order);
+        $Terminal_africa_shipment_id = get_post_meta($order->get_id(), 'Terminal_africa_shipment_id', true);
 
-        $Terminal_reference = get_post_meta($order->get_id(), 'Terminal_reference', true);
-
-        if (isset($$reference)) {
+        if ($Terminal_africa_shipment_id) {
 ?>
             <table id="wc_Terminal_delivery_order_meta_box">
                 <tr>
                     <th><strong><?php esc_html_e('Unique Refrence ID') ?> : </strong></th>
-                    <td><?php echo esc_html((empty($Terminal_reference)) ? __('N/A') : $Terminal_reference); ?></td>
+                    <td><?php echo esc_html((empty($Terminal_africa_shipment_id)) ? __('N/A') : $Terminal_africa_shipment_id); ?></td>
                 </tr>
 
                 <tr>
-                    <th><strong><?php esc_html_e('Delivery Status') ?> : </strong></th>
-                    <td>
-                        <p id="errand_status">
-                            ....
-                        </p>
-                    </td>
+                    <th><strong>Manage Shipment</strong></th>
                 </tr>
             </table>
-            <script>
-                jQuery(document).ready(function($) {
-                    $.get("<?php echo admin_url('admin-ajax.php'); ?>", {
-                        action: 'Terminal_delivery_get_status',
-                        reference: '<?php echo esc_html($Terminal_reference); ?>'
-                    }, function(data) {
-                        $('#errand_status').html(data.status);
-                    });
-                });
-            </script>
 
 <?php
         }
@@ -290,6 +255,14 @@ class WC_Terminal_Delivery
     {
         unset($fields['billing']['billing_address_2']);
         unset($fields['shipping']['shipping_address_2']);
+        //enable zip code
+        $fields['billing']['billing_postcode'] = array(
+            'label' => __('Postcode / ZIP', 'woocommerce'),
+            'placeholder' => _x('Postcode / ZIP', 'placeholder', 'woocommerce'),
+            'class' => array('form-row-wide'),
+            'clear' => true,
+            'priority' => 100,
+        );
 
         return $fields;
     }
@@ -320,26 +293,6 @@ class WC_Terminal_Delivery
         endif;
 
         return $methods;
-    }
-
-    /**
-     * Initializes the and returns Terminal Delivery API object.
-     *
-     * @since 1.0
-     *
-     * @return \WC_Terminal_Delivery_API instance
-     */
-    public function get_api()
-    {
-        // return API object if already instantiated
-        // if (is_object($this->api)) {
-        //     return $this->api;
-        // }
-
-        // $Terminal_delivery_settings = $this->settings;
-
-        // // instantiate API
-        // return $this->api = new \WC_Terminal_Delivery_API($Terminal_delivery_settings);
     }
 
     public function get_plugin_path()

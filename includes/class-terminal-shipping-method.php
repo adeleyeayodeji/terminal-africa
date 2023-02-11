@@ -104,29 +104,40 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         }
 
         // // country required for all shipments
-        // if ($package['destination']['country'] !== 'NG') {
-        //     //add notice
-        //     wc_add_notice(__('Terminal delivery is only available for Nigeria'), 'notice');
-        //     return;
-        // }
+        if ($package['destination']['country'] !== 'NG') {
+            //add notice
+            wc_add_notice(__('Terminal delivery is only available for Nigeria'), 'notice');
+            return;
+        }
 
-        $delivery_country_code = $package['destination']['country'];
-        $delivery_state_code = $package['destination']['state'];
-        $delivery_city = $package['destination']['city'];
-        $delivery_base_address = $package['destination']['address'];
-
-        $delivery_state = WC()->countries->get_states($delivery_country_code)[$delivery_state_code];
-        $delivery_country = WC()->countries->get_countries()[$delivery_country_code];
-
-        //full address 
-        $delivery_address = $package['destination']['address'] . ', ' . $package['destination']['city'] . ', ' . $delivery_state . ', ' . $delivery_country;
-
-        // if ('Lagos' !== $delivery_state) {
-        //     wc_add_notice('Terminal Delivery only available within Lagos', 'notice');
-        //     return;
-        // }
-
-
+        //check if session exists
+        $terminal_africa_carriername = WC()->session->get('terminal_africa_carriername');
+        $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
+        $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
+        $guest_email = WC()->session->get('terminal_africa_guest_email');
+        $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
+        //if exist
+        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
+            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
+            //check if $terminal_africa_amount is not string
+            if (is_string($terminal_africa_amount)) {
+                $terminal_africa_amount = floatval($terminal_africa_amount);
+            }
+            //add rate
+            $this->add_rate(array(
+                'id'        => $this->id . $this->instance_id,
+                'label'     => $this->title . ' - ' . $terminal_africa_carriername,
+                'cost'      => $terminal_africa_amount,
+                'meta_data' => [
+                    'duration' => $terminal_africa_duration,
+                    'carrier' => $terminal_africa_carriername,
+                    'amount' => $terminal_africa_amount,
+                    'shipment_id' => $shipment_id,
+                    'rate_id' => $terminal_africa_rateid,
+                ],
+            ));
+            return;
+        }
         //add rate
         $this->add_rate(array(
             'id'        => $this->id . $this->instance_id,

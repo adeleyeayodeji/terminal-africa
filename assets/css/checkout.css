@@ -16,3 +16,47 @@
 .swal-text {
   line-height: 23px;
 }
+
+.t-checkout-carriers {
+  border: 1px solid gray;
+  margin-top: 10px;
+}
+
+.t-checkout-single {
+  margin: 0px;
+  padding: 6px;
+  padding-bottom: 0px;
+  padding-top: 2px;
+  cursor: pointer;
+  border-bottom: 1px solid gray;
+}
+
+/* hover */
+.t-checkout-single:hover {
+  background: lightgray;
+  border-bottom: 1px solid white;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+}
+
+.t-checkout-single label {
+  cursor: pointer;
+}
+
+.t-delivery-time {
+  font-size: 13px;
+  color: gray;
+}
+
+.t-restore {
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.t-restore:hover {
+  background: lightgray;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+}

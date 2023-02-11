@@ -299,7 +299,8 @@ trait Ajax
             'description' => 'Order from ' . get_bloginfo('name'),
         ];
         //check if terminal_africa_parcel_id is set
-        if ($parcel_id = get_option('terminal_africa_parcel_id')) {
+        $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+        if (!empty($parcel_id)) {
             //update parcel
             $response = updateTerminalParcel($parcel_id, $parcel);
             //check if response is 200
@@ -320,10 +321,10 @@ trait Ajax
         $response = createTerminalParcel($parcel);
         //check if response is 200
         if ($response['code'] == 200) {
-            //save parcel
-            update_option('terminal_africa_parcel_id', $response['data']->parcel_id);
-            //packaging id
-            update_option('terminal_africa_packaging_id', $response['data']->packaging);
+            //save parcel wc session
+            WC()->session->set('terminal_africa_parcel_id', $response['data']->parcel_id);
+            //packaging wc session
+            WC()->session->set('terminal_africa_packaging_id', $response['data']->packaging);
             //return
             wp_send_json([
                 'code' => 200,
@@ -354,7 +355,7 @@ trait Ajax
         $stateCode  = sanitize_text_field($_POST['stateCode']);
         $city = sanitize_text_field($_POST['city']);
         $country = sanitize_text_field($_POST['countryCode']);
-        $zip_code = "";
+        $zip_code = sanitize_text_field($_POST['billing_postcode']);
         $line_1 = sanitize_text_field($_POST['line_1']);
         $phone = sanitize_text_field($_POST['phone']);
         //check if + is in $phone
@@ -370,7 +371,7 @@ trait Ajax
         $merchant_address_id = get_option('terminal_africa_merchant_address_id');
         if (!empty($merchant_address_id)) {
             //check if not empty $parcel_id 
-            $parcel_id = get_option('terminal_africa_parcel_id');
+            $parcel_id = WC()->session->get('terminal_africa_parcel_id');
             if (empty($parcel_id)) {
                 //wc notice
                 wc_add_notice('Terminal Parcel is empty, please refresh the page and try again', 'error');
@@ -380,41 +381,53 @@ trait Ajax
                     'message' => 'Terminal Parcel is empty, please refresh the page and try again'
                 ]);
             }
-            //create address
-            $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
-            //check if address is created
-            if ($create_address['code'] == 200) {
-                //save address id
-                update_option('terminal_africa_guest_address_id', $create_address['data']->address_id);
-                $address_from = $merchant_address_id;
-                $address_to = $create_address['data']->address_id;
-                $parcel = $parcel_id;
+            //check if address id is set
+            $address_id = WC()->session->get('terminal_africa_guest_address_id' . $email);
+            if (empty($address_id)) {
+                //create address
+                $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+                //check if address is created
+                if ($create_address['code'] == 200) {
+                    //save address id wc session
+                    WC()->session->set('terminal_africa_guest_address_id' . $email, $create_address['data']->address_id);
+                    $address_id = $create_address['data']->address_id;
+                } else {
+                    wp_send_json([
+                        'code' => 400,
+                        'message' => $create_address['message'],
+                        'endpoint' => 'create_address'
+                    ]);
+                }
+            } else {
+                //update address
+                $update_address = updateTerminalAddress($address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+                //check if address is updated
+                if ($update_address['code'] == 200) {
+                    //save address id wc session
+                    WC()->session->set('terminal_africa_guest_address_id' . $email, $update_address['data']->address_id);
+                    $address_id = $update_address['data']->address_id;
+                } else {
+                    wp_send_json([
+                        'code' => 400,
+                        'message' => $update_address['message'],
+                        'endpoint' => 'update_address'
+                    ]);
+                }
+            }
+            $address_from = $merchant_address_id;
+            $address_to = $address_id;
+            $parcel = $parcel_id;
+            //get shipment_id
+            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $email);
+            //check if shipment_id is empty
+            if (empty($shipment_id)) {
                 //create shipment
                 $create_shipment = createTerminalShipment($address_from, $address_to, $parcel);
                 //check if shipment is created
                 if ($create_shipment['code'] == 200) {
-                    //save shipment id
-                    update_option('terminal_africa_shipment_id', $create_shipment['data']->shipment_id);
-                    //get rates
-                    $get_rates = getTerminalRates($create_shipment['data']->shipment_id);
-                    //check if rates is gotten
-                    if ($get_rates['code'] == 200) {
-                        //return
-                        wp_send_json([
-                            'code' => 200,
-                            'message' => 'Rates gotten successfully',
-                            'data' => $get_rates['data']
-                        ]);
-                    } else {
-                        //wc notice
-                        wc_add_notice($get_rates['message'], 'error');
-                        //return error
-                        wp_send_json([
-                            'code' => 400,
-                            'message' => $get_rates['message'],
-                            'endpoint' => 'get_rates'
-                        ]);
-                    }
+                    //wc session
+                    WC()->session->set('terminal_africa_shipment_id' . $email, $create_shipment['data']->shipment_id);
+                    $shipment_id = $create_shipment['data']->shipment_id;
                 } else {
                     //wc notice
                     wc_add_notice($create_shipment['message'], 'error');
@@ -425,16 +438,25 @@ trait Ajax
                         'endpoint' => 'create_shipment'
                     ]);
                 }
+            }
+            //get rates
+            $get_rates = getTerminalRates($shipment_id);
+            //check if rates is gotten
+            if ($get_rates['code'] == 200) {
                 //return
                 wp_send_json([
                     'code' => 200,
-                    'message' => 'Address saved successfully'
+                    'message' => 'Rates gotten successfully',
+                    'data' => $get_rates['data']
                 ]);
             } else {
+                //wc notice
+                wc_add_notice($get_rates['message'], 'error');
+                //return error
                 wp_send_json([
                     'code' => 400,
-                    'message' => $create_address['message'],
-                    'endpoint' => 'create_address'
+                    'message' => $get_rates['message'],
+                    'endpoint' => 'get_rates'
                 ]);
             }
         }
@@ -444,6 +466,35 @@ trait Ajax
         wp_send_json([
             'code' => 400,
             'message' => 'Terminal Merchant address not set'
+        ]);
+    }
+
+    //terminal_africa_save_shipping_carrier
+    public function terminal_africa_save_shipping_carrier()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $carriername = sanitize_text_field($_POST['carriername']);
+        $amount = sanitize_text_field($_POST['amount']);
+        $duration = sanitize_text_field($_POST['duration']);
+        $email = sanitize_text_field($_POST['email']);
+        $rateid = sanitize_text_field($_POST['rateid']);
+        //wc session
+        WC()->session->set('terminal_africa_carriername', $carriername);
+        WC()->session->set('terminal_africa_amount', $amount);
+        WC()->session->set('terminal_africa_duration', $duration);
+        WC()->session->set('terminal_africa_guest_email', $email);
+        WC()->session->set('terminal_africa_rateid', $rateid);
+        //return
+        wp_send_json([
+            'code' => 200,
+            'message' => 'Carrier saved successfully'
         ]);
     }
 }

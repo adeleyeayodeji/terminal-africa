@@ -38,7 +38,7 @@ class TerminalAfricaShippingPlugin
         //woocommerce_states
         add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 999);
         //plugin loaded
-        add_action('plugins_loaded', array(self::class, 'activate'));
+        add_action('plugins_loaded', array(self::class, 'activate'), 999);
         //enqueue scripts
         add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'));
         //enqueue scripts
@@ -70,6 +70,9 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_process_terminal_rates
         add_action('wp_ajax_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
         add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
+        //ajax terminal_africa_save_shipping_carrier
+        add_action('wp_ajax_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
+        add_action('wp_ajax_nopriv_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

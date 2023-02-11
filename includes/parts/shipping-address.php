@@ -199,7 +199,9 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
-            ])
+            ]),
+            //time out 60 seconds
+            ['timeout' => 60]
         );
         $body = json_decode($response->body);
         //check if response is ok
@@ -242,21 +244,26 @@ trait Shipping
         }
 
         //request 
-        $response = Requests::put(self::$enpoint . 'addresses/' . $merchant_address_id, [
-            'Authorization' => 'Bearer ' . self::$skkey,
-            'Content-Type' => 'application/json'
-        ], json_encode([
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'email' => $email,
-            'phone' => $phone,
-            'line1' => $line_1,
-            'line2' => $line_2,
-            'city' => $city,
-            'state' => $state,
-            'country' => $country,
-            'zip' => $zip_code,
-        ]));
+        $response = Requests::put(
+            self::$enpoint . 'addresses/' . $merchant_address_id,
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode([
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'phone' => $phone,
+                'line1' => $line_1,
+                'line2' => $line_2,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'zip' => $zip_code,
+            ]), //time out 60 seconds
+            ['timeout' => 60]
+        );
         //decode response
         $body = json_decode($response->body);
         //check if response is ok
@@ -297,7 +304,9 @@ trait Shipping
             ],
             json_encode(
                 $body
-            )
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
         );
         $body = json_decode($response->body);
         //check if response is ok
@@ -338,7 +347,9 @@ trait Shipping
             ],
             json_encode(
                 $body
-            )
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
         );
         $body = json_decode($response->body);
         //check if response is ok
@@ -383,7 +394,9 @@ trait Shipping
                     'address_to' => $address_to,
                     'parcel' => $parcel_id,
                 ]
-            )
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
         );
         $body = json_decode($response->body);
         //check if response is ok
@@ -425,7 +438,9 @@ trait Shipping
             [
                 'Authorization' => 'Bearer ' . self::$skkey,
                 'Content-Type' => 'application/json'
-            ]
+            ],
+            //time out 60 seconds
+            ['timeout' => 60]
         );
         $body = json_decode($response->body);
         //check if response is ok
