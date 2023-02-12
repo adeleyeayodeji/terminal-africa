@@ -32,7 +32,6 @@ define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://api.terminal.africa/v1/');
 //slug
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 
-
 /**
  * WooCommerce Terminal Delivery Loader.
  *
@@ -99,6 +98,9 @@ class WC_Terminal_Delivery_Loader
         if (!$this->plugins_compatible()) {
             return;
         }
+        //load vendor
+        require_once TERMINAL_AFRICA_PLUGIN_PATH . '/vendor/autoload.php';
+
         // load the main plugin class
         require(plugin_dir_path(__FILE__) . 'includes' . DIRECTORY_SEPARATOR . 'class-terminal-delivery.php');
 
@@ -109,6 +111,7 @@ class WC_Terminal_Delivery_Loader
         if ($shipping->enabled == "no") {
             add_action('admin_notices', array($this, 'terminal_delivery_disabled_notice'));
         }
+
 
         // Include the main Terminal Africa class.
         if (!class_exists('TerminalAfricaShippingPlugin')) {
