@@ -485,12 +485,14 @@ trait Ajax
         $duration = sanitize_text_field($_POST['duration']);
         $email = sanitize_text_field($_POST['email']);
         $rateid = sanitize_text_field($_POST['rateid']);
+        $pickuptime = sanitize_text_field($_POST['pickup']);
         //wc session
         WC()->session->set('terminal_africa_carriername', $carriername);
         WC()->session->set('terminal_africa_amount', $amount);
         WC()->session->set('terminal_africa_duration', $duration);
         WC()->session->set('terminal_africa_guest_email', $email);
         WC()->session->set('terminal_africa_rateid', $rateid);
+        WC()->session->set('terminal_africa_pickuptime', $pickuptime);
         //return
         wp_send_json([
             'code' => 200,

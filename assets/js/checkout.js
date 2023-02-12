@@ -23,7 +23,6 @@ function terminalsetValue2(elem) {
     var selected_option = $('select[name="billing_state"]')
       .find("option:selected")
       .val();
-    console.log(selected_option, lga);
     document.querySelector("#billing_city").value = finaltext;
     //form name="checkout" input name billing_city
     //custom
@@ -100,10 +99,17 @@ function terminalsetValue2(elem) {
           $.each(response.data, function (indexInArray, value) {
             //append to terminal_html
             terminal_html += `
-                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-rateid="${value.rate_id}">
+                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}">
                 <label for="shipping"><img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: 11px;
                 height: 12px;
-                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} <br> <b class="t-delivery-time">=> ${value.delivery_time}</b></label>
+                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} 
+                <br>
+                <b class="t-carrier-desc">${value.carrier_rate_description}</b>
+                <br />
+                <b class="t-delivery-time">Pickup: ${value.pickup_time}</b>
+                <br />
+                 <b class="t-delivery-time">Delivery: ${value.delivery_time}</b>
+                </label>
                 </p>
             `;
           });
@@ -203,7 +209,7 @@ jQuery(document).ready(function ($) {
         </p>
       `);
 
-  let do_terminal_calculation = (datas) => {
+  let do_terminal_calculation = (datas, selected = "") => {
     //check data count
     if (datas.length < 1) {
       datas = [
@@ -216,7 +222,10 @@ jQuery(document).ready(function ($) {
     var lga = "<option value=''>Select City</option>";
     //create options
     $.each(datas, function (indexInArray, valueOfElement) {
-      lga += `<option value="${valueOfElement.name}">${valueOfElement.name}</option>`;
+      lga += `<option value="${valueOfElement.name}"  ${
+        selected == valueOfElement.name ? "selected" : ""
+      }
+      >${valueOfElement.name}</option>`;
     });
     //check if terminal_custom_shipping_lga2 element exists
     if (!$("#terminal_custom_shipping_lga2").length) {
@@ -358,8 +367,9 @@ jQuery(document).ready(function ($) {
     if (localStorage.getItem("terminal_delivery_html") != null) {
       //check if t-restore does not exist
       if (!$(".t-restore").length) {
-        let terminal_html = `<div class="t-checkout-carriers t-restore" onclick="restoreCarrierData(this)">`;
-        terminal_html += `<b>Change Carrier</b>`;
+        let terminal_html = `<div class="t-checkout-carriers t-update">`;
+        terminal_html += `<b class="t-restore" onclick="restoreCarrierData(this)">Change Carrier</b>`;
+        terminal_html += `<b class="t-restore" onclick="reloadCarrierData(event)">Reload Carrier</b>`;
         terminal_html += `</div>`;
         //append to terminal_html
         var terminal_delivery_html = $(".Terminal-delivery-logo");
@@ -435,6 +445,10 @@ jQuery(document).ready(function ($) {
       success: function (response) {
         //unblock
         $("form[name='checkout']").unblock();
+        //stringify
+        var cities = JSON.stringify(response.cities);
+        //save to local storage response.cities
+        localStorage.setItem("terminal_delivery_cities", cities);
         do_terminal_calculation(response.cities);
       },
       error: function (error) {
@@ -482,10 +496,19 @@ jQuery(document).ready(function ($) {
   }, 300);
 
   setTimeout(() => {
-    if (terminal_billing_state != "") {
-      var state = terminal_billing_state;
-      var lga = "";
-      do_terminal_calculation(state, lga);
+    if (terminal_billing_city != "") {
+      var city = terminal_billing_city;
+      //get local storage terminal_delivery_cities
+      var terminal_delivery_cities = localStorage.getItem(
+        "terminal_delivery_cities"
+      );
+      //if terminal_delivery_cities is not null
+      if (terminal_delivery_cities != null) {
+        //parse
+        terminal_delivery_cities = JSON.parse(terminal_delivery_cities);
+        //do terminal calculation
+        do_terminal_calculation(terminal_delivery_cities, city);
+      }
     }
   }, 1000);
 });

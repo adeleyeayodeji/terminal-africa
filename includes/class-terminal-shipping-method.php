@@ -116,6 +116,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
         $guest_email = WC()->session->get('terminal_africa_guest_email');
         $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
+        $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
@@ -134,6 +135,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                     'amount' => $terminal_africa_amount,
                     'shipment_id' => $shipment_id,
                     'rate_id' => $terminal_africa_rateid,
+                    'pickup_time' => $terminal_africa_pickuptime,
                 ],
             ));
             return;

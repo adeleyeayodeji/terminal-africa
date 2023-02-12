@@ -14,10 +14,81 @@ jQuery(document).ready(function ($) {
   });
 
   setTimeout(() => {
+    //add value to post code
+    $("#billing_postcode").val(terminal_billing_postcode);
     //fade in #billing_postcode_field
     $("#billing_postcode_field").fadeIn();
-  }, 1000);
+  }, 800);
+
+  let terminalPostCode = document.getElementById("billing_postcode");
+  terminalPostCode.addEventListener(
+    "keyup",
+    debounce(() => {
+      var postcode = $("#billing_postcode").val();
+      //save to session
+      //check if select name terminal_custom_shipping_lga2 exist
+      if ($("select[name='terminal_custom_shipping_lga2']").length) {
+        //check if postcode is not empty
+        if (postcode != "") {
+          //check if postcode is not equal to session
+          if (sessionStorage.getItem("terminal_postcode") != postcode) {
+            //trigger event change
+            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+            sessionStorage.setItem("terminal_postcode", postcode);
+          }
+        }
+      }
+    }, 1000)
+  );
 });
+
+//reloadCarrierData
+let reloadCarrierData = (e) => {
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //Swal confirm
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will reload the shipping carrier data",
+      icon: "warning",
+      customClass: {
+        title: "swal-title",
+        text: "swal-text",
+        content: "swal-content",
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button"
+      },
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(246 146 32)",
+      cancelButtonColor: "rgb(0 0 0)",
+      //icon color
+      iconColor: "rgb(246 146 32)",
+      //swal footer
+      footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `,
+      confirmButtonText: "Yes, reload it!"
+    }).then((result) => {
+      if (result.value) {
+        //trigger event change
+        $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+      }
+    });
+  });
+};
+
+function debounce(callback, wait) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      callback.apply(this, args);
+    }, wait);
+  };
+}
 
 //terminalSetShippingCrarrier
 let terminalSetShippingCrarrier = function (elem, e) {
@@ -26,6 +97,7 @@ let terminalSetShippingCrarrier = function (elem, e) {
     let carriername = $(elem).attr("data-carrier-name");
     let amount = $(elem).attr("data-amount");
     let duration = $(elem).attr("data-duration");
+    let pickup = $(elem).attr("data-pickup");
     let email = $('input[name="billing_email"]').val();
     let rateid = $(elem).attr("data-rateid");
     //save to session
@@ -39,7 +111,8 @@ let terminalSetShippingCrarrier = function (elem, e) {
         amount: amount,
         duration: duration,
         email: email,
-        rateid: rateid
+        rateid: rateid,
+        pickup: pickup
       },
       dataType: "json",
       beforeSend: function () {

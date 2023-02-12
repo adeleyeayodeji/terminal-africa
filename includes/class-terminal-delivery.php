@@ -106,6 +106,9 @@ class WC_Terminal_Delivery
         add_filter('woocommerce_shipping_methods', array($this, 'add_shipping_method'));
 
         add_filter('woocommerce_shipping_calculator_enable_city', '__return_true');
+        // add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
+        //woocommerce_checkout_update_order_review
+        add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), 10, 1);
     }
 
     //add_order_meta_box
@@ -130,7 +133,8 @@ class WC_Terminal_Delivery
         echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;'/>Terminal Delivery</h4>";
         echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_carriername', true)) . "</p>";
         echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html(get_post_meta($order_id, 'Terminal_africa_amount', true))) . "</p>";
-        echo "<p><strong>Delivery Duration: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_duration', true)) . "</p>";
+        echo "<p><strong>Pickup Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_pickuptime', true)) . "</p>";
+        echo "<p><strong>Delivery Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_duration', true)) . "</p>";
         echo "<p><strong>Delivery Rate ID: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_rateid', true)) . "</p>";
         echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
         echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
@@ -177,6 +181,7 @@ class WC_Terminal_Delivery
         $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
         $guest_email = WC()->session->get('terminal_africa_guest_email');
         $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
+        $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
@@ -191,6 +196,7 @@ class WC_Terminal_Delivery
             $guest_email = sanitize_text_field($guest_email);
             $terminal_africa_rateid = sanitize_text_field($terminal_africa_rateid);
             $shipment_id = sanitize_text_field($shipment_id);
+            $terminal_africa_pickuptime = sanitize_text_field($terminal_africa_pickuptime);
 
             //save
             update_post_meta($order_id, 'Terminal_africa_carriername', $terminal_africa_carriername);
@@ -199,12 +205,15 @@ class WC_Terminal_Delivery
             update_post_meta($order_id, 'Terminal_africa_guest_email', $guest_email);
             update_post_meta($order_id, 'Terminal_africa_rateid', $terminal_africa_rateid);
             update_post_meta($order_id, 'Terminal_africa_shipment_id', $shipment_id);
+            update_post_meta($order_id, 'Terminal_africa_pickuptime', $terminal_africa_pickuptime);
+
             //delete session
             WC()->session->__unset('terminal_africa_carriername');
             WC()->session->__unset('terminal_africa_amount');
             WC()->session->__unset('terminal_africa_duration');
             WC()->session->__unset('terminal_africa_guest_email');
             WC()->session->__unset('terminal_africa_rateid');
+            WC()->session->__unset('terminal_africa_pickuptime');
             WC()->session->__unset('terminal_africa_shipment_id' . $guest_email);
             //delete terminal_africa_parcel_id
             $terminal_africa_parcel_id = WC()->session->get('terminal_africa_parcel_id');
@@ -255,16 +264,62 @@ class WC_Terminal_Delivery
     {
         unset($fields['billing']['billing_address_2']);
         unset($fields['shipping']['shipping_address_2']);
+        //check if logged in
+        if (!is_user_logged_in()) {
+            return $fields;
+        }
+        $user_id = get_current_user_id();
+        $billing_postcode = get_user_meta($user_id, 'billing_postcode', true);
         //enable zip code
         $fields['billing']['billing_postcode'] = array(
             'label' => __('Postcode / ZIP', 'woocommerce'),
             'placeholder' => _x('Postcode / ZIP', 'placeholder', 'woocommerce'),
-            'class' => array('form-row-wide'),
             'clear' => true,
             'priority' => 100,
+            'default' => $billing_postcode,
         );
-
         return $fields;
+    }
+
+    //update_order_review
+    public function update_order_review($data)
+    {
+        //check if logged in
+        if (!is_user_logged_in()) {
+            return $data;
+        }
+        //format url data 
+        $formdata = array();
+        parse_str($data, $formdata);
+        //billing_postcode
+        $billing_postcode = $formdata['billing_postcode'];
+        $billing_postcode = sanitize_text_field($billing_postcode);
+        $billing_state = $formdata['shipping_state'];
+        $billing_state = sanitize_text_field($billing_state);
+        $billing_city = $formdata['shipping_city'];
+        $billing_city = sanitize_text_field($billing_city);
+        //check if , is in billing city
+        if (strpos($billing_city, ',') !== false) {
+            $billing_city = explode(',', $billing_city);
+            $billing_city = $billing_city[0];
+        }
+        //update user meta
+        $user_id = get_current_user_id();
+        update_user_meta($user_id, 'billing_postcode', $billing_postcode);
+        update_user_meta($user_id, 'billing_state', $billing_state);
+        update_user_meta($user_id, 'billing_city', $billing_city);
+        //shipping postcode
+        update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
+        update_user_meta($user_id, 'shipping_state', $billing_state);
+        update_user_meta($user_id, 'shipping_city', $billing_city);
+        //update session
+        WC()->session->set('billing_postcode', $billing_postcode);
+        WC()->session->set('billing_state', $billing_state);
+        WC()->session->set('billing_city', $billing_city);
+        WC()->session->set('shipping_postcode', $billing_postcode);
+        WC()->session->set('shipping_state', $billing_state);
+        WC()->session->set('shipping_city', $billing_city);
+        return $data;
     }
 
     /**

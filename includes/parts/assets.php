@@ -111,39 +111,31 @@ trait Assets
             if (is_checkout()) {
                 $checkout = WC()->checkout();
                 //get checkout billing state
-                $billing_state = $checkout->get_value('billing_state') ?: null;
-                if ($billing_state) {
-                    $dd1 = explode(', ', $billing_state);
-                    // enqueue_script as param
-?>
-                    <script>
-                        var terminal_billing_state = '<?php echo $dd1[1]; ?>';
-                        var terminal_billing_city = '<?php echo $dd1[0]; ?>';
-                    </script>
-                <?php
-                } else {
-                ?>
-                    <script>
-                        var terminal_billing_state = '';
-                        var terminal_billing_city = '';
-                    </script>
-                <?php
+                $billing_state = $checkout->get_value('billing_state') ?: '';
+                //get checkout billing city
+                $billing_city = $checkout->get_value('billing_city') ?: '';
+                $billing_postcode = $checkout->get_value('billing_postcode') ?: '';
+                //check if , is in billing city
+                if (strpos($billing_city, ',') !== false) {
+                    $billing_city = explode(',', $billing_city);
+                    $billing_city = $billing_city[0];
                 }
-            } else {
-                ?>
+                //check if logged in
+                if (is_user_logged_in()) {
+                    $user_id = get_current_user_id();
+                    $billing_postcode = get_user_meta($user_id, 'billing_postcode', true) ?: '';
+                    $billing_state = get_user_meta($user_id, 'billing_state', true) ?: '';
+                    $billing_city = get_user_meta($user_id, 'billing_city', true) ?: '';
+                }
+?>
                 <script>
-                    var terminal_billing_state = '';
-                    var terminal_billing_city = '';
+                    var terminal_billing_state = '<?php echo esc_html($billing_state); ?>';
+                    var terminal_billing_city = '<?php echo esc_html($billing_city); ?>';
+                    var terminal_billing_postcode = '<?php echo esc_html($billing_postcode); ?>';
                 </script>
-            <?php
-            }
-        } else {
-            ?>
-            <script>
-                var terminal_billing_state = '';
-                var terminal_billing_city = '';
-            </script>
 <?php
+
+            }
         }
     }
 }
