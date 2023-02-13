@@ -118,6 +118,7 @@ class WC_Terminal_Delivery
         $order_id = $order->get_id();
         $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
         $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
+        $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
         if (empty($shipment_id)) {
             return;
         }
@@ -128,6 +129,9 @@ class WC_Terminal_Delivery
             'page' => 'terminal-africa',
             'action' => 'edit',
             'id' => esc_html($shipment_id),
+            'order_id' => esc_html($order_id),
+            'rate_id' => esc_html($rate_id),
+            'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         );
         $plugin_url = add_query_arg($arg, $plugin_url);
         echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;'/>Terminal Delivery</h4>";
@@ -135,11 +139,11 @@ class WC_Terminal_Delivery
         echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html(get_post_meta($order_id, 'Terminal_africa_amount', true))) . "</p>";
         echo "<p><strong>Pickup Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_pickuptime', true)) . "</p>";
         echo "<p><strong>Delivery Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_duration', true)) . "</p>";
-        echo "<p><strong>Delivery Rate ID: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_rateid', true)) . "</p>";
+        echo "<p><strong>Delivery Rate ID: </strong>" . esc_html($rate_id) . "</p>";
         echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
         echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
         //manage shipping from terminal delivery
-        echo "<p><strong><a href='" . $plugin_url . "' target='_blank' style='background: orange;
+        echo "<p><strong><a href='" . $plugin_url . "' style='background: orange;
     text-decoration: none;
     color: white;
     padding: 3px 5px 3px 5px;

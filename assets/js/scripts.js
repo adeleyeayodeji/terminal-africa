@@ -155,13 +155,22 @@ jQuery(document).ready(function ($) {
     e.preventDefault();
     //form
     var form = $(this);
+    //get type
+    var type = form.data("type");
+    var actionData = "terminal_merchant_save_address";
+    //if type is customer
+    if (type == "customer") {
+      actionData = "terminal_customer_save_address";
+    }
     //ajax
     $.ajax({
       type: "POST",
       url: terminal_africa.ajax_url,
       data:
         form.serialize() +
-        "&action=terminal_merchant_save_address&nonce=" +
+        "&action=" +
+        actionData +
+        "&nonce=" +
         terminal_africa.nonce,
       dataType: "json",
       beforeSend: function () {
@@ -201,8 +210,31 @@ jQuery(document).ready(function ($) {
             `
           }).then((result) => {
             if (result.value) {
-              //reload page
-              location.reload();
+              //if type is customer
+              if (type == "customer") {
+                //Swal alert 'Customer address changed, please recalculate shipping'
+                Swal.fire({
+                  icon: "info",
+                  title: "Info",
+                  text: "Customer address changed, please recalculate shipping",
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  iconColor: "rgb(246 146 32)",
+                  footer: `
+                    <div>
+                      <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                  `
+                }).then((result) => {
+                  if (result.value) {
+                    //trigger click #t-carrier-change-button
+                    $("#t-carrier-change-button").trigger("click");
+                  }
+                });
+              } else {
+                //reload page
+                location.reload();
+              }
             }
           });
         } else {
@@ -863,5 +895,232 @@ let updateData = (elem, e, element_id) => {
     let element = $(`#${element_id}`);
     //update the value
     element.text(value);
+  });
+};
+
+let changeTerminalCarrier = (elem, e) => {
+  //prevent default
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //process the terminal rates
+    var shipment_id = $(elem).data("shipment_id");
+    var order_id = $(elem).data("order-id");
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_process_terminal_rates_customer",
+        nonce: terminal_africa.nonce,
+        shipment_id: shipment_id
+      },
+      dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "Getting Shipping Rates",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //Swal close
+        Swal.close();
+        //check response is 200
+        if (response.code === 200) {
+          //do something cool
+          //clear .t-checkout-carriers
+          $(".t-checkout-carriers").remove();
+          let terminal_html = `
+          <div class="t-checkout-carriers">
+          `;
+          //loop through response.data
+          $.each(response.data, function (indexInArray, value) {
+            //append to terminal_html
+            terminal_html += `
+                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-order-id="${order_id}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}">
+                <label for="shipping"><img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: 11px;
+                height: 12px;
+                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} 
+                <br>
+                <b class="t-carrier-desc">${value.carrier_rate_description}</b>
+                <br />
+                <b class="t-delivery-time">Pickup: ${value.pickup_time}</b>
+                <br />
+                 <b class="t-delivery-time">Delivery: ${value.delivery_time}</b>
+                </label>
+                </p>
+            `;
+          });
+          //close div
+          terminal_html += `
+          </div>
+          `;
+          //append to terminal_html
+          var terminal_delivery_html = $("#t_carriers_location");
+          //append to li
+          terminal_delivery_html.html(terminal_html);
+        } else {
+          //swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            text: response.message,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        }
+      },
+      error: function (error) {
+        //swal error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          text: "Something went wrong!",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      }
+    });
+  });
+};
+
+let terminalSetShippingCrarrier2 = (elem, e) => {
+  //prevent default
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //get the data
+    var carrier_name = $(elem).data("carrier-name");
+    var amount = $(elem).data("amount");
+    var duration = $(elem).data("duration");
+    var pickup = $(elem).data("pickup");
+    var rateid = $(elem).data("rateid");
+    var order_id = $(elem).data("order-id");
+    //do ajax
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_apply_terminal_rates_customer",
+        nonce: terminal_africa.nonce,
+        carrier_name: carrier_name,
+        amount: amount,
+        duration: duration,
+        pickup: pickup,
+        rateid: rateid,
+        order_id: order_id
+      },
+      dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "Applying Shipping Rates",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //Swal close
+        Swal.close();
+        //check response is 200
+        if (response.code === 200) {
+          //swal success
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            text: response.message,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          }).then(() => {
+            //reload page
+            window.location.href = response.url;
+          });
+        } else {
+          //swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            text: response.message,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        }
+      },
+      error: function (error) {
+        //swal error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      }
+    });
+  });
+};
+
+//arrangeTerminalDelivery
+let arrangeTerminalDelivery = (elem, e) => {
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //Swal confirm
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to arrange delivery for this order!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(246 146 32)",
+      cancelButtonColor: "rgb(0 0 0)",
+      confirmButtonText: "Yes, arrange it!"
+    }).then((result) => {
+      if (result.value) {
+        //ajax
+      }
+    });
   });
 };

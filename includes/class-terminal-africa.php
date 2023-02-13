@@ -73,6 +73,18 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_save_shipping_carrier
         add_action('wp_ajax_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
         add_action('wp_ajax_nopriv_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
+        //ajax get rate data
+        add_action('wp_ajax_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
+        add_action('wp_ajax_nopriv_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
+        //ajax terminal_customer_save_address
+        add_action('wp_ajax_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
+        add_action('wp_ajax_nopriv_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
+        //ajax terminal_africa_process_terminal_rates_customer
+        add_action('wp_ajax_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
+        add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
+        //ajax terminal_africa_apply_terminal_rates_customer
+        add_action('wp_ajax_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
+        add_action('wp_ajax_nopriv_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

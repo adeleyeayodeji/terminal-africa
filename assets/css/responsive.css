@@ -532,3 +532,63 @@
 .t-tips-block {
   padding-top: 0px;
 }
+
+/* responsive t-m-sm-3  */
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .t-m-sm-3 {
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+
+  .t-display-information {
+    max-height: 100%;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .t-m-sm-3 {
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+
+  .t-display-information {
+    max-height: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .t-m-sm-3 {
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+
+  .t-display-information {
+    max-height: 100%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .t-m-sm-3 {
+    margin-left: 0px;
+    margin-top: 0px;
+  }
+  .t-display-information {
+    max-height: 600px;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .t-m-sm-3 {
+    margin-left: 0px;
+    margin-top: 0px;
+  }
+
+  .t-display-information {
+    max-height: 600px;
+  }
+}

@@ -88,6 +88,20 @@ trait Shipping
     //get cities
     public static function get_cities($countryCode = "NG", $state_code = "LA")
     {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if terminal_africa_cities.$countryCode.$state_code is set
+        if (isset($_SESSION['terminal_africa_cities'][$countryCode][$state_code])) {
+            //return countries
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $_SESSION['terminal_africa_cities'][$countryCode][$state_code],
+            ];
+        }
+        //check if self::$skkey
         if (!self::$skkey) {
             return [
                 'code' => 404,
@@ -114,6 +128,8 @@ trait Shipping
         if ($response->status_code == 200) {
             //return countries
             $data = $body->data;
+            // save to session
+            $_SESSION['terminal_africa_cities'][$countryCode][$state_code] = $data;
             //return data
             return [
                 'code' => 200,
@@ -460,5 +476,128 @@ trait Shipping
                 'data' => [],
             ];
         }
+    }
+
+    //getTerminalRateData
+    public static function getTerminalRateData($rate_id)
+    {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if data is in session
+        if (isset($_SESSION['ratedata'][$rate_id])) {
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $_SESSION['ratedata'][$rate_id],
+                'from' => 'session',
+            ];
+        }
+        //check if api key is valid
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        $response = Requests::get(
+            self::$enpoint . 'rates/' . $rate_id,
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //save data to session
+            $_SESSION['ratedata'][$rate_id] = $data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+                'from' => 'api',
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+                'from' => 'api',
+            ];
+        }
+    }
+
+    //applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+    public static function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+    {
+        //wc order
+        $order = wc_get_order($order_id);
+        //check if order is valid
+        if (!$order) {
+            return [
+                'code' => 404,
+                'message' => "Invalid Order",
+                'data' => [],
+            ];
+        }
+        //check if $amount is string
+        if (is_string($amount)) {
+            $amount = (float) $amount;
+        }
+        $items    = (array) $order->get_items('shipping');
+        // // Loop through shipping items
+        foreach ($items as $item) {
+            //get shipping method id
+            $shipping_method_id = $item->get_method_id();
+            //if shipping method id is terminal_delivery
+            if ($shipping_method_id == "terminal_delivery") {
+                $item->set_method_title(__("Terminal Delivery - $carrier_name"));
+                $item->set_total($amount);
+                //update item meta
+                $item->update_meta_data('duration', $duration, true);
+                $item->update_meta_data('carrier', $carrier_name, true);
+                $item->update_meta_data('amount', $amount, true);
+                $item->update_meta_data('rate_id', $rateid, true);
+                $item->update_meta_data('pickup_time', $pickup, true);
+                $item->save();
+            }
+        }
+        //calculate totals
+        $order->calculate_totals();
+        //update meta
+        update_post_meta($order_id, 'Terminal_africa_carriername', $carrier_name);
+        update_post_meta($order_id, 'Terminal_africa_amount', $amount);
+        update_post_meta($order_id, 'Terminal_africa_duration', $duration);
+        update_post_meta($order_id, 'Terminal_africa_rateid', $rateid);
+        update_post_meta($order_id, 'Terminal_africa_pickuptime', $pickup);
+        //url
+        $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
+        //shipping url
+        $plugin_url = admin_url('admin.php?page=terminal-africa');
+        //arg
+        $arg = array(
+            'page' => 'terminal-africa',
+            'action' => 'edit',
+            'id' => esc_html($shipment_id),
+            'order_id' => esc_html($order_id),
+            'rate_id' => esc_html($rateid),
+            'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
+        );
+        $plugin_url = add_query_arg($arg, $plugin_url);
+        //return data
+        return [
+            'code' => 200,
+            'message' => 'success',
+            'data' => [],
+            'url' => $plugin_url,
+        ];
     }
 }

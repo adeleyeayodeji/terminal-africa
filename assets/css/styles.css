@@ -3,6 +3,10 @@
   font-family: Lato;
   src: url(../fonts/Lato/Lato-Light.ttf);
 }
+@font-face {
+  font-family: LatoBold;
+  src: url(../fonts/Lato/Lato-Bold.ttf);
+}
 
 #wpbody {
   /* background: #f4f4f4; */
@@ -780,4 +784,69 @@ img.t-dashboard-intro-icon {
 .t-shipping {
   padding-left: 28px;
   padding-right: 30px;
+}
+
+.t-space {
+  height: 1px;
+  margin-top: 30px;
+  background-color: lightgray;
+  margin-bottom: 30px;
+}
+
+.t-checkout-carriers {
+  border: 1px solid gray;
+  margin-top: 10px;
+}
+
+.t-checkout-single {
+  margin: 0px;
+  padding: 6px;
+  padding-bottom: 0px;
+  padding-top: 2px;
+  cursor: pointer;
+  border-bottom: 1px solid gray;
+}
+
+/* hover */
+.t-checkout-single:hover {
+  background: lightgray;
+  border-bottom: 1px solid white;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+  cursor: pointer;
+}
+
+.t-checkout-single label {
+  cursor: pointer;
+}
+
+.t-delivery-time {
+  font-size: 13px;
+  color: gray;
+}
+
+.t-restore {
+  text-align: center;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+
+.t-restore:hover {
+  background: lightgray;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
+.t-checkout-carriers.t-update {
+  border: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.t-carrier-desc {
+  font-weight: lighter;
+  font-size: 13px;
 }

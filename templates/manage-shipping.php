@@ -1,30 +1,68 @@
 <?php
 //security
 defined('ABSPATH') or die('No script kiddies please!');
+//get shipping address
 $country = get_terminal_countries();
 $states = get_terminal_states("NG");
 $states = $states['data'];
-$saved_address = get_option('terminal_africa_merchant_address', false);
-$saved_address_state = "LA";
+//get shipping id
+$shipping_id = $_GET['id'];
+//sanitize
+$shipping_id = sanitize_text_field($shipping_id);
+$order_id = $_GET['order_id'];
+//sanitize
+$order_id = sanitize_text_field($order_id);
+//get order
+$order = wc_get_order($order_id);
+//rate_id
+$rate_id = sanitize_text_field($_GET['rate_id']);
+//get rate data
+$get_rate_data = getTerminalRateData($rate_id);
+//order date
+$order_date = $order->get_date_created();
+//get order date
+$order_date = $order_date->date('Y-m-d H:i:s');
+//human readable date
+$order_time = human_time_diff(strtotime($order_date), current_time('timestamp')) . ' ago';
+//order status
+$order_status = $order->get_status();
+//$order_url
+$order_url = admin_url('post.php?post=' . $order_id . '&action=edit');
+//order shipping method
+$order_shipping_method = $order->get_shipping_method();
+//order shipping price
+$order_shipping_price = $order->get_shipping_total();
+//get the items
+$items = $order->get_items();
+//check if $get_rate_data is not empty
+$saved_address = null;
+$saved_others = null;
+if ($get_rate_data['code'] == 200) {
+    $saved_address = $get_rate_data['data']->delivery_address;
+    $saved_others = $get_rate_data['data'];
+}
 ?>
+<style>
+    b {
+        font-weight: bold !important;
+        font-family: LatoBold;
+    }
+</style>
 <div class="t-container">
-    <?php terminal_header("fas fa-map", "Pickup Address"); ?>
+    <?php terminal_header("fas fa-map", "Customer Address"); ?>
     <div class="t-body">
         <div class="t-row">
             <div class="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">
-                <form method="post" id="t-form-submit" data-type="merchant">
+                <form method="post" id="t-form-submit" data-type="customer">
+                    <input type="hidden" name="address_id" value="<?php echo $saved_address ? esc_html($saved_address->address_id) : ''; ?>">
+                    <input type="hidden" name="rate_id" value="<?php echo esc_html($rate_id); ?>">
                     <div class="t-row">
                         <div class="t-col-12">
                             <div class="t-address-info">
-                                <!-- instructions -->
-                                <h3 class="t-title">
-                                    <strong>Instructions:</strong>
-                                </h3>
                                 <p class="t-text">
-                                    Please fill in your address details below. This address will be used to pick up your items from your location.
+                                    Update your customer address here. <br>This address will be used to re-calculate the shipping cost if the customer changes the shipping address.
                                 </p>
                             </div>
-
                         </div>
                         <div class="t-col-12">
                             <div class="t-address">
@@ -33,27 +71,27 @@ $saved_address_state = "LA";
                                         <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="first_name">First Name</label>
-                                                <input type="text" name="first_name" required id="first_name" class="t-form-control" placeholder="First Name" value="<?php echo $saved_address ? esc_html($saved_address->first_name) : ''; ?>" onkeyup="updateData(this,event, 't_first_name')">
+                                                <input type="text" name="first_name" required id="first_name" class="t-form-control" placeholder="First Name" value="<?php echo $saved_address ? esc_html($saved_address->first_name) : ''; ?>">
                                             </div>
                                         </div>
                                         <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="last_name">Last Name</label>
-                                                <input type="text" name="last_name" required id="last_name" class="t-form-control" placeholder="Last Name" value="<?php echo $saved_address ? esc_html($saved_address->last_name) : ''; ?>" onkeyup="updateData(this,event, 't_last_name')">
+                                                <input type="text" name="last_name" required id="last_name" class="t-form-control" placeholder="Last Name" value="<?php echo $saved_address ? esc_html($saved_address->last_name) : ''; ?>">
                                             </div>
                                         </div>
 
                                         <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="email">Email</label>
-                                                <input type="email" name="email" required id="email" class="t-form-control" placeholder="Email" value="<?php echo $saved_address ? esc_html($saved_address->email) : ''; ?>" onkeyup="updateData(this,event, 't_email')">
+                                                <input type="email" name="email" required id="email" class="t-form-control" placeholder="Email" value="<?php echo $saved_address ? esc_html($saved_address->email) : ''; ?>">
                                             </div>
                                         </div>
 
                                         <div class="t-col-5 t-col-lg-5 t-col-md-5 t-col-sm-10">
                                             <div class="t-form-group">
                                                 <label for="phone">Phone</label>
-                                                <input type="text" name="phone" required id="phone" class="t-form-control" placeholder="Phone" value="<?php echo $saved_address ? esc_html($saved_address->phone) : ''; ?>" onkeyup="updateData(this,event, 't_phone')">
+                                                <input type="text" name="phone" required id="phone" class="t-form-control" placeholder="Phone" value="<?php echo $saved_address ? esc_html($saved_address->phone) : ''; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -69,7 +107,7 @@ $saved_address_state = "LA";
                                                 <label for="street_address">
                                                     Street Address
                                                 </label>
-                                                <input type="text" required name="line_1" id="street_address" class="t-form-control" placeholder="Street Address" value="<?php echo $saved_address ? esc_html($saved_address->line1) : ''; ?>" onkeyup="updateData(this,event, 't_address')">
+                                                <input type="text" required name="line_1" id="street_address" class="t-form-control" placeholder="Street Address" value="<?php echo $saved_address ? esc_html($saved_address->line1) : ''; ?>">
                                             </div>
                                         </div>
                                         <div class="t-col-11">
@@ -148,29 +186,43 @@ $saved_address_state = "LA";
                             </div>
                         </div>
                         <div class="t-col-12">
-                            <button type="submit" class="t-address-save">Save</button>
+                            <button type="submit" class="t-address-save">Update</button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12 t-d-xs-none">
-                <div class="t-display-information t-data-profile">
-                    <h3 class="t-title">Personal Information</h3>
-                    <p id="t_first_name">
-                        <?php echo $saved_address ? esc_html($saved_address->first_name) : ''; ?>
+            <div class="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12">
+                <div class="t-display-information t-data-profile t-m-sm-3">
+                    <h3 class="t-title" style="    margin-bottom: 5px;">Manage order</h3>
+                    <p>
+                        <b>Order Date:</b> <?php echo $order_date; ?> <b style="color:orange;">(<?php echo $order_time; ?>)</b>
                     </p>
-                    <p id="t_last_name">
-                        <?php echo $saved_address ? esc_html($saved_address->last_name) : ''; ?>
+                    <p>
+                        <b>Order Number:</b> <?php echo $order_id; ?>
                     </p>
-                    <p id="t_email">
-                        <?php echo $saved_address ? esc_html($saved_address->email) : ''; ?>
+                    <p>
+                        <b>Order Status:</b> <b style="color:orange;text-transform: capitalize;"><?php echo $order_status; ?></b>
                     </p>
-                    <p id="t_phone">
-                        <?php echo $saved_address ? esc_html($saved_address->phone) : ''; ?>
+                    <p style="margin-top: 13px;">
+                        <a href="<?php echo $order_url; ?>" class="t-btn t-btn-primary t-btn-sm" style="    padding: 8px 8px;">Manage in WC Editor</a>
                     </p>
-                    <h3 class="t-title" style="padding-top:6px;">Address</h3>
-                    <p id="t_address">
-                        <?php echo $saved_address ? esc_html($saved_address->line1) : ''; ?>
+
+                    <div class="t-space"></div>
+
+                    <h3 class="t-title" style="    margin-bottom: 5px;">Manage Shipping</h3>
+                    <p>
+                        <b>Carrier name:</b> <b style="color:orange;"><?php echo $saved_others ? '<img style="    height: 11px;
+    margin-right: 4px;" src="' . $saved_others->carrier_logo . '" >' . $saved_others->carrier_name . ' : ' . $saved_others->carrier_rate_description : ''; ?></b>
+                    </p>
+                    <p>
+                        <b>Shipping Price:</b> <?php echo wc_price($saved_others->amount); ?>
+                    </p>
+                    <p>
+                        <b>Shipment Status:</b> <b style="color:orange;">Draft</b>
+                    </p>
+                    <p style="margin-top: 13px;" id="t_carriers_location">
+                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="changeTerminalCarrier(this, event)" style="padding: 8px 8px;">Change Carrier</a>
+                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="arrangeTerminalDelivery(this, event)" style="padding: 8px 8px;">Arrange for delivery</a>
                     </p>
                 </div>
             </div>

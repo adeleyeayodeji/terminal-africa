@@ -154,6 +154,59 @@ trait Ajax
         }
     }
 
+    //terminal_customer_save_address
+    public function terminal_customer_save_address()
+    {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $nounce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nounce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        $first_name = sanitize_text_field($_POST['first_name']);
+        $last_name = sanitize_text_field($_POST['last_name']);
+        $email = sanitize_text_field($_POST['email']);
+        $phone = sanitize_text_field($_POST['phone']);
+        $line_1 = sanitize_text_field($_POST['line_1']);
+        $line_2 = sanitize_text_field($_POST['line_2']);
+        $city = sanitize_text_field($_POST['lga']);
+        $state = sanitize_text_field($_POST['state']);
+        $country = sanitize_text_field($_POST['country']);
+        $zip_code = sanitize_text_field($_POST['zip_code']);
+        $address_id = sanitize_text_field($_POST['address_id']);
+        $rate_id = sanitize_text_field($_POST['rate_id']);
+        //check if any field is empty
+        if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($line_1) || empty($city) || empty($state) || empty($country) || empty($address_id)) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Please fill all required fields'
+            ]);
+        }
+        //update address
+        $update_address = updateTerminalAddress($address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+        //check if address is updated
+        if ($update_address['code'] == 200) {
+            //clear session data
+            unset($_SESSION['ratedata'][$rate_id]);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Address updated successfully',
+                'rate_cleared' => true
+            ]);
+        } else {
+            wp_send_json([
+                'code' => 400,
+                'message' => $update_address['message']
+            ]);
+        }
+    }
+
     //terminal_africa_get_states
     public function terminal_africa_get_states()
     {
@@ -498,5 +551,123 @@ trait Ajax
             'code' => 200,
             'message' => 'Carrier saved successfully'
         ]);
+    }
+
+    //terminal_africa_get_rate_data
+    public function terminal_africa_get_rate_data()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $rate_id = sanitize_text_field($_GET['rate_id']);
+        //check if rate_id is empty
+        if (empty($rate_id)) {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Rate ID is empty, please refresh the page and try again'
+            ]);
+        }
+        //get rate data
+        $get_rate_data = getTerminalRateData($rate_id);
+        //check if rate data is gotten
+        if ($get_rate_data['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Rate data gotten successfully',
+                'data' => $get_rate_data['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $get_rate_data['message'],
+                'endpoint' => 'get_rate_data'
+            ]);
+        }
+    }
+
+    //terminal_africa_process_terminal_rates_customer
+    public function terminal_africa_process_terminal_rates_customer()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $shipment_id = sanitize_text_field($_GET['shipment_id']);
+        //get rate
+        $get_rate = getTerminalRates($shipment_id);
+        //check if rate is gotten
+        if ($get_rate['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Rate gotten successfully',
+                'data' => $get_rate['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $get_rate['message'],
+                'endpoint' => 'get_rate'
+            ]);
+        }
+    }
+
+    //terminal_africa_apply_terminal_rates_customer
+    public function terminal_africa_apply_terminal_rates_customer()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $order_id = sanitize_text_field($_GET['order_id']);
+        $rateid = sanitize_text_field($_GET['rateid']);
+        $pickup = sanitize_text_field($_GET['pickup']);
+        $duration = sanitize_text_field($_GET['duration']);
+        $amount = sanitize_text_field($_GET['amount']);
+        $carrier_name = sanitize_text_field($_GET['carrier_name']);
+        //check if rate_id is empty
+        if (empty($rateid) || empty($pickup) || empty($duration) || empty($amount) || empty($carrier_name)) {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Rate ID, pickup, duration, amount or carrier name is empty, please refresh the page and try again'
+            ]);
+        }
+        //apply rate
+        $apply_rate = applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name);
+        //check if rate is applied
+        if ($apply_rate['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Rate applied successfully',
+                'url' => $apply_rate['url'],
+                'data' => $apply_rate['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $apply_rate['message'],
+                'endpoint' => 'apply_rate'
+            ]);
+        }
     }
 }

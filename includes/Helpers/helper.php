@@ -90,3 +90,21 @@ if (!function_exists('getTerminalRates')) {
         return TerminalAfricaShippingPlugin::getTerminalRates($shipment_id);
     }
 }
+
+//getTerminalRateData
+if (!function_exists('getTerminalRateData')) {
+    //get terminal rate data
+    function getTerminalRateData($rate_id)
+    {
+        return TerminalAfricaShippingPlugin::getTerminalRateData($rate_id);
+    }
+}
+
+//applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+if (!function_exists('applyTerminalRate')) {
+    //apply terminal rate
+    function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+    {
+        return TerminalAfricaShippingPlugin::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name);
+    }
+}

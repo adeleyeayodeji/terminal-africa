@@ -76,6 +76,10 @@ trait Menus
         switch ($current_page) {
             case 'terminal-africa':
                 $page = 'shipping';
+                //check if page match edit and id
+                if (isset($_GET['action']) && $_GET['action'] == "edit" && isset($_GET['id']) && $_GET['id'] != "" && isset($_GET['order_id']) && !empty($_GET['order_id']) && isset($_GET['rate_id']) && !empty($_GET['rate_id']) && isset($_GET['nonce']) && wp_verify_nonce($_GET['nonce'], 'terminal_africa_edit_shipment')) {
+                    $page = 'manage-shipping';
+                }
                 break;
             case 'terminal-africa-get-started':
                 $page = 'get-started';
