@@ -108,3 +108,12 @@ if (!function_exists('applyTerminalRate')) {
         return TerminalAfricaShippingPlugin::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name);
     }
 }
+
+//getWalletBalance
+if (!function_exists('getWalletBalance')) {
+    //get wallet balance
+    function getWalletBalance($user_id, $force = false)
+    {
+        return TerminalAfricaShippingPlugin::getWalletBalance($user_id, $force);
+    }
+}

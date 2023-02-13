@@ -600,4 +600,59 @@ trait Shipping
             'url' => $plugin_url,
         ];
     }
+
+    //getWalletBalance
+    public static function getWalletBalance($user_id, $force = false)
+    {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if data is in session
+        if (isset($_SESSION['wallet_balance']) && !$force) {
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $_SESSION['wallet_balance'],
+                'from' => 'session',
+            ];
+        }
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $query = [
+            'user_id' => $user_id
+        ];
+        //query builder
+        $query = http_build_query($query);
+        //get cities
+        $response = Requests::get(self::$enpoint . 'users/wallet-balance?' . $query, [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //save to session
+            $_SESSION['wallet_balance'] = $data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
 }

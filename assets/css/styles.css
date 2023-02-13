@@ -850,3 +850,114 @@ img.t-dashboard-intro-icon {
   font-weight: lighter;
   font-size: 13px;
 }
+
+.terminal-standard-wrapper {
+  padding: 40px;
+  background-color: #fff0db;
+}
+
+.t-wallet-background {
+  padding-top: 0px;
+  background-color: #fff0db;
+  font-size: 18px;
+}
+
+.t-balance-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: fit-content;
+  display: flex;
+}
+
+.terminal-balance-block {
+  position: relative;
+  width: 500px;
+  height: auto;
+  margin-right: 10px;
+  margin-left: 20px;
+  padding: 20px 20px 40px 40px;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 2px 2px 4px 1px hsl(0deg 0% 74% / 50%);
+  -webkit-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
+  -webkit-transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
+  transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
+  transition: transform 500ms ease, box-shadow 500ms ease;
+  transition: transform 500ms ease, box-shadow 500ms ease,
+    -webkit-transform 500ms ease;
+  cursor: pointer;
+}
+
+.t-wallet-balance-title {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-family: Lato, sans-serif;
+  color: #f69220;
+  font-size: 18px;
+  line-height: 1.2em;
+  font-weight: 400;
+}
+
+.t-balance-figure {
+  margin-bottom: 15px;
+  font-family: Lato, sans-serif;
+  color: #2d2f2e;
+  font-size: 36px;
+  line-height: 1.2em;
+  font-weight: 300;
+}
+
+.t-balance-footer-text {
+  font-family: Lato, sans-serif;
+  color: #8c8c8c;
+  line-height: 1.2em;
+  font-weight: 300;
+}
+
+.t-landing-action-link-button {
+  width: 100%;
+  height: auto;
+  margin: 20px 0px 20px 20px;
+  padding: 20px 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px 0 hsl(0deg 0% 74% / 50%);
+  cursor: pointer;
+  -o-object-fit: fill;
+  object-fit: fill;
+}
+
+.t-landing-action-link-button:hover {
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+  box-shadow: 2px 2px 4px 4px hsl(0deg 0% 74% / 50%);
+}
+
+.t-wallet-link-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.t-top-up-image-green-landscape {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.t-quick-link-text {
+  margin-top: 5px;
+  margin-right: 10px;
+  margin-left: 5px;
+  font-family: Lato, sans-serif;
+  color: #6b6b6b;
+  font-size: 18px;
+  font-weight: 400;
+}
