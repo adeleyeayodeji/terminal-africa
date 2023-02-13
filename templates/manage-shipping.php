@@ -222,7 +222,7 @@ if ($get_rate_data['code'] == 200) {
                     </p>
                     <p style="margin-top: 13px;" id="t_carriers_location">
                         <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="changeTerminalCarrier(this, event)" style="padding: 8px 8px;">Change Carrier</a>
-                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="arrangeTerminalDelivery(this, event)" style="padding: 8px 8px;">Arrange for delivery</a>
+                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-rate-id="<?php echo esc_html($rate_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="arrangeTerminalDelivery(this, event)" style="padding: 8px 8px;">Arrange for delivery</a>
                     </p>
                 </div>
             </div>

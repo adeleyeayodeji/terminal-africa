@@ -85,6 +85,9 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_apply_terminal_rates_customer
         add_action('wp_ajax_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
         add_action('wp_ajax_nopriv_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
+        //ajax terminal_africa_arrange_terminal_delivery
+        add_action('wp_ajax_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
+        add_action('wp_ajax_nopriv_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

@@ -670,4 +670,49 @@ trait Ajax
             ]);
         }
     }
+
+    //terminal_africa_arrange_terminal_delivery
+    public function terminal_africa_arrange_terminal_delivery()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $order_id = sanitize_text_field($_POST['order_id']);
+        $rateid = sanitize_text_field($_POST['rateid']);
+        $shipment_id = sanitize_text_field($_POST['shipment_id']);
+        //check if rate_id is empty
+        if (empty($rateid) || empty($shipment_id)) {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Rate ID or shipment ID is empty, please refresh the page and try again'
+            ]);
+        }
+        //check user balance
+        $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
+        $wallet_balance = getWalletBalance($terminal_africa_merchant_id);
+        //check if wallet balance is gotten
+        if ($wallet_balance['code'] == 200) {
+            //check if wallet balance is enough
+            if ($wallet_balance['data']->amount < 100) {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Your wallet balance is not enough to arrange delivery, please fund your wallet and try again'
+                ]);
+            }
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $wallet_balance['message'],
+                'endpoint' => 'get_wallet_balance'
+            ]);
+        }
+    }
 }
