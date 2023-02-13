@@ -317,11 +317,35 @@ class WC_Terminal_Delivery
         update_user_meta($user_id, 'shipping_state', $billing_state);
         update_user_meta($user_id, 'shipping_city', $billing_city);
         //update session
+        //get billing_postcode
+        if (WC()->session->get('billing_postcode')) {
+            WC()->session->__unset('billing_postcode');
+        }
         WC()->session->set('billing_postcode', $billing_postcode);
+        //get billing_state
+        if (WC()->session->get('billing_state')) {
+            WC()->session->__unset('billing_state');
+        }
         WC()->session->set('billing_state', $billing_state);
+        //get billing_city
+        if (WC()->session->get('billing_city')) {
+            WC()->session->__unset('billing_city');
+        }
         WC()->session->set('billing_city', $billing_city);
+        //get shipping_postcode
+        if (WC()->session->get('shipping_postcode')) {
+            WC()->session->__unset('shipping_postcode');
+        }
         WC()->session->set('shipping_postcode', $billing_postcode);
+        //get shipping_state
+        if (WC()->session->get('shipping_state')) {
+            WC()->session->__unset('shipping_state');
+        }
         WC()->session->set('shipping_state', $billing_state);
+        //get shipping_city
+        if (WC()->session->get('shipping_city')) {
+            WC()->session->__unset('shipping_city');
+        }
         WC()->session->set('shipping_city', $billing_city);
         return $data;
     }

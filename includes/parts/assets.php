@@ -120,13 +120,6 @@ trait Assets
                     $billing_city = explode(',', $billing_city);
                     $billing_city = $billing_city[0];
                 }
-                //check if logged in
-                if (is_user_logged_in()) {
-                    $user_id = get_current_user_id();
-                    $billing_postcode = get_user_meta($user_id, 'billing_postcode', true) ?: '';
-                    $billing_state = get_user_meta($user_id, 'billing_state', true) ?: '';
-                    $billing_city = get_user_meta($user_id, 'billing_city', true) ?: '';
-                }
 ?>
                 <script>
                     var terminal_billing_state = '<?php echo esc_html($billing_state); ?>';

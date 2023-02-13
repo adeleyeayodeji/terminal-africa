@@ -216,7 +216,7 @@ jQuery(document).ready(function ($) {
                 Swal.fire({
                   icon: "info",
                   title: "Info",
-                  text: "Customer address changed, please recalculate shipping",
+                  text: "Customer address changed, please recalculate shipping fee",
                   confirmButtonColor: "rgb(246 146 32)",
                   cancelButtonColor: "rgb(0 0 0)",
                   iconColor: "rgb(246 146 32)",
