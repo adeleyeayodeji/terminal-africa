@@ -51,6 +51,26 @@ trait Activation
         //update shipping settings
         $settings['enabled'] = 'no';
         update_option('woocommerce_terminal_delivery_settings', $settings);
+        //unset session
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if data is in session
+        if (isset($_SESSION['wallet_balance'])) {
+            //unset session
+            unset($_SESSION['wallet_balance']);
+        }
+        //$_SESSION['terminal_africa_cities']
+        if (isset($_SESSION['terminal_africa_cities'])) {
+            //unset session
+            unset($_SESSION['terminal_africa_cities']);
+        }
+        //$_SESSION['ratedata']
+        if (isset($_SESSION['ratedata'])) {
+            //unset session
+            unset($_SESSION['ratedata']);
+        }
         //delete terminal_africa_states
         global $wpdb;
         //use prepared statement

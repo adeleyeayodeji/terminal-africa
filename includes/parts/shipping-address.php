@@ -479,14 +479,14 @@ trait Shipping
     }
 
     //getTerminalRateData
-    public static function getTerminalRateData($rate_id)
+    public static function getTerminalRateData($rate_id, $force = false)
     {
         //if session is not started start it
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
         //check if data is in session
-        if (isset($_SESSION['ratedata'][$rate_id])) {
+        if (isset($_SESSION['ratedata'][$rate_id]) && !$force) {
             return [
                 'code' => 200,
                 'message' => 'success',
@@ -631,7 +631,7 @@ trait Shipping
         //query builder
         $query = http_build_query($query);
         //get cities
-        $response = Requests::get(self::$enpoint . 'users/wallet-balance?' . $query, [
+        $response = Requests::get(self::$enpoint . 'users/wallet?' . $query, [
             'Authorization' => 'Bearer ' . self::$skkey,
         ]);
         $body = json_decode($response->body);

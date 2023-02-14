@@ -1173,19 +1173,45 @@ let arrangeTerminalDelivery = (elem, e) => {
                 window.location.reload();
               });
             } else {
-              //swal error
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                confirmButtonColor: "rgb(246 146 32)",
-                cancelButtonColor: "rgb(0 0 0)",
-                text: response.message,
-                footer: `
+              if (response.code === 400) {
+                //swal error
+                Swal.fire({
+                  icon: "error",
+                  title: "Insufficient funds",
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //confirm button
+                  confirmButtonText: "Add funds",
+                  showCancelButton: true,
+                  cancelButtonText: "Cancel, I'll do it later",
+                  text: response.message,
+                  footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
         </div>
       `
-              });
+                }).then((result) => {
+                  if (result.value) {
+                    //redirect to add funds page
+                    window.location.href = terminal_africa.wallet_url;
+                    return;
+                  }
+                });
+              } else {
+                //swal error
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  text: response.message,
+                  footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+                });
+              }
             }
           },
           error: function (error) {
@@ -1208,3 +1234,206 @@ let arrangeTerminalDelivery = (elem, e) => {
     });
   });
 };
+
+//gotoTerminalPage
+let gotoTerminalPage = (elem, page) => {
+  jQuery(document).ready(function ($) {
+    let page1 = ["t-wallet-home", "t-wallet-topup"];
+    let page2 = ["t-amount-input", "t-confirm-bank"];
+    //if page is in page1
+    if (page1.includes(page)) {
+      //remove active class from all page1
+      $.each(page1, function (i, v) {
+        $(`.${v}`).hide();
+      });
+      //check if session storage is set
+      if (sessionStorage.getItem("bank") === "true") {
+        //remove active class from all page2
+        $.each(page2, function (i, v) {
+          $(`.${v}`).hide();
+        });
+        //add active class to page
+        $(`.t-wallet-topup, .t-amount-input`).show();
+        //clear session storage
+        sessionStorage.clear();
+        // console.log("session storage cleared");
+        return;
+      }
+      //add active class to page
+      $(`.${page}`).show();
+    }
+    //if page is in page2
+    if (page2.includes(page)) {
+      //check if session storage is
+      if (sessionStorage.getItem("amount") !== "true") {
+        //Swal
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please enter amount first!",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+        return;
+      }
+      //remove active class from all page2
+      $.each(page2, function (i, v) {
+        $(`.${v}`).hide();
+      });
+      //add active class to page
+      $(`.${page}`).show();
+      //check if page is t-confirm-bank then session storage
+      if (page === "t-confirm-bank") {
+        sessionStorage.setItem("bank", "true");
+        // console.log("session storage set");
+      } else {
+        //remove session storage
+        sessionStorage.removeItem("bank");
+        // console.log("session storage removed");
+      }
+    }
+  });
+};
+
+//.t-top-up-amount-input keyup and change
+jQuery(document).ready(function ($) {
+  $(document).on("keyup change", ".t-top-up-amount-input", function () {
+    let amount = $(this).val();
+    //check if amount is empty
+    if (amount === "") {
+      //disable button
+      $(".t-top-up-amount-btn").attr("disabled", true);
+      //remove session storage
+      sessionStorage.removeItem("amount");
+      return;
+    }
+    //enable button
+    $(".t-top-up-amount-btn").attr("disabled", false);
+    //session storage
+    sessionStorage.setItem("amount", "true");
+    //get old balance
+    let oldBalance = $(".t-NGN-balance");
+    //check if element exist
+    if (oldBalance.length) {
+      //get data balance
+      let dataBalance = oldBalance.data("balance");
+      //convert to number
+      let balance = Number(dataBalance);
+      //convert amount to number
+      amount = Number(amount);
+      //add amount to balance
+      amount = balance + amount;
+    }
+    //format to price format
+    let formattedAmount = new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN"
+    }).format(amount);
+    //set amount to display
+    $(".t-balance-sub-text:first").html(
+      `Balance after topup - ${formattedAmount}`
+    );
+    $(".t-top-up-amount").html(formattedAmount);
+  });
+});
+
+let confirmTerminalTransfer = (elem, e) => {
+  //prevent default
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //Swal success
+    Swal.fire({
+      icon: "success",
+      title: "Top Up Completed!",
+      confirmButtonColor: "rgb(246 146 32)",
+      //confirm button text
+      confirmButtonText: "Continue",
+      text: "You should receive confirmation once your transfer is confirmed.",
+      footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+    }).then(() => {
+      //reload page
+      window.location.href = terminal_africa.wallet_home;
+    });
+  });
+};
+
+//refreshTerminalWallet
+let refreshTerminalWallet = () => {
+  jQuery(document).ready(function ($) {
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "refresh_terminal_wallet",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      success: function (response) {
+        // console.log(response);
+      }
+    });
+  });
+};
+
+//refreshTerminalRate
+let refreshTerminalRate = (rate_id) => {
+  jQuery(document).ready(function ($) {
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "refresh_terminal_rate_data",
+        nonce: terminal_africa.nonce,
+        rate_id: rate_id
+      },
+      dataType: "json",
+      success: function (response) {
+        // console.log(response);
+      }
+    });
+  });
+};
+
+//check if page match admin.php?page=terminal-africa-wallet
+var currentpageurl = window.location.href;
+if (currentpageurl.includes("admin.php?page=terminal-africa-wallet")) {
+  //refresh terminal wallet
+  refreshTerminalWallet();
+  //check if tab is in url
+  if (currentpageurl.includes("tab=")) {
+    //trigger click .t-top-up-landing
+    jQuery(document).ready(function ($) {
+      $(".t-top-up-landing").trigger("click");
+    });
+  }
+}
+//check if page match admin.php?page=terminal-africa and has rate_id
+if (currentpageurl.includes("admin.php?page=terminal-africa")) {
+  //check if rate_id is in url
+  if (currentpageurl.includes("rate_id=")) {
+    //get rate id
+    let rate_id = currentpageurl.split("rate_id=")[1];
+    //check if & is in rate id
+    if (rate_id.includes("&")) {
+      //split rate id
+      rate_id = rate_id.split("&")[0];
+    }
+    //if rate id is not undefined
+    if (rate_id !== undefined && rate_id !== "") {
+      //refresh terminal rate
+      console.log("refreshed", rate_id);
+      refreshTerminalRate(rate_id);
+    }
+  }
+}

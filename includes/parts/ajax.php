@@ -695,7 +695,7 @@ trait Ajax
         }
         //check user balance
         $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
-        $wallet_balance = getWalletBalance($terminal_africa_merchant_id);
+        $wallet_balance = getWalletBalance($terminal_africa_merchant_id, true);
         //check if wallet balance is gotten
         if ($wallet_balance['code'] == 200) {
             //check if wallet balance is enough
@@ -705,13 +705,79 @@ trait Ajax
                     'code' => 400,
                     'message' => 'Your wallet balance is not enough to arrange delivery, please fund your wallet and try again'
                 ]);
+            } else {
+                //arrange delivery
             }
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 401,
+                'message' => $wallet_balance['message'],
+                'endpoint' => 'get_wallet_balance'
+            ]);
+        }
+    }
+
+    //refresh_terminal_wallet
+    public function refresh_terminal_wallet()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
+        //get wallet balance
+        $wallet_balance = getWalletBalance($terminal_africa_merchant_id, true);
+        //check if wallet balance is gotten
+        if ($wallet_balance['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Wallet balance gotten successfully',
+                'data' => $wallet_balance['data']
+            ]);
         } else {
             //return error
             wp_send_json([
                 'code' => 400,
                 'message' => $wallet_balance['message'],
                 'endpoint' => 'get_wallet_balance'
+            ]);
+        }
+    }
+
+    //refresh_terminal_rate
+    public function refresh_terminal_rate_data()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $rate_id = sanitize_text_field($_GET['rate_id']);
+        //get rate
+        $get_rate = getTerminalRateData($rate_id, true);
+        //check if rate is gotten
+        if ($get_rate['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Rate gotten successfully',
+                'data' => $get_rate['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $get_rate['message'],
+                'endpoint' => 'get_rate'
             ]);
         }
     }

@@ -94,9 +94,9 @@ if (!function_exists('getTerminalRates')) {
 //getTerminalRateData
 if (!function_exists('getTerminalRateData')) {
     //get terminal rate data
-    function getTerminalRateData($rate_id)
+    function getTerminalRateData($rate_id, $force = false)
     {
-        return TerminalAfricaShippingPlugin::getTerminalRateData($rate_id);
+        return TerminalAfricaShippingPlugin::getTerminalRateData($rate_id, $force);
     }
 }
 

@@ -40,7 +40,7 @@ class TerminalAfricaShippingPlugin
         //plugin loaded
         add_action('plugins_loaded', array(self::class, 'activate'), 999);
         //enqueue scripts
-        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), 9999);
         //enqueue scripts
         add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'));
         //ajax terminal_africa_auth
@@ -88,6 +88,12 @@ class TerminalAfricaShippingPlugin
         //ajax terminal_africa_arrange_terminal_delivery
         add_action('wp_ajax_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
         add_action('wp_ajax_nopriv_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
+        //refresh_terminal_wallet
+        add_action('wp_ajax_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
+        add_action('wp_ajax_nopriv_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
+        //refresh_terminal_rate_data
+        add_action('wp_ajax_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
+        add_action('wp_ajax_nopriv_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

@@ -125,8 +125,8 @@ if ($get_rate_data['code'] == 200) {
                                                         <select class="t-form-control t-terminal-country" required name="country" id="">
                                                             <option value="">Country</option>
                                                             <?php foreach ($country as $key => $value) : ?>
-                                                                <option value="<?php echo $value->isoCode; ?>" data-flag="<?php echo $value->flag; ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
-                                                                    <?php echo $value->name; ?>
+                                                                <option value="<?php echo esc_html($value->isoCode); ?>" data-flag="<?php echo $value->flag; ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
+                                                                    <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -143,8 +143,8 @@ if ($get_rate_data['code'] == 200) {
                                                                     $saved_address_state = $value->isoCode;
                                                                 }
                                                             ?>
-                                                                <option value="<?php echo $value->name; ?>" data-statecode="<?php echo $value->isoCode; ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
-                                                                    <?php echo $value->name; ?>
+                                                                <option value="<?php echo esc_html($value->name); ?>" data-statecode="<?php echo $value->isoCode; ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
+                                                                    <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -160,8 +160,8 @@ if ($get_rate_data['code'] == 200) {
                                                                 //check if cities is empty
                                                                 if (!empty($lga['data'])) :
                                                                     foreach ($lga['data'] as $key => $value) : ?>
-                                                                        <option value="<?php echo $value->name; ?>" <?php echo $saved_address && $saved_address->city == $value->name ? 'selected' : ''; ?>>
-                                                                            <?php echo $value->name; ?>
+                                                                        <option value="<?php echo esc_html($value->name); ?>" <?php echo $saved_address && $saved_address->city == $value->name ? 'selected' : ''; ?>>
+                                                                            <?php echo esc_html($value->name); ?>
                                                                         </option>
                                                                 <?php endforeach;
                                                                 endif;
@@ -195,16 +195,16 @@ if ($get_rate_data['code'] == 200) {
                 <div class="t-display-information t-data-profile t-m-sm-3">
                     <h3 class="t-title" style="    margin-bottom: 5px;">Manage order</h3>
                     <p>
-                        <b>Order Date:</b> <?php echo $order_date; ?> <b style="color:orange;">(<?php echo $order_time; ?>)</b>
+                        <b>Order Date:</b> <?php echo esc_html($order_date); ?> <b style="color:orange;">(<?php echo esc_html($order_time); ?>)</b>
                     </p>
                     <p>
-                        <b>Order Number:</b> <?php echo $order_id; ?>
+                        <b>Order Number:</b> <?php echo esc_html($order_id); ?>
                     </p>
                     <p>
-                        <b>Order Status:</b> <b style="color:orange;text-transform: capitalize;"><?php echo $order_status; ?></b>
+                        <b>Order Status:</b> <b style="color:orange;text-transform: capitalize;"><?php echo esc_html($order_status); ?></b>
                     </p>
                     <p style="margin-top: 13px;">
-                        <a href="<?php echo $order_url; ?>" class="t-btn t-btn-primary t-btn-sm" style="    padding: 8px 8px;">Manage in WC Editor</a>
+                        <a href="<?php echo esc_url($order_url); ?>" class="t-btn t-btn-primary t-btn-sm" style="    padding: 8px 8px;">Manage in WC Editor</a>
                     </p>
 
                     <div class="t-space"></div>
@@ -212,7 +212,7 @@ if ($get_rate_data['code'] == 200) {
                     <h3 class="t-title" style="    margin-bottom: 5px;">Manage Shipping</h3>
                     <p>
                         <b>Carrier name:</b> <b style="color:orange;"><?php echo $saved_others ? '<img style="    height: 11px;
-    margin-right: 4px;" src="' . $saved_others->carrier_logo . '" >' . $saved_others->carrier_name . ' : ' . $saved_others->carrier_rate_description : ''; ?></b>
+    margin-right: 4px;" src="' . esc_url($saved_others->carrier_logo) . '" >' . esc_html($saved_others->carrier_name . ' : ' . $saved_others->carrier_rate_description) : ''; ?></b>
                     </p>
                     <p>
                         <b>Shipping Price:</b> <?php echo wc_price($saved_others->amount); ?>
