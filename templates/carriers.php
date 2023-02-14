@@ -5,7 +5,7 @@ $orders = getTerminalOrders();
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-car", "Carriers"); ?>
-    <div class="t-body">
+    <div class="t-body" style="padding-top: 10px;">
         <div class="t-row">
             <div class="t-col-12">
                 <div class="t-address-info">
