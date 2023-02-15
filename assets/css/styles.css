@@ -793,6 +793,12 @@ img.t-dashboard-intro-icon {
   margin-bottom: 30px;
 }
 
+.t-space-no-border {
+  height: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .t-checkout-carriers {
   border: 1px solid gray;
   margin-top: 10px;
@@ -1332,7 +1338,7 @@ img.t-dashboard-intro-icon {
 
 .t-address-card-header-text {
   margin: 0px;
-  padding: 0px;
+  padding: 10px;
   font-family: LatoBold, sans-serif;
   font-size: 18px;
   line-height: 1.2em;

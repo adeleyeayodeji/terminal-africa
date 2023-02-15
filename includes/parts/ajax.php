@@ -781,4 +781,84 @@ trait Ajax
             ]);
         }
     }
+
+    //save_terminal_carrier_settings
+    public function save_terminal_carrier_settings()
+    {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $terminalEnabledCarriers = $_POST['terminalEnabledCarriers'];
+        $terminalDisabledCarriers = $_POST['terminalDisabledCarriers'];
+        //check if terminalEnabledCarriers is empty
+        if (empty($terminalEnabledCarriers) || empty($terminalDisabledCarriers)) {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Please select at least one carrier',
+            ]);
+        }
+        //save settings
+        //enableMultipleCarriers
+        $enableMultipleCarriers = enableMultipleCarriers($terminalEnabledCarriers);
+        //disableMultipleCarriers
+        $disableMultipleCarriers = disableMultipleCarriers($terminalDisabledCarriers);
+        //check if settings are saved
+        if ($enableMultipleCarriers['code'] == 200 && $disableMultipleCarriers['code'] == 200) {
+            //clear cache
+            unset($_SESSION['terminal_carriers_data']);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Settings saved successfully',
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $enableMultipleCarriers['message'] . ' ' . $disableMultipleCarriers['message'],
+            ]);
+        }
+    }
+
+    //refresh_terminal_carriers_data
+    public function refresh_terminal_carriers_data()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //get domestic carriers 
+        $domestic_carriers = getTerminalCarriers('domestic', true);
+        //get international carriers
+        $international_carriers = getTerminalCarriers('international', true);
+
+        //check if carriers are gotten
+        if ($domestic_carriers['code'] == 200 && $international_carriers['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Carriers updated successfully',
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Carriers not updated, please try again',
+                'endpoint' => 'get_carriers'
+            ]);
+        }
+    }
 }

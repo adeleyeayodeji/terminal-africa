@@ -186,7 +186,7 @@ if ($get_rate_data['code'] == 200) {
                             </div>
                         </div>
                         <div class="t-col-12">
-                            <button type="submit" class="t-address-save">Update</button>
+                            <button type="submit" class="t-address-save" style="width: fit-content;">Save Changes</button>
                         </div>
                     </div>
                 </form>

@@ -1405,6 +1405,25 @@ let refreshTerminalRate = (rate_id) => {
   });
 };
 
+//refreshTerminalCarriers
+let refreshTerminalCarriers = () => {
+  jQuery(document).ready(function ($) {
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "refresh_terminal_carriers_data",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      success: function (response) {
+        // console.log(response);
+      }
+    });
+  });
+};
+
 //check if page match admin.php?page=terminal-africa-wallet
 var currentpageurl = window.location.href;
 if (currentpageurl.includes("admin.php?page=terminal-africa-wallet")) {
@@ -1432,8 +1451,169 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
     //if rate id is not undefined
     if (rate_id !== undefined && rate_id !== "") {
       //refresh terminal rate
-      console.log("refreshed", rate_id);
       refreshTerminalRate(rate_id);
     }
   }
 }
+
+//check if page is admin.php?page=terminal-africa-carriers
+if (currentpageurl.includes("admin.php?page=terminal-africa-carriers")) {
+  refreshTerminalCarriers();
+}
+//getSelectedDataTerminal
+let getSelectedDataTerminal = () => {
+  let terminalEnabledCarriers = [];
+  let terminalDisabledCarriers = [];
+  //get all element .t-carrier-region-listing-block check if input is check
+  jQuery(document).ready(function ($) {
+    //get all element .t-carrier-region-listing-block
+    let elements = $(".t-carrier-region-listing-block");
+    //check if element exist
+    if (elements.length) {
+      //loop through elements
+      $.each(elements, function (i, v) {
+        //get input
+        let input = $(v).find("input");
+        let ppp = $(v);
+        let carrier_id = input.data("carrier-id");
+        let domestic = ppp.data("domestic");
+        //check if domestic is empty
+        if (
+          domestic === "" ||
+          domestic === undefined ||
+          domestic === null ||
+          domestic === "null" ||
+          domestic === "undefined" ||
+          carrier_id === "undefined" ||
+          carrier_id === undefined ||
+          carrier_id === null ||
+          carrier_id === "null"
+        ) {
+          //skip
+          return;
+        }
+        let international = ppp.data("international");
+        let regional = ppp.data("regional");
+        //create carrier object
+        let carrierObj = {
+          id: carrier_id,
+          domestic,
+          international,
+          regional
+        };
+        //check if input is checked
+        if (input.is(":checked")) {
+          //push to terminalEnabledCarriers
+          terminalEnabledCarriers.push(carrierObj);
+        } else {
+          //push to terminalDisabledCarriers
+          terminalDisabledCarriers.push(carrierObj);
+        }
+      });
+    }
+  });
+
+  //return object
+  return {
+    terminalEnabledCarriers,
+    terminalDisabledCarriers
+  };
+};
+
+//.save-carrier-settings
+jQuery(document).ready(function ($) {
+  //click
+  $(".save-carrier-settings").on("click", function (e) {
+    //prevent default
+    e.preventDefault();
+    //get selected data
+    let selectedData = getSelectedDataTerminal();
+    //use Promise
+    const myPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        return resolve(selectedData);
+      }, 300);
+    });
+    //then
+    myPromise.then((selectedData) => {
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "save_terminal_carrier_settings",
+          nonce: terminal_africa.nonce,
+          terminalEnabledCarriers: selectedData.terminalEnabledCarriers,
+          terminalDisabledCarriers: selectedData.terminalDisabledCarriers
+        },
+        dataType: "json",
+        beforeSend: () => {
+          // Swal loader
+          Swal.fire({
+            title: "Please wait...",
+            text: "Saving settings",
+            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        },
+        success: function (response) {
+          console.log(response);
+          if (response.code == 200) {
+            //Swal success
+            Swal.fire({
+              icon: "success",
+              title: "Settings Saved!",
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              //confirm button text
+              confirmButtonText: "Continue",
+              footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+            });
+          } else {
+            //Swal error
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+            });
+          }
+        },
+        error: function (error) {
+          console.log(error);
+          //Swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            footer: `
+            <div>
+              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+          `
+          });
+        }
+      });
+    });
+  });
+});

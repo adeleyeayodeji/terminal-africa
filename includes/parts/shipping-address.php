@@ -655,4 +655,171 @@ trait Shipping
             ];
         }
     }
+
+    //getTerminalCarriers
+    public static function getTerminalCarriers($type, $force = false)
+    {
+        //if session is not started start it
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if data is in session
+        if (isset($_SESSION['terminal_carriers_data'][$type]) && !$force) {
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $_SESSION['terminal_carriers_data'][$type],
+                'from' => 'session',
+            ];
+        }
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $query = [
+            'type' => $type
+        ];
+        //query builder
+        $query = http_build_query($query);
+        //get cities
+        $response = Requests::get(self::$enpoint . 'carriers?' . $query, [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //save to session
+            $_SESSION['terminal_carriers_data'][$type] = $data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //Enable Multiple Carriers
+    public static function enableMultipleCarriers($carriers)
+    {
+        $newconverted = [];
+        //loop through carriers
+        foreach ($carriers as $carrier) {
+            $newconverted[] = [
+                'id' => $carrier['id'],
+                'domestic' => (bool)$carrier['domestic'],
+                'international' => (bool)$carrier['international'],
+                'regional' => (bool)$carrier['regional'],
+            ];
+        }
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'carriers/multiple/enable',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                [
+                    'carriers' => $newconverted
+                ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //Disable Multiple Carriers
+    public static function disableMultipleCarriers($carriers)
+    {
+        $newconverted = [];
+        //loop through carriers
+        foreach ($carriers as $carrier) {
+            $newconverted[] = [
+                'id' => $carrier['id'],
+                'domestic' => (bool)$carrier['domestic'],
+                'international' => (bool)$carrier['international'],
+                'regional' => (bool)$carrier['regional'],
+            ];
+        }
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'carriers/multiple/disable',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                [
+                    'carriers' => $newconverted
+                ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
 }

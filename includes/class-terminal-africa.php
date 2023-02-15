@@ -94,6 +94,12 @@ class TerminalAfricaShippingPlugin
         //refresh_terminal_rate_data
         add_action('wp_ajax_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
         add_action('wp_ajax_nopriv_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
+        //ajax save_terminal_carrier_settings
+        add_action('wp_ajax_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
+        add_action('wp_ajax_nopriv_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
+        //ajax refresh_terminal_carriers_data
+        add_action('wp_ajax_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
+        add_action('wp_ajax_nopriv_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

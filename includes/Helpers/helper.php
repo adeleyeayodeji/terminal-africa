@@ -117,3 +117,30 @@ if (!function_exists('getWalletBalance')) {
         return TerminalAfricaShippingPlugin::getWalletBalance($user_id, $force);
     }
 }
+
+//getTerminalCarriers
+if (!function_exists('getTerminalCarriers')) {
+    //get terminal carriers
+    function getTerminalCarriers($type, $force = false)
+    {
+        return TerminalAfricaShippingPlugin::getTerminalCarriers($type, $force);
+    }
+}
+
+//enableMultipleCarriers
+if (!function_exists('enableMultipleCarriers')) {
+    //enable multiple carriers
+    function enableMultipleCarriers($carriers)
+    {
+        return TerminalAfricaShippingPlugin::enableMultipleCarriers($carriers);
+    }
+}
+
+//disableMultipleCarriers
+if (!function_exists('disableMultipleCarriers')) {
+    //disable multiple carriers
+    function disableMultipleCarriers($carriers)
+    {
+        return TerminalAfricaShippingPlugin::disableMultipleCarriers($carriers);
+    }
+}

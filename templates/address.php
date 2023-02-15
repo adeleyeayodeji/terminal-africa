@@ -148,7 +148,7 @@ $saved_address_state = "LA";
                             </div>
                         </div>
                         <div class="t-col-12">
-                            <button type="submit" class="t-address-save">Save</button>
+                            <button type="submit" class="t-address-save" style="width: fit-content;">Save Changes</button>
                         </div>
                     </div>
                 </form>
