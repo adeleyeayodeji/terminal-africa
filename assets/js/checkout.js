@@ -99,18 +99,16 @@ function terminalsetValue2(elem) {
           $.each(response.data, function (indexInArray, value) {
             //append to terminal_html
             terminal_html += `
-                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}">
-                <label for="shipping"><img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: 11px;
-                height: 12px;
-                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} 
-                <br>
-                <b class="t-carrier-desc">${value.carrier_rate_description}</b>
-                <br />
-                <b class="t-delivery-time">Pickup: ${value.pickup_time}</b>
-                <br />
-                 <b class="t-delivery-time">Delivery: ${value.delivery_time}</b>
+                <div class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}">
+                <label for="shipping">
+                <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
+                  <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
+                  <p style=""> 
+                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${value.currency} ${value.amount} - ${value.delivery_time}
+                    </p>
+                </div>
                 </label>
-                </p>
+                </div>
             `;
           });
           //close div
@@ -359,6 +357,8 @@ jQuery(document).ready(function ($) {
       //if all is good
       //submit form
       form.submit();
+      //clear local storage
+      localStorage.removeItem("terminal_delivery_html");
     });
   };
 

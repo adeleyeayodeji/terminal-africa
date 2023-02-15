@@ -640,6 +640,8 @@ jQuery(document).ready(function ($) {
     }).then((result) => {
       //check result
       if (result.value) {
+        //clear terminal_delivery_html
+        localStorage.removeItem("terminal_delivery_html");
         //ajax
         $.ajax({
           type: "GET",
@@ -1318,6 +1320,7 @@ jQuery(document).ready(function ($) {
     sessionStorage.setItem("amount", "true");
     //get old balance
     let oldBalance = $(".t-NGN-balance");
+    let amount2 = amount;
     //check if element exist
     if (oldBalance.length) {
       //get data balance
@@ -1334,11 +1337,16 @@ jQuery(document).ready(function ($) {
       style: "currency",
       currency: "NGN"
     }).format(amount);
+    //format amount2
+    let formattedAmount2 = new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN"
+    }).format(amount2);
     //set amount to display
     $(".t-balance-sub-text:first").html(
       `Balance after topup - ${formattedAmount}`
     );
-    $(".t-top-up-amount").html(formattedAmount);
+    $(".t-top-up-amount").html(formattedAmount2);
   });
 });
 

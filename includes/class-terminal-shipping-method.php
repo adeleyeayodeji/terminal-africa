@@ -143,7 +143,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         //add rate
         $this->add_rate(array(
             'id'        => $this->id . $this->instance_id,
-            'label'     => $this->title,
+            'label'     => "Terminal",
             'cost'      => 0,
             'meta_data' => [],
         ));

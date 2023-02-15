@@ -28,7 +28,7 @@ define('TERMINAL_AFRICA_PLUGIN_URL', untrailingslashit(plugins_url(basename(plug
 define('TERMINAL_AFRICA_PLUGIN_ASSETS_URL', TERMINAL_AFRICA_PLUGIN_URL . '/assets');
 //api endpoint
 define('TERMINAL_AFRICA_API_ENDPOINT', 'https://api.terminal.africa/v1/');
-define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://api.terminal.africa/v1/');
+define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/');
 //slug
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 
