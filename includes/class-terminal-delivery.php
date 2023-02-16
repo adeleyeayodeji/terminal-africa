@@ -162,12 +162,13 @@ class WC_Terminal_Delivery
             $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
             $logo_title = 'Terminal Delivery';
             $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
-            $img = '<img class="Terminal-delivery-logo"' .
+            $img = '<img class="Terminal-delivery-logo" align="left"' .
                 ' alt="' . $logo_title . '"' .
                 ' title="' . $logo_title . '"' .
-                ' style="width: 11px;
-    height: 12px;
-    display: inline;"' .
+                ' style="width: auto;
+    height: auto;
+    margin-right: 10px;
+    max-width: 20px;    display: inline;"' .
                 ' src="' . $icon_url . '"' .
                 '>';
             $label = $img . ' ' . $label;

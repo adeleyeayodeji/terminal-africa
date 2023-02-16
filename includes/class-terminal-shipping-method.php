@@ -127,7 +127,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             //add rate
             $this->add_rate(array(
                 'id'        => $this->id . $this->instance_id,
-                'label'     => $this->title . ' - ' . $terminal_africa_carriername,
+                'label'     => $terminal_africa_carriername . " - " . $terminal_africa_duration,
                 'cost'      => $terminal_africa_amount,
                 'meta_data' => [
                     'duration' => $terminal_africa_duration,

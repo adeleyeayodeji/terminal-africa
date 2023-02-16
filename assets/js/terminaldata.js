@@ -100,6 +100,7 @@ let terminalSetShippingCrarrier = function (elem, e) {
     let pickup = $(elem).attr("data-pickup");
     let email = $('input[name="billing_email"]').val();
     let rateid = $(elem).attr("data-rateid");
+    let carrierlogo = $(elem).attr("data-image-url");
     //save to session
     $.ajax({
       type: "POST",
@@ -137,6 +138,8 @@ let terminalSetShippingCrarrier = function (elem, e) {
         Swal.close();
         //if response code 200
         if (response.code == 200) {
+          //save carrier logo to session
+          localStorage.setItem("terminal_carrier_logo", carrierlogo);
           //update woocommerce
           $(document.body).trigger("update_checkout");
         } else {
@@ -196,3 +199,23 @@ let restoreCarrierData = (e) => {
     }
   });
 };
+
+//set interval carrier logo
+setInterval(function () {
+  jQuery(document).ready(function ($) {
+    //check if local storage is not empty
+    if (localStorage.getItem("terminal_carrier_logo") != null) {
+      let terminal_carrier_logo = localStorage.getItem("terminal_carrier_logo");
+      //set carrier logo
+      let img = $(".Terminal-delivery-logo");
+      //check if parent has element .woocommerce-Price-amount amount
+      if (img.parent().find(".woocommerce-Price-amount").length) {
+        img.attr("src", terminal_carrier_logo);
+      }
+    } else {
+      let old_url = `${terminal_africa.plugin_url}/img/logo-footer.png`;
+      let img = $(".Terminal-delivery-logo");
+      img.attr("src", old_url);
+    }
+  });
+}, 1000);
