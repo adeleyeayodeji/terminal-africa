@@ -166,8 +166,10 @@ trait Shipping
     //woocommerce_states
     public static function woocommerce_states($states)
     {
+        //get array key
+        $countryCode = array_key_first($states);
         //get states
-        $states_raw = self::get_states();
+        $states_raw = self::get_states($countryCode);
         //check if states is not empty
         if ($states_raw['code'] != 200) {
             //return states
@@ -181,9 +183,11 @@ trait Shipping
             foreach ($states_raw['data'] as $state) {
                 //add state to states array
                 $states_d[$state->isoCode] = $state->name;
+                //update countryCode
+                $countryCode = $state->countryCode;
             }
         }
-        $states["NG"] = $states_d;
+        $states[$countryCode] = $states_d;
         return $states;
     }
 
@@ -536,7 +540,7 @@ trait Shipping
     }
 
     //applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
-    public static function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+    public static function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo)
     {
         //wc order
         $order = wc_get_order($order_id);
@@ -567,6 +571,7 @@ trait Shipping
                 $item->update_meta_data('amount', $amount, true);
                 $item->update_meta_data('rate_id', $rateid, true);
                 $item->update_meta_data('pickup_time', $pickup, true);
+                $item->update_meta_data('carrier_logo', $carrierlogo, true);
                 $item->save();
             }
         }
@@ -578,6 +583,7 @@ trait Shipping
         update_post_meta($order_id, 'Terminal_africa_duration', $duration);
         update_post_meta($order_id, 'Terminal_africa_rateid', $rateid);
         update_post_meta($order_id, 'Terminal_africa_pickuptime', $pickup);
+        update_post_meta($order_id, 'Terminal_africa_carrierlogo', $carrierlogo);
         //url
         $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
         //shipping url
@@ -718,7 +724,7 @@ trait Shipping
         //loop through carriers
         foreach ($carriers as $carrier) {
             $newconverted[] = [
-                'id' => $carrier['id'],
+                'carrier_id' => $carrier['id'],
                 'domestic' => (bool)$carrier['domestic'],
                 'international' => (bool)$carrier['international'],
                 'regional' => (bool)$carrier['regional'],
@@ -774,7 +780,7 @@ trait Shipping
         //loop through carriers
         foreach ($carriers as $carrier) {
             $newconverted[] = [
-                'id' => $carrier['id'],
+                'carrier_id' => $carrier['id'],
                 'domestic' => (bool)$carrier['domestic'],
                 'international' => (bool)$carrier['international'],
                 'regional' => (bool)$carrier['regional'],

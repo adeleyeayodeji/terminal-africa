@@ -539,6 +539,7 @@ trait Ajax
         $email = sanitize_text_field($_POST['email']);
         $rateid = sanitize_text_field($_POST['rateid']);
         $pickuptime = sanitize_text_field($_POST['pickup']);
+        $carrierlogo = sanitize_text_field($_POST['carrierlogo']);
         //wc session
         WC()->session->set('terminal_africa_carriername', $carriername);
         WC()->session->set('terminal_africa_amount', $amount);
@@ -546,6 +547,7 @@ trait Ajax
         WC()->session->set('terminal_africa_guest_email', $email);
         WC()->session->set('terminal_africa_rateid', $rateid);
         WC()->session->set('terminal_africa_pickuptime', $pickuptime);
+        WC()->session->set('terminal_africa_carrierlogo', $carrierlogo);
         //return
         wp_send_json([
             'code' => 200,
@@ -642,6 +644,7 @@ trait Ajax
         $duration = sanitize_text_field($_GET['duration']);
         $amount = sanitize_text_field($_GET['amount']);
         $carrier_name = sanitize_text_field($_GET['carrier_name']);
+        $carrierlogo = sanitize_text_field($_GET['carrierlogo']);
         //check if rate_id is empty
         if (empty($rateid) || empty($pickup) || empty($duration) || empty($amount) || empty($carrier_name)) {
             //return error
@@ -651,7 +654,7 @@ trait Ajax
             ]);
         }
         //apply rate
-        $apply_rate = applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name);
+        $apply_rate = applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo);
         //check if rate is applied
         if ($apply_rate['code'] == 200) {
             //return
@@ -825,7 +828,7 @@ trait Ajax
             //return error
             wp_send_json([
                 'code' => 400,
-                'message' => $enableMultipleCarriers['message'] . ' ' . $disableMultipleCarriers['message'],
+                'message' => $enableMultipleCarriers['message'] . ', ' . $disableMultipleCarriers['message'],
             ]);
         }
     }

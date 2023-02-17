@@ -854,7 +854,13 @@ img.t-dashboard-intro-icon {
 
 .t-carrier-desc {
   font-weight: lighter;
-  font-size: 13px;
+  font-size: 11px;
+  background: #ff9900;
+  border-radius: 10px;
+  padding: 5px;
+  padding-top: 3px;
+  color: white;
+  padding-bottom: 3px;
 }
 
 .terminal-standard-wrapper {

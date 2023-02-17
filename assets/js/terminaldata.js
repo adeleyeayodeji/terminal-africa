@@ -13,12 +13,15 @@ jQuery(document).ready(function ($) {
     }
   });
 
-  setTimeout(() => {
-    //add value to post code
-    $("#billing_postcode").val(terminal_billing_postcode);
-    //fade in #billing_postcode_field
-    $("#billing_postcode_field").fadeIn();
-  }, 800);
+  setInterval(() => {
+    //check if #billing_postcode_field display none
+    if ($("#billing_postcode_field").css("display") == "none") {
+      //add value to post code
+      $("#billing_postcode").val(terminal_billing_postcode);
+      //fade in #billing_postcode_field
+      $("#billing_postcode_field").show();
+    }
+  }, 300);
 
   let terminalPostCode = document.getElementById("billing_postcode");
   terminalPostCode.addEventListener(
@@ -113,7 +116,8 @@ let terminalSetShippingCrarrier = function (elem, e) {
         duration: duration,
         email: email,
         rateid: rateid,
-        pickup: pickup
+        pickup: pickup,
+        carrierlogo: carrierlogo
       },
       dataType: "json",
       beforeSend: function () {

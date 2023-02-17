@@ -117,8 +117,12 @@ class WC_Terminal_Delivery
         $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
         $order_id = $order->get_id();
         $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
+        //overwirte icon url
+        $icon_url = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: $icon_url;
         $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
+        $carrier_name = get_post_meta($order_id, 'Terminal_africa_carriername', true);
         $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
+        $delivery_time = get_post_meta($order_id, 'Terminal_africa_duration', true);
         if (empty($shipment_id)) {
             return;
         }
@@ -134,11 +138,13 @@ class WC_Terminal_Delivery
             'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         );
         $plugin_url = add_query_arg($arg, $plugin_url);
-        echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;'/>Terminal Delivery</h4>";
-        echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_carriername', true)) . "</p>";
+        echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;width: auto;
+    height: auto;
+    max-width: 20px;'/>" . esc_html($carrier_name . ' - ' . $delivery_time ?: 'Terminal Delivery') . "</h4>";
+        echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html($carrier_name) . "</p>";
         echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html(get_post_meta($order_id, 'Terminal_africa_amount', true))) . "</p>";
         echo "<p><strong>Pickup Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_pickuptime', true)) . "</p>";
-        echo "<p><strong>Delivery Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_duration', true)) . "</p>";
+        echo "<p><strong>Delivery Time: </strong>" . esc_html($delivery_time) . "</p>";
         echo "<p><strong>Delivery Rate ID: </strong>" . esc_html($rate_id) . "</p>";
         echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
         echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
@@ -146,9 +152,9 @@ class WC_Terminal_Delivery
         echo "<p><strong><a href='" . $plugin_url . "' style='background: orange;
     text-decoration: none;
     color: white;
-    padding: 3px 5px 3px 5px;
+    padding: 8px;
     border-radius: 6px;
-    outline: none;'>Manage Shipping &rarr;</a></strong></p>";
+    outline: none;'>Arrange Delivery &rarr;</a></strong></p>";
     }
 
     /**
@@ -187,6 +193,7 @@ class WC_Terminal_Delivery
         $guest_email = WC()->session->get('terminal_africa_guest_email');
         $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
         $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
+        $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
@@ -202,6 +209,7 @@ class WC_Terminal_Delivery
             $terminal_africa_rateid = sanitize_text_field($terminal_africa_rateid);
             $shipment_id = sanitize_text_field($shipment_id);
             $terminal_africa_pickuptime = sanitize_text_field($terminal_africa_pickuptime);
+            $terminal_africa_carrierlogo = sanitize_text_field($terminal_africa_carrierlogo);
 
             //save
             update_post_meta($order_id, 'Terminal_africa_carriername', $terminal_africa_carriername);
@@ -211,6 +219,7 @@ class WC_Terminal_Delivery
             update_post_meta($order_id, 'Terminal_africa_rateid', $terminal_africa_rateid);
             update_post_meta($order_id, 'Terminal_africa_shipment_id', $shipment_id);
             update_post_meta($order_id, 'Terminal_africa_pickuptime', $terminal_africa_pickuptime);
+            update_post_meta($order_id, 'Terminal_africa_carrierlogo', $terminal_africa_carrierlogo);
 
             //delete session
             WC()->session->__unset('terminal_africa_carriername');
@@ -220,6 +229,7 @@ class WC_Terminal_Delivery
             WC()->session->__unset('terminal_africa_rateid');
             WC()->session->__unset('terminal_africa_pickuptime');
             WC()->session->__unset('terminal_africa_shipment_id' . $guest_email);
+            WC()->session->__unset('terminal_africa_carrierlogo');
             //delete terminal_africa_parcel_id
             $terminal_africa_parcel_id = WC()->session->get('terminal_africa_parcel_id');
             if ($terminal_africa_parcel_id) {
@@ -302,52 +312,86 @@ class WC_Terminal_Delivery
         $billing_state = $formdata['shipping_state'];
         $billing_state = sanitize_text_field($billing_state);
         $billing_city = $formdata['shipping_city'];
-        $billing_city = sanitize_text_field($billing_city);
-        //check if , is in billing city
-        if (strpos($billing_city, ',') !== false) {
-            $billing_city = explode(',', $billing_city);
-            $billing_city = $billing_city[0];
+        //country
+        $billing_country = $formdata['billing_country'];
+        //check if city is not empty
+        if (!empty($billing_city)) {
+            $billing_city = sanitize_text_field($billing_city);
+            //check if , is in billing city
+            if (strpos($billing_city, ',') !== false) {
+                $billing_city = explode(',', $billing_city);
+                $billing_city = $billing_city[0];
+            }
         }
         //update user meta
         $user_id = get_current_user_id();
-        update_user_meta($user_id, 'billing_postcode', $billing_postcode);
-        update_user_meta($user_id, 'billing_state', $billing_state);
-        update_user_meta($user_id, 'billing_city', $billing_city);
-        //shipping postcode
-        update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
-        update_user_meta($user_id, 'shipping_state', $billing_state);
-        update_user_meta($user_id, 'shipping_city', $billing_city);
+        if (!empty($billing_state)) {
+            update_user_meta($user_id, 'billing_state', $billing_state);
+        }
+        //check if city is not empty
+        if (!empty($billing_city)) {
+            update_user_meta($user_id, 'billing_city', $billing_city);
+            update_user_meta($user_id, 'shipping_city', $billing_city);
+        }
+        if (!empty($billing_state)) {
+            //shipping_state
+            update_user_meta($user_id, 'shipping_state', $billing_state);
+        }
         //update session
-        //get billing_postcode
-        if (WC()->session->get('billing_postcode')) {
-            WC()->session->__unset('billing_postcode');
+        if (!empty($billing_postcode)) {
+            //get billing_postcode
+            if (WC()->session->get('billing_postcode')) {
+                WC()->session->__unset('billing_postcode');
+            }
+            WC()->session->set('billing_postcode', $billing_postcode);
+
+            //get shipping_postcode
+            if (WC()->session->get('shipping_postcode')) {
+                WC()->session->__unset('shipping_postcode');
+            }
+            WC()->session->set('shipping_postcode', $billing_postcode);
+
+            //shipping postcode
+            update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
+            update_user_meta($user_id, 'billing_postcode', $billing_postcode);
         }
-        WC()->session->set('billing_postcode', $billing_postcode);
-        //get billing_state
-        if (WC()->session->get('billing_state')) {
-            WC()->session->__unset('billing_state');
+        if (!empty($billing_state)) {
+            //get billing_state
+            if (WC()->session->get('billing_state')) {
+                WC()->session->__unset('billing_state');
+            }
+            WC()->session->set('billing_state', $billing_state);
         }
-        WC()->session->set('billing_state', $billing_state);
-        //get billing_city
-        if (WC()->session->get('billing_city')) {
-            WC()->session->__unset('billing_city');
+        //$billing_country
+        if (!empty($billing_country)) {
+            //get billing_country
+            if (WC()->session->get('billing_country')) {
+                WC()->session->__unset('billing_country');
+            }
+            WC()->session->set('billing_country', $billing_country);
         }
-        WC()->session->set('billing_city', $billing_city);
-        //get shipping_postcode
-        if (WC()->session->get('shipping_postcode')) {
-            WC()->session->__unset('shipping_postcode');
+        //check if city is not empty
+        if (!empty($billing_city)) {
+            //get billing_city
+            if (WC()->session->get('billing_city')) {
+                WC()->session->__unset('billing_city');
+            }
+            WC()->session->set('billing_city', $billing_city);
+
+            //get shipping_city
+            if (WC()->session->get('shipping_city')) {
+                WC()->session->__unset('shipping_city');
+            }
+            WC()->session->set(
+                'shipping_city',
+                $billing_city
+            );
         }
-        WC()->session->set('shipping_postcode', $billing_postcode);
         //get shipping_state
         if (WC()->session->get('shipping_state')) {
             WC()->session->__unset('shipping_state');
         }
         WC()->session->set('shipping_state', $billing_state);
-        //get shipping_city
-        if (WC()->session->get('shipping_city')) {
-            WC()->session->__unset('shipping_city');
-        }
-        WC()->session->set('shipping_city', $billing_city);
         return $data;
     }
 

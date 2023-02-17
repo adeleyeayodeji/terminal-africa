@@ -103,9 +103,9 @@ if (!function_exists('getTerminalRateData')) {
 //applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
 if (!function_exists('applyTerminalRate')) {
     //apply terminal rate
-    function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name)
+    function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo)
     {
-        return TerminalAfricaShippingPlugin::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name);
+        return TerminalAfricaShippingPlugin::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo);
     }
 }
 

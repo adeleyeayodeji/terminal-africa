@@ -949,18 +949,25 @@ let changeTerminalCarrier = (elem, e) => {
           $.each(response.data, function (indexInArray, value) {
             //append to terminal_html
             terminal_html += `
-                <p class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-order-id="${order_id}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}">
-                <label for="shipping"><img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: 11px;
-                height: 12px;
-                display: inline;" src="${value.carrier_logo}"> ${value.carrier_name} - ${value.currency} ${value.amount} 
-                <br>
-                <b class="t-carrier-desc">${value.carrier_rate_description}</b>
-                <br />
-                <b class="t-delivery-time">Pickup: ${value.pickup_time}</b>
-                <br />
-                 <b class="t-delivery-time">Delivery: ${value.delivery_time}</b>
+                <div class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-order-id="${order_id}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
+                <label for="shipping">
+                <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;    padding-bottom: 0px;">
+                  <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
+                  <b style=""> 
+                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${value.currency} ${value.amount}
+                    </b>
+                </div>
+                <div>
+                  <p>
+                    <span class="t-carrier-desc">${value.carrier_rate_description}</span>
+                    <br />
+                    <span class="t-delivery-time">Pickup: ${value.pickup_time}</span>
+                    <br />
+                    <span class="t-delivery-time">Delivery: ${value.delivery_time}</span>
+                  </p>
+                </div>
                 </label>
-                </p>
+                </div>
             `;
           });
           //close div
@@ -1017,6 +1024,7 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
     var pickup = $(elem).data("pickup");
     var rateid = $(elem).data("rateid");
     var order_id = $(elem).data("order-id");
+    let carrierlogo = $(elem).attr("data-image-url");
     //do ajax
     //ajax
     $.ajax({
@@ -1030,7 +1038,8 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
         duration: duration,
         pickup: pickup,
         rateid: rateid,
-        order_id: order_id
+        order_id: order_id,
+        carrierlogo: carrierlogo
       },
       dataType: "json",
       beforeSend: function () {
