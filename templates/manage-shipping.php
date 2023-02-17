@@ -218,7 +218,7 @@ if ($get_rate_data['code'] == 200) {
                         <b>Shipping Price:</b> <?php echo wc_price($saved_others->amount); ?>
                     </p>
                     <p>
-                        <b>Shipment Status:</b> <b style="color:orange;">Draft</b>
+                        <b>Shipment Status:</b> <b style="color:orange;text-transform: uppercase;" id="terminal_shipment_status" data-shipment-id="<?php echo esc_html($shipping_id) ?>">....</b>
                     </p>
                     <p style="margin-top: 13px;" id="t_carriers_location">
                         <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="changeTerminalCarrier(this, event)" style="padding: 8px 8px;">Change Carrier</a>

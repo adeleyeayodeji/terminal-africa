@@ -144,3 +144,30 @@ if (!function_exists('disableMultipleCarriers')) {
         return TerminalAfricaShippingPlugin::disableMultipleCarriers($carriers);
     }
 }
+
+//getTerminalPackagingData
+if (!function_exists('getTerminalPackagingData')) {
+    //get terminal packaging data
+    function getTerminalPackagingData($force = false)
+    {
+        return TerminalAfricaShippingPlugin::getTerminalPackagingData($force);
+    }
+}
+
+//arrangePickupAndDelivery
+if (!function_exists('arrangePickupAndDelivery')) {
+    //arrange pickup and delivery
+    function arrangePickupAndDelivery($shipment_id, $rate_id)
+    {
+        return TerminalAfricaShippingPlugin::arrangePickupAndDelivery($shipment_id, $rate_id);
+    }
+}
+
+//getTerminalShipmentStatus
+if (!function_exists('getTerminalShipmentStatus')) {
+    //get terminal shipment status
+    function getTerminalShipmentStatus($shipment_id)
+    {
+        return TerminalAfricaShippingPlugin::getTerminalShipmentStatus($shipment_id);
+    }
+}

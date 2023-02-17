@@ -344,9 +344,17 @@ trait Ajax
                 'weight' => $item['data']->get_weight() ?: 0.1,
             ];
         }
+        //check if terminal_default_packaging_id is set
+        $packaging_id = get_option('terminal_default_packaging_id');
+        if (empty($packaging_id)) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Please set a default packaging, go to settings and set a default packaging'
+            ]);
+        }
         //arrange parcel
         $parcel = [
-            'packaging' => "PA-88484599859",
+            'packaging' => $packaging_id,
             'weight_unit' => 'kg',
             'items' => $data_items,
             'description' => 'Order from ' . get_bloginfo('name'),
@@ -710,6 +718,23 @@ trait Ajax
                 ]);
             } else {
                 //arrange delivery
+                $delivery = arrangePickupAndDelivery($shipment_id, $rateid);
+                //check if delivery is arranged
+                if ($delivery['code'] == 200) {
+                    //return
+                    wp_send_json([
+                        'code' => 200,
+                        'message' => 'Delivery arranged successfully',
+                        'data' => $delivery['data']
+                    ]);
+                } else {
+                    //return error
+                    wp_send_json([
+                        'code' => 400,
+                        'message' => $delivery['message'],
+                        'endpoint' => 'arrange_delivery'
+                    ]);
+                }
             }
         } else {
             //return error
@@ -861,6 +886,69 @@ trait Ajax
                 'code' => 400,
                 'message' => 'Carriers not updated, please try again',
                 'endpoint' => 'get_carriers'
+            ]);
+        }
+    }
+
+    //get packaging
+    public function get_terminal_packaging()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //get packaging
+        $get_packaging = getTerminalPackagingData();
+        //check if packaging is gotten
+        if ($get_packaging['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Packaging gotten successfully',
+                'data' => $get_packaging['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $get_packaging['message'],
+                'endpoint' => 'get_packaging'
+            ]);
+        }
+    }
+
+    //get_terminal_shipment_status
+    public function get_terminal_shipment_status()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $shipment_id = sanitize_text_field($_GET['shipment_id']);
+        //get shipment status
+        $get_shipment_status = getTerminalShipmentStatus($shipment_id);
+        //check if shipment status is gotten
+        if ($get_shipment_status['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Shipment status gotten successfully',
+                'data' => $get_shipment_status['data']
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $get_shipment_status['message'],
+                'endpoint' => 'get_shipment_status',
+                'data' => 'not available'
             ]);
         }
     }

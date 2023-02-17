@@ -828,4 +828,216 @@ trait Shipping
             ];
         }
     }
+
+    //getTerminalPackagingData
+    public static function getTerminalPackagingData()
+    {
+        //check terminal_default_packaging_id option
+        $packaging_id = get_option('terminal_default_packaging_id');
+        //check if packaging id is set
+        if ($packaging_id) {
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => [
+                    'packaging_id' => $packaging_id
+                ]
+            ];
+        }
+
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        //get cities
+        $response = Requests::get(self::$enpoint . 'packaging', [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            $packaging = $data->packaging;
+            //check the count
+            if (count($packaging) > 0) {
+                //get the first element
+                $element = $packaging[0];
+                //save the id to option
+                update_option('terminal_default_packaging_id', $element->packaging_id);
+            } else {
+                //create new packaging
+                $create = self::createDefaultPackaging();
+                if ($create['code'] == 200) {
+                    //save the id to option
+                    update_option('terminal_default_packaging_id', $create['data']->packaging_id);
+                } else {
+                    return [
+                        'code' => 404,
+                        'message' => "Unable to create default packaging",
+                        'data' => [],
+                    ];
+                }
+            }
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //create packaging
+    public static function createDefaultPackaging()
+    {
+        //check if terminal_africa_merchant_id is set
+        $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
+        if (!$terminal_africa_merchant_id) {
+            return [
+                'code' => 404,
+                'message' => "Invalid Merchant ID",
+                'data' => [],
+            ];
+        }
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'packaging',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                [
+                    "height" => 1,
+                    "length" => 47,
+                    "name" => "DHL Express Large Flyer",
+                    "size_unit" => "cm",
+                    "type" => "soft-packaging",
+                    "user" => $terminal_africa_merchant_id,
+                    "weight" => 0.1,
+                    "weight_unit" => "kg",
+                    "width" => 38
+                ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //arrange pickup and delivery
+    public static function arrangePickupAndDelivery($shipment_id, $rate_id)
+    {
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'shipments/pickup',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                [
+                    "shipment_id" => $shipment_id,
+                    "rate_id" => $rate_id,
+                ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //getTerminalShipmentStatus
+    public static function getTerminalShipmentStatus($shipment_id)
+    {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        //get shipment status
+        $response = Requests::get(self::$enpoint . 'shipments/' . $shipment_id, [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data->status;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
 }

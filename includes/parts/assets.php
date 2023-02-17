@@ -39,6 +39,7 @@ trait Assets
         wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
         //wallet page url
         $wallet_url = add_query_arg(array('tab' => 'deposit'), admin_url('admin.php?page=terminal-africa-wallet'));
+        $packaging_id = get_option('terminal_default_packaging_id');
         //localize scripts
         wp_localize_script('terminal-africa-scripts', 'terminal_africa', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -48,6 +49,7 @@ trait Assets
             'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
             'wallet_url' => $wallet_url,
             'wallet_home' => admin_url('admin.php?page=terminal-africa-wallet'),
+            'packaging_id' => $packaging_id ? 'yes' : 'no',
         ));
     }
 

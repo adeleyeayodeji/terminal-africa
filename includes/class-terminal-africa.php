@@ -100,6 +100,12 @@ class TerminalAfricaShippingPlugin
         //ajax refresh_terminal_carriers_data
         add_action('wp_ajax_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
         add_action('wp_ajax_nopriv_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
+        //ajax get_terminal_packaging
+        add_action('wp_ajax_get_terminal_packaging', array($this, 'get_terminal_packaging'));
+        add_action('wp_ajax_nopriv_get_terminal_packaging', array($this, 'get_terminal_packaging'));
+        //ajax get_terminal_shipment_status
+        add_action('wp_ajax_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
+        add_action('wp_ajax_nopriv_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)

@@ -1166,7 +1166,7 @@ let arrangeTerminalDelivery = (elem, e) => {
             //Swal close
             Swal.close();
             //check response is 200
-            if (response.code === 200) {
+            if (response.code == 200) {
               //swal success
               Swal.fire({
                 icon: "success",
@@ -1441,6 +1441,26 @@ let refreshTerminalCarriers = () => {
   });
 };
 
+let getShipmentStatus = (shipment_id) => {
+  jQuery(document).ready(function ($) {
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "get_terminal_shipment_status",
+        nonce: terminal_africa.nonce,
+        shipment_id
+      },
+      dataType: "json",
+      success: function (response) {
+        //update #terminal_shipment_status html
+        $("#terminal_shipment_status").html(response.data);
+      }
+    });
+  });
+};
+
 //check if page match admin.php?page=terminal-africa-wallet
 var currentpageurl = window.location.href;
 if (currentpageurl.includes("admin.php?page=terminal-africa-wallet")) {
@@ -1469,6 +1489,18 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
     if (rate_id !== undefined && rate_id !== "") {
       //refresh terminal rate
       refreshTerminalRate(rate_id);
+    }
+    //get shipment status
+    let shipment_id = currentpageurl.split("id=")[1];
+    //check if & is in id
+    if (shipment_id.includes("&")) {
+      //split id
+      shipment_id = shipment_id.split("&")[0];
+    }
+    //if shipment id is not undefined
+    if (shipment_id !== undefined && shipment_id !== "") {
+      //get shipment status
+      getShipmentStatus(shipment_id);
     }
   }
 }
@@ -1634,3 +1666,26 @@ jQuery(document).ready(function ($) {
     });
   });
 });
+
+//load terminal_packaging
+let loadTerminalPackaging = () => {
+  jQuery(document).ready(function ($) {
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "get_terminal_packaging",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      success: function (response) {
+        // console.log(response);
+      }
+    });
+  });
+};
+
+//check if terminal_africa.packaging_id is no
+if (terminal_africa.packaging_id == "no") {
+  loadTerminalPackaging();
+}

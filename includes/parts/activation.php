@@ -45,6 +45,8 @@ trait Activation
         delete_option('terminal_africa_merchant_address_id');
         //terminal_africa_merchant_address
         delete_option('terminal_africa_merchant_address');
+        //terminal_default_packaging_id
+        delete_option('terminal_default_packaging_id');
         //disable shipping method
         //get shipping settings
         $settings = get_option('woocommerce_terminal_delivery_settings');
