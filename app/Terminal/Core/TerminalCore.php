@@ -30,4 +30,31 @@ class TerminalCore
 
         return $orders ?: [];
     }
+
+    //getActiveCarrier
+    public function getActiveCarrier($carrier_id, $carriers_array_obj, $type)
+    {
+        //check if $carriers_array_obj code is not 200
+        if ($carriers_array_obj['code'] != 200) {
+            return false;
+        }
+        //get carriers_array_obj
+        $carriers_array_obj = $carriers_array_obj['data'];
+        //check if carrier_id is in carriers_array_obj
+        $carrier = array_filter($carriers_array_obj, function ($carrier) use ($carrier_id) {
+            return $carrier->carrier_id == $carrier_id;
+        });
+        //if carrier_id is in carriers_array_obj
+        if ($carrier) {
+            //get carrier
+            $carrier = array_values($carrier)[0];
+            //check if carrier has type enabled
+            if ($carrier->{$type}) {
+                //return carrier
+                return true;
+            }
+        }
+        //return false
+        return false;
+    }
 }

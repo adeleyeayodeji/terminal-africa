@@ -253,7 +253,6 @@ trait Shipping
                 'data' => [],
             ];
         }
-
         //check if merchant_address_id is empty
         if (empty($merchant_address_id)) {
             return [
@@ -262,7 +261,6 @@ trait Shipping
                 'data' => [],
             ];
         }
-
         //request 
         $response = Requests::put(
             self::$enpoint . 'addresses/' . $merchant_address_id,
@@ -1026,6 +1024,54 @@ trait Shipping
         if ($response->status_code == 200) {
             //return countries
             $data = $body->data->status;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //get User Carriers
+    public static function getUserCarriers($type = "domestic", $force = false)
+    {
+        //if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        //check if session is set
+        if (isset($_SESSION['terminal_africa_carriers'][$type]) && !$force) {
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $_SESSION['terminal_africa_carriers'][$type],
+            ];
+        }
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        //get shipment status
+        $response = Requests::get(self::$enpoint . 'users/carriers?type=' . $type, [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data->carriers;
+            //save session
+            $_SESSION['terminal_africa_carriers'][$type] = $data;
             //return data
             return [
                 'code' => 200,

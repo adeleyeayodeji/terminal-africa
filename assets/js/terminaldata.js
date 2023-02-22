@@ -23,6 +23,7 @@ jQuery(document).ready(function ($) {
     }
   }, 300);
 
+  //terminal postcode keyup event
   let terminalPostCode = document.getElementById("billing_postcode");
   terminalPostCode.addEventListener(
     "keyup",
@@ -38,6 +39,28 @@ jQuery(document).ready(function ($) {
             //trigger event change
             $("select[name='terminal_custom_shipping_lga2']").trigger("change");
             sessionStorage.setItem("terminal_postcode", postcode);
+          }
+        }
+      }
+    }, 1000)
+  );
+
+  //terminal phone keyup event
+  let terminalPhone = document.getElementById("billing_phone");
+  terminalPhone.addEventListener(
+    "keyup",
+    debounce(() => {
+      var phone = $("#billing_phone").val();
+      //save to session
+      //check if select name terminal_custom_shipping_lga2 exist
+      if ($("select[name='terminal_custom_shipping_lga2']").length) {
+        //check if phone is not empty
+        if (phone != "") {
+          //check if phone is not equal to session
+          if (sessionStorage.getItem("terminal_phone") != phone) {
+            //trigger event change
+            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+            sessionStorage.setItem("terminal_phone", phone);
           }
         }
       }

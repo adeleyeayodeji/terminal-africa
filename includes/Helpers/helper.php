@@ -171,3 +171,12 @@ if (!function_exists('getTerminalShipmentStatus')) {
         return TerminalAfricaShippingPlugin::getTerminalShipmentStatus($shipment_id);
     }
 }
+
+//getUserCarriers
+if (!function_exists('getUserCarriers')) {
+    //get user carriers
+    function getUserCarriers($type, $force = false)
+    {
+        return TerminalAfricaShippingPlugin::getUserCarriers($type, $force);
+    }
+}

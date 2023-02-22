@@ -374,6 +374,28 @@ jQuery(document).ready(function ($) {
         return;
       }
       // }
+      //check if shipment is applied
+      var terminal_delivery_html = $(".Terminal-delivery-logo");
+      //find parent li
+      var terminal_delivery_li = terminal_delivery_html.parent();
+      //check if class exist woocommerce-Price-amount
+      if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
+        //show error
+        Swal.fire({
+          icon: "error",
+          title: "Please select a carrier",
+          text: "Carrier is required to proceed with checkout",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+            <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+            `
+        });
+        return;
+      }
       //if all is good
       //submit form
       form.submit();
@@ -594,20 +616,6 @@ jQuery(document).ready(function ($) {
         });
       }
     });
-    return;
-    //ajax complete
-    $(document).ajaxComplete(function (event, xhr, settings) {
-      var url = settings.url;
-      //if url match update_order_review
-      if (url.indexOf("update_order_review") >= 0) {
-        var old_country = $('select[name="billing_country"]').val();
-        //compare old country with new country
-        if (old_country == sessionStorage.getItem("old_country")) {
-          return false;
-        }
-        sessionStorage.setItem("old_country", old_country);
-      }
-    });
   });
 
   //checking
@@ -627,10 +635,55 @@ jQuery(document).ready(function ($) {
       );
       //if terminal_delivery_cities is not null
       if (terminal_delivery_cities != "" && terminal_billing_state != "") {
-        //parse
-        terminal_delivery_cities = JSON.parse(terminal_delivery_cities);
-        //do terminal calculation
-        do_terminal_calculation(terminal_delivery_cities, city);
+        let countrycode = $('select[name="billing_country"]').val();
+        let state = $('select[name="terminal_custom_shipping_state2"]').val();
+        //ajax
+        $.ajax({
+          type: "GET",
+          url: terminal_africa.ajax_url,
+          data: {
+            action: "terminal_africa_get_cities",
+            countryCode: countrycode,
+            stateCode: state,
+            nonce: terminal_africa.nonce
+          },
+          dataType: "json",
+          beforeSend: function () {
+            //block form name="checkout"
+            $("form[name='checkout']").block({
+              message: null,
+              overlayCSS: {
+                background: "#fff",
+                opacity: 0.6
+              }
+            });
+          },
+          success: function (response) {
+            //unblock
+            $("form[name='checkout']").unblock();
+            //check if response code 200
+            if (response.code != 200) {
+              return;
+            }
+            do_terminal_calculation(response.cities, city);
+          },
+          error: function (error) {
+            //swal
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              //footer
+              footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+            });
+          }
+        });
       }
     }
   }, 1000);

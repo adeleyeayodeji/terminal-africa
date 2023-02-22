@@ -418,14 +418,11 @@ trait Ajax
         $country = sanitize_text_field($_POST['countryCode']);
         $zip_code = sanitize_text_field($_POST['billing_postcode']);
         $line_1 = sanitize_text_field($_POST['line_1']);
-        $phone = sanitize_text_field($_POST['phone']);
-        //check if + is in $phone
-        if (strpos("+", $phone) === false) {
-            //add + and remove first number
-            $phone = substr($phone, 1);
-            //add + to phone
-            $phone = "+234" . $phone;
-        }
+        $phone = $_POST['phone'];
+        //clean phone allow only numbers and +
+        $phone = sanitize_text_field($phone);
+        $phone = preg_replace('/[^0-9\+]/', '', $phone);
+        $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
         $email = sanitize_text_field($_POST['email']);
         $line_2 = "";
         //check if merchant_address_id is set

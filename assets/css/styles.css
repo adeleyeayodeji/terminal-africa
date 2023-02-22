@@ -1510,3 +1510,13 @@ input:checked + .t-slider:before {
 .t-slider.round:before {
   border-radius: 50%;
 }
+
+.t-carrier-coming-soon {
+  padding: 5px;
+  text-transform: uppercase;
+  background-color: #f4f4f4;
+  color: #333;
+  margin-left: 10px;
+  font-size: 10px;
+  font-family: Lato;
+}
