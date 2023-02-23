@@ -180,3 +180,21 @@ if (!function_exists('getUserCarriers')) {
         return TerminalAfricaShippingPlugin::getUserCarriers($type, $force);
     }
 }
+
+//enableSingleCarriers
+if (!function_exists('enableSingleCarriers')) {
+    //enable single carriers
+    function enableSingleCarriers($carrier)
+    {
+        return TerminalAfricaShippingPlugin::enableSingleCarriers($carrier);
+    }
+}
+
+//disableSingleCarriers
+if (!function_exists('disableSingleCarriers')) {
+    //disable single carriers
+    function disableSingleCarriers($carrier)
+    {
+        return TerminalAfricaShippingPlugin::disableSingleCarriers($carrier);
+    }
+}

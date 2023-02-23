@@ -865,13 +865,20 @@ trait Ajax
                 'message' => 'Wrong nonce, please refresh the page and try again'
             ]);
         }
+        //getUserCarriers
+        $user_carriers_domestic = getUserCarriers('domestic', true);
+        //getUserCarriers international
+        $user_carriers_international = getUserCarriers('international', true);
+        //getUserCarriers regional
+        $user_carriers_regional = getUserCarriers('regional', true);
         //get domestic carriers 
         $domestic_carriers = getTerminalCarriers('domestic', true);
         //get international carriers
         $international_carriers = getTerminalCarriers('international', true);
-
+        //regional
+        $regional_carriers = getTerminalCarriers('regional', true);
         //check if carriers are gotten
-        if ($domestic_carriers['code'] == 200 && $international_carriers['code'] == 200) {
+        if ($domestic_carriers['code'] == 200 && $international_carriers['code'] == 200 && $regional_carriers['code'] == 200 && $user_carriers_domestic['code'] == 200 && $user_carriers_international['code'] == 200 && $user_carriers_regional['code'] == 200) {
             //return
             wp_send_json([
                 'code' => 200,
@@ -948,5 +955,97 @@ trait Ajax
                 'data' => 'not available'
             ]);
         }
+    }
+
+    //update_user_carrier_terminal
+    public function update_user_carrier_terminal()
+    {
+        //check if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $carriers = $_POST['carrierObj'];
+        $status = $_POST['status'];
+        //sanitize data
+        $status = sanitize_text_field($status);
+        //sanitize object data
+        foreach ($carriers as $key => $value) {
+            $carriers[$key] = sanitize_text_field($value);
+        }
+        //check if carriers is empty
+        if (empty($carriers)) {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Please select at least one carrier',
+            ]);
+        }
+        $arrayData = [
+            'carriers' => [
+                [
+                    'carrier_id' => $carriers['id'],
+                    'domestic' => (bool)$carriers['domestic'],
+                    'international' => (bool)$carriers['international'],
+                    'regional' => (bool)$carriers['regional'],
+                ]
+            ]
+        ];
+        //check if status is enabled
+        if ($status == 'enabled') {
+            //enable carrier
+            $enable_carrier = enableSingleCarriers($arrayData);
+            //check if carrier is enabled
+            if ($enable_carrier['code'] == 200) {
+                //clear cache
+                unset($_SESSION['terminal_carriers_data']);
+                //terminal_africa_carriers
+                unset($_SESSION['terminal_africa_carriers']);
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Carrier enabled successfully',
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $enable_carrier['message'],
+                ]);
+            }
+        } else {
+            //disable carrier
+            $disable_carrier = disableSingleCarriers($arrayData);
+            //check if carrier is disabled
+            if ($disable_carrier['code'] == 200) {
+                //clear cache
+                unset($_SESSION['terminal_carriers_data']);
+                //terminal_africa_carriers
+                unset($_SESSION['terminal_africa_carriers']);
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Carrier disabled successfully',
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $disable_carrier['message'],
+                ]);
+            }
+        }
+        //return
+        wp_send_json([
+            'code' => 500,
+            'message' => 'Something went wrong, please try again',
+        ]);
     }
 }

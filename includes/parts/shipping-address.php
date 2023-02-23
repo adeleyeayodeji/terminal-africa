@@ -771,6 +771,49 @@ trait Shipping
         }
     }
 
+    //Enable Single Carriers
+    public static function enableSingleCarriers($carriers)
+    {
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        $response = Requests::post(
+            self::$enpoint . 'carriers/multiple/enable',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                $carriers
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
     //Disable Multiple Carriers
     public static function disableMultipleCarriers($carriers)
     {
@@ -803,6 +846,50 @@ trait Shipping
                 [
                     'carriers' => $newconverted
                 ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
+    //Disable Single Carriers
+    public static function disableSingleCarriers($carriers)
+    {
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'carriers/multiple/disable',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                $carriers
             ),
             //time out 60 seconds
             ['timeout' => 60]

@@ -36,9 +36,14 @@ jQuery(document).ready(function ($) {
         if (postcode != "") {
           //check if postcode is not equal to session
           if (sessionStorage.getItem("terminal_postcode") != postcode) {
-            //trigger event change
-            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
-            sessionStorage.setItem("terminal_postcode", postcode);
+            //check if select[name='terminal_custom_shipping_lga2 is not empty
+            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
+              //trigger event change
+              $("select[name='terminal_custom_shipping_lga2']").trigger(
+                "change"
+              );
+              sessionStorage.setItem("terminal_postcode", postcode);
+            }
           }
         }
       }
@@ -58,9 +63,14 @@ jQuery(document).ready(function ($) {
         if (phone != "") {
           //check if phone is not equal to session
           if (sessionStorage.getItem("terminal_phone") != phone) {
-            //trigger event change
-            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
-            sessionStorage.setItem("terminal_phone", phone);
+            //check if select[name='terminal_custom_shipping_lga2 is not empty
+            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
+              //trigger event change
+              $("select[name='terminal_custom_shipping_lga2']").trigger(
+                "change"
+              );
+              sessionStorage.setItem("terminal_phone", phone);
+            }
           }
         }
       }

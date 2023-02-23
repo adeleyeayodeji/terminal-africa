@@ -1689,3 +1689,149 @@ let loadTerminalPackaging = () => {
 if (terminal_africa.packaging_id == "no") {
   loadTerminalPackaging();
 }
+
+//.t-carrier-switch
+jQuery(document).ready(function ($) {
+  //each element
+  $(".t-carrier-switch").each(function (i, v) {
+    //find input checkbox and change event
+    $(v)
+      .find("input")
+      .on("change", function (e) {
+        //get parent
+        let parent = $(this).parents(".t-carrier-region-listing-block");
+        //carrier id
+        let carrier_id = $(this).data("carrier-id");
+        //domestic
+        let domestic = parent.data("domestic");
+        //international
+        let international = parent.data("international");
+        //regional
+        let regional = parent.data("regional");
+        //create carrier object
+        let carrierObj = {
+          id: carrier_id,
+          domestic,
+          international,
+          regional
+        };
+        //check if all are not empty
+        if (
+          carrier_id !== "" &&
+          carrier_id !== undefined &&
+          carrier_id !== null &&
+          carrier_id !== "null" &&
+          carrier_id !== "undefined" &&
+          domestic !== "" &&
+          domestic !== undefined &&
+          domestic !== null &&
+          domestic !== "null" &&
+          domestic !== "undefined" &&
+          international !== "" &&
+          international !== undefined &&
+          international !== null &&
+          international !== "null" &&
+          international !== "undefined" &&
+          regional !== "" &&
+          regional !== undefined &&
+          regional !== null &&
+          regional !== "null" &&
+          regional !== "undefined"
+        ) {
+          //check if input is checked
+          if ($(this).is(":checked")) {
+            //update server
+            $.ajax({
+              type: "POST",
+              url: terminal_africa.ajax_url,
+              data: {
+                action: "update_user_carrier_terminal",
+                nonce: terminal_africa.nonce,
+                carrierObj,
+                status: "enabled"
+              },
+              dataType: "json",
+              beforeSend: () => {
+                //block element
+                $(parent).block({
+                  message: '<i class="fa fa-spinner fa-spin"></i>',
+                  overlayCSS: {
+                    background: "#fff",
+                    opacity: 0.8,
+                    cursor: "wait"
+                  },
+                  css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: "transparent"
+                  }
+                });
+              },
+              success: function (response) {
+                //unblock element
+                $(parent).unblock();
+                //izitoast success if response code is 200
+                if (response.code == 200) {
+                  iziToast.success({
+                    title: "Success",
+                    message: response.message,
+                    position: "topRight",
+                    timeout: 3000,
+                    transitionIn: "flipInX",
+                    transitionOut: "flipOutX"
+                  });
+                }
+              }
+            });
+          } else {
+            //update server
+            $.ajax({
+              type: "POST",
+              url: terminal_africa.ajax_url,
+              data: {
+                action: "update_user_carrier_terminal",
+                nonce: terminal_africa.nonce,
+                carrierObj,
+                status: "disabled"
+              },
+              dataType: "json",
+              beforeSend: () => {
+                //block element
+                $(parent).block({
+                  message: "<i class='fa fa-spinner fa-spin'></i>",
+                  overlayCSS: {
+                    background: "#fff",
+                    opacity: 0.8,
+                    cursor: "wait"
+                  },
+                  css: {
+                    border: 0,
+                    padding: 0,
+                    backgroundColor: "transparent"
+                  }
+                });
+              },
+              success: function (response) {
+                //unblock element
+                $(parent).unblock();
+                //izitoast success if response code is 200
+                if (response.code == 200) {
+                  iziToast.info({
+                    title: "Success",
+                    message: response.message,
+                    position: "topRight",
+                    timeout: 3000,
+                    transitionIn: "flipInX",
+                    transitionOut: "flipOutX"
+                  });
+                }
+              }
+            });
+          }
+          return;
+        }
+        //log data are empty
+        console.log("data are empty", carrierObj);
+      });
+  });
+});

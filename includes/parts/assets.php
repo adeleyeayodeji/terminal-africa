@@ -28,6 +28,8 @@ trait Assets
         wp_enqueue_style('terminal-africa-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/styles.css', array(), TERMINAL_AFRICA_VERSION);
         //responsive css
         wp_enqueue_style('terminal-africa-styles-responsive', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/responsive.css', array(), TERMINAL_AFRICA_VERSION);
+        //izitoast css
+        wp_enqueue_style('terminal-africa-izitoast-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/iziToast.min.css', array(), TERMINAL_AFRICA_VERSION);
         //sweet alert styles
         wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
         //enqueue scripts
@@ -35,8 +37,10 @@ trait Assets
         wp_enqueue_script('terminal-africa-font-awesome-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/fontawesome.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //sweet alert scripts
         wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //izitoast scripts
+        wp_enqueue_script('terminal-africa-izitoast-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/iziToast.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //terminal africa scripts
-        wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery', 'select2', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
         //wallet page url
         $wallet_url = add_query_arg(array('tab' => 'deposit'), admin_url('admin.php?page=terminal-africa-wallet'));
         $packaging_id = get_option('terminal_default_packaging_id');
