@@ -8,6 +8,13 @@ use TerminalAfrica\Includes\Parts\Assets;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 //class
+/**
+ * TerminalAfricaShippingPlugin
+ * @package TerminalAfrica
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Terminal Africa
+ */
 class TerminalAfricaShippingPlugin
 {
     //skkey

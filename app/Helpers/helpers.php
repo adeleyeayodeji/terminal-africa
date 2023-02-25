@@ -32,3 +32,18 @@ if (!function_exists('getActiveCarrier')) {
         return $terminal_core->getActiveCarrier($carrier_id, $carriers_array_obj, $type);
     }
 }
+
+//getTerminalTemplate
+//check if function exists
+/**
+ * Get terminal template
+ * @param $template
+ * @param array $data
+ * @return string
+ */
+if (!function_exists('getTerminalTemplate')) {
+    function getTerminalTemplate($template, $data = [])
+    {
+        return \App\Terminal\Core\TemplateLoader::get($template, $data);
+    }
+}

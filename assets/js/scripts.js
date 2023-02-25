@@ -1441,7 +1441,7 @@ let refreshTerminalCarriers = () => {
   });
 };
 
-let getShipmentStatus = (shipment_id) => {
+let getShipmentStatus = (shipment_id, order_id, rate_id) => {
   jQuery(document).ready(function ($) {
     //ajax
     $.ajax({
@@ -1450,12 +1450,16 @@ let getShipmentStatus = (shipment_id) => {
       data: {
         action: "get_terminal_shipment_status",
         nonce: terminal_africa.nonce,
-        shipment_id
+        shipment_id,
+        order_id,
+        rate_id
       },
       dataType: "json",
       success: function (response) {
         //update #terminal_shipment_status html
         $("#terminal_shipment_status").html(response.data);
+        //load button
+        $("#t_carriers_location").html(response.button);
       }
     });
   });
@@ -1497,10 +1501,24 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
       //split id
       shipment_id = shipment_id.split("&")[0];
     }
+    //order_id
+    let order_id = currentpageurl.split("order_id=")[1];
+    //check if & is in order_id
+    if (order_id.includes("&")) {
+      //split order_id
+      order_id = order_id.split("&")[0];
+    }
     //if shipment id is not undefined
-    if (shipment_id !== undefined && shipment_id !== "") {
+    if (
+      shipment_id !== undefined &&
+      shipment_id !== "" &&
+      order_id !== undefined &&
+      order_id !== "" &&
+      rate_id !== undefined &&
+      rate_id !== ""
+    ) {
       //get shipment status
-      getShipmentStatus(shipment_id);
+      getShipmentStatus(shipment_id, order_id, rate_id);
     }
   }
 }

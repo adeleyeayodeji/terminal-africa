@@ -2,6 +2,13 @@
 
 namespace App\Terminal\Core;
 
+/**
+ * Terminal Core
+ * @package App\Terminal\Core
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Terminal Africa
+ */
 class TerminalCore
 {
     //get wc orders where shipment_id exist in metal

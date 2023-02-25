@@ -3,8 +3,6 @@
 defined('ABSPATH') or die('No script kiddies please!');
 //get shipping address
 $country = get_terminal_countries();
-$states = get_terminal_states("NG");
-$states = $states['data'];
 //get shipping id
 $shipping_id = $_GET['id'];
 //sanitize
@@ -41,6 +39,8 @@ if ($get_rate_data['code'] == 200) {
     $saved_address = $get_rate_data['data']->delivery_address;
     $saved_others = $get_rate_data['data'];
 }
+$states = get_terminal_states($saved_address ? $saved_address->country : 'NG');
+$states = $states['data'];
 ?>
 <style>
     b {
@@ -221,8 +221,7 @@ if ($get_rate_data['code'] == 200) {
                         <b>Shipment Status:</b> <b style="color:orange;text-transform: uppercase;" id="terminal_shipment_status" data-shipment-id="<?php echo esc_html($shipping_id) ?>">....</b>
                     </p>
                     <p style="margin-top: 13px;" id="t_carriers_location">
-                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="changeTerminalCarrier(this, event)" style="padding: 8px 8px;">Change Carrier</a>
-                        <a href="javascript:;" class="t-btn t-btn-primary t-btn-sm" id="t-carrier-change-button" data-shipment_id="<?php echo esc_html($shipping_id); ?>" data-rate-id="<?php echo esc_html($rate_id); ?>" data-order-id="<?php echo esc_html($order_id); ?>" onclick="arrangeTerminalDelivery(this, event)" style="padding: 8px 8px;">Arrange for delivery</a>
+
                     </p>
                 </div>
             </div>

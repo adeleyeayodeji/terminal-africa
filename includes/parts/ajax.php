@@ -936,15 +936,24 @@ trait Ajax
         }
         //data
         $shipment_id = sanitize_text_field($_GET['shipment_id']);
+        $order_id = sanitize_text_field($_GET['order_id']);
+        $rate_id = sanitize_text_field($_GET['rate_id']);
         //get shipment status
         $get_shipment_status = getTerminalShipmentStatus($shipment_id);
         //check if shipment status is gotten
         if ($get_shipment_status['code'] == 200) {
+            $status = $get_shipment_status['data'];
+            if ($status == 'draft') {
+                $getTerminalTemplate = getTerminalTemplate('shipment-button/button', compact('rate_id', 'order_id', 'shipment_id'));
+            } else {
+                $getTerminalTemplate = '';
+            }
             //return
             wp_send_json([
                 'code' => 200,
                 'message' => 'Shipment status gotten successfully',
-                'data' => $get_shipment_status['data']
+                'data' => $status,
+                'button' => $getTerminalTemplate
             ]);
         } else {
             //return error
@@ -952,7 +961,8 @@ trait Ajax
                 'code' => 400,
                 'message' => $get_shipment_status['message'],
                 'endpoint' => 'get_shipment_status',
-                'data' => 'not available'
+                'data' => 'not available',
+                'button' => 'Try shipment again.',
             ]);
         }
     }
