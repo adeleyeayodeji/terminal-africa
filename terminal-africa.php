@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: Terminal Shipping Method
- * Plugin URI:  Terminal Africa Shipping
+ * Plugin Name: Terminal Africa
+ * Plugin URI:  https://wordpress.org/plugins/terminal-africa/
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
