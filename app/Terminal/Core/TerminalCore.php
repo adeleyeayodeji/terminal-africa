@@ -64,4 +64,25 @@ class TerminalCore
         //return false
         return false;
     }
+
+    //sanitize_array
+    public function sanitize_array($array)
+    {
+        //check if array is not empty
+        if (!empty($array)) {
+            //loop through array
+            foreach ($array as $key => $value) {
+                //check if value is array
+                if (is_array($value)) {
+                    //sanitize array
+                    $array[$key] = $this->sanitize_array($value);
+                } else {
+                    //sanitize value
+                    $array[$key] = sanitize_text_field($value);
+                }
+            }
+        }
+        //return array
+        return $array;
+    }
 }

@@ -47,3 +47,18 @@ if (!function_exists('getTerminalTemplate')) {
         return \App\Terminal\Core\TemplateLoader::get($template, $data);
     }
 }
+
+//sanitize_array
+//check if function exists
+/**
+ * Sanitize array
+ * @param $array
+ * @return array
+ */
+if (!function_exists('sanitize_array')) {
+    function sanitize_array($array)
+    {
+        $terminal_core = new TerminalCore();
+        return $terminal_core->sanitize_array($array);
+    }
+}

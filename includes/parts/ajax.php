@@ -982,13 +982,11 @@ trait Ajax
             ]);
         }
         //data
-        $carriers = $_POST['carrierObj'];
-        $status = $_POST['status'];
-        //sanitize data
-        $status = sanitize_text_field($status);
+        $carriers = sanitize_array($_POST['carrierObj']);
+        $status = sanitize_text_field($_POST['status']);
         //sanitize object data
         foreach ($carriers as $key => $value) {
-            $carriers[$key] = sanitize_text_field($value);
+            $carriers[$key] = $value;
         }
         //check if carriers is empty
         if (empty($carriers)) {
