@@ -103,24 +103,17 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             return;
         }
 
-        // // country required for all shipments
-        // if ($package['destination']['country'] !== 'NG') {
-        //     //add notice
-        //     wc_add_notice(__('Terminal delivery is only available for Nigeria'), 'notice');
-        //     return;
-        // }
-
         //check if session exists
-        $terminal_africa_carriername = WC()->session->get('terminal_africa_carriername');
-        $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
-        $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
-        $guest_email = WC()->session->get('terminal_africa_guest_email');
-        $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
-        $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
-        $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
+        $terminal_africa_carriername = sanitize_text_field(WC()->session->get('terminal_africa_carriername'));
+        $terminal_africa_amount = sanitize_text_field(WC()->session->get('terminal_africa_amount'));
+        $terminal_africa_duration = sanitize_text_field(WC()->session->get('terminal_africa_duration'));
+        $guest_email = sanitize_text_field(WC()->session->get('terminal_africa_guest_email'));
+        $terminal_africa_rateid = sanitize_text_field(WC()->session->get('terminal_africa_rateid'));
+        $terminal_africa_pickuptime = sanitize_text_field(WC()->session->get('terminal_africa_pickuptime'));
+        $terminal_africa_carrierlogo = sanitize_text_field(WC()->session->get('terminal_africa_carrierlogo'));
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
-            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
+            $shipment_id = sanitize_text_field(WC()->session->get('terminal_africa_shipment_id' . $guest_email));
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);

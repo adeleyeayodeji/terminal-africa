@@ -138,7 +138,7 @@ class WC_Terminal_Delivery
             'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         );
         $plugin_url = add_query_arg($arg, $plugin_url);
-        echo "<h4> <img src='" . $icon_url . "' align='left' style='margin-right: 5px;width: auto;
+        echo "<h4> <img src='" . esc_url($icon_url) . "' align='left' style='margin-right: 5px;width: auto;
     height: auto;
     max-width: 20px;'/>" . esc_html($carrier_name . ' - ' . $delivery_time ?: 'Terminal Delivery') . "</h4>";
         echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html($carrier_name) . "</p>";
@@ -149,7 +149,7 @@ class WC_Terminal_Delivery
         echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
         echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
         //manage shipping from terminal delivery
-        echo "<p><strong><a href='" . $plugin_url . "' style='background: orange;
+        echo "<p><strong><a href='" . esc_url($plugin_url) . "' style='background: orange;
     text-decoration: none;
     color: white;
     padding: 8px;
@@ -307,13 +307,11 @@ class WC_Terminal_Delivery
         $formdata = array();
         parse_str($data, $formdata);
         //billing_postcode
-        $billing_postcode = $formdata['billing_postcode'];
-        $billing_postcode = sanitize_text_field($billing_postcode);
-        $billing_state = $formdata['shipping_state'];
-        $billing_state = sanitize_text_field($billing_state);
-        $billing_city = $formdata['shipping_city'];
+        $billing_postcode = sanitize_text_field($formdata['billing_postcode']);
+        $billing_state = sanitize_text_field($formdata['shipping_state']);
+        $billing_city = sanitize_text_field($formdata['shipping_city']);
         //country
-        $billing_country = $formdata['billing_country'];
+        $billing_country = sanitize_text_field($formdata['billing_country']);
         //check if city is not empty
         if (!empty($billing_city)) {
             $billing_city = sanitize_text_field($billing_city);

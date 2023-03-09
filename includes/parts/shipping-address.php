@@ -98,7 +98,7 @@ trait Shipping
             return [
                 'code' => 200,
                 'message' => 'success',
-                'data' => $_SESSION['terminal_africa_cities'][$countryCode][$state_code],
+                'data' => sanitize_array($_SESSION['terminal_africa_cities'][$countryCode][$state_code]),
             ];
         }
         //check if self::$skkey
@@ -492,7 +492,7 @@ trait Shipping
             return [
                 'code' => 200,
                 'message' => 'success',
-                'data' => $_SESSION['ratedata'][$rate_id],
+                'data' => sanitize_array($_SESSION['ratedata'][$rate_id]),
                 'from' => 'session',
             ];
         }
@@ -617,7 +617,7 @@ trait Shipping
             return [
                 'code' => 200,
                 'message' => 'success',
-                'data' => $_SESSION['wallet_balance'],
+                'data' => sanitize_array($_SESSION['wallet_balance']),
                 'from' => 'session',
             ];
         }
@@ -1138,7 +1138,7 @@ trait Shipping
             return [
                 'code' => 200,
                 'message' => 'success',
-                'data' => $_SESSION['terminal_africa_carriers'][$type],
+                'data' => sanitize_array($_SESSION['terminal_africa_carriers'][$type]),
             ];
         }
         if (!self::$skkey) {

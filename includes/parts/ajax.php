@@ -418,9 +418,8 @@ trait Ajax
         $country = sanitize_text_field($_POST['countryCode']);
         $zip_code = sanitize_text_field($_POST['billing_postcode']);
         $line_1 = sanitize_text_field($_POST['line_1']);
-        $phone = $_POST['phone'];
         //clean phone allow only numbers and +
-        $phone = sanitize_text_field($phone);
+        $phone = sanitize_text_field($_POST['phone']);
         $phone = preg_replace('/[^0-9\+]/', '', $phone);
         $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
         $email = sanitize_text_field($_POST['email']);
@@ -822,8 +821,8 @@ trait Ajax
             ]);
         }
         //data
-        $terminalEnabledCarriers = $_POST['terminalEnabledCarriers'];
-        $terminalDisabledCarriers = $_POST['terminalDisabledCarriers'];
+        $terminalEnabledCarriers = sanitize_array($_POST['terminalEnabledCarriers']);
+        $terminalDisabledCarriers = sanitize_array($_POST['terminalDisabledCarriers']);
         //check if terminalEnabledCarriers is empty
         if (empty($terminalEnabledCarriers) || empty($terminalDisabledCarriers)) {
             //return error

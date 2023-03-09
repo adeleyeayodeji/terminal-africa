@@ -3,13 +3,10 @@
 defined('ABSPATH') or die('No script kiddies please!');
 //get shipping address
 $country = get_terminal_countries();
-//get shipping id
-$shipping_id = $_GET['id'];
 //sanitize
-$shipping_id = sanitize_text_field($shipping_id);
-$order_id = $_GET['order_id'];
+$shipping_id = sanitize_text_field($_GET['id']);
 //sanitize
-$order_id = sanitize_text_field($order_id);
+$order_id = sanitize_text_field($_GET['order_id']);
 //get order
 $order = wc_get_order($order_id);
 //rate_id
@@ -125,7 +122,7 @@ $states = $states['data'];
                                                         <select class="t-form-control t-terminal-country" required name="country" id="">
                                                             <option value="">Country</option>
                                                             <?php foreach ($country as $key => $value) : ?>
-                                                                <option value="<?php echo esc_html($value->isoCode); ?>" data-flag="<?php echo $value->flag; ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
+                                                                <option value="<?php echo esc_html($value->isoCode); ?>" data-flag="<?php echo esc_html($value->flag); ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
                                                                     <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>
@@ -143,7 +140,7 @@ $states = $states['data'];
                                                                     $saved_address_state = $value->isoCode;
                                                                 }
                                                             ?>
-                                                                <option value="<?php echo esc_html($value->name); ?>" data-statecode="<?php echo $value->isoCode; ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
+                                                                <option value="<?php echo esc_html($value->name); ?>" data-statecode="<?php echo esc_html($value->isoCode); ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
                                                                     <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>

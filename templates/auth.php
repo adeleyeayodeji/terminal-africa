@@ -19,7 +19,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                     <input type="text" name="secret_key" required id="secret_key" placeholder="Enter your secret key">
                 </div>
                 <p>
-                    You can get your keys from your <br><a href="https://app.terminal.africa/settings/api-keys-webhooks" target="_blank">Terminal Africa Dashboard</a>
+                    You can get your keys from your <br><a href="<?php echo esc_url("https://app.terminal.africa/settings/api-keys-webhooks") ?>" target="_blank">Terminal Africa Dashboard</a>
                 </p>
                 <div class="t-form-group">
                     <button type="submit">Connect to Terminal Africa</button>

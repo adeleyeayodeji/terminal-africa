@@ -87,8 +87,8 @@ $saved_address_state = "LA";
                                                         <select class="t-form-control t-terminal-country" required name="country" id="">
                                                             <option value="">Country</option>
                                                             <?php foreach ($country as $key => $value) : ?>
-                                                                <option value="<?php echo $value->isoCode; ?>" data-flag="<?php echo $value->flag; ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
-                                                                    <?php echo $value->name; ?>
+                                                                <option value="<?php echo esc_html($value->isoCode); ?>" data-flag="<?php echo esc_html($value->flag); ?>" <?php echo $saved_address && $saved_address->country == $value->isoCode ? 'selected' : ''; ?>>
+                                                                    <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -105,8 +105,8 @@ $saved_address_state = "LA";
                                                                     $saved_address_state = $value->isoCode;
                                                                 }
                                                             ?>
-                                                                <option value="<?php echo $value->name; ?>" data-statecode="<?php echo $value->isoCode; ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
-                                                                    <?php echo $value->name; ?>
+                                                                <option value="<?php echo esc_html($value->name); ?>" data-statecode="<?php echo esc_html($value->isoCode); ?>" <?php echo $saved_address && $saved_address->state == $value->name ? 'selected' : ''; ?>>
+                                                                    <?php echo esc_html($value->name); ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>
@@ -122,8 +122,8 @@ $saved_address_state = "LA";
                                                                 //check if cities is empty
                                                                 if (!empty($lga['data'])) :
                                                                     foreach ($lga['data'] as $key => $value) : ?>
-                                                                        <option value="<?php echo $value->name; ?>" <?php echo $saved_address && $saved_address->city == $value->name ? 'selected' : ''; ?>>
-                                                                            <?php echo $value->name; ?>
+                                                                        <option value="<?php echo esc_html($value->name); ?>" <?php echo $saved_address && $saved_address->city == $value->name ? 'selected' : ''; ?>>
+                                                                            <?php echo esc_html($value->name); ?>
                                                                         </option>
                                                                 <?php endforeach;
                                                                 endif;
