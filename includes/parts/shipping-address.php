@@ -672,7 +672,7 @@ trait Shipping
             return [
                 'code' => 200,
                 'message' => 'success',
-                'data' => $_SESSION['terminal_carriers_data'][$type],
+                'data' => sanitize_array($_SESSION['terminal_carriers_data'][$type]),
                 'from' => 'session',
             ];
         }

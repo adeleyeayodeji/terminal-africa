@@ -2,6 +2,8 @@
 
 namespace App\Terminal\Core;
 
+//security
+defined('ABSPATH') or die('No script kiddies please!');
 /**
  * Terminal Core
  * @package App\Terminal\Core

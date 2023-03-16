@@ -79,7 +79,7 @@ trait Menus
     public static function settings_page()
     {
         //get current page slug
-        $current_page = isset($_GET['page']) ? $_GET['page'] : 'terminal-africa';
+        $current_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : 'terminal-africa';
         //add css
         self::cssHeaderCustom();
         //switch pages

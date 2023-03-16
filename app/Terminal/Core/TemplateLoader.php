@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Terminal\Core;
-
+//security
+defined('ABSPATH') or die('No script kiddies please!');
 /**
  * Terminal Template Loader
  * @package App\Terminal\Core

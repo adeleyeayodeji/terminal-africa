@@ -1,4 +1,6 @@
 <?php
+//security
+defined('ABSPATH') or die('No script kiddies please!');
 
 use App\Terminal\Core\TerminalCore;
 
