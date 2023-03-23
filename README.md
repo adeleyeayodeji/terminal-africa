@@ -1,6 +1,6 @@
 === Terminal Africa ===
-Contributors: Terminal, biggidroid
-Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping
+Contributors: terminalafrica, biggidroid
+Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping, terminalafrica
 Author URI: http://www.terminal.africa
 Author: Terminal
 Requires at least: 3.0.0
