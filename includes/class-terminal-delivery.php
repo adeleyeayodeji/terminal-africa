@@ -111,9 +111,51 @@ class WC_Terminal_Delivery
         add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), 10, 1);
     }
 
+    public function removeShipment($order_id)
+    {
+        $order = wc_get_order($order_id);
+        $items    = (array) $order->get_items('shipping');
+        // // Loop through shipping items
+        foreach ($items as $item) {
+            //get shipping method id
+            $shipping_method_id = $item->get_method_id();
+            //if shipping method id is terminal_delivery
+            if ($shipping_method_id == "terminal_delivery") {
+                //remove order item shipping
+                $order->remove_item($item->get_id());
+            }
+        }
+        //calculate totals
+        $order->calculate_totals();
+    }
+
     //add_order_meta_box
     public function add_order_meta_box($order)
     {
+        $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        //check if mode is live or test
+        $mode = 'test';
+        //check if class exist TerminalAfricaShippingPlugin
+        if (class_exists('TerminalAfricaShippingPlugin')) {
+            $TerminalAfricaShippingPlugin = new \TerminalAfricaShippingPlugin();
+            if ($TerminalAfricaShippingPlugin::$plugin_mode) {
+                $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
+            }
+        }
+        //check if order has meta Terminal_africa_merchant_id
+        $order_terminal_africa_merchant_id = get_post_meta($order->get_id(), 'Terminal_africa_merchant_id', true);
+        if ($order_terminal_africa_merchant_id != $terminal_africa_merchant_id) {
+            //remove order item shipping
+            $this->removeShipment($order->get_id());
+            return;
+        }
+        //check if order has meta Terminal_africa_mode
+        $order_terminal_africa_mode = get_post_meta($order->get_id(), 'Terminal_africa_mode', true);
+        if ($order_terminal_africa_mode != $mode) {
+            //remove order item shipping
+            $this->removeShipment($order->get_id());
+            return;
+        }
         $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
         $order_id = $order->get_id();
         $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
@@ -194,6 +236,16 @@ class WC_Terminal_Delivery
         $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
         $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
         $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
+        $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        //check if mode is live or test
+        $mode = 'test';
+        //check if class exist TerminalAfricaShippingPlugin
+        if (class_exists('TerminalAfricaShippingPlugin')) {
+            $TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+            if ($TerminalAfricaShippingPlugin::$plugin_mode) {
+                $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
+            }
+        }
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
@@ -220,6 +272,8 @@ class WC_Terminal_Delivery
             update_post_meta($order_id, 'Terminal_africa_shipment_id', $shipment_id);
             update_post_meta($order_id, 'Terminal_africa_pickuptime', $terminal_africa_pickuptime);
             update_post_meta($order_id, 'Terminal_africa_carrierlogo', $terminal_africa_carrierlogo);
+            update_post_meta($order_id, 'Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+            update_post_meta($order_id, 'Terminal_africa_mode', $mode);
 
             //delete session
             WC()->session->__unset('terminal_africa_carriername');

@@ -20,6 +20,7 @@ class TerminalAfricaShippingPlugin
     //skkey
     public static $skkey;
     public static $enpoint;
+    public static $plugin_mode;
 
     use Menus, Ajax, Shipping, Activation, Assets;
 
@@ -31,9 +32,11 @@ class TerminalAfricaShippingPlugin
             self::$skkey = $settings["secret_key"];
             $validate_keys = $this->checkKeys($settings["public_key"], $settings["secret_key"]);
             self::$enpoint = $validate_keys['endpoint'];
+            self::$plugin_mode = $validate_keys['mode'];
         } else {
             self::$skkey = null;
             self::$enpoint = null;
+            self::$plugin_mode = null;
         }
     }
     public function init()

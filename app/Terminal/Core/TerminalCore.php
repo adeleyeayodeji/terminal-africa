@@ -16,6 +16,16 @@ class TerminalCore
     //get wc orders where shipment_id exist in metal
     public function get_orders()
     {
+        $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        //check if mode is live or test
+        $mode = 'test';
+        //check if class exist TerminalAfricaShippingPlugin
+        if (class_exists('TerminalAfricaShippingPlugin')) {
+            $TerminalAfricaShippingPlugin = new \TerminalAfricaShippingPlugin();
+            if ($TerminalAfricaShippingPlugin::$plugin_mode) {
+                $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
+            }
+        }
         $args = [
             'post_type' => 'shop_order',
             'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
@@ -32,6 +42,18 @@ class TerminalCore
                 [
                     'key' => 'Terminal_africa_rateid',
                     'compare' => 'EXISTS',
+                ],
+                //Terminal_africa_merchant_id 
+                [
+                    'key' => 'Terminal_africa_merchant_id',
+                    'value' => $terminal_africa_merchant_id,
+                    'compare' => '=',
+                ],
+                //Terminal_africa_mode
+                [
+                    'key' => 'Terminal_africa_mode',
+                    'value' => $mode,
+                    'compare' => '=',
                 ],
             ],
         ];
@@ -75,16 +97,60 @@ class TerminalCore
             //loop through array
             foreach ($array as $key => $value) {
                 //check if value is array
-                if (is_array($value)) {
+                if (is_array($array)) {
                     //sanitize array
-                    $array[$key] = $this->sanitize_array($value);
+                    $array[$key] = is_array($value) ? $this->sanitize_array($value) : $this->sanitizeDynamic($value);
                 } else {
-                    //sanitize value
-                    $array[$key] = sanitize_text_field($value);
+                    //check if $array is object
+                    if (is_object($array)) {
+                        //sanitize object
+                        $array->$key = $this->sanitizeDynamic($value);
+                    } else {
+                        //sanitize mixed
+                        $array[$key] = $this->sanitizeDynamic($value);
+                    }
                 }
             }
         }
         //return array
         return $array;
+    }
+
+    //sanitize_object
+    public function sanitize_object($object)
+    {
+        //check if object is not empty
+        if (!empty($object)) {
+            //loop through object
+            foreach ($object as $key => $value) {
+                //check if value is array
+                if (is_array($value)) {
+                    //sanitize array
+                    $object->$key = $this->sanitize_array($value);
+                } else {
+                    //sanitize mixed
+                    $object->$key = $this->sanitizeDynamic($value);
+                }
+            }
+        }
+        //return object
+        return $object;
+    }
+
+    //dynamic sanitize
+    public function sanitizeDynamic($data)
+    {
+        $type = gettype($data);
+        switch ($type) {
+            case 'array':
+                return $this->sanitize_array($data);
+                break;
+            case 'object':
+                return $this->sanitize_object($data);
+                break;
+            default:
+                return sanitize_text_field($data);
+                break;
+        }
     }
 }

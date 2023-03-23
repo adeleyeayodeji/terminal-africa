@@ -726,7 +726,7 @@ trait Ajax
                 } else {
                     //return error
                     wp_send_json([
-                        'code' => 400,
+                        'code' => 401,
                         'message' => $delivery['message'],
                         'endpoint' => 'arrange_delivery'
                     ]);

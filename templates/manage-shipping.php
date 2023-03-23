@@ -212,7 +212,7 @@ $states = $states['data'];
     margin-right: 4px;" src="' . esc_url($saved_others->carrier_logo) . '" >' . esc_html($saved_others->carrier_name . ' : ' . $saved_others->carrier_rate_description) : ''; ?></b>
                     </p>
                     <p>
-                        <b>Shipping Price:</b> <?php echo wc_price($saved_others->amount); ?>
+                        <b>Shipping Price:</b> <?php echo $saved_others ? wc_price($saved_others->amount) : 0; ?>
                     </p>
                     <p>
                         <b>Shipment Status:</b> <b style="color:orange;text-transform: uppercase;" id="terminal_shipment_status" data-shipment-id="<?php echo esc_html($shipping_id) ?>">....</b>

@@ -111,6 +111,16 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         $terminal_africa_rateid = sanitize_text_field(WC()->session->get('terminal_africa_rateid'));
         $terminal_africa_pickuptime = sanitize_text_field(WC()->session->get('terminal_africa_pickuptime'));
         $terminal_africa_carrierlogo = sanitize_text_field(WC()->session->get('terminal_africa_carrierlogo'));
+        $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        //check if mode is live or test
+        $mode = 'test';
+        //check if class exist TerminalAfricaShippingPlugin
+        if (class_exists('TerminalAfricaShippingPlugin')) {
+            $TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+            if ($TerminalAfricaShippingPlugin::$plugin_mode) {
+                $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
+            }
+        }
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = sanitize_text_field(WC()->session->get('terminal_africa_shipment_id' . $guest_email));
@@ -131,6 +141,8 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                     'rate_id' => $terminal_africa_rateid,
                     'pickup_time' => $terminal_africa_pickuptime,
                     'carrier_logo' => $terminal_africa_carrierlogo,
+                    'merchant_id' => $terminal_africa_merchant_id,
+                    'mode' => $mode,
                 ],
             ));
             return;

@@ -73,6 +73,17 @@ trait Activation
             //unset session
             unset($_SESSION['ratedata']);
         }
+        //remove all woocomerce session
+        //get all session
+        $sessions = WC()->session->get_session_data();
+        //loop through sessions
+        foreach ($sessions as $key => $value) {
+            //check if session is terminal_africa
+            if (strpos($key, 'terminal_africa') !== false) {
+                //remove session
+                WC()->session->__unset($key);
+            }
+        }
         //delete terminal_africa_states
         global $wpdb;
         //use prepared statement

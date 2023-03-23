@@ -1216,6 +1216,7 @@ let arrangeTerminalDelivery = (elem, e) => {
                   confirmButtonColor: "rgb(246 146 32)",
                   cancelButtonColor: "rgb(0 0 0)",
                   text: response.message,
+                  confirmButtonText: "Try again",
                   footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
