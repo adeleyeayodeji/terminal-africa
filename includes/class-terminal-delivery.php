@@ -82,9 +82,9 @@ class WC_Terminal_Delivery
         // create order when \WC_Order::payment_complete() is called
         // add_action('woocommerce_thankyou', array($this, 'create_order_shipping_task'));
 
-        add_action('woocommerce_shipping_init', array($this, 'load_shipping_method'));
+        add_action('woocommerce_shipping_init', array($this, 'load_shipping_method'), PHP_INT_MAX);
 
-        add_action('woocommerce_checkout_update_order_meta', array($this, 'save_terminal_delivery_order_meta'));
+        add_action('woocommerce_checkout_update_order_meta', array($this, 'save_terminal_delivery_order_meta'), PHP_INT_MAX);
 
         // cancel a Terminal delivery task when an order is cancelled in WC
         // add_action('woocommerce_order_status_cancelled', array($this, 'cancel_order_shipping_task'));
@@ -93,7 +93,7 @@ class WC_Terminal_Delivery
         // add_action('woocommerce_order_details_after_order_table', array($this, 'add_view_order_tracking'));
 
         //order edit page actions
-        add_action('woocommerce_admin_order_data_after_shipping_address', array($this, 'add_order_meta_box'));
+        add_action('woocommerce_admin_order_data_after_shipping_address', array($this, 'add_order_meta_box'), PHP_INT_MAX);
 
         /**
          * Filters
@@ -101,14 +101,14 @@ class WC_Terminal_Delivery
         // Add shipping icon to the shipping label
         add_filter('woocommerce_cart_shipping_method_full_label', array($this, 'add_shipping_icon'), PHP_INT_MAX, 2);
 
-        add_filter('woocommerce_checkout_fields', array($this, 'remove_address_2_checkout_fields'), 99999, 1);
+        add_filter('woocommerce_checkout_fields', array($this, 'remove_address_2_checkout_fields'), PHP_INT_MAX, 1);
 
-        add_filter('woocommerce_shipping_methods', array($this, 'add_shipping_method'));
+        add_filter('woocommerce_shipping_methods', array($this, 'add_shipping_method'), PHP_INT_MAX);
 
         add_filter('woocommerce_shipping_calculator_enable_city', '__return_true');
         // add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
         //woocommerce_checkout_update_order_review
-        add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), 10, 1);
+        add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), PHP_INT_MAX, 1);
     }
 
     public function removeShipment($order_id)

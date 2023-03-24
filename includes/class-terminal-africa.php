@@ -42,17 +42,17 @@ class TerminalAfricaShippingPlugin
     public function init()
     {
         //add settings page
-        add_action('admin_menu', array(self::class, 'add_settings_page'));
+        add_action('admin_menu', array(self::class, 'add_settings_page'), PHP_INT_MAX);
         //woocommerce_countries
-        add_filter('woocommerce_countries', array(self::class, 'woocommerce_countries'), 9999);
+        add_filter('woocommerce_countries', array(self::class, 'woocommerce_countries'), PHP_INT_MAX);
         //woocommerce_states
-        add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), 9999);
+        add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), PHP_INT_MAX);
         //plugin loaded
-        add_action('plugins_loaded', array(self::class, 'activate'), 9999);
+        add_action('plugins_loaded', array(self::class, 'activate'), PHP_INT_MAX);
         //enqueue scripts
-        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), 99999);
+        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), PHP_INT_MAX);
         //enqueue scripts
-        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), 99999);
+        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), PHP_INT_MAX);
         //ajax terminal_africa_auth
         add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
         add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));
@@ -72,8 +72,8 @@ class TerminalAfricaShippingPlugin
         add_action('wp_ajax_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
         add_action('wp_ajax_nopriv_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
         //wp head
-        add_action('wp_head', array(self::class, 'wp_head_checkout'), 9999);
-        add_action('woocommerce_checkout_update_order_review', array($this, 'checkout_update_refresh_shipping_methods'), 99999, 1);
+        add_action('wp_head', array(self::class, 'wp_head_checkout'), PHP_INT_MAX);
+        add_action('woocommerce_checkout_update_order_review', array($this, 'checkout_update_refresh_shipping_methods'), PHP_INT_MAX, 1);
         //ajax terminal_africa_save_cart_item
         add_action('wp_ajax_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
         add_action('wp_ajax_nopriv_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
