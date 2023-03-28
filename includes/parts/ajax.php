@@ -341,7 +341,7 @@ trait Ajax
                 'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
                 'type' => 'parcel',
                 'currency' => get_woocommerce_currency(),
-                'weight' => $item['data']->get_weight() ?: 0.1,
+                'weight' => (float)$item['data']->get_weight() ?: 0.1,
             ];
         }
         //check if terminal_default_packaging_id is set

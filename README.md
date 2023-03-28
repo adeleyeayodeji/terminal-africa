@@ -6,30 +6,73 @@ Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
 
-== Description ==
-Terminal Africa Shipping Method is a plugin for WooCommerce that allows you to integrate Terminal Africa's shipping services into your online store. This plugin will overwrite the shipping addresses entered by customers, including country, state, and city.
+== About us ==
+Terminal Africa is a software company that provides logistics solutions for Africans and African businesses.
 
-1. Upload the plugin files to the `/wp-content/plugins/terminal-africa` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress
+Serving over 130 countries, including Nigeria, with 15+ courier partners such as DHL, FedEx, Aramex, UPS, GIGL, and Kwik, we have completed over 200,000 successful deliveries both locally and internationally, with over 5000 active shipping customers and growing, on our database.
+
+== About the Terminal Plugin ==
+Our WooCommerce plugin allows you to integrate Terminal Africa into your online store; so your customers can enjoy benefits like multiple courier options, competitive delivery rates, access to generate shipping labels, and more.
+
+== How to integrate Terminal Africa into your WooCommerce store ==
+
+= Option 1 =
+
+1. Upload the plugin files to the `/wp-content/plugins/` directory, or install the plugin directly through the WordPress plugins screen.
+2. Activate the plugin through the ‘Plugins’ screen in WordPress
 3. Go to WooCommerce > Settings > Shipping > Terminal Africa and configure the plugin.
 
+= Option 2 =
+
+1.  Download our WordPress plugin here
+2.  Install the plugin and activate it on your WordPress plugin dashboard
+3.  Follow the Terminal plugin step-by-step instructions to connect to your WordPress store and you’re live on TerminalWordPress Plugin
+
+= Option 3 =
+
+1. Login to Wordpress admin dashboard,
+2. Click on plugins
+3. Search for Terminal Africa
+4. Follow the steps in option 2 to integrate
+
 == Frequently Asked Questions ==
-= How do I set up the plugin? =
-You can set up the plugin by following the installation instructions provided in the plugin's readme file.
+= What are the benefits of integrating the Terminal Africa plugin? =
 
-= What countries does Terminal Africa Shipping support? =
-Currently, Terminal Africa Shipping supports shipping to all countries in Africa.
+- Access to a large business community
+- Multiple courier partners
+- Affordable rates
+- Seamless delivery schedule
+- Fast pickup and delivery SLA
+- Real time tracking
+- Global address verification
+- Access to waybill
+- Update on customer journey
+- Free plugin integration
 
-= Will this plugin overwrite my customers' shipping addresses? =
-Yes, this plugin will overwrite the shipping addresses entered by customers, including country, state, and city.
+= What countries do Terminal Africa shipping support? =
+Using Terminal Africa, you can ship to countries in Africa, Europe, Asia, North America, and around the world.
+
+= Will the plugin overwrite my customers’ shipping address? =
+Yes. Terminal Africa has an address validation process that automatically verifies and matches locations accordingly, providing the postal code, city, state and country.
 
 = How do I get the Terminal Africa API Key? =
 You can get the API key from your Terminal Africa account. You can create an account [here](https://app.terminal.africa/sign-up/).
+
+== Step to use the plugin ==
+
+1. Activate the plugin
+2. Retrieve API keys and login credentials
+3. Confirm address override
+4. Set default address for business or store
+5. Disable other shipment plugins
+6. WooCommerce setting - Setting tabs
+7. Select Shipping
+8. Select shipping method
 
 == Changelog ==
 = 1.0.0 =

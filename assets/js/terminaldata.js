@@ -23,59 +23,49 @@ jQuery(document).ready(function ($) {
     }
   }, 300);
 
-  //terminal postcode keyup event
+  //terminal postcode key focus out
   let terminalPostCode = document.getElementById("billing_postcode");
-  terminalPostCode.addEventListener(
-    "keyup",
-    debounce(() => {
-      var postcode = $("#billing_postcode").val();
-      //save to session
-      //check if select name terminal_custom_shipping_lga2 exist
-      if ($("select[name='terminal_custom_shipping_lga2']").length) {
-        //check if postcode is not empty
-        if (postcode != "") {
-          //check if postcode is not equal to session
-          if (sessionStorage.getItem("terminal_postcode") != postcode) {
-            //check if select[name='terminal_custom_shipping_lga2 is not empty
-            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
-              //trigger event change
-              $("select[name='terminal_custom_shipping_lga2']").trigger(
-                "change"
-              );
-              sessionStorage.setItem("terminal_postcode", postcode);
-            }
+  terminalPostCode.addEventListener("focusout", () => {
+    var postcode = $("#billing_postcode").val();
+    //save to session
+    //check if select name terminal_custom_shipping_lga2 exist
+    if ($("select[name='terminal_custom_shipping_lga2']").length) {
+      //check if postcode is not empty
+      if (postcode != "") {
+        //check if postcode is not equal to session
+        if (sessionStorage.getItem("terminal_postcode") != postcode) {
+          //check if select[name='terminal_custom_shipping_lga2 is not empty
+          if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
+            //trigger event change
+            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+            sessionStorage.setItem("terminal_postcode", postcode);
           }
         }
       }
-    }, 1000)
-  );
+    }
+  });
 
   //terminal phone keyup event
   let terminalPhone = document.getElementById("billing_phone");
-  terminalPhone.addEventListener(
-    "keyup",
-    debounce(() => {
-      var phone = $("#billing_phone").val();
-      //save to session
-      //check if select name terminal_custom_shipping_lga2 exist
-      if ($("select[name='terminal_custom_shipping_lga2']").length) {
-        //check if phone is not empty
-        if (phone != "") {
-          //check if phone is not equal to session
-          if (sessionStorage.getItem("terminal_phone") != phone) {
-            //check if select[name='terminal_custom_shipping_lga2 is not empty
-            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
-              //trigger event change
-              $("select[name='terminal_custom_shipping_lga2']").trigger(
-                "change"
-              );
-              sessionStorage.setItem("terminal_phone", phone);
-            }
+  terminalPhone.addEventListener("focusout", () => {
+    var phone = $("#billing_phone").val();
+    //save to session
+    //check if select name terminal_custom_shipping_lga2 exist
+    if ($("select[name='terminal_custom_shipping_lga2']").length) {
+      //check if phone is not empty
+      if (phone != "") {
+        //check if phone is not equal to session
+        if (sessionStorage.getItem("terminal_phone") != phone) {
+          //check if select[name='terminal_custom_shipping_lga2 is not empty
+          if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
+            //trigger event change
+            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+            sessionStorage.setItem("terminal_phone", phone);
           }
         }
       }
-    }, 1000)
-  );
+    }
+  });
 });
 
 //reloadCarrierData
@@ -130,6 +120,20 @@ function debounce(callback, wait) {
 let terminalSetShippingCrarrier = function (elem, e) {
   e.preventDefault();
   jQuery(document).ready(function ($) {
+    //get terminal shipping input
+    let terminalimage = $(".Terminal-delivery-logo");
+    //get parent element
+    let terminal_image_parent = terminalimage.parent();
+    //get previous element
+    let terminal_image_prev = terminal_image_parent.prev();
+    //check if terminal_image_prev is not empty
+    if (terminal_image_prev.length) {
+      //check if terminal_image_prev is input type radio
+      if (terminal_image_prev.is("input[type='radio']")) {
+        //check the input
+        terminal_image_prev.prop("checked", true);
+      }
+    }
     let carriername = $(elem).attr("data-carrier-name");
     let amount = $(elem).attr("data-amount");
     let duration = $(elem).attr("data-duration");

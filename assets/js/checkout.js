@@ -626,65 +626,75 @@ jQuery(document).ready(function ($) {
     $("#terminal_custom_shipping_state2").show();
   }, 300);
 
+  $('select[name="billing_country"]').val("");
+  //destroy select2
+  $('select[name="billing_country"]').select2("destroy");
+  //init select2
+  $('select[name="billing_country"]').select2({
+    placeholder: "Select Country",
+    allowClear: true
+  });
   setTimeout(() => {
-    if (terminal_billing_city != "") {
-      var city = terminal_billing_city;
-      //get local storage terminal_delivery_cities
-      var terminal_delivery_cities = localStorage.getItem(
-        "terminal_delivery_cities"
-      );
-      //if terminal_delivery_cities is not null
-      if (terminal_delivery_cities != "" && terminal_billing_state != "") {
-        let countrycode = $('select[name="billing_country"]').val();
-        let state = $('select[name="terminal_custom_shipping_state2"]').val();
-        //ajax
-        $.ajax({
-          type: "GET",
-          url: terminal_africa.ajax_url,
-          data: {
-            action: "terminal_africa_get_cities",
-            countryCode: countrycode,
-            stateCode: state,
-            nonce: terminal_africa.nonce
-          },
-          dataType: "json",
-          beforeSend: function () {
-            //block form name="checkout"
-            $("form[name='checkout']").block({
-              message: null,
-              overlayCSS: {
-                background: "#fff",
-                opacity: 0.6
-              }
-            });
-          },
-          success: function (response) {
-            //unblock
-            $("form[name='checkout']").unblock();
-            //check if response code 200
-            if (response.code != 200) {
-              return;
-            }
-            do_terminal_calculation(response.cities, city);
-          },
-          error: function (error) {
-            //swal
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong!",
-              confirmButtonColor: "rgb(246 146 32)",
-              cancelButtonColor: "rgb(0 0 0)",
-              //footer
-              footer: `
-                    <div>
-                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-                    </div>
-                    `
-            });
-          }
-        });
-      }
-    }
+    //clear current country and state
+    $('select[name="terminal_custom_shipping_state2"]').val("");
+    //   if (terminal_billing_city != "") {
+    //     var city = terminal_billing_city;
+    //     //get local storage terminal_delivery_cities
+    //     var terminal_delivery_cities = localStorage.getItem(
+    //       "terminal_delivery_cities"
+    //     );
+    //     //if terminal_delivery_cities is not null
+    //     if (terminal_delivery_cities != "" && terminal_billing_state != "") {
+    //       let countrycode = $('select[name="billing_country"]').val();
+    //       let state = $('select[name="terminal_custom_shipping_state2"]').val();
+    //       //ajax
+    //       $.ajax({
+    //         type: "GET",
+    //         url: terminal_africa.ajax_url,
+    //         data: {
+    //           action: "terminal_africa_get_cities",
+    //           countryCode: countrycode,
+    //           stateCode: state,
+    //           nonce: terminal_africa.nonce
+    //         },
+    //         dataType: "json",
+    //         beforeSend: function () {
+    //           //block form name="checkout"
+    //           $("form[name='checkout']").block({
+    //             message: null,
+    //             overlayCSS: {
+    //               background: "#fff",
+    //               opacity: 0.6
+    //             }
+    //           });
+    //         },
+    //         success: function (response) {
+    //           //unblock
+    //           $("form[name='checkout']").unblock();
+    //           //check if response code 200
+    //           if (response.code != 200) {
+    //             return;
+    //           }
+    //           do_terminal_calculation(response.cities, city);
+    //         },
+    //         error: function (error) {
+    //           //swal
+    //           Swal.fire({
+    //             icon: "error",
+    //             title: "Oops...",
+    //             text: "Something went wrong!",
+    //             confirmButtonColor: "rgb(246 146 32)",
+    //             cancelButtonColor: "rgb(0 0 0)",
+    //             //footer
+    //             footer: `
+    //                   <div>
+    //                       <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+    //                   </div>
+    //                   `
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
   }, 1000);
 });
