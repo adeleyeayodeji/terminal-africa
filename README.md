@@ -78,9 +78,13 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
-= 1.0.0 =
 
+= 1.0.0 =
 Initial release
+
+= 1.0.3 =
+Updated ReadMe file
+
 == Upgrade Notice ==
 = 1.0.0 =
 This is the initial release of Terminal Africa Shipping Method for WooCommerce. No upgrade notice is required.
