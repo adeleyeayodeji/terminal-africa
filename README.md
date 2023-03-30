@@ -6,10 +6,13 @@ Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
 Tested up to: 6.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
+
+== Description ==
+Terminal Africa Shipping Method Plugin for WooCommerce
 
 == About us ==
 Terminal Africa is a software company that provides logistics solutions for Africans and African businesses.
