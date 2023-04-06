@@ -119,8 +119,6 @@ class TerminalAfricaShippingPlugin
         //ajax update user carrier
         add_action('wp_ajax_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
         add_action('wp_ajax_nopriv_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
-        //woocommerce new order
-        add_action('woocommerce_new_order', array($this, 'woocommerce_new_order'), 10, 2);
         add_action('woocommerce_add_to_cart', array($this, 'remove_wc_session_on_cart_action'), 10, 6);
         //ajax deactivate_terminal_africa
         add_action('wp_ajax_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
@@ -136,25 +134,6 @@ class TerminalAfricaShippingPlugin
         $packages = WC()->cart->get_shipping_packages();
         foreach ($packages as $package_key => $package) {
             WC()->session->set('shipping_for_package_' . $package_key, false); // Or true
-        }
-    }
-
-    //woocommerce_new_order
-    public function woocommerce_new_order($order_id, $order)
-    {
-        //clear all wc session with terminal_africa
-        //check if class exist
-        if (function_exists('WC')) {
-            //get all session
-            $sessions = WC()->session->get_session_data();
-            //loop through sessions
-            foreach ($sessions as $key => $value) {
-                //check if session is terminal_africa
-                if (strpos($key, 'terminal_africa') !== false) {
-                    //remove session
-                    WC()->session->__unset($key);
-                }
-            }
         }
     }
 
