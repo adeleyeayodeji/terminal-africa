@@ -44,7 +44,7 @@ class WC_Terminal_Delivery_Loader
     const MINIMUM_PHP_VERSION = '5.4.0';
 
     /** minimum WordPress version required by this plugin */
-    const MINIMUM_WP_VERSION = '5.0';
+    const MINIMUM_WP_VERSION = '6.2';
 
     /** minimum WooCommerce version required by this plugin */
     const MINIMUM_WC_VERSION = '4.0';
