@@ -947,6 +947,13 @@ let changeTerminalCarrier = (elem, e) => {
           `;
           //loop through response.data
           $.each(response.data, function (indexInArray, value) {
+            let amount = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: terminal_africa.currency
+              //  currencyDisplay: "narrowSymbol",
+              //remove decimal
+              //  minimumFractionDigits: 0
+            }).format(value.amount);
             //append to terminal_html
             terminal_html += `
                 <div class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-order-id="${order_id}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
@@ -954,7 +961,7 @@ let changeTerminalCarrier = (elem, e) => {
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;    padding-bottom: 0px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
                   <b style=""> 
-                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${value.currency} ${value.amount}
+                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${amount}
                     </b>
                 </div>
                 <div>
@@ -1456,11 +1463,102 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
         rate_id
       },
       dataType: "json",
+      beforeSend: () => {
+        //disable all input #t-form-submit
+        $("#t-form-submit")
+          .find("input, button, select, textarea")
+          .attr("disabled", "disabled");
+        //add readonly to all input
+        $("#t-form-submit")
+          .find("input, button, select, textarea")
+          .attr("readonly", "readonly");
+      },
       success: function (response) {
-        //update #terminal_shipment_status html
-        $("#terminal_shipment_status").html(response.data);
-        //load button
-        $("#t_carriers_location").html(response.button);
+        //check if response code is 200
+        if (response.code === 200) {
+          //update #terminal_shipment_status html
+          $("#terminal_shipment_status").html(response.data);
+          //check if status is draft
+          if (response.data === "draft") {
+            //enable all input #t-form-submit
+            $("#t-form-submit")
+              .find("input, button, select, textarea")
+              .removeAttr("disabled");
+            //remove readonly to all input
+            $("#t-form-submit")
+              .find("input, button, select, textarea")
+              .removeAttr("readonly");
+          } else {
+            let shipping_info = response.shipment_info.extras;
+            let address_from = response.shipment_info.address_from.country;
+            let address_to = response.shipment_info.address_to.country;
+            //add template for info
+            let template = `
+              <div class="t-space"></div>
+
+                    <p>
+                        <b>Shipping Label:</b> <a href="${
+                          shipping_info.shipping_label_url
+                        }" class="t-shipment-info-link" target="_blank">View Label</a>
+                    </p>
+                    <p>
+                        <b>Tracking Number:</b> <b>${
+                          shipping_info.tracking_number
+                        }</b>
+                    </p>
+                    <p>
+                        <b>Tracking Link:</b> <a href="${
+                          terminal_africa.tracking_url +
+                          shipping_info.tracking_number
+                        }" class="t-shipment-info-link" target="_blank">Track Shipment</a>
+                    </p>
+
+                    ${
+                      address_from != address_to
+                        ? `
+                        <br>
+                    <p>
+                    <b>Commercial Invoice:</b> <a href="${shipping_info.commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
+                    </p>
+                    <p>
+                    <b>Carrier Tracking:</b> <a href="${shipping_info.carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
+                    </p>
+                    `
+                        : ``
+                    }
+                    
+                    <div class="t-space"></div>
+                `;
+            //append before #t_carriers_location
+            $("#t_carriers_location").before(template);
+          }
+          //load button
+          $("#t_carriers_location").html(response.button);
+        } else {
+          //Swal
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            //confirm button text
+            confirmButtonText: "Continue",
+            footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+          }).then(() => {
+            //enable all input #t-form-submit
+            $("#t-form-submit")
+              .find("input, button, select, textarea")
+              .removeAttr("disabled");
+            //remove readonly to all input
+            $("#t-form-submit")
+              .find("input, button, select, textarea")
+              .removeAttr("readonly");
+          });
+        }
       }
     });
   });
@@ -1490,11 +1588,6 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
       //split rate id
       rate_id = rate_id.split("&")[0];
     }
-    //if rate id is not undefined
-    if (rate_id !== undefined && rate_id !== "") {
-      //refresh terminal rate
-      refreshTerminalRate(rate_id);
-    }
     //get shipment status
     let shipment_id = currentpageurl.split("id=")[1];
     //check if & is in id
@@ -1520,6 +1613,8 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
     ) {
       //get shipment status
       getShipmentStatus(shipment_id, order_id, rate_id);
+      //refresh terminal rate
+      refreshTerminalRate(rate_id);
     }
   }
 }
@@ -1702,6 +1797,11 @@ let loadTerminalPackaging = () => {
       }
     });
   });
+};
+
+//duplicateTerminalShipment
+let duplicateTerminalShipment = (elem, e) => {
+  //do something
 };
 
 //check if terminal_africa.packaging_id is no

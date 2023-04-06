@@ -168,6 +168,13 @@ class WC_Terminal_Delivery
         if (empty($shipment_id)) {
             return;
         }
+        //check if terminal_africa_delivery_arranged is yes
+        $terminal_africa_delivery_arranged = get_post_meta($order_id, 'terminal_africa_delivery_arranged', true);
+        if ($terminal_africa_delivery_arranged == 'yes') {
+            $note = "Manage Delivery &rarr;";
+        } else {
+            $note = "Arrange Delivery &rarr;";
+        }
         //plugin url
         $plugin_url = admin_url('admin.php?page=terminal-africa');
         //arg
@@ -196,7 +203,7 @@ class WC_Terminal_Delivery
     color: white;
     padding: 8px;
     border-radius: 6px;
-    outline: none;'>Arrange Delivery &rarr;</a></strong></p>";
+    outline: none;'>" . $note . "</a></strong></p>";
     }
 
     /**

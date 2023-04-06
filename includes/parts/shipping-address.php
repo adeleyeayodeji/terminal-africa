@@ -5,7 +5,7 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
-use Requests;
+use \WpOrg\Requests\Requests;
 
 trait Shipping
 {
@@ -446,9 +446,22 @@ trait Shipping
                 'data' => [],
             ];
         }
+        //get woocommerce currency
+        $currency = get_woocommerce_currency();
+        //allowed currencies
+        /*
+            NGN. Available options are AED, AUD, CAD, CNY, EUR, GBP, GHS, HKD, KES, NGN, TZS, UGX, USD, ZAR.
+        */
+        $allowed_currencies =  ['AED', 'AUD', 'CAD', 'CNY', 'EUR', 'GBP', 'GHS', 'HKD', 'KES', 'NGN', 'TZS', 'UGX', 'USD', 'ZAR'];
+        //check if currency is allowed
+        if (!in_array($currency, $allowed_currencies)) {
+            //set default usd
+            $currency = 'USD';
+        }
         //query
         $query = [
             'shipment_id' => $shipment_id,
+            'currency' => $currency,
         ];
         $query = http_build_query($query);
         $response = Requests::get(
@@ -1116,12 +1129,14 @@ trait Shipping
                 'code' => 200,
                 'message' => 'success',
                 'data' => $data,
+                'shipment_info' => $body->data
             ];
         } else {
             return [
                 'code' => $response->status_code,
                 'message' => $body->message,
-                'data' => [],
+                'data' => '',
+                'shipment_info' => []
             ];
         }
     }

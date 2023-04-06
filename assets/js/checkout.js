@@ -105,6 +105,13 @@ function terminalsetValue2(elem) {
           `;
           //loop through response.data
           $.each(response.data, function (indexInArray, value) {
+            let amount = new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: terminal_africa.currency
+              //  currencyDisplay: "narrowSymbol",
+              //remove decimal
+              //  minimumFractionDigits: 0
+            }).format(value.amount);
             //append to terminal_html
             terminal_html += `
                 <div class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
@@ -112,7 +119,7 @@ function terminalsetValue2(elem) {
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
                   <p style=""> 
-                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${value.currency} ${value.amount} - ${value.delivery_time}
+                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${amount} - ${value.delivery_time}
                     </p>
                 </div>
                 </label>

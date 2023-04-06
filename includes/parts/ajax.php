@@ -717,6 +717,8 @@ trait Ajax
                 $delivery = arrangePickupAndDelivery($shipment_id, $rateid);
                 //check if delivery is arranged
                 if ($delivery['code'] == 200) {
+                    //add order meta
+                    update_post_meta($order_id, 'terminal_africa_delivery_arranged', "yes");
                     //return
                     wp_send_json([
                         'code' => 200,
@@ -942,17 +944,24 @@ trait Ajax
         //check if shipment status is gotten
         if ($get_shipment_status['code'] == 200) {
             $status = $get_shipment_status['data'];
-            if ($status == 'draft') {
-                $getTerminalTemplate = getTerminalTemplate('shipment-button/button', compact('rate_id', 'order_id', 'shipment_id'));
-            } else {
-                $getTerminalTemplate = '';
+            switch ($status) {
+                case 'draft':
+                    $getTerminalTemplate = getTerminalTemplate('shipment-button/button', compact('rate_id', 'order_id', 'shipment_id'));
+                    break;
+                case 'canceled':
+                    $getTerminalTemplate = getTerminalTemplate('shipment-button/duplicate-shipment', compact('rate_id', 'order_id', 'shipment_id'));
+                    break;
+                default:
+                    $getTerminalTemplate = '';
+                    break;
             }
             //return
             wp_send_json([
                 'code' => 200,
                 'message' => 'Shipment status gotten successfully',
                 'data' => $status,
-                'button' => $getTerminalTemplate
+                'button' => $getTerminalTemplate,
+                'shipment_info' => $get_shipment_status['shipment_info'],
             ]);
         } else {
             //return error

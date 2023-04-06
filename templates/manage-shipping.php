@@ -42,7 +42,7 @@ $states = $states['data'];
 <style>
     b {
         font-weight: bold !important;
-        font-family: LatoBold;
+        font-family: Lato;
     }
 </style>
 <div class="t-container">
@@ -217,6 +217,8 @@ $states = $states['data'];
                     <p>
                         <b>Shipment Status:</b> <b style="color:orange;text-transform: uppercase;" id="terminal_shipment_status" data-shipment-id="<?php echo esc_html($shipping_id) ?>">....</b>
                     </p>
+
+
                     <p style="margin-top: 13px;" id="t_carriers_location">
 
                     </p>

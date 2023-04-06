@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.0.3
+ * Version:     1.0.4
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -31,6 +31,8 @@ define('TERMINAL_AFRICA_API_ENDPOINT', 'https://api.terminal.africa/v1/');
 define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/');
 //slug
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
+//tracking url
+define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipments/track/');
 
 /**
  * WooCommerce Terminal Delivery Loader.

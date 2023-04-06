@@ -75,7 +75,7 @@ trait Activation
         }
         //remove all woocomerce session
         //check if class exist
-        if (class_exists('WC')) {
+        if (function_exists('WC')) {
             //get all session
             $sessions = WC()->session->get_session_data();
             //loop through sessions

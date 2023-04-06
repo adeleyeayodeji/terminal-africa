@@ -54,6 +54,8 @@ trait Assets
             'wallet_url' => $wallet_url,
             'wallet_home' => admin_url('admin.php?page=terminal-africa-wallet'),
             'packaging_id' => $packaging_id ? 'yes' : 'no',
+            'currency' => get_woocommerce_currency(),
+            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE
         ));
     }
 
@@ -101,6 +103,8 @@ trait Assets
                     'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
                     'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
                     'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
+                    'currency' => get_woocommerce_currency(),
+                    'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE
                 ));
             }
         }
