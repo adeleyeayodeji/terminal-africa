@@ -688,7 +688,7 @@ jQuery(document).ready(function ($) {
             `
               }).then(function () {
                 //reload
-                window.location.reload();
+                window.location.href = response.redirect_url;
               });
             } else {
               //swal error
@@ -1476,10 +1476,26 @@ let cancelTerminalShipment = (elem, e) => {
             rate_id: elem.dataset.rate_id
           },
           dataType: "json",
+          beforeSend: function () {
+            //loader
+            Swal.fire({
+              title: "Cancelling Shipment...",
+              imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              allowEnterKey: false,
+              showConfirmButton: false,
+              footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+            });
+          },
           success: function (response) {
             // console.log(response);
             //check if response is success
-            if (response.status === "success") {
+            if (response.code == 200) {
               //Swal success
               Swal.fire({
                 icon: "success",
@@ -1505,7 +1521,7 @@ let cancelTerminalShipment = (elem, e) => {
                 confirmButtonColor: "rgb(246 146 32)",
                 //confirm button text
                 confirmButtonText: "Continue",
-                text: "Something went wrong, please try again.",
+                text: response.message,
                 footer: `
                   <div>
                     <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
@@ -1564,8 +1580,16 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
         Swal.close();
         //check if response code is 200
         if (response.code === 200) {
+          //check for cancelled shipment
+          let cancellation_request =
+            response.shipment_info.cancellation_request;
+          // PENDING CANCELLATION
           //update #terminal_shipment_status html
-          $("#terminal_shipment_status").html(response.data);
+          if (cancellation_request) {
+            $("#terminal_shipment_status").html("PENDING CANCELLATION");
+          } else {
+            $("#terminal_shipment_status").html(response.data);
+          }
           //check if status is draft
           if (response.data === "draft") {
             //enable all input #t-form-submit
@@ -1577,18 +1601,26 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
               .find("input, button, select, textarea")
               .removeAttr("readonly");
           } else {
-            let shipping_info = response.shipment_info.extras;
-            let address_from = response.shipment_info.address_from.country;
-            let address_to = response.shipment_info.address_to.country;
-            //add template for info
-            let template = `
+            if (!cancellation_request) {
+              let shipping_info = response.shipment_info.extras;
+              let address_from = response.shipment_info.address_from.country;
+              let address_to = response.shipment_info.address_to.country;
+              //add template for info
+              let template = `
               <div class="t-space"></div>
-
-                    <p>
-                        <b>Shipping Label:</b> <a href="${
-                          shipping_info.shipping_label_url
-                        }" class="t-shipment-info-link" target="_blank">View Label</a>
-                    </p>
+              ${
+                shipping_info.shipping_label_url != null ||
+                shipping_info.shipping_label_url != undefined ||
+                shipping_info.shipping_label_url != "" ||
+                shipping_info.shipping_label_url != "null" ||
+                shipping_info.shipping_label_url != "undefined"
+                  ? `
+              <p>
+                  <b>Shipping Label:</b> <a href="${shipping_info.shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
+              </p>
+              `
+                  : ``
+              }
                     <p>
                         <b>Tracking Number:</b> <b>${
                           shipping_info.tracking_number
@@ -1596,8 +1628,7 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
                     </p>
                     <p>
                         <b>Tracking Link:</b> <a href="${
-                          terminal_africa.tracking_url +
-                          shipping_info.tracking_number
+                          terminal_africa.tracking_url + shipment_id
                         }" class="t-shipment-info-link" target="_blank">Track Shipment</a>
                     </p>
 
@@ -1617,8 +1648,9 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
                     
                     <div class="t-space"></div>
                 `;
-            //append before #t_carriers_location
-            $("#t_carriers_location").before(template);
+              //append before #t_carriers_location
+              $("#t_carriers_location").before(template);
+            }
           }
           //load button
           $("#t_carriers_location").html(response.button);
@@ -1890,6 +1922,20 @@ let loadTerminalPackaging = () => {
 //duplicateTerminalShipment
 let duplicateTerminalShipment = (elem, e) => {
   //do something
+  e.preventDefault();
+  //alert coming soon
+  Swal.fire({
+    icon: "info",
+    title: "Coming Soon",
+    text: "This feature is coming soon!",
+    confirmButtonColor: "rgb(246 146 32)",
+    cancelButtonColor: "rgb(0 0 0)",
+    footer: `
+    <div>
+      <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+    </div>
+  `
+  });
 };
 
 //check if terminal_africa.packaging_id is no

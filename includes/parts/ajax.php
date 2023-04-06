@@ -284,6 +284,7 @@ trait Ajax
         //return
         wp_send_json([
             'code' => 200,
+            'redirect_url' => admin_url('admin.php?page=terminal-africa'),
             'message' => 'Signed out successfully',
         ]);
     }
@@ -941,6 +942,8 @@ trait Ajax
         $rate_id = sanitize_text_field($_GET['rate_id']);
         //get shipment status
         $get_shipment_status = getTerminalShipmentStatus($shipment_id);
+        //cancellation_request
+        $cancellation_request = $get_shipment_status['shipment_info']->cancellation_request;
         //check if shipment status is gotten
         if ($get_shipment_status['code'] == 200) {
             $status = $get_shipment_status['data'];
@@ -957,6 +960,10 @@ trait Ajax
                 default:
                     $getTerminalTemplate = '';
                     break;
+            }
+            //check if cancellation request is true
+            if ($cancellation_request) {
+                $getTerminalTemplate = getTerminalTemplate('shipment-button/duplicate-shipment', compact('rate_id', 'order_id', 'shipment_id'));
             }
             //return
             wp_send_json([
