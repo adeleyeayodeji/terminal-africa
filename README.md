@@ -79,6 +79,9 @@ You can get the API key from your Terminal Africa account. You can create an acc
 
 == Changelog ==
 
+= 1.0.6 =
+Deactivation hook removed
+
 = 1.0.5 =
 Added update to carrier listings
 

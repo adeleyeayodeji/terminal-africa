@@ -1449,6 +1449,77 @@ let refreshTerminalCarriers = () => {
   });
 };
 
+//cancelTerminalShipment
+let cancelTerminalShipment = (elem, e) => {
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //Swal confirm
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "rgb(246 146 32)",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!"
+    }).then((result) => {
+      if (result.value) {
+        //ajax
+        $.ajax({
+          type: "GET",
+          url: terminal_africa.ajax_url,
+          data: {
+            action: "cancel_terminal_shipment",
+            nonce: terminal_africa.nonce,
+            shipment_id: elem.dataset.shipment_id,
+            order_id: elem.dataset.order_id,
+            rate_id: elem.dataset.rate_id
+          },
+          dataType: "json",
+          success: function (response) {
+            // console.log(response);
+            //check if response is success
+            if (response.status === "success") {
+              //Swal success
+              Swal.fire({
+                icon: "success",
+                title: "Shipment Cancelled!",
+                confirmButtonColor: "rgb(246 146 32)",
+                //confirm button text
+                confirmButtonText: "Continue",
+                text: "Your shipment has been cancelled.",
+                footer: `
+                  <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                  </div>
+                `
+              }).then(() => {
+                //reload page
+                window.location.reload();
+              });
+            } else {
+              //Swal error
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                confirmButtonColor: "rgb(246 146 32)",
+                //confirm button text
+                confirmButtonText: "Continue",
+                text: "Something went wrong, please try again.",
+                footer: `
+                  <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                  </div>
+                `
+              });
+            }
+          }
+        });
+      }
+    });
+  });
+};
+
 let getShipmentStatus = (shipment_id, order_id, rate_id) => {
   jQuery(document).ready(function ($) {
     //ajax
@@ -1464,6 +1535,21 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
       },
       dataType: "json",
       beforeSend: () => {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "We are fetching your shipment status",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
         //disable all input #t-form-submit
         $("#t-form-submit")
           .find("input, button, select, textarea")
@@ -1474,6 +1560,8 @@ let getShipmentStatus = (shipment_id, order_id, rate_id) => {
           .attr("readonly", "readonly");
       },
       success: function (response) {
+        //close   Swal loader
+        Swal.close();
         //check if response code is 200
         if (response.code === 200) {
           //update #terminal_shipment_status html

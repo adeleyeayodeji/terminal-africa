@@ -30,6 +30,25 @@ trait Activation
         }
     }
 
+    //deactivate_terminal_africa
+    public static function deactivate_terminal_africa()
+    {
+        try {
+            self::deactivate();
+            //remove plugin from active
+            deactivate_plugins(plugin_basename(TERMINAL_AFRICA_PLUGIN_FILE));
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Plugin deactivated successfully'
+            ]);
+        } catch (\Exception $e) {
+            wp_send_json([
+                'code' => 500,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     //deactivate
     public static function deactivate()
     {

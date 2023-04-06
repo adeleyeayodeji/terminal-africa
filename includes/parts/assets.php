@@ -12,6 +12,19 @@ trait Assets
     //enqueue_scripts
     public static function enqueue_scripts()
     {
+        //sweet alert styles
+        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+        //sweet alert scripts
+        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //admin.js
+        wp_enqueue_script('terminal-africa-admin-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/admin.js', array('jquery', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
+        //localize scripts
+        wp_localize_script('terminal-africa-admin-scripts', 'terminal_africa_admin', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('terminal_africa_nonce'),
+            'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+            'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL
+        ));
         //check if cuurent url has terminal
         if (strpos($_SERVER['REQUEST_URI'], 'terminal') === false) {
             return;
@@ -30,13 +43,9 @@ trait Assets
         wp_enqueue_style('terminal-africa-styles-responsive', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/responsive.css', array(), TERMINAL_AFRICA_VERSION);
         //izitoast css
         wp_enqueue_style('terminal-africa-izitoast-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/iziToast.min.css', array(), TERMINAL_AFRICA_VERSION);
-        //sweet alert styles
-        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
         //enqueue scripts
         //font awesome scripts
         wp_enqueue_script('terminal-africa-font-awesome-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/fontawesome.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
-        //sweet alert scripts
-        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //izitoast scripts
         wp_enqueue_script('terminal-africa-izitoast-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/iziToast.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //terminal africa scripts

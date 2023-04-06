@@ -951,6 +951,9 @@ trait Ajax
                 case 'canceled':
                     $getTerminalTemplate = getTerminalTemplate('shipment-button/duplicate-shipment', compact('rate_id', 'order_id', 'shipment_id'));
                     break;
+                case 'confirmed':
+                    $getTerminalTemplate = getTerminalTemplate('shipment-button/cancel-shipment', compact('rate_id', 'order_id', 'shipment_id'));
+                    break;
                 default:
                     $getTerminalTemplate = '';
                     break;
@@ -1063,5 +1066,35 @@ trait Ajax
             'code' => 500,
             'message' => 'Something went wrong, please try again',
         ]);
+    }
+
+    //cancel_terminal_shipment
+    public function cancel_terminal_shipment()
+    {
+        $nonce = sanitize_text_field($_GET['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $shipment_id = sanitize_text_field($_GET['shipment_id']);
+        //cancel shipment
+        $cancel_shipment = cancelTerminalShipment($shipment_id);
+        //check if shipment is canceled
+        if ($cancel_shipment['code'] == 200) {
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Shipment canceled successfully',
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $cancel_shipment['message'],
+            ]);
+        }
     }
 }

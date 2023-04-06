@@ -198,3 +198,12 @@ if (!function_exists('disableSingleCarriers')) {
         return TerminalAfricaShippingPlugin::disableSingleCarriers($carrier);
     }
 }
+
+//cancelTerminalShipment
+if (!function_exists('cancelTerminalShipment')) {
+    //cancel terminal shipment
+    function cancelTerminalShipment($shipment_id)
+    {
+        return TerminalAfricaShippingPlugin::cancelTerminalShipment($shipment_id);
+    }
+}
