@@ -1302,16 +1302,6 @@ img.t-dashboard-intro-icon {
   object-fit: fill;
 }
 
-.t-bank-info-text.bank-details {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  color: #8c8c8c;
-  font-size: 24px;
-  font-weight: 300;
-  text-align: center;
-  letter-spacing: 1px;
-}
-
 .t-bank-info-text {
   font-family: Lato, sans-serif;
 }
@@ -1339,6 +1329,7 @@ img.t-dashboard-intro-icon {
   font-weight: 300;
   text-align: center;
   letter-spacing: 1px;
+  line-height: normal !important;
 }
 
 .t-bank-info-text {
