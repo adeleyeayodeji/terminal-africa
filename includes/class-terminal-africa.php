@@ -52,7 +52,7 @@ class TerminalAfricaShippingPlugin
         //enqueue scripts
         add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), PHP_INT_MAX);
         //enqueue scripts
-        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), PHP_INT_MAX);
+        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), 1);
         //ajax terminal_africa_auth
         add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
         add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));

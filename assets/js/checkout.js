@@ -41,7 +41,12 @@ function terminalsetValue2(elem) {
     var stateText = $('select[name="terminal_custom_shipping_state2"]')
       .find("option:selected")
       .text();
-    var countryCode = $('select[name="billing_country"]').val();
+    //check if billing_country exist
+    if ($('select[name="billing_country"]').length > 0) {
+      var countryCode = $('select[name="billing_country"]').val();
+    } else {
+      var countryCode = $('input[name="billing_country"]').val();
+    }
     var state = $('select[name="terminal_custom_shipping_state2"]').val();
     var finaltext = lga + ", " + stateText;
 
@@ -272,13 +277,15 @@ jQuery(document).ready(function ($) {
       ) {
         //select2 init
         $('select[name="terminal_custom_shipping_lga2"]').select2({
-          placeholder: "Select City"
+          placeholder: "Select City",
+          allowClear: true
         });
       } else {
         //destroy and update
         // $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
         $('select[name="terminal_custom_shipping_lga2"]').select2({
-          placeholder: "Select City"
+          placeholder: "Select City",
+          allowClear: true
         });
       }
     } else {
@@ -288,7 +295,8 @@ jQuery(document).ready(function ($) {
       $('select[name="terminal_custom_shipping_lga2"]').html(lga);
       //update select2
       $('select[name="terminal_custom_shipping_lga2"]').select2({
-        placeholder: "Select City"
+        placeholder: "Select City",
+        allowClear: true
       });
     }
 
@@ -298,7 +306,12 @@ jQuery(document).ready(function ($) {
 
   //overide submit button
   let terminalButton = () => {
-    var countrycode = $('select[name="billing_country"]').val();
+    //check if billing_country exist
+    if ($('select[name="billing_country"]').length > 0) {
+      var countrycode = $('select[name="billing_country"]').val();
+    } else {
+      var countrycode = $('input[name="billing_country"]').val();
+    }
     let submitButton = $("button[name='woocommerce_checkout_place_order']");
     // console.log(submitButton);
     submitButton.removeAttr("id");
@@ -430,21 +443,47 @@ jQuery(document).ready(function ($) {
     }
   };
 
-  //on ajax complete
-  $(document).ajaxComplete(function (event, xhr, settings) {
-    var url = settings.url;
-    //if url match update_order_review
-    if (url.indexOf("update_order_review") >= 0) {
-      //select2 init
+  let clearCurrentFields = () => {
+    //set timeout
+    setTimeout(() => {
+      //clear current country and state
+      $('select[name="terminal_custom_shipping_state2"]').val("");
+      //select2 update
+      $('select[name="terminal_custom_shipping_state2"]').select2({
+        placeholder: "Select State",
+        allowClear: true
+      });
+    }, 1000);
+  };
+
+  //session storage
+  sessionStorage.setItem("update_checkout_timer", "0");
+  $(document.body).on("update_checkout", function () {
+    //get session storage and check if its 2
+    var update_checkout_timer = sessionStorage.getItem("update_checkout_timer");
+    //convert to int
+    var update_checkout_timer_int = parseInt(update_checkout_timer);
+    //check if its 2
+    if (update_checkout_timer_int >= 2) {
+      console.log("Yes");
+      //check if t-update exist
       setTimeout(() => {
         restoreCarriers();
         //select2 update
         $('select[name="terminal_custom_shipping_state2"]').select2({
-          placeholder: "Select State"
+          placeholder: "Select State",
+          allowClear: true
         });
         terminalButton();
       }, 700);
+      //reset session storage
+      sessionStorage.setItem("update_checkout_timer", "0");
     }
+    //increment session storage
+    sessionStorage.setItem(
+      "update_checkout_timer",
+      update_checkout_timer_int + 1
+    );
   });
 
   $('select[name="terminal_custom_shipping_state2"]').change(function (e) {
@@ -452,8 +491,12 @@ jQuery(document).ready(function ($) {
     var state = $(this).val();
     //process updateCoreWoocommerceElements
     updateCoreWoocommerceElements(state, "");
-    //country
-    var countrycode = $('select[name="billing_country"]').val();
+    //check if billing_country exist
+    if ($('select[name="billing_country"]').length > 0) {
+      var countrycode = $('select[name="billing_country"]').val();
+    } else {
+      var countrycode = $('input[name="billing_country"]').val();
+    }
     var lga = "";
     //if countrycode and state is empty
     if (countrycode == "" || state == "") {
@@ -540,40 +583,80 @@ jQuery(document).ready(function ($) {
     });
   });
 
-  //on change billing_country
-  $('select[name="billing_country"]').change(function (e) {
-    e.preventDefault();
-    var country = $(this).val();
-    //ajax to get states
-    $.ajax({
-      type: "GET",
-      url: terminal_africa.ajax_url,
-      data: {
-        action: "terminal_africa_get_states",
-        countryCode: country,
-        nonce: terminal_africa.nonce
-      },
-      dataType: "json",
-      beforeSend: function () {
-        //block form name="checkout"
-        $("form[name='checkout']").block({
-          message: null,
-          overlayCSS: {
-            background: "#fff",
-            opacity: 0.6
+  //check if billing_country exist
+  if ($('select[name="billing_country"]').length > 0) {
+    //on change billing_country
+    $('select[name="billing_country"]').change(function (e) {
+      e.preventDefault();
+      var country = $(this).val();
+      //ajax to get states
+      $.ajax({
+        type: "GET",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "terminal_africa_get_states",
+          countryCode: country,
+          nonce: terminal_africa.nonce
+        },
+        dataType: "json",
+        beforeSend: function () {
+          //block form name="checkout"
+          $("form[name='checkout']").block({
+            message: null,
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.6
+            }
+          });
+        },
+        success: function (response) {
+          //unblock
+          $("form[name='checkout']").unblock();
+          //check if response code 200
+          if (response.code != 200) {
+            //swal
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              //footer
+              footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+            });
+            return;
           }
-        });
-      },
-      success: function (response) {
-        //unblock
-        $("form[name='checkout']").unblock();
-        //check if response code 200
-        if (response.code != 200) {
-          //swal
+          var states = response.states;
+          //options
+          var options = "<option value=''>Select State</option>";
+          //loop through states
+          for (var i = 0; i < states.length; i++) {
+            var state = states[i];
+            options += `<option value="${state.isoCode}">${state.name}</option>`;
+          }
+          //update state select name terminal_custom_shipping_state2
+          $('select[name="terminal_custom_shipping_state2"]').html(options);
+          //update select2
+          $('select[name="terminal_custom_shipping_state2"]').select2({
+            placeholder: "Select State"
+          });
+          //clear select name terminal_custom_shipping_lga2
+          $('select[name="terminal_custom_shipping_lga2"]').html("");
+          //update select2
+          $('select[name="terminal_custom_shipping_lga2"]').select2({
+            placeholder: "Select LGA"
+          });
+        },
+        error: function () {
+          //error
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: response.message,
+            text: "Something went wrong...",
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
             //footer
@@ -583,47 +666,10 @@ jQuery(document).ready(function ($) {
                     </div>
                     `
           });
-          return;
         }
-        var states = response.states;
-        //options
-        var options = "<option value=''>Select State</option>";
-        //loop through states
-        for (var i = 0; i < states.length; i++) {
-          var state = states[i];
-          options += `<option value="${state.isoCode}">${state.name}</option>`;
-        }
-        //update state select name terminal_custom_shipping_state2
-        $('select[name="terminal_custom_shipping_state2"]').html(options);
-        //update select2
-        $('select[name="terminal_custom_shipping_state2"]').select2({
-          placeholder: "Select State"
-        });
-        //clear select name terminal_custom_shipping_lga2
-        $('select[name="terminal_custom_shipping_lga2"]').html("");
-        //update select2
-        $('select[name="terminal_custom_shipping_lga2"]').select2({
-          placeholder: "Select LGA"
-        });
-      },
-      error: function () {
-        //error
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong...",
-          confirmButtonColor: "rgb(246 146 32)",
-          cancelButtonColor: "rgb(0 0 0)",
-          //footer
-          footer: `
-                    <div>
-                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-                    </div>
-                    `
-        });
-      }
+      });
     });
-  });
+  }
 
   //checking
   setInterval(() => {
@@ -633,75 +679,17 @@ jQuery(document).ready(function ($) {
     $("#terminal_custom_shipping_state2").show();
   }, 300);
 
-  $('select[name="billing_country"]').val("");
-  //destroy select2
-  $('select[name="billing_country"]').select2("destroy");
-  //init select2
-  $('select[name="billing_country"]').select2({
-    placeholder: "Select Country",
-    allowClear: true
-  });
-  setTimeout(() => {
-    //clear current country and state
-    $('select[name="terminal_custom_shipping_state2"]').val("");
-    //   if (terminal_billing_city != "") {
-    //     var city = terminal_billing_city;
-    //     //get local storage terminal_delivery_cities
-    //     var terminal_delivery_cities = localStorage.getItem(
-    //       "terminal_delivery_cities"
-    //     );
-    //     //if terminal_delivery_cities is not null
-    //     if (terminal_delivery_cities != "" && terminal_billing_state != "") {
-    //       let countrycode = $('select[name="billing_country"]').val();
-    //       let state = $('select[name="terminal_custom_shipping_state2"]').val();
-    //       //ajax
-    //       $.ajax({
-    //         type: "GET",
-    //         url: terminal_africa.ajax_url,
-    //         data: {
-    //           action: "terminal_africa_get_cities",
-    //           countryCode: countrycode,
-    //           stateCode: state,
-    //           nonce: terminal_africa.nonce
-    //         },
-    //         dataType: "json",
-    //         beforeSend: function () {
-    //           //block form name="checkout"
-    //           $("form[name='checkout']").block({
-    //             message: null,
-    //             overlayCSS: {
-    //               background: "#fff",
-    //               opacity: 0.6
-    //             }
-    //           });
-    //         },
-    //         success: function (response) {
-    //           //unblock
-    //           $("form[name='checkout']").unblock();
-    //           //check if response code 200
-    //           if (response.code != 200) {
-    //             return;
-    //           }
-    //           do_terminal_calculation(response.cities, city);
-    //         },
-    //         error: function (error) {
-    //           //swal
-    //           Swal.fire({
-    //             icon: "error",
-    //             title: "Oops...",
-    //             text: "Something went wrong!",
-    //             confirmButtonColor: "rgb(246 146 32)",
-    //             cancelButtonColor: "rgb(0 0 0)",
-    //             //footer
-    //             footer: `
-    //                   <div>
-    //                       <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-    //                   </div>
-    //                   `
-    //           });
-    //         }
-    //       });
-    //     }
-    //   }
-  }, 1000);
+  //check if billing_country exist
+  if ($('select[name="billing_country"]').length > 0) {
+    $('select[name="billing_country"]').val("");
+    //destroy select2
+    // $('select[name="billing_country"]').select2("destroy");
+    //init select2
+    $('select[name="billing_country"]').select2({
+      placeholder: "Select Country",
+      allowClear: true
+    });
+  }
+  //set timeout
+  clearCurrentFields();
 });
