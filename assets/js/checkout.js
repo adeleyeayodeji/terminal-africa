@@ -278,14 +278,16 @@ jQuery(document).ready(function ($) {
         //select2 init
         $('select[name="terminal_custom_shipping_lga2"]').select2({
           placeholder: "Select City",
-          allowClear: true
+          allowClear: true,
+          width: "100%"
         });
       } else {
         //destroy and update
         // $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
         $('select[name="terminal_custom_shipping_lga2"]').select2({
           placeholder: "Select City",
-          allowClear: true
+          allowClear: true,
+          width: "100%"
         });
       }
     } else {
@@ -296,7 +298,8 @@ jQuery(document).ready(function ($) {
       //update select2
       $('select[name="terminal_custom_shipping_lga2"]').select2({
         placeholder: "Select City",
-        allowClear: true
+        allowClear: true,
+        width: "100%"
       });
     }
 
@@ -451,7 +454,8 @@ jQuery(document).ready(function ($) {
       //select2 update
       $('select[name="terminal_custom_shipping_state2"]').select2({
         placeholder: "Select State",
-        allowClear: true
+        allowClear: true,
+        width: "100%"
       });
     }, 1000);
   };
@@ -472,7 +476,8 @@ jQuery(document).ready(function ($) {
         //select2 update
         $('select[name="terminal_custom_shipping_state2"]').select2({
           placeholder: "Select State",
-          allowClear: true
+          allowClear: true,
+          width: "100%"
         });
         terminalButton();
       }, 700);
@@ -687,7 +692,8 @@ jQuery(document).ready(function ($) {
     //init select2
     $('select[name="billing_country"]').select2({
       placeholder: "Select Country",
-      allowClear: true
+      allowClear: true,
+      width: "100%"
     });
   }
   //set timeout
