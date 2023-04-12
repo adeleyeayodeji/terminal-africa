@@ -349,7 +349,7 @@ trait Ajax
         $packaging_id = get_option('terminal_default_packaging_id');
         if (empty($packaging_id)) {
             wp_send_json([
-                'code' => 400,
+                'code' => 401,
                 'message' => 'Please set a default packaging, go to settings and set a default packaging'
             ]);
         }
@@ -374,7 +374,7 @@ trait Ajax
                 ]);
             } else {
                 wp_send_json([
-                    'code' => 400,
+                    'code' => 401,
                     'message' => $response['message']
                 ]);
             }
@@ -394,7 +394,7 @@ trait Ajax
             ]);
         } else {
             wp_send_json([
-                'code' => 400,
+                'code' => 401,
                 'message' => $response['message']
             ]);
         }
