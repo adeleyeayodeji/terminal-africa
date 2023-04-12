@@ -647,13 +647,17 @@ jQuery(document).ready(function ($) {
           $('select[name="terminal_custom_shipping_state2"]').html(options);
           //update select2
           $('select[name="terminal_custom_shipping_state2"]').select2({
-            placeholder: "Select State"
+            placeholder: "Select State",
+            allowClear: true,
+            width: "100%"
           });
           //clear select name terminal_custom_shipping_lga2
           $('select[name="terminal_custom_shipping_lga2"]').html("");
           //update select2
           $('select[name="terminal_custom_shipping_lga2"]').select2({
-            placeholder: "Select LGA"
+            placeholder: "Select LGA",
+            allowClear: true,
+            width: "100%"
           });
         },
         error: function () {

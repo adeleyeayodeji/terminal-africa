@@ -319,5 +319,10 @@ setInterval(function () {
       let img = $(".Terminal-delivery-logo");
       img.attr("src", old_url);
     }
+
+    //.select2-container css
+    $(".select2-container").css({
+      width: "100% !important"
+    });
   });
 }, 1000);
