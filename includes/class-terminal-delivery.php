@@ -341,18 +341,83 @@ class WC_Terminal_Delivery
         unset($fields['billing']['billing_address_2']);
         unset($fields['shipping']['shipping_address_2']);
         //check if logged in
-        if (!is_user_logged_in()) {
-            return $fields;
+        if (is_user_logged_in()) {
+            $user_id = get_current_user_id();
+            $billing_postcode = get_user_meta($user_id, 'billing_postcode', true);
+        } else {
+            $billing_postcode = '';
         }
-        $user_id = get_current_user_id();
-        $billing_postcode = get_user_meta($user_id, 'billing_postcode', true);
+        //enable first name
+        $fields['billing']['billing_first_name'] = array(
+            'label' => __('First name', 'terminal-africa'),
+            'placeholder' => _x('First name', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-first'),
+            'clear' => true,
+            'priority' => 10,
+        );
+        //enable last name
+        $fields['billing']['billing_last_name'] = array(
+            'label' => __('Last name', 'terminal-africa'),
+            'placeholder' => _x('Last name', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-last'),
+            'clear' => true,
+            'priority' => 20,
+        );
+        //email 
+        $fields['billing']['billing_email'] = array(
+            'label' => __('Email address', 'terminal-africa'),
+            'placeholder' => _x('Email address', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 30,
+        );
+        //phone
+        $fields['billing']['billing_phone'] = array(
+            'label' => __('Phone', 'terminal-africa'),
+            'placeholder' => _x('Phone', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 40,
+        );
+        //address
+        $fields['billing']['billing_address_1'] = array(
+            'label' => __('Address', 'terminal-africa'),
+            'placeholder' => _x('Address', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 50,
+        );
         //enable zip code
         $fields['billing']['billing_postcode'] = array(
-            'label' => __('Postcode / ZIP', 'woocommerce'),
-            'placeholder' => _x('Postcode / ZIP', 'placeholder', 'woocommerce'),
+            'label' => __('Postcode / ZIP', 'terminal-africa'),
+            'placeholder' => _x('Postcode / ZIP', 'placeholder', 'terminal-africa'),
             'clear' => true,
-            'priority' => 100,
+            'priority' => 60,
+            'required' => true,
             'default' => $billing_postcode,
+        );
+        //country
+        $fields['billing']['billing_country'] = array(
+            'type' => 'country',
+            'label' => __('Country', 'terminal-africa'),
+            'placeholder' => _x('Country', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field', 'update_totals_on_change'),
+            'clear' => true,
+            'priority' => 70,
+        );
+        //state
+        $fields['billing']['billing_state'] = array(
+            'type' => 'state',
+            'label' => __('State / County', 'terminal-africa'),
+            'placeholder' => _x('State / County', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'validate' => array('state'),
+            'clear' => true,
+            'priority' => 80,
         );
         return $fields;
     }
