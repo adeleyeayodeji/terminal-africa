@@ -113,7 +113,8 @@ trait Assets
                     'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
                     'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
                     'currency' => get_woocommerce_currency(),
-                    'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE
+                    'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
+                    'terminal_africal_countries' => get_terminal_countries(),
                 ));
             }
         }
@@ -132,6 +133,29 @@ trait Assets
     {
         if (function_exists('WC')) {
             if (is_checkout()) {
+?>
+                <style>
+                    .select2-container {
+                        width: 100% !important;
+                    }
+
+                    #billing_phone_field .select2.select2-container.select2-container--default {
+                        height: 100% !important;
+                    }
+
+                    #billing_phone_field .select2-container--default .select2-selection--single {
+                        height: 100% !important;
+                    }
+
+                    #billing_phone_field .select2-container--default .select2-selection--single .select2-selection__rendered {
+                        line-height: 40px;
+                    }
+
+                    #billing_phone_field .select2-container--default .select2-selection--single .select2-selection__arrow {
+                        top: 7px;
+                    }
+                </style>
+                <?php
                 $checkout = WC()->checkout();
                 //get checkout billing state
                 $billing_state = $checkout->get_value('billing_state') ?: '';
@@ -143,7 +167,7 @@ trait Assets
                     $billing_city = explode(',', $billing_city);
                     $billing_city = $billing_city[0];
                 }
-?>
+                ?>
                 <script>
                     var terminal_billing_state = '<?php echo esc_html($billing_state); ?>';
                     var terminal_billing_city = '<?php echo esc_html($billing_city); ?>';

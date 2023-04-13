@@ -71,44 +71,52 @@ jQuery(document).ready(function ($) {
     });
   };
 
-  //init
-  saveCartTerminalData();
+  //check if page url match 'order-received'
+  if (window.location.href.indexOf("order-received") > -1) {
+    //do nothing
+  } else {
+    //init
+    saveCartTerminalData();
+    //set interval
+    setInterval(() => {
+      //check if #billing_postcode_field display none
+      if ($("#billing_postcode_field").css("display") == "none") {
+        //add value to post code
+        $("#billing_postcode").val(terminal_billing_postcode);
+        //fade in #billing_postcode_field
+        $("#billing_postcode_field").show();
+      }
+    }, 300);
 
-  setInterval(() => {
-    //check if #billing_postcode_field display none
-    if ($("#billing_postcode_field").css("display") == "none") {
-      //add value to post code
-      $("#billing_postcode").val(terminal_billing_postcode);
-      //fade in #billing_postcode_field
-      $("#billing_postcode_field").show();
-    }
-  }, 300);
-
-  //terminal postcode key focus out
-  let terminalPostCode = document.getElementById("billing_postcode");
-  terminalPostCode.addEventListener("focusout", () => {
-    var postcode = $("#billing_postcode").val();
-    //save to session
-    //check if select name terminal_custom_shipping_lga2 exist
-    if ($("select[name='terminal_custom_shipping_lga2']").length) {
-      //check if postcode is not empty
-      if (postcode != "") {
-        //check if postcode is not equal to session
-        if (sessionStorage.getItem("terminal_postcode") != postcode) {
-          //check if select[name='terminal_custom_shipping_lga2 is not empty
-          if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
-            //trigger event change
-            $("select[name='terminal_custom_shipping_lga2']").trigger("change");
-            sessionStorage.setItem("terminal_postcode", postcode);
+    //terminal postcode key focus out
+    let terminalPostCode = document.getElementById("billing_postcode");
+    terminalPostCode.addEventListener("focusout", () => {
+      var postcode = $("#billing_postcode").val();
+      //save to session
+      //check if select name terminal_custom_shipping_lga2 exist
+      if ($("select[name='terminal_custom_shipping_lga2']").length) {
+        //check if postcode is not empty
+        if (postcode != "") {
+          //check if postcode is not equal to session
+          if (sessionStorage.getItem("terminal_postcode") != postcode) {
+            //check if select[name='terminal_custom_shipping_lga2 is not empty
+            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
+              //trigger event change
+              $("select[name='terminal_custom_shipping_lga2']").trigger(
+                "change"
+              );
+              sessionStorage.setItem("terminal_postcode", postcode);
+            }
           }
         }
       }
-    }
-  });
+    });
+  }
+});
 
-  //terminal phone keyup event
-  let terminalPhone = document.getElementById("billing_phone");
-  terminalPhone.addEventListener("focusout", () => {
+//terminal phone keyup event
+function billing_phone_terminal_focus_out() {
+  jQuery(document).ready(function ($) {
     var phone = $("#billing_phone").val();
     //save to session
     //check if select name terminal_custom_shipping_lga2 exist
@@ -127,7 +135,7 @@ jQuery(document).ready(function ($) {
       }
     }
   });
-});
+}
 
 //reloadCarrierData
 let reloadCarrierData = (e) => {
@@ -301,6 +309,138 @@ let restoreCarrierData = (e) => {
     }
   });
 };
+
+//overide billing phone
+let overideBillingPhone = () => {
+  jQuery(document).ready(function ($) {
+    let tm_countries = terminal_africa.terminal_africal_countries;
+    //new content
+    let new_content = `
+    <p class="form-row validate-required" id="billing_phone_field" data-priority="40">
+        <label for="billing_phone" class="">Phone&nbsp;<abbr class="required" title="required">*</abbr></label>
+        <span style="
+        display: flex;
+    ">
+            <span style="
+        width: 21%;
+    ">
+                <select style="
+        height: 100% !important;
+    " class="formatCountryTerminal" onchange="formatCountryTerminalchange(this)">
+    <option value="">Select</option>
+                    ${tm_countries.map((country) => {
+                      return `
+                        <option value="${country.phonecode}" data-flag="${country.flag}">${country.phonecode}</option>
+                    `;
+                    })}
+                </select>
+            </span>
+            <span class="woocommerce-input-wrapper" style="
+        width: 100%;
+    ">
+                <input type="number" class="input-text" name="billing_phone_terminal" onkeyup="billing_phone_terminal_key_up(this)" id="billing_phone_terminal" placeholder="Enter phone">
+                <input type="hidden" class="input-text" name="billing_phone" id="billing_phone" placeholder="Phone">
+            </span>
+        </span>
+    </p>
+    `;
+    //get billing phone
+    let billing_phone = $("#billing_phone_field");
+    //check if billing phone exist
+    if (billing_phone.length > 0) {
+      //replace with new content
+      billing_phone.replaceWith(new_content);
+    }
+
+    //select2 template
+    let formatCountryTerminal = (country) => {
+      if (!country.id) {
+        return country.text;
+      }
+      var $country = country.element.dataset.flag + " " + country.text;
+      return $country;
+    };
+
+    //select2 .formatCountryTerminal
+    $(".formatCountryTerminal").select2({
+      placeholder: "Country Code",
+      allowClear: true,
+      //template
+      templateResult: formatCountryTerminal,
+      templateSelection: formatCountryTerminal,
+      //clear default
+      //height
+      height: "100% !important",
+      //width
+      width: "100% !important"
+    });
+  });
+};
+
+//on change .formatCountryTerminal
+function formatCountryTerminalchange(elem) {
+  jQuery(document).ready(function ($) {
+    let phonecode = $(this).val();
+    //check if phonecode not include +
+    if (!phonecode.includes("+")) {
+      phonecode = "+" + phonecode;
+    }
+    //remove - and space
+    phonecode = phonecode.replace(/[- ]/g, "");
+    //get billing phone
+    let billing_phone = $("#billing_phone_terminal");
+    //final phone
+    let final_phone = "";
+    //check if billing phone exist
+    if (billing_phone.length > 0) {
+      //get phone
+      let phone = billing_phone.val();
+      //check if phone is not empty
+      if (phone != "") {
+        //final phone
+        final_phone = phonecode + phone;
+        //set final phone
+        $("#billing_phone").val(final_phone);
+        //billing_phone_terminal_focus_out
+        billing_phone_terminal_focus_out();
+      }
+    }
+  });
+}
+
+//on keyup #billing_phone_terminal
+function billing_phone_terminal_key_up() {
+  jQuery(document).ready(function ($) {
+    let phonecode = $(".formatCountryTerminal").val();
+    //check if phonecode not include +
+    if (!phonecode.includes("+")) {
+      phonecode = "+" + phonecode;
+    }
+    //remove - and space
+    phonecode = phonecode.replace(/[- ]/g, "");
+    //get billing phone
+    let billing_phone = $("#billing_phone_terminal");
+    //final phone
+    let final_phone = "";
+    //check if billing phone exist
+    if (billing_phone.length > 0) {
+      //get phone
+      let phone = billing_phone.val();
+      //check if phone is not empty
+      if (phone != "") {
+        //final phone
+        final_phone = phonecode + phone;
+        console.log(final_phone);
+        //set final phone
+        $("#billing_phone").val(final_phone);
+        //billing_phone_terminal_focus_out
+        billing_phone_terminal_focus_out();
+      }
+    }
+  });
+}
+
+overideBillingPhone();
 
 //set interval carrier logo
 setInterval(function () {

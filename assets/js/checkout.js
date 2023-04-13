@@ -469,7 +469,6 @@ jQuery(document).ready(function ($) {
     var update_checkout_timer_int = parseInt(update_checkout_timer);
     //check if its 2
     if (update_checkout_timer_int >= 2) {
-      console.log("Yes");
       //check if t-update exist
       setTimeout(() => {
         restoreCarriers();
