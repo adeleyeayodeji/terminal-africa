@@ -481,9 +481,22 @@ setInterval(function () {
       img.attr("src", old_url);
     }
 
-    //.select2-container css
-    $(".select2-container").css({
-      width: "100% !important"
+    //use each to loop through all select2-container
+    $(".select2-container").each(function () {
+      //check if width is not 100%
+      if ($(this).css("width") != "100%") {
+        //check if width is is 142.109px or 508.854px ignore
+        if (
+          $(this).css("width") == "142.109px" ||
+          $(this).css("width") == "508.854px"
+        ) {
+          return;
+        }
+        //css
+        $(this).css({
+          width: "100% !important"
+        });
+      }
     });
   });
 }, 1000);

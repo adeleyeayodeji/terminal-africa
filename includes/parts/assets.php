@@ -131,6 +131,10 @@ trait Assets
     //wp head checkout
     public static function wp_head_checkout()
     {
+        //domain exclude
+        $domainExclude = [
+            'miamiahair.com'
+        ];
         if (function_exists('WC')) {
             if (is_checkout()) {
 ?>
@@ -147,11 +151,18 @@ trait Assets
                         height: 100% !important;
                     }
 
-                    #billing_phone_field .select2-container--default .select2-selection--single .select2-selection__rendered {
+                    <?php
+                    //check if current domain is in domain exclude
+                    if (!in_array($_SERVER['HTTP_HOST'], $domainExclude)) :
+                    ?>#billing_phone_field .select2-container--default .select2-selection--single .select2-selection__rendered {
                         line-height: 40px;
                     }
 
-                    #billing_phone_field .select2-container--default .select2-selection--single .select2-selection__arrow {
+                    <?php else : ?>#billing_phone_field .select2-container--default .select2-selection--single .select2-selection__rendered {
+                        line-height: normal;
+                    }
+
+                    <?php endif; ?>#billing_phone_field .select2-container--default .select2-selection--single .select2-selection__arrow {
                         top: 7px;
                     }
                 </style>
