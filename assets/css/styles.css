@@ -1321,6 +1321,32 @@ img.t-dashboard-intro-icon {
   text-align: center;
 }
 
+.t-m-p-0 {
+  padding: 0px;
+  margin: 0px;
+}
+
+.t-signal {
+  margin-top: 10px;
+  border: 2px solid green;
+  padding: 0px 4px;
+  margin-right: 15px;
+}
+
+.t-signal-sandbox {
+  margin-top: 10px;
+  border: 2px solid orange;
+  padding: 0px 4px;
+  margin-right: 15px;
+}
+
+.t-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+}
+
 .t-bank-info-text.bank-details {
   margin-top: 20px;
   margin-bottom: 20px;

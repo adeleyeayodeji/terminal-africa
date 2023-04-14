@@ -1058,6 +1058,55 @@ trait Shipping
         }
     }
 
+    //verifyDefaultPackage
+    public static function verifyDefaultPackaging($packaging_id)
+    {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+        //get cities
+        $response = Requests::get(self::$enpoint . 'packaging/' . $packaging_id, [
+            'Authorization' => 'Bearer ' . self::$skkey,
+        ]);
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //update the option
+            update_option('terminal_default_packaging_id', $packaging_id);
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $body->data,
+                'packaging_id' => $packaging_id
+            ];
+        } else {
+            //create new default packaging
+            $create = self::createDefaultPackaging();
+            if ($create['code'] == 200) {
+                //save the id to option
+                update_option('terminal_default_packaging_id', $create['data']->packaging_id);
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $create['data'],
+                    'packaging_id' => $create['data']->packaging_id
+                ];
+            } else {
+                return [
+                    'code' => 404,
+                    'message' => "Unable to create default packaging",
+                    'data' => [],
+                ];
+            }
+        }
+    }
+
     //arrange pickup and delivery
     public static function arrangePickupAndDelivery($shipment_id, $rate_id)
     {

@@ -347,12 +347,17 @@ trait Ajax
         }
         //check if terminal_default_packaging_id is set
         $packaging_id = get_option('terminal_default_packaging_id');
-        if (empty($packaging_id)) {
+        //verify packaging id
+        $verifyDefaultPackaging = verifyDefaultPackaging($packaging_id);
+        //check if verifyDefaultPackaging is 200
+        if ($verifyDefaultPackaging['code'] != 200) {
             wp_send_json([
-                'code' => 401,
-                'message' => 'Please set a default packaging, go to settings and set a default packaging'
+                'code' => 400,
+                'message' => 'Unable to verify default packaging, please try again'
             ]);
         }
+        //get new packaging id
+        $packaging_id = $verifyDefaultPackaging['packaging_id'];
         //arrange parcel
         $parcel = [
             'packaging' => $packaging_id,
@@ -370,11 +375,13 @@ trait Ajax
                 //return
                 wp_send_json([
                     'code' => 200,
+                    'type' => 'percel',
                     'message' => 'Parcel updated successfully',
                 ]);
             } else {
                 wp_send_json([
                     'code' => 401,
+                    'type' => 'percel',
                     'message' => $response['message']
                 ]);
             }

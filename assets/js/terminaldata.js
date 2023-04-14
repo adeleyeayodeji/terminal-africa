@@ -322,7 +322,7 @@ let overideBillingPhone = () => {
         display: flex;
     ">
             <span style="
-        width: 21%;
+        width: 31%;
     ">
                 <select style="
         height: 100% !important;
@@ -336,9 +336,9 @@ let overideBillingPhone = () => {
                 </select>
             </span>
             <span class="woocommerce-input-wrapper" style="
-        width: 100%;
+        width: 80%;
     ">
-                <input type="number" class="input-text" name="billing_phone_terminal" onkeyup="billing_phone_terminal_key_up(this)" id="billing_phone_terminal" placeholder="Enter phone">
+                <input type="number" class="input-text" name="billing_phone_terminal" onkeyup="billing_phone_terminal_key_up(this)" id="billing_phone_terminal" placeholder="Enter phone" onfocuseout="testnow()">
                 <input type="hidden" class="input-text" name="billing_phone" id="billing_phone" placeholder="Phone">
             </span>
         </span>
@@ -377,6 +377,31 @@ let overideBillingPhone = () => {
   });
 };
 
+//clear session billing_phone_terminal
+sessionStorage.removeItem("billing_phone_terminal");
+//set interval #billing_phone_terminal
+setInterval(() => {
+  jQuery(document).ready(function ($) {
+    //get session
+    let session = sessionStorage.getItem("billing_phone_terminal");
+    //check if session is empty
+    if (session == null) {
+      //check if the element exist #billing_phone_terminal
+      if ($("#billing_phone_terminal").length > 0) {
+        // console.log("focus");
+        //add on focusout
+        $("#billing_phone_terminal").on("focusout", function () {
+          // console.log("focus out");
+          //focus out #billing_phone_terminal
+          billing_phone_terminal_focus_out();
+        });
+        //set session
+        sessionStorage.setItem("billing_phone_terminal", "true");
+      }
+    }
+  });
+}, 1000);
+
 //on change .formatCountryTerminal
 function formatCountryTerminalchange(elem) {
   jQuery(document).ready(function ($) {
@@ -401,8 +426,6 @@ function formatCountryTerminalchange(elem) {
         final_phone = phonecode + phone;
         //set final phone
         $("#billing_phone").val(final_phone);
-        //billing_phone_terminal_focus_out
-        billing_phone_terminal_focus_out();
       }
     }
   });
@@ -430,11 +453,9 @@ function billing_phone_terminal_key_up() {
       if (phone != "") {
         //final phone
         final_phone = phonecode + phone;
-        console.log(final_phone);
+        // console.log(final_phone);
         //set final phone
         $("#billing_phone").val(final_phone);
-        //billing_phone_terminal_focus_out
-        billing_phone_terminal_focus_out();
       }
     }
   });

@@ -1,3 +1,4 @@
+<?php $mode = getTerminalPluginMode(); ?>
 <div class="t-header">
     <div class="t-row">
         <div class="t-col-6">
@@ -5,9 +6,16 @@
         </div>
         <div class="t-col-6">
             <div class="t-right">
-                <a href="javascript:;" id="t-sign-out">
-                    <i class="fa fa-power-off t-font-sign-out" aria-hidden="true"></i>
-                </a>
+                <div class="t-flex">
+                    <p class="t-m-p-0 <?php echo $mode == "test" ? "t-signal-sandbox" : "t-signal"; ?>">
+                        <?php echo esc_html(ucfirst($mode)); ?> Mode
+                    </p>
+                    <a href="javascript:;" id="t-sign-out">
+                        <p class="t-m-p-0">
+                            <i class="fa fa-power-off t-font-sign-out" aria-hidden="true"></i>
+                        </p>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

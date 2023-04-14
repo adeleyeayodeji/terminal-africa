@@ -207,3 +207,29 @@ if (!function_exists('cancelTerminalShipment')) {
         return TerminalAfricaShippingPlugin::cancelTerminalShipment($shipment_id);
     }
 }
+
+//TerminalAfricaShippingPlugin::$plugin_mode
+if (!function_exists('getTerminalPluginMode')) {
+    //get plugin mode
+    /**
+     * @return string
+     */
+    function getTerminalPluginMode()
+    {
+        $signal = new TerminalAfricaShippingPlugin;
+        return $signal::$plugin_mode;
+    }
+}
+
+//TerminalAfricaShippingPlugin::verifyDefaultPackaging
+if (!function_exists('verifyDefaultPackaging')) {
+    //verify default packaging
+    /**
+     * @param $packaging_id
+     * @return object
+     */
+    function verifyDefaultPackaging($packaging_id)
+    {
+        return TerminalAfricaShippingPlugin::verifyDefaultPackaging($packaging_id);
+    }
+}
