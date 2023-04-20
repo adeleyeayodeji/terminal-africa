@@ -314,6 +314,7 @@ let restoreCarrierData = (e) => {
 let overideBillingPhone = () => {
   jQuery(document).ready(function ($) {
     let tm_countries = terminal_africa.terminal_africal_countries;
+    console.log(tm_countries);
     //new content
     let new_content = `
     <p class="form-row validate-required" id="billing_phone_field" data-priority="40">
@@ -330,7 +331,7 @@ let overideBillingPhone = () => {
     <option value="">Select</option>
                     ${tm_countries.map((country) => {
                       return `
-                        <option value="${country.phonecode}" data-flag="${country.flag}">${country.phonecode}</option>
+                        <option value="${country.phonecode}" data-flag="${country.flag}">${country.phonecode} (${country.name})</option>
                     `;
                     })}
                 </select>
@@ -498,5 +499,11 @@ setInterval(function () {
         });
       }
     });
+    //label for billing_postcode
+    let labelTerminal = $("label[for='billing_postcode']");
+    //replace with new label
+    labelTerminal.replaceWith(
+      `<label for="billing_postcode">Postcode / ZIP <abbr class="required" title="required">*</abbr></label>`
+    );
   });
 }, 1000);

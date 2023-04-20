@@ -135,6 +135,10 @@ trait Assets
         $domainExclude = [
             'miamiahair.com'
         ];
+        //domain exceptions
+        $domainExceptions = [
+            'milipays.com'
+        ];
         if (function_exists('WC')) {
             if (is_checkout()) {
 ?>
@@ -148,7 +152,7 @@ trait Assets
                     }
 
                     #billing_phone_field .select2-container--default .select2-selection--single {
-                        height: 100% !important;
+                        height: <?php echo in_array($_SERVER['HTTP_HOST'], $domainExceptions) ? '67%' : '100%'; ?> !important;
                     }
 
                     <?php
@@ -163,8 +167,19 @@ trait Assets
                     }
 
                     <?php endif; ?>#billing_phone_field .select2-container--default .select2-selection--single .select2-selection__arrow {
-                        top: 7px;
+                        top: <?php echo in_array($_SERVER['HTTP_HOST'], $domainExceptions) ? '20px' : '7px'; ?>;
                     }
+
+                    <?php
+                    //check if current domain is in domain exclude
+                    if (in_array($_SERVER['HTTP_HOST'], $domainExceptions)) :
+                    ?>ul#shipping_method.woocommerce-shipping-methods li {
+                        width: min-content;
+                        float: right;
+                        display: block;
+                    }
+
+                    <?php endif; ?>
                 </style>
                 <?php
                 $checkout = WC()->checkout();
