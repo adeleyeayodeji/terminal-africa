@@ -223,23 +223,10 @@ let wooSelectElementOptions = ($) => {
   };
 };
 
-////////////////////////////////////////////////////////////////
-jQuery(document).ready(function ($) {
-  //get woocommerce state select
-  var { state_options, data_options } = wooSelectElementOptions($);
-  //append to billing_country_field
-  $("#billing_country_field").after(`
-        <p class="form-row address-field validate-required validate-state form-row-wide woocommerce-validated" id="terminal_custom_shipping_state2">
-          <label for="terminal_custom_shipping_state2">State <abbr class="required" title="required">*</abbr></label>
-          <span class="woocommerce-input-wrapper">
-            <select name="terminal_custom_shipping_state2" class="state_select">
-                ${state_options}
-            </select>
-          </span>
-        </p>
-      `);
+/////// EVENT //////////////////////////////////
 
-  let do_terminal_calculation = (datas, selected = "") => {
+let do_terminal_calculation = (datas, selected = "") => {
+  jQuery(document).ready(function ($) {
     //check data count
     if (datas.length < 1) {
       datas = [
@@ -278,7 +265,7 @@ jQuery(document).ready(function ($) {
         //select2 init
         $('select[name="terminal_custom_shipping_lga2"]').select2({
           placeholder: "Select City",
-          allowClear: true,
+          // allowClear: true,
           width: "100%"
         });
       } else {
@@ -286,7 +273,7 @@ jQuery(document).ready(function ($) {
         // $('select[name="terminal_custom_shipping_lga2"]').select2("destroy");
         $('select[name="terminal_custom_shipping_lga2"]').select2({
           placeholder: "Select City",
-          allowClear: true,
+          // allowClear: true,
           width: "100%"
         });
       }
@@ -298,17 +285,19 @@ jQuery(document).ready(function ($) {
       //update select2
       $('select[name="terminal_custom_shipping_lga2"]').select2({
         placeholder: "Select City",
-        allowClear: true,
+        // allowClear: true,
         width: "100%"
       });
     }
 
     //recalculate
     $(document.body).trigger("update_checkout");
-  };
+  });
+};
 
-  //overide submit button
-  let terminalButton = () => {
+//overide submit button
+let terminalButton = () => {
+  jQuery(document).ready(function ($) {
     //check if billing_country exist
     if ($('select[name="billing_country"]').length > 0) {
       var countrycode = $('select[name="billing_country"]').val();
@@ -425,9 +414,11 @@ jQuery(document).ready(function ($) {
       //clear local storage
       localStorage.removeItem("terminal_delivery_html");
     });
-  };
+  });
+};
 
-  let restoreCarriers = () => {
+let restoreCarriers = () => {
+  jQuery(document).ready(function ($) {
     //check if local storage is not empty
     if (localStorage.getItem("terminal_delivery_html") != null) {
       //check if t-restore does not exist
@@ -444,9 +435,11 @@ jQuery(document).ready(function ($) {
         terminal_delivery_li.append(terminal_html);
       }
     }
-  };
+  });
+};
 
-  let clearCurrentFields = () => {
+let clearCurrentFields = () => {
+  jQuery(document).ready(function ($) {
     //set timeout
     setTimeout(() => {
       //clear current country and state
@@ -454,11 +447,28 @@ jQuery(document).ready(function ($) {
       //select2 update
       $('select[name="terminal_custom_shipping_state2"]').select2({
         placeholder: "Select State",
-        allowClear: true,
+        // allowClear: true,
         width: "100%"
       });
     }, 1000);
-  };
+  });
+};
+
+////////////////////////////////////////////////////////////////
+jQuery(document).ready(function ($) {
+  //get woocommerce state select
+  var { state_options, data_options } = wooSelectElementOptions($);
+  //append to billing_country_field
+  $("#billing_country_field").after(`
+        <p class="form-row address-field validate-required validate-state form-row-wide woocommerce-validated" id="terminal_custom_shipping_state2">
+          <label for="terminal_custom_shipping_state2">State <abbr class="required" title="required">*</abbr></label>
+          <span class="woocommerce-input-wrapper">
+            <select name="terminal_custom_shipping_state2" class="state_select">
+                ${state_options}
+            </select>
+          </span>
+        </p>
+      `);
 
   //session storage
   sessionStorage.setItem("update_checkout_timer", "0");
@@ -475,7 +485,7 @@ jQuery(document).ready(function ($) {
         //select2 update
         $('select[name="terminal_custom_shipping_state2"]').select2({
           placeholder: "Select State",
-          allowClear: true,
+          // allowClear: true,
           width: "100%"
         });
         terminalButton();
@@ -647,7 +657,7 @@ jQuery(document).ready(function ($) {
           //update select2
           $('select[name="terminal_custom_shipping_state2"]').select2({
             placeholder: "Select State",
-            allowClear: true,
+            // allowClear: true,
             width: "100%"
           });
           //clear select name terminal_custom_shipping_lga2
@@ -655,7 +665,7 @@ jQuery(document).ready(function ($) {
           //update select2
           $('select[name="terminal_custom_shipping_lga2"]').select2({
             placeholder: "Select LGA",
-            allowClear: true,
+            // allowClear: true,
             width: "100%"
           });
         },
@@ -695,7 +705,7 @@ jQuery(document).ready(function ($) {
     //init select2
     $('select[name="billing_country"]').select2({
       placeholder: "Select Country",
-      allowClear: true,
+      // allowClear: true,
       width: "100%"
     });
   }

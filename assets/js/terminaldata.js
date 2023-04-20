@@ -153,7 +153,6 @@ let reloadCarrierData = (e) => {
         confirmButton: "swal-confirm-button",
         cancelButton: "swal-cancel-button"
       },
-      type: "warning",
       showCancelButton: true,
       confirmButtonColor: "rgb(246 146 32)",
       cancelButtonColor: "rgb(0 0 0)",
@@ -168,8 +167,11 @@ let reloadCarrierData = (e) => {
       confirmButtonText: "Yes, reload it!"
     }).then((result) => {
       if (result.value) {
-        //trigger event change
-        $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+        //check if element exist $("select[name='terminal_custom_shipping_lga2']")
+        if ($("select[name='terminal_custom_shipping_lga2']").length > 0) {
+          //trigger event change
+          $("select[name='terminal_custom_shipping_lga2']").trigger("change");
+        }
       }
     });
   });
@@ -252,6 +254,8 @@ let terminalSetShippingCrarrier = function (elem, e) {
           localStorage.setItem("terminal_carrier_logo", carrierlogo);
           //update woocommerce
           $(document.body).trigger("update_checkout");
+          //restoreCarriers
+          restoreCarriers();
         } else {
           //show error
           Swal.fire({
@@ -314,7 +318,7 @@ let restoreCarrierData = (e) => {
 let overideBillingPhone = () => {
   jQuery(document).ready(function ($) {
     let tm_countries = terminal_africa.terminal_africal_countries;
-    console.log(tm_countries);
+    // console.log(tm_countries);
     //new content
     let new_content = `
     <p class="form-row validate-required" id="billing_phone_field" data-priority="40">

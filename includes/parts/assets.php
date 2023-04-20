@@ -102,9 +102,9 @@ trait Assets
                 //sweet alert scripts
                 wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
                 //checkout
-                wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+                wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
                 //terminaldata
-                wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+                wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
                 //localize scripts
                 wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
                     'ajax_url' => admin_url('admin-ajax.php'),
@@ -137,7 +137,7 @@ trait Assets
         ];
         //domain exceptions
         $domainExceptions = [
-            'milipays.com'
+            'www.milipays.com'
         ];
         if (function_exists('WC')) {
             if (is_checkout()) {
@@ -168,6 +168,11 @@ trait Assets
 
                     <?php endif; ?>#billing_phone_field .select2-container--default .select2-selection--single .select2-selection__arrow {
                         top: <?php echo in_array($_SERVER['HTTP_HOST'], $domainExceptions) ? '20px' : '7px'; ?>;
+                    }
+
+                    .swal2-image {
+                        height: 80px;
+                        max-height: 80px;
                     }
 
                     <?php
