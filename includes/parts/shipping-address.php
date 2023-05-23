@@ -411,6 +411,7 @@ trait Shipping
                     'address_from' => $address_from,
                     'address_to' => $address_to,
                     'parcel' => $parcel_id,
+                    'source' => 'wordpress'
                 ]
             ),
             //time out 60 seconds

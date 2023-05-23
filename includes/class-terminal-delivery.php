@@ -109,6 +109,177 @@ class WC_Terminal_Delivery
         // add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
         //woocommerce_checkout_update_order_review
         add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), PHP_INT_MAX, 1);
+        //filter checkout wc
+        // add_filter('woocommerce_default_address_fields', array($this, 'get_custom_default_address_fields'), PHP_INT_MAX, 1);
+
+        //init
+        add_action('wp', array($this, 'init'), PHP_INT_MAX);
+    }
+
+    //init
+    public function init()
+    {
+        //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
+        if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+            //filter the postal code
+            //wp head
+            add_action('wp_head', array($this, 'filter_postal_code'), PHP_INT_MAX);
+        } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+            //filter the postal code
+            //wp head
+            add_action('wp_head', array($this, 'filter_postal_code'), PHP_INT_MAX);
+        }
+    }
+
+    /**
+     * filter_postal_code
+     * @return void
+     */
+    public function filter_postal_code()
+    {
+        echo '<style>';
+        //#shipping_postcode_field
+        echo '#shipping_postcode_field{display:block !important;}';
+        //style
+        echo '</style>';
+    }
+
+    /**
+     * Alter checkout wc fields
+     * @param $fields
+     * @return array
+     */
+    public function get_custom_default_address_fields($fields): array
+    {
+        // First Name
+        $fields['first_name']['placeholder']       = $fields['first_name']['label'];
+        $fields['first_name']['class']             = array();
+        $fields['first_name']['autocomplete']      = 'given-name';
+        $fields['first_name']['input_class']       = array();
+        $fields['first_name']['priority']          = 10;
+        $fields['first_name']['columns']           = 6;
+        $fields['first_name']['custom_attributes'] = array(
+            'data-parsley-trigger' => 'change focusout',
+        );
+
+        // Last Name
+        $fields['last_name']['placeholder']       = $fields['last_name']['label'];
+        $fields['last_name']['class']             = array();
+        $fields['last_name']['autocomplete']      = 'family-name';
+        $fields['last_name']['input_class']       = array();
+        $fields['last_name']['priority']          = 20;
+        $fields['last_name']['columns']           = 6;
+        $fields['last_name']['custom_attributes'] = array(
+            'data-parsley-trigger' => 'change focusout',
+        );
+
+        // Address 1
+        $fields['address_1']['placeholder']       = $fields['address_1']['label'];
+        $fields['address_1']['class']             = array('address-field');
+        $fields['address_1']['autocomplete']      = 'address-line1';
+        $fields['address_1']['input_class']       = array();
+        $fields['address_1']['priority']          = 30;
+        $fields['address_1']['columns']           = 12;
+        $fields['address_1']['custom_attributes'] = array(
+            'data-parsley-trigger' => 'change focusout',
+        );
+
+        // Address 2
+        if (isset($fields['address_2'])) {
+            $fields['address_2']['label']        = cfw__('Apartment, suite, unit, etc.', 'woocommerce');
+            $fields['address_2']['label_class']  = '';
+            $fields['address_2']['placeholder']  = $fields['address_2']['label'];
+            $fields['address_2']['class']        = array('address-field');
+            $fields['address_2']['autocomplete'] = 'address-line2';
+            $fields['address_2']['input_class']  = array();
+            $fields['address_2']['priority']     = 40;
+            $fields['address_2']['columns']      = 12;
+        }
+
+        // Company
+        if (isset($fields['company'])) {
+            $fields['company']['placeholder']  = $fields['company']['label'];
+            $fields['company']['class']        = array();
+            $fields['company']['autocomplete'] = 'organization';
+            $fields['company']['input_class']  = array('update_totals_on_change');
+            $fields['company']['priority']     = 50;
+            $fields['company']['columns']      = 12;
+        }
+
+        // Country
+        $fields['country']['type']         = 'country';
+        $fields['country']['class']        = array('address-field', 'update_totals_on_change');
+        $fields['country']['input_class']  = array('cfw-no-select2');
+        $fields['country']['autocomplete'] = 'country';
+        $fields['country']['priority']     = 60;
+        $fields['country']['columns']      = 4;
+
+        // Postcode
+        $fields['postcode']['placeholder']       = $fields['postcode']['label'];
+        $fields['postcode']['class']             = array('address-field');
+        $fields['postcode']['validate']          = array('postcode');
+        $fields['postcode']['autocomplete']      = 'postal-code';
+        $fields['postcode']['input_class']       = array();
+        $fields['postcode']['priority']          = 60;
+        $fields['postcode']['columns']           = 4;
+        $fields['postcode']['custom_attributes'] = array(
+            'data-parsley-length'   => '[2,12]',
+            'data-parsley-trigger'  => 'change focusout',
+            'data-parsley-postcode' => 'true',
+            'data-parsley-debounce' => '200',
+        );
+
+        // State
+        $fields['state']['type']              = 'state';
+        $fields['state']['placeholder']       = $fields['state']['label'];
+        $fields['state']['class']             = array('address-field');
+        $fields['state']['input_class']       = array('cfw-no-select2');
+        $fields['state']['validate']          = array('state');
+        $fields['state']['autocomplete']      = 'address-level1';
+        $fields['state']['priority']          = 70;
+        $fields['state']['columns']           = 4;
+        $fields['state']['custom_attributes'] = array(
+            'data-parsley-trigger' => 'input change focusout',
+        );
+
+        // City
+        $fields['city']['placeholder']       = $fields['city']['label'];
+        $fields['city']['class']             = array('address-field');
+        $fields['city']['autocomplete']      = 'address-level2';
+        $fields['city']['input_class']       = array();
+        $fields['city']['priority']          = 80;
+        $fields['city']['columns']           = 12;
+        $fields['city']['custom_attributes'] = array(
+            'data-parsley-trigger' => 'change focusout',
+        );
+
+
+        $fields['phone'] = array(
+            'type'              => 'tel',
+            'label'             => cfw__('Phone', 'woocommerce'),
+            'placeholder'       => cfw__('Phone', 'woocommerce'),
+            'required'          => 'required' === get_option('woocommerce_checkout_phone_field', 'required'),
+            'autocomplete'      => 'tel',
+            'input_class'       => array(),
+            'priority'          => 90,
+            'columns'           => 12,
+            'validate'          => array('phone'),
+            'custom_attributes' => array(
+                'data-parsley-trigger' => 'input change focusout',
+            ),
+        );
+
+
+        foreach ($fields as $key => $field) {
+            $type = $field['type'] ?? 'text';
+
+            if (isset($field['placeholder']) && !$field['required'] && 'hidden' !== $type) {
+                // Add optional to placeholder
+                $fields[$key]['placeholder'] = sprintf('%s (%s)', $field['placeholder'], cfw__('optional', 'woocommerce'));
+            }
+        }
+
+        return $fields;
     }
 
     public function removeShipment($order_id)
