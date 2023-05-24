@@ -67,7 +67,7 @@ let terminalCheckoutWC = {
 
       //append to billing_country_field
       shippingState.replaceWith(`
-          <select name="shipping_state" class="state_select cfw-no-select2" onchange="terminalCheckoutWC.stateOnChange(this,event)">
+          <select name="shipping_state" class="state_select cfw-no-select2" id="shipping_state" onchange="terminalCheckoutWC.stateOnChange(this,event)">
               ${state_options}
           </select>
       `);
@@ -121,6 +121,7 @@ let terminalCheckoutWC = {
           //pass data to #shipping_city
           let content = `
           <select name="shipping_city" id="shipping_city" class="state_select cfw-no-select2 garlic-auto-save" data-parsley-trigger="keyup change focusout" data-saved-value="CFW_EMPTY" data-parsley-required="true" data-parsley-group="cfw-customer-info" autocomplete="address-level1" data-placeholder="City" data-input-classes="cfw-no-select2" data-label="City" placeholder="City" onchange="terminalCheckoutWC.cityOnChange(this,event)">
+              <option value="">Select City</option>
                ${response.cities
                  .map((city) => {
                    return `<option value="${city.name}">${city.name}</option>`;
@@ -378,7 +379,142 @@ let terminalCheckoutWC = {
   },
   //getTerminalShippingRate
   getTerminalShippingRate: (customer_details) => {
-    console.log(customer_details);
+    jQuery(function ($) {
+      //get country
+      let countryCode = customer_details.country;
+      //get state
+      let state = $("select[name='shipping_state'] option:selected").val();
+      //get city
+      let lga = customer_details.city;
+      //get email
+      let email = customer_details.email;
+      //get first_name
+      let first_name = customer_details.firstName;
+      //get last_name
+      let last_name = customer_details.lastName;
+      //get phone
+      let phone = customer_details.phone;
+      //get line_1
+      let line_1 = customer_details.address;
+      //get billing_postcode
+      let billing_postcode = customer_details.postcode;
+      //get stateText
+      let stateText = $("select[name='shipping_state'] option:selected").text();
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "terminal_africa_process_terminal_rates",
+          nonce: terminal_africa.nonce,
+          state: stateText,
+          stateCode: state,
+          countryCode: countryCode,
+          city: lga,
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          phone: phone,
+          line_1: line_1,
+          billing_postcode: billing_postcode
+        },
+        dataType: "json",
+        beforeSend: function () {
+          //update woocommerce
+          $(document.body).trigger("update_checkout");
+          // Swal loader
+          Swal.fire({
+            title: "Please wait...",
+            text: "Getting Shipping Rates",
+            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        },
+        success: function (response) {
+          //Swal close
+          Swal.close();
+          console.log(response);
+          return;
+          //check response is 200
+          if (response.code === 200) {
+            //do something cool
+            //clear .t-checkout-carriers
+            $(".t-checkout-carriers").remove();
+            let terminal_html = `
+          <div class="t-checkout-carriers">
+          `;
+            //loop through response.data
+            $.each(response.data, function (indexInArray, value) {
+              let amount = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: terminal_africa.currency
+                //  currencyDisplay: "narrowSymbol",
+                //remove decimal
+                //  minimumFractionDigits: 0
+              }).format(value.amount);
+              //append to terminal_html
+              terminal_html += `
+                <div class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
+                <label for="shipping">
+                <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
+                  <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
+                  <p style=""> 
+                        <span style="font-weight: bolder;">${value.carrier_name}</span> - ${amount} - ${value.delivery_time}
+                    </p>
+                </div>
+                </label>
+                </div>
+            `;
+            });
+            //close div
+            terminal_html += `
+          </div>
+          `;
+            //append to terminal_html
+            var terminal_delivery_html = $(".Terminal-delivery-logo");
+            //find parent li
+            var terminal_delivery_li = terminal_delivery_html.parent().parent();
+            //save terminal_html to localstorage
+            localStorage.setItem("terminal_delivery_html", terminal_html);
+            //append to li
+            terminal_delivery_li.append(terminal_html);
+          } else {
+            //swal error
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+              footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+            });
+          }
+        },
+        error: function (error) {
+          //swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        }
+      });
+    });
   }
 };
 
