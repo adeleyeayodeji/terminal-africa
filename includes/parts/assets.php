@@ -95,29 +95,77 @@ trait Assets
                 if (!$enabled) {
                     return;
                 }
-                //sweet alert styles
-                wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
-                //checkoutcss
-                wp_enqueue_style('terminal-africa-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/checkout.css', array(), TERMINAL_AFRICA_VERSION);
-                //sweet alert scripts
-                wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
-                //checkout
-                wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
-                //terminaldata
-                wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
-                //localize scripts
-                wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
-                    'ajax_url' => admin_url('admin-ajax.php'),
-                    'nonce' => wp_create_nonce('terminal_africa_nonce'),
-                    'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
-                    'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
-                    'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
-                    'currency' => get_woocommerce_currency(),
-                    'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
-                    'terminal_africal_countries' => get_terminal_countries(),
-                ));
+                //check if user is logged in
+                if (!is_user_logged_in()) {
+                    return;
+                }
+                //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
+                if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+                    //filter checkout wc
+                    self::checkoutWCAsset();
+                } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+                    //filter checkout wc
+                    self::checkoutWCAsset();
+                } else {
+                    //wc checkout asset core
+                    self::checkoutWCAssetCore();
+                }
             }
         }
+    }
+
+    /**
+     * Checkout Asset for WC Core
+     */
+    public static function checkoutWCAssetCore()
+    {
+        //sweet alert styles
+        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+        //checkoutcss
+        wp_enqueue_style('terminal-africa-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/checkout.css', array(), TERMINAL_AFRICA_VERSION);
+        //sweet alert scripts
+        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //checkout
+        wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //terminaldata
+        wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //localize scripts
+        wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('terminal_africa_nonce'),
+            'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+            'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
+            'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
+            'currency' => get_woocommerce_currency(),
+            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
+            'terminal_africal_countries' => get_terminal_countries(),
+        ));
+    }
+
+    /**
+     * Checkout Asset for CheckoutWC
+     */
+    public static function checkoutWCAsset()
+    {
+        //sweet alert styles
+        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+        //checkoutcss
+        wp_enqueue_style('terminal-africa-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/checkout.css', array(), TERMINAL_AFRICA_VERSION);
+        //sweet alert scripts
+        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //checkout
+        wp_enqueue_script('terminal-africa-checkoutWC-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkoutWC.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //localize scripts
+        wp_localize_script('terminal-africa-checkoutWC-scripts', 'terminal_africa', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('terminal_africa_nonce'),
+            'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+            'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
+            'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
+            'currency' => get_woocommerce_currency(),
+            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
+            'terminal_africal_countries' => get_terminal_countries(),
+        ));
     }
 
     //header

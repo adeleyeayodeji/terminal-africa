@@ -109,8 +109,6 @@ class WC_Terminal_Delivery
         // add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
         //woocommerce_checkout_update_order_review
         add_filter('woocommerce_checkout_update_order_review', array($this, 'update_order_review'), PHP_INT_MAX, 1);
-        //filter checkout wc
-        // add_filter('woocommerce_default_address_fields', array($this, 'get_custom_default_address_fields'), PHP_INT_MAX, 1);
 
         //init
         add_action('wp', array($this, 'init'), PHP_INT_MAX);
@@ -124,10 +122,14 @@ class WC_Terminal_Delivery
             //filter the postal code
             //wp head
             add_action('wp_head', array($this, 'filter_postal_code'), PHP_INT_MAX);
+            //filter checkout wc
+            //add_filter('woocommerce_default_address_fields', array($this, 'get_custom_default_address_fields'), PHP_INT_MAX, 1);
         } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             //filter the postal code
             //wp head
             add_action('wp_head', array($this, 'filter_postal_code'), PHP_INT_MAX);
+            //filter checkout wc
+            //add_filter('woocommerce_default_address_fields', array($this, 'get_custom_default_address_fields'), PHP_INT_MAX, 1);
         }
     }
 
