@@ -458,10 +458,6 @@ class WC_Terminal_Delivery
     //update_order_review
     public function update_order_review($data)
     {
-        //check if logged in
-        if (!is_user_logged_in()) {
-            return $data;
-        }
         //format url data 
         $formdata = array();
         parse_str($data, $formdata);
@@ -480,19 +476,22 @@ class WC_Terminal_Delivery
                 $billing_city = $billing_city[0];
             }
         }
-        //update user meta
-        $user_id = get_current_user_id();
-        if (!empty($billing_state)) {
-            update_user_meta($user_id, 'billing_state', $billing_state);
-        }
-        //check if city is not empty
-        if (!empty($billing_city)) {
-            update_user_meta($user_id, 'billing_city', $billing_city);
-            update_user_meta($user_id, 'shipping_city', $billing_city);
-        }
-        if (!empty($billing_state)) {
-            //shipping_state
-            update_user_meta($user_id, 'shipping_state', $billing_state);
+        //check if logged in
+        if (is_user_logged_in()) {
+            //update user meta
+            $user_id = get_current_user_id();
+            if (!empty($billing_state)) {
+                update_user_meta($user_id, 'billing_state', $billing_state);
+            }
+            //check if city is not empty
+            if (!empty($billing_city)) {
+                update_user_meta($user_id, 'billing_city', $billing_city);
+                update_user_meta($user_id, 'shipping_city', $billing_city);
+            }
+            if (!empty($billing_state)) {
+                //shipping_state
+                update_user_meta($user_id, 'shipping_state', $billing_state);
+            }
         }
         //update session
         if (!empty($billing_postcode)) {
@@ -508,9 +507,14 @@ class WC_Terminal_Delivery
             }
             WC()->session->set('shipping_postcode', $billing_postcode);
 
-            //shipping postcode
-            update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
-            update_user_meta($user_id, 'billing_postcode', $billing_postcode);
+            //check if logged in
+            if (is_user_logged_in()) {
+                //update user meta
+                $user_id = get_current_user_id();
+                //shipping postcode
+                update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
+                update_user_meta($user_id, 'billing_postcode', $billing_postcode);
+            }
         }
         if (!empty($billing_state)) {
             //get billing_state

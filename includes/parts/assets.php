@@ -96,9 +96,9 @@ trait Assets
                     return;
                 }
                 //check if user is logged in
-                if (!is_user_logged_in()) {
-                    return;
-                }
+                // if (!is_user_logged_in()) {
+                //     return;
+                // }
                 //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
                 if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
                     //filter checkout wc

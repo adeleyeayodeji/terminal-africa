@@ -20,8 +20,21 @@ let terminalCheckoutWC = {
         //return
         return;
       }
+      //set country to ''
+      shippingCountry.val("");
+      //unselect country options
+      shippingCountry.find("option:selected").prop("selected", false);
+      //get all options
+      let shippingCountryOptions = shippingCountry.find("option");
+      //options html
+      let shippingCountryOptionsHtml = "";
+      //loop
+      shippingCountryOptions.each(function (index, element) {
+        //pass option to html
+        shippingCountryOptionsHtml += $(element).prop("outerHTML");
+      });
       //get html
-      let shippingCountryHtml = shippingCountry.html();
+      let shippingCountryHtml = shippingCountryOptionsHtml;
       //replace country with
       shippingCountry.replaceWith(`
       <select name="shipping_country" id="shipping_country" class="country_to_state country_select cfw-no-select2" data-persist="false" data-saved-value="NG" data-parsley-required="true" data-parsley-group="cfw-customer-info" autocomplete="country" data-placeholder="Country / Region" data-label="Country / Region" onchange="terminalCheckoutWC.countryOnChange(this,event)">
@@ -44,6 +57,20 @@ let terminalCheckoutWC = {
         });
         //return
         return;
+      }
+
+      //check if shipping_phone_field is after #billing_phone_field
+      if (
+        $("#shipping_phone_field")
+          .parent()
+          .prev()
+          .find("p#shipping_address_1_field")
+          .attr("id") != "shipping_address_1_field"
+      ) {
+        //move shipping_phone_field to after #billing_phone_field
+        $("#shipping_phone_field")
+          .insertAfter("#shipping_address_1_field")
+          .parent();
       }
 
       //check if element exist #shipping_city
@@ -80,6 +107,14 @@ let terminalCheckoutWC = {
               ${state_options}
           </select>
       `);
+
+      //check if billing_postcode_field is after #billing_phone_field
+      if (
+        $("#billing_postcode_field").prev().attr("id") != "billing_phone_field"
+      ) {
+        //move billing_postcode_field to after #billing_phone_field
+        $("#billing_postcode_field").insertAfter("#billing_phone_field");
+      }
 
       //get h3 class cfw-shipping-methods-heading
       let cfw_shipping_methods_heading = $(".cfw-shipping-methods-heading");
@@ -962,7 +997,8 @@ let terminalCheckoutWC = {
         let labelTerminal = $("label[for='shipping_postcode']");
         //remove span with class optional
         labelTerminal.find("span.optional").remove();
-
+        //set input shipping_postcode placeholder to required
+        $("input#shipping_postcode").attr("placeholder", "Postcode required");
         //restoreCarriers
         terminalCheckoutWC.restoreCarriers();
 
