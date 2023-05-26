@@ -74,3 +74,55 @@
   font-weight: lighter;
   font-size: 13px;
 }
+
+.t-checkout-carriers-checkoutWC {
+  display: flex;
+  justify-content: end;
+}
+
+.t-checkout-carriers-reload-checkoutWC {
+  display: flex;
+  justify-content: end;
+}
+
+.t-checkout-carriers-reload-checkoutWC .t-checkout-carriers {
+  width: 100%;
+  max-width: 115px;
+}
+
+.t-checkout-carriers-reload-checkoutWC .t-checkout-carriers .t-restore {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+.terminalCheckoutWC-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.t-restoreInner {
+  text-align: center;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+
+.t-restoreInner:hover {
+  background: lightgray;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
+.terminalCheckoutWC-container-inner .t-restoreInner {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+.terminalCheckoutWC-container-inner img {
+  height: 10px;
+  margin-right: 2px;
+}

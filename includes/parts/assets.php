@@ -241,6 +241,8 @@ trait Assets
                 //get checkout billing city
                 $billing_city = $checkout->get_value('billing_city') ?: '';
                 $billing_postcode = $checkout->get_value('billing_postcode') ?: '';
+                //shipping post code
+                $shipping_postcode = $checkout->get_value('shipping_postcode') ?: '';
                 //check if , is in billing city
                 if (strpos($billing_city, ',') !== false) {
                     $billing_city = explode(',', $billing_city);
@@ -251,6 +253,7 @@ trait Assets
                     var terminal_billing_state = '<?php echo esc_html($billing_state); ?>';
                     var terminal_billing_city = '<?php echo esc_html($billing_city); ?>';
                     var terminal_billing_postcode = '<?php echo esc_html($billing_postcode); ?>';
+                    var terminal_shipping_postcode = '<?php echo esc_html($shipping_postcode); ?>';
                 </script>
 <?php
 

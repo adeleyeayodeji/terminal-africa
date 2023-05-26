@@ -1,3 +1,4 @@
+////////////////////////////// Terminal Africa Checkout ////////////////////////////
 let updateCoreWoocommerceElements = (state = "", finaltext = "") => {
   jQuery(document).ready(function ($) {
     //find select[name='billing_state'] option with value and set it to selected
@@ -55,6 +56,21 @@ function terminalsetValue2(elem) {
     var first_name = $('input[name="billing_first_name"]').val();
     var last_name = $('input[name="billing_last_name"]').val();
     var phone = $('input[name="billing_phone"]').val();
+    let tm_countries = terminal_africa.terminal_africal_countries;
+    //find country where isoCode is NG
+    let tm_country = tm_countries.find(
+      (country) => country.isoCode === countryCode
+    );
+    //phone code
+    let phonecode = tm_country.phonecode;
+    //check if phonecode not include +
+    if (!phonecode.includes("+")) {
+      phonecode = "+" + phonecode;
+    }
+    //remove - and space
+    phonecode = phonecode.replace(/[- ]/g, "");
+    //append to phone
+    phone = phonecode + phone;
     var line_1 = $('input[name="billing_address_1"]').val();
     var billing_postcode = $('input[name="billing_postcode"]').val();
     //process updateCoreWoocommerceElements
@@ -695,6 +711,14 @@ jQuery(document).ready(function ($) {
     $("#billing_city_field").hide();
     $("#terminal_custom_shipping_lga2").show();
     $("#terminal_custom_shipping_state2").show();
+
+    //check if billing_postcode_field is after #billing_phone_field
+    if (
+      $("#billing_postcode_field").prev().attr("id") != "billing_phone_field"
+    ) {
+      //move billing_postcode_field to after #billing_phone_field
+      $("#billing_postcode_field").insertAfter("#billing_phone_field");
+    }
   }, 300);
 
   //check if billing_country exist

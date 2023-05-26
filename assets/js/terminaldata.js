@@ -466,7 +466,7 @@ function billing_phone_terminal_key_up() {
   });
 }
 
-overideBillingPhone();
+// overideBillingPhone();
 
 //set interval carrier logo
 setInterval(function () {
