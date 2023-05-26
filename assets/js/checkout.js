@@ -69,6 +69,8 @@ function terminalsetValue2(elem) {
     }
     //remove - and space
     phonecode = phonecode.replace(/[- ]/g, "");
+    //remove + and space and special characters form phone
+    phone = phone.replace(/[-+()]/g, "");
     //append to phone
     phone = phonecode + phone;
     var line_1 = $('input[name="billing_address_1"]').val();

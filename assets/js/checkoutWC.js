@@ -247,7 +247,7 @@ let terminalCheckoutWC = {
             //check if terminal_africa_save_cart_itemcount is less than 3
             if (terminal_africa_save_cart_itemcount < 3) {
               //try again
-              saveCartTerminalData();
+              terminalCheckoutWC.initCartData($);
               //increment terminal_africa_save_cart_itemcount
               terminal_africa_save_cart_itemcount++;
               //save to session
@@ -808,6 +808,8 @@ let terminalCheckoutWC = {
       }
       //remove - and space
       phonecode = phonecode.replace(/[- ]/g, "");
+      //remove + and space and special characters form phone
+      phone = phone.replace(/[-+()]/g, "");
       //append to phone
       phone = phonecode + phone;
       //get line_1
@@ -996,11 +998,10 @@ let terminalCheckoutWC = {
           jQuery("#shipping_postcode").val(terminal_shipping_postcode);
           //fade in #shipping_postcode_field
           jQuery("#shipping_postcode_field").show();
-        } else {
-          //add value to post code
-          jQuery("#shipping_postcode").val(terminal_shipping_postcode);
         }
       }, 300);
+      //add value to post code
+      jQuery("#shipping_postcode").val(terminal_shipping_postcode);
     }
   }
 };
