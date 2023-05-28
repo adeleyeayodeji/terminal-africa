@@ -429,7 +429,7 @@ trait Ajax
         //clean phone allow only numbers and +
         $phone = sanitize_text_field($_POST['phone']);
         $phone = preg_replace('/[^0-9\+]/', '', $phone);
-        $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
+        // $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
         $email = sanitize_text_field($_POST['email']);
         $line_2 = "";
         //check if merchant_address_id is set
