@@ -132,6 +132,9 @@ let terminalCheckoutWC = {
           </div>
        </div>
       `);
+
+      //shipping_city to empty
+      shippingCity.val("");
     });
   },
   //country change
@@ -182,17 +185,17 @@ let terminalCheckoutWC = {
           }
           var states = response.states;
           //options
-          var options = "<option value=''>Select State</option>";
+          var state_options = "<option value=''>Select State</option>";
           //loop through states
           for (var i = 0; i < states.length; i++) {
             var state = states[i];
-            options += `<option value="${state.isoCode}">${state.name}</option>`;
+            state_options += `<option value="${state.isoCode}">${state.name}</option>`;
           }
           //update state select name shipping_state
           let shippingState = $('select[name="shipping_state"]');
           //check if element exist
           if (shippingState.length > 0) {
-            $('select[name="shipping_state"]').html(options);
+            $('select[name="shipping_state"]').html(state_options);
           } else {
             $("#shipping_state").replaceWith(`
           <select name="shipping_state" class="state_select cfw-no-select2" id="shipping_state" onchange="terminalCheckoutWC.stateOnChange(this,event)">
