@@ -2,6 +2,13 @@ jQuery(document).ready(function ($) {
   //set session storage terminal_africa_save_cart_itemcount
   sessionStorage.setItem("terminal_africa_save_cart_itemcount", "0");
   let saveCartTerminalData = () => {
+    //Check if shipping is enabled by woocommerce
+    var terminal_delivery_html = $(".Terminal-delivery-logo");
+    //check if terminal_delivery_html exist
+    if (!terminal_delivery_html.length) {
+      //do nothing
+      return;
+    }
     //Save cart item as parcel
     $.ajax({
       type: "POST",
@@ -141,39 +148,37 @@ function billing_phone_terminal_focus_out() {
 let reloadCarrierData = (e) => {
   e.preventDefault();
   jQuery(document).ready(function ($) {
-    //Swal confirm
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This will reload the shipping carrier data",
-      icon: "warning",
-      customClass: {
-        title: "swal-title",
-        text: "swal-text",
-        content: "swal-content",
-        confirmButton: "swal-confirm-button",
-        cancelButton: "swal-cancel-button"
-      },
-      showCancelButton: true,
-      confirmButtonColor: "rgb(246 146 32)",
-      cancelButtonColor: "rgb(0 0 0)",
-      //icon color
-      iconColor: "rgb(246 146 32)",
-      //swal footer
-      footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `,
-      confirmButtonText: "Yes, reload it!"
-    }).then((result) => {
-      if (result.value) {
-        //check if element exist $("select[name='terminal_custom_shipping_lga2']")
-        if ($("select[name='terminal_custom_shipping_lga2']").length > 0) {
-          //trigger event change
-          $("select[name='terminal_custom_shipping_lga2']").trigger("change");
-        }
-      }
-    });
+    //check if value is empty $("select[name='terminal_custom_shipping_lga2']")
+    if ($("select[name='terminal_custom_shipping_lga2']").val() == "") {
+      //Swal
+      Swal.fire({
+        title: "Error!",
+        text: "Please select a shipping city first!",
+        icon: "error",
+        customClass: {
+          title: "swal-title",
+          text: "swal-text",
+          content: "swal-content",
+          confirmButton: "swal-confirm-button",
+          cancelButton: "swal-cancel-button"
+        },
+        type: "error",
+        showCancelButton: false,
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        //icon color
+        iconColor: "rgb(246 146 32)",
+        //swal footer
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      return;
+    }
+    //trigger event change
+    $("select[name='terminal_custom_shipping_lga2']").trigger("change");
   });
 };
 

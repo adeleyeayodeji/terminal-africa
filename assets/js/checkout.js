@@ -77,6 +77,13 @@ function terminalsetValue2(elem) {
     var billing_postcode = $('input[name="billing_postcode"]').val();
     //process updateCoreWoocommerceElements
     updateCoreWoocommerceElements(state, finaltext);
+    //Check if shipping is enabled by woocommerce
+    var terminal_delivery_html = $(".Terminal-delivery-logo");
+    //check if terminal_delivery_html exist
+    if (!terminal_delivery_html.length) {
+      //do nothing
+      return;
+    }
     //ajax
     $.ajax({
       type: "POST",
@@ -316,6 +323,14 @@ let do_terminal_calculation = (datas, selected = "") => {
 //overide submit button
 let terminalButton = () => {
   jQuery(document).ready(function ($) {
+    //Check if shipping is enabled by woocommerce
+    var terminal_delivery_html = $(".Terminal-delivery-logo");
+    //check if terminal_delivery_html exist
+    if (!terminal_delivery_html.length) {
+      //do nothing
+      return;
+    }
+
     //check if billing_country exist
     if ($('select[name="billing_country"]').length > 0) {
       var countrycode = $('select[name="billing_country"]').val();
@@ -443,7 +458,6 @@ let restoreCarriers = () => {
       if (!$(".t-restore").length) {
         let terminal_html = `<div class="t-checkout-carriers t-update">`;
         terminal_html += `<b class="t-restore" onclick="restoreCarrierData(this)">Change Carrier</b>`;
-        terminal_html += `<b class="t-restore" onclick="reloadCarrierData(event)">Reload Carrier</b>`;
         terminal_html += `</div>`;
         //append to terminal_html
         var terminal_delivery_html = $(".Terminal-delivery-logo");
@@ -720,6 +734,27 @@ jQuery(document).ready(function ($) {
     ) {
       //move billing_postcode_field to after #billing_phone_field
       $("#billing_postcode_field").insertAfter("#billing_phone_field");
+    }
+
+    //get label for terminal_custom_shipping_lga2
+    var label = $("label[for='terminal_custom_shipping_lga2']");
+    //check if label already has class woocheckout-city-label
+    if (!label.hasClass("woocheckout-city-label")) {
+      var terminal_delivery_html = $(".Terminal-delivery-logo");
+      //check if terminal_delivery_html exist
+      if (!terminal_delivery_html.length) {
+        //do nothing
+        return;
+      }
+      //replace with
+      label.replaceWith(`
+      <label for="terminal_custom_shipping_lga2" class="woocheckout-city-label">
+      <span>
+        City <abbr class="required" title="required">*</abbr>
+      </span>
+      <b class="t-restore terminal-woo-checkout-get-rate" onclick="reloadCarrierData(event)"><img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" /> Get Carriers</b>
+      </label>
+      `);
     }
   }, 300);
 

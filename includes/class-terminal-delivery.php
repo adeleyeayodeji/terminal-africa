@@ -420,7 +420,7 @@ class WC_Terminal_Delivery
             'placeholder' => _x('Postcode / ZIP', 'placeholder', 'terminal-africa'),
             'clear' => true,
             'priority' => 50,
-            'required' => true,
+            'required' => false,
             'default' => $billing_postcode,
         );
         //address

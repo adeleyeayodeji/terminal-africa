@@ -3,6 +3,13 @@ let terminalCheckoutWC = {
   //init
   init: () => {
     jQuery(function ($) {
+      //Check if shipping is enabled by woocommerce
+      var terminal_delivery_html = $(".Terminal-delivery-logo");
+      //check if terminal_delivery_html exist
+      if (!terminal_delivery_html.length) {
+        //do nothing
+        return;
+      }
       //check if element exist #shipping_country
       let shippingCountry = $("#shipping_country");
       if (!shippingCountry.length) {
@@ -114,6 +121,14 @@ let terminalCheckoutWC = {
       ) {
         //move billing_postcode_field to after #billing_phone_field
         $("#billing_postcode_field").insertAfter("#billing_phone_field");
+      }
+
+      //Check if shipping is enabled by woocommerce
+      var terminal_delivery_html = $(".Terminal-delivery-logo");
+      //check if terminal_delivery_html exist
+      if (!terminal_delivery_html.length) {
+        //do nothing
+        return;
       }
 
       //get h3 class cfw-shipping-methods-heading
@@ -231,6 +246,13 @@ let terminalCheckoutWC = {
   },
   //save terminal cart
   initCartData: ($) => {
+    //Check if shipping is enabled by woocommerce
+    var terminal_delivery_html = $(".Terminal-delivery-logo");
+    //check if terminal_delivery_html exist
+    if (!terminal_delivery_html.length) {
+      //do nothing
+      return;
+    }
     //Save cart item as parcel
     $.ajax({
       type: "POST",
@@ -655,6 +677,13 @@ let terminalCheckoutWC = {
   //city on change event
   cityOnChange: (elem, e) => {
     jQuery(document).ready(function ($) {
+      //Check if shipping is enabled by woocommerce
+      var terminal_delivery_html = $(".Terminal-delivery-logo");
+      //check if terminal_delivery_html exist
+      if (!terminal_delivery_html.length) {
+        //do nothing
+        return;
+      }
       //get country value
       let country = $("#shipping_country").val();
       //get state selected option value
@@ -1007,6 +1036,13 @@ let terminalCheckoutWC = {
     //set interval carrier logo
     setInterval(function () {
       jQuery(document).ready(function ($) {
+        //Check if shipping is enabled by woocommerce
+        var terminal_delivery_html = $(".Terminal-delivery-logo");
+        //check if terminal_delivery_html exist
+        if (!terminal_delivery_html.length) {
+          //do nothing
+          return;
+        }
         //check if local storage is not empty
         if (localStorage.getItem("terminal_carrier_logo") != null) {
           let terminal_carrier_logo = localStorage.getItem(
@@ -1067,6 +1103,13 @@ let terminalCheckoutWC = {
       //set interval
       setInterval(() => {
         jQuery(document).ready(function ($) {
+          //Check if shipping is enabled by woocommerce
+          var terminal_delivery_html = $(".Terminal-delivery-logo");
+          //check if terminal_delivery_html exist
+          if (!terminal_delivery_html.length) {
+            //do nothing
+            return;
+          }
           //check if #shipping_postcode_field display none
           if ($("#shipping_postcode_field").css("display") == "none") {
             //add value to post code
