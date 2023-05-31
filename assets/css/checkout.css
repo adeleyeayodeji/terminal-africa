@@ -126,3 +126,13 @@
   height: 10px;
   margin-right: 2px;
 }
+
+.terminal-overlay-checkout {
+  width: 100%;
+  height: 100%;
+}
+
+.terminal-overlay-content-checkout {
+  width: 100%;
+  height: 100%;
+}

@@ -561,39 +561,26 @@ let terminalCheckoutWC = {
         });
         return;
       }
-      //Swal confirm
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This will reload the shipping carrier data",
-        icon: "warning",
-        customClass: {
-          title: "swal-title",
-          text: "swal-text",
-          content: "swal-content",
-          confirmButton: "swal-confirm-button",
-          cancelButton: "swal-cancel-button"
-        },
-        showCancelButton: true,
-        confirmButtonColor: "rgb(246 146 32)",
-        cancelButtonColor: "rgb(0 0 0)",
-        //icon color
-        iconColor: "rgb(246 146 32)",
-        //swal footer
-        footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `,
-        confirmButtonText: "Yes, reload it!"
-      }).then((result) => {
-        if (result.value) {
-          //check if element exist $("select[name='shipping_city']")
-          if ($("select[name='shipping_city']").length > 0) {
-            //trigger event change
-            $("select[name='shipping_city']").trigger("change");
-          }
-        }
-      });
+      //check if shipping city is empty
+      if ($("#shipping_city").val() == "") {
+        //swal
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please select state and city first!",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+        });
+        return;
+      }
+      //trigger event change
+      $("select[name='shipping_city']").trigger("change");
     });
   },
   //overide state select
@@ -975,6 +962,46 @@ let terminalCheckoutWC = {
       });
     });
   },
+  //checkForCarriers
+  checkForCarriers: function () {
+    jQuery(document).ready(function ($) {
+      //check if shipment is applied
+      let img = $(".Terminal-delivery-logo");
+      //check if parent has element .woocommerce-Price-amount amount
+      if (!img.parent().find(".woocommerce-Price-amount").length) {
+        //check if class exist woocommerce-Price-amount
+        //show error
+        Swal.fire({
+          icon: "error",
+          title: "Please select a carrier",
+          text: "Carrier is required to proceed with checkout",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+            <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+            `
+        });
+        return;
+      } else {
+        //remove block from
+        $(".cfw-place-order-wrap").unblock();
+      }
+    });
+  },
+  //post code focused out
+  postCodeFocusedOut: function (e) {
+    //prevent default
+    e.preventDefault();
+    //check if shipping_state is empty
+    if (jQuery("#shipping_state").val() == "") {
+      //do nothing
+      return;
+    }
+    terminalCheckoutWC.reloadCarrierData(e);
+  },
   //set carrier logo
   setCarrierLogo: function () {
     //set interval carrier logo
@@ -1000,11 +1027,19 @@ let terminalCheckoutWC = {
         let labelTerminal = $("label[for='shipping_postcode']");
         //remove span with class optional
         labelTerminal.find("span.optional").remove();
-        //set input shipping_postcode placeholder to required
-        $("input#shipping_postcode").attr("placeholder", "Postcode required");
+        //check if class terminal-postcode-wc-checkout exist on input#shipping_postcode
+        if (
+          !$("input#shipping_postcode").hasClass(
+            "terminal-postcode-wc-checkout"
+          )
+        ) {
+          //replace with
+          $("input#shipping_postcode").replaceWith(
+            '<input type="text" class="input-text garlic-auto-save terminal-postcode-wc-checkout" onfocusout="terminalCheckoutWC.postCodeFocusedOut(event)" name="shipping_postcode" id="shipping_postcode" placeholder="Postcode required" value="" data-parsley-length="[2,12]" data-parsley-trigger="change focusout" data-parsley-postcode="true" data-parsley-debounce="200" data-saved-value="CFW_EMPTY" autocomplete="postal-code" data-placeholder="Postcode" data-parsley-id="26">'
+          );
+        }
         //restoreCarriers
         terminalCheckoutWC.restoreCarriers();
-
         //get session
         let session = sessionStorage.getItem("billing_phone_terminal");
         //check if session is empty
@@ -1031,13 +1066,52 @@ let terminalCheckoutWC = {
     } else {
       //set interval
       setInterval(() => {
-        //check if #shipping_postcode_field display none
-        if (jQuery("#shipping_postcode_field").css("display") == "none") {
-          //add value to post code
-          jQuery("#shipping_postcode").val(terminal_shipping_postcode);
-          //fade in #shipping_postcode_field
-          jQuery("#shipping_postcode_field").show();
-        }
+        jQuery(document).ready(function ($) {
+          //check if #shipping_postcode_field display none
+          if ($("#shipping_postcode_field").css("display") == "none") {
+            //add value to post code
+            $("#shipping_postcode").val(terminal_shipping_postcode);
+            //fade in #shipping_postcode_field
+            $("#shipping_postcode_field").show();
+          }
+          //check if .terminal-overlay-checkout exist
+          if ($(".terminal-overlay-checkout").length == 0) {
+            //unblock .cfw-place-order-wrap
+            $(".cfw-place-order-wrap").unblock();
+            let img = $(".Terminal-delivery-logo");
+            //check if parent has element .woocommerce-Price-amount amount
+            if (!img.parent().find(".woocommerce-Price-amount").length) {
+              //add overlay html to .cfw-place-order-wrap with opacity
+              $(".cfw-place-order-wrap").block({
+                message: `
+              <div class="terminal-overlay-checkout" onclick="terminalCheckoutWC.checkForCarriers(this,event)">
+                <div class="terminal-overlay-content-checkout">
+                  
+                </div>
+              </div>
+              `,
+                css: {
+                  border: "none",
+                  padding: "0px",
+                  backgroundColor: "transparent",
+                  color: "#fff",
+                  opacity: 0.3,
+                  width: "100%",
+                  height: "100%"
+                }
+              });
+            } else {
+              //unblock .cfw-place-order-wrap
+              $(".cfw-place-order-wrap").unblock();
+            }
+          } else {
+            //check if cfw-place-order-wrap has a element with class blockUI blockOverlay
+            if ($(".cfw-place-order-wrap").find(".blockUI.blockOverlay")) {
+              //remove blockUI blockOverlay
+              $(".cfw-place-order-wrap").find(".blockUI.blockOverlay").hide();
+            }
+          }
+        });
       }, 300);
       //add value to post code
       jQuery("#shipping_postcode").val(terminal_shipping_postcode);
