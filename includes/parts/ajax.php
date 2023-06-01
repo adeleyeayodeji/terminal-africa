@@ -5,7 +5,8 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
-use Requests;
+use WpOrg\Requests\Requests;
+use TerminalLogHandler;
 
 trait Ajax
 {
@@ -50,6 +51,8 @@ trait Ajax
             //update shipping settings
             $settings['enabled'] = 'yes';
             update_option('woocommerce_terminal_delivery_settings', $settings);
+            //log plugin data
+            TerminalLogHandler::terminalLoggerHandler('plugin/activate');
             //return 
             wp_send_json([
                 'code' => 200,

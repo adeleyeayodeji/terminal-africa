@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.1.7
+ * Version:     1.1.9
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -342,7 +342,9 @@ class WC_Terminal_Delivery_Loader
 // fire it up!
 WC_Terminal_Delivery_Loader::instance();
 
+//include terminal log handler
+require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/terminalLogHandler.php';
 
 // Register hooks that are fired when the plugin is activated or deactivated.
-// register_activation_hook(__FILE__, array('TerminalAfricaShippingPlugin', 'activate'));
-// register_deactivation_hook(__FILE__, array('TerminalAfricaShippingPlugin', 'deactivate'));
+register_activation_hook(__FILE__, [TerminalLogHandler::class, 'terminalActivatorHandler']);
+register_deactivation_hook(__FILE__, [TerminalLogHandler::class, 'terminalDeactionHandler']);
