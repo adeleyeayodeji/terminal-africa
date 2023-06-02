@@ -960,6 +960,14 @@ let changeTerminalCarrier = (elem, e) => {
             if (value.default_amount) {
               //set amount to default_amount
               default_amount = value.default_amount;
+              //set amount to currency
+              amount = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: value.default_currency
+                //  currencyDisplay: "narrowSymbol",
+                //remove decimal
+                //  minimumFractionDigits: 0
+              }).format(default_amount);
             }
             //append to terminal_html
             terminal_html += `

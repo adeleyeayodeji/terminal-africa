@@ -937,6 +937,14 @@ let terminalCheckoutWC = {
               if (value.default_amount) {
                 //set amount to default_amount
                 default_amount = value.default_amount;
+                //set amount to currency
+                amount = new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: value.default_currency
+                  //  currencyDisplay: "narrowSymbol",
+                  //remove decimal
+                  //  minimumFractionDigits: 0
+                }).format(default_amount);
               }
               //append to terminal_html
               terminal_html += `
@@ -1010,7 +1018,7 @@ let terminalCheckoutWC = {
         Swal.fire({
           icon: "error",
           title: "Please select a carrier",
-          text: "Carrier is required to proceed with checkout",
+          text: "Please choose your delivery option to complete your order",
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
           //footer
