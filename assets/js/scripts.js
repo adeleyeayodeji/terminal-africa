@@ -954,9 +954,16 @@ let changeTerminalCarrier = (elem, e) => {
               //remove decimal
               //  minimumFractionDigits: 0
             }).format(value.amount);
+            //set default amount
+            let default_amount = value.amount;
+            //check if value.default_amount exist
+            if (value.default_amount) {
+              //set amount to default_amount
+              default_amount = value.default_amount;
+            }
             //append to terminal_html
             terminal_html += `
-                <div class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${value.amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-order-id="${order_id}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
+                <div class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${default_amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-order-id="${order_id}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
                 <label for="shipping">
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;    padding-bottom: 0px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">

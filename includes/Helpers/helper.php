@@ -73,6 +73,19 @@ if (!function_exists('updateTerminalParcel')) {
         return TerminalAfricaShippingPlugin::updateParcel($parcel_id, $body);
     }
 }
+
+/**
+ * getTerminalParcel
+ * @param $parcel_id
+ */
+if (!function_exists('getTerminalParcel')) {
+    //get parcel
+    function getTerminalParcel($parcel_id)
+    {
+        return TerminalAfricaShippingPlugin::getParcel($parcel_id);
+    }
+}
+
 //createTerminalShipment
 if (!function_exists('createTerminalShipment')) {
     //create terminal shipment
@@ -88,6 +101,15 @@ if (!function_exists('getTerminalRates')) {
     function getTerminalRates($shipment_id)
     {
         return TerminalAfricaShippingPlugin::getTerminalRates($shipment_id);
+    }
+}
+
+//getTerminalRatesvbyAddressId
+if (!function_exists('getTerminalRatesvbyAddressId')) {
+    //get terminal rates
+    function getTerminalRatesvbyAddressId($merchant_address_id, $customer_address_id, $parcel)
+    {
+        return TerminalAfricaShippingPlugin::getTerminalRates(null, $merchant_address_id, $customer_address_id, $parcel);
     }
 }
 

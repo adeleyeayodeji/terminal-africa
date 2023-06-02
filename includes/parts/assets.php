@@ -76,29 +76,29 @@ trait Assets
                 $enabled = true;
                 //check if address is set
                 if (!get_option('terminal_africa_merchant_address_id')) {
+                    //add notice
+                    wc_add_notice(__('Please set your merchant address in the <a href="' . admin_url('admin.php?page=terminal-africa-get-started') . '">settings page</a> to enable Terminal Africa.', 'terminal-africa'), 'error');
                     //$enabled false
                     $enabled = false;
                 }
                 //check if merchant id is set
                 if (!get_option('terminal_africa_merchant_id')) {
+                    //add notice
+                    wc_add_notice(__('Please set your merchant id in the <a href="' . admin_url('admin.php?page=terminal-africa-get-started') . '">settings page</a> to enable Terminal Africa.', 'terminal-africa'), 'error');
                     //$enabled false
                     $enabled = false;
-                } else {
-                    $shipping = new \WC_Terminal_Delivery_Shipping_Method;
-                    //check if shipping method is enabled 
-                    if ($shipping->enabled == "no") {
-                        //$enabled false
-                        $enabled = false;
-                    }
+                }
+                //check if enabled is set to no
+                $shipping = new \WC_Terminal_Delivery_Shipping_Method;
+                //check if shipping method is enabled 
+                if ($shipping->enabled == "no") {
+                    //$enabled false
+                    $enabled = false;
                 }
                 //check if enabled
                 if (!$enabled) {
                     return;
                 }
-                //check if user is logged in
-                // if (!is_user_logged_in()) {
-                //     return;
-                // }
                 //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
                 if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
                     //filter checkout wc
@@ -139,6 +139,7 @@ trait Assets
             'currency' => get_woocommerce_currency(),
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
+            'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
         ));
     }
 
@@ -165,6 +166,7 @@ trait Assets
             'currency' => get_woocommerce_currency(),
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
+            'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
         ));
     }
 
@@ -174,6 +176,32 @@ trait Assets
         ob_start();
         require TERMINAL_AFRICA_PLUGIN_PATH . '/templates/parts/header.php';
         return ob_get_clean();
+    }
+
+    /**
+     * Check if the product in the cart is supported for shipping
+     */
+    public static function check_checkout_product_for_shipping_support()
+    {
+        //check if product is supported for shipping
+        if (get_option('terminal_check_checkout_product_for_shipping_support') == 'yes') {
+            //get cart items
+            $cartItems = WC()->cart->get_cart();
+            //loop through cart items
+            foreach ($cartItems as $cartItem) {
+                //get product id
+                $productId = $cartItem['product_id'];
+                //get product
+                $product = wc_get_product($productId);
+                //check if product is supported for shipping
+                if ($product->get_shipping_class_id() == 0) {
+                    //return false
+                    return "false";
+                }
+            }
+        }
+        //return true
+        return "true";
     }
 
     //wp head checkout

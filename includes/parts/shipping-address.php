@@ -389,6 +389,46 @@ trait Shipping
         }
     }
 
+    //get parcel
+    public static function getParcel($parcel_id)
+    {
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::get(
+            self::$enpoint . 'parcels' . "/" . $parcel_id,
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
+
     //createShipment
     public static function createShipment($address_from, $address_to, $parcel_id)
     {
@@ -438,7 +478,7 @@ trait Shipping
     }
 
     //getTerminalRates
-    public static function getTerminalRates($shipment_id)
+    public static function getTerminalRates($shipment_id, $merchant_address_id = null, $customer_address_id = null, $parcel = null)
     {
         if (!self::$skkey) {
             return [
@@ -461,9 +501,18 @@ trait Shipping
         }
         //query
         $query = [
-            'shipment_id' => $shipment_id,
             'currency' => $currency,
         ];
+        //check if merchant address id is set
+        if ($merchant_address_id && $customer_address_id && $parcel) {
+            $query['pickup_address'] = $merchant_address_id;
+            $query['delivery_address'] = $customer_address_id;
+            $query['parcel_id'] = $parcel;
+        } else {
+            //set shipment id
+            $query['shipment_id'] = $shipment_id;
+        }
+
         $query = http_build_query($query);
         $response = Requests::get(
             self::$enpoint . 'rates/shipment?' . $query,

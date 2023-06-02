@@ -485,30 +485,8 @@ trait Ajax
             $address_from = $merchant_address_id;
             $address_to = $address_id;
             $parcel = $parcel_id;
-            //get shipment_id
-            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $email);
-            //check if shipment_id is empty
-            if (empty($shipment_id)) {
-                //create shipment
-                $create_shipment = createTerminalShipment($address_from, $address_to, $parcel);
-                //check if shipment is created
-                if ($create_shipment['code'] == 200) {
-                    //wc session
-                    WC()->session->set('terminal_africa_shipment_id' . $email, $create_shipment['data']->shipment_id);
-                    $shipment_id = $create_shipment['data']->shipment_id;
-                } else {
-                    //wc notice
-                    wc_add_notice($create_shipment['message'], 'error');
-                    //return error
-                    wp_send_json([
-                        'code' => 400,
-                        'message' => $create_shipment['message'],
-                        'endpoint' => 'create_shipment'
-                    ]);
-                }
-            }
             //get rates
-            $get_rates = getTerminalRates($shipment_id);
+            $get_rates = getTerminalRatesvbyAddressId($address_from, $address_to, $parcel);
             //check if rates is gotten
             if ($get_rates['code'] == 200) {
                 //return

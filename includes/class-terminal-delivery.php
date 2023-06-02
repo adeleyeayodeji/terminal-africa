@@ -201,6 +201,35 @@ class WC_Terminal_Delivery
         if (empty($shipment_id)) {
             return;
         }
+        //check if order shipping method is terminal_delivery
+        $shipping_method = $order->get_shipping_methods();
+        if (empty($shipping_method)) {
+            return;
+        }
+        //get order currency
+        $order_currency = $order->get_currency();
+        //loop through shipping method
+        $items    = (array) $order->get_items('shipping');
+        //$shipping_cost
+        $shipping_cost = 0;
+        //terminal method is active
+        $terminal_method_is_active = false;
+        // Loop through shipping items
+        foreach ($items as $item) {
+            //get shipping method id
+            $shipping_method_id = $item->get_method_id();
+            //if shipping method id is terminal_delivery
+            if ($shipping_method_id == "terminal_delivery") {
+                $terminal_method_is_active = true;
+                //get shipping cost
+                $shipping_cost = $item->get_total();
+                break;
+            }
+        }
+        //if terminal method is not active
+        if (!$terminal_method_is_active) {
+            return;
+        }
         //check if terminal_africa_delivery_arranged is yes
         $terminal_africa_delivery_arranged = get_post_meta($order_id, 'terminal_africa_delivery_arranged', true);
         if ($terminal_africa_delivery_arranged == 'yes') {
@@ -220,11 +249,12 @@ class WC_Terminal_Delivery
             'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         );
         $plugin_url = add_query_arg($arg, $plugin_url);
+        //get order 
         echo "<h4> <img src='" . esc_url($icon_url) . "' align='left' style='margin-right: 5px;width: auto;
     height: auto;
     max-width: 20px;'/>" . esc_html($carrier_name . ' - ' . $delivery_time ?: 'Terminal Delivery') . "</h4>";
         echo "<p><strong>Delivery Carrier Name: </strong>" . esc_html($carrier_name) . "</p>";
-        echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html(get_post_meta($order_id, 'Terminal_africa_amount', true))) . "</p>";
+        echo "<p><strong>Delivery Amount: </strong>" . wc_price(esc_html($shipping_cost), array('currency' => $order_currency)) . "</p>";
         echo "<p><strong>Pickup Time: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_pickuptime', true)) . "</p>";
         echo "<p><strong>Delivery Time: </strong>" . esc_html($delivery_time) . "</p>";
         echo "<p><strong>Delivery Rate ID: </strong>" . esc_html($rate_id) . "</p>";
@@ -277,6 +307,11 @@ class WC_Terminal_Delivery
         $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
         $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+        //check if address id is set
+        $guest_address_id = WC()->session->get('terminal_africa_guest_address_id' . $guest_email);
+        //check if not empty $parcel_id 
+        $parcel_id = WC()->session->get('terminal_africa_parcel_id');
         //check if mode is live or test
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
@@ -287,8 +322,27 @@ class WC_Terminal_Delivery
             }
         }
         //if exist
-        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
+        if ($merchant_address_id && $terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
             $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
+            //check if shipment_id is empty
+            if (empty($shipment_id)) {
+                //create shipment
+                $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id);
+                //check if shipment is created
+                if ($create_shipment['code'] == 200) {
+                    //wc session
+                    WC()->session->set('terminal_africa_shipment_id' . $guest_email, $create_shipment['data']->shipment_id);
+                    $shipment_id = $create_shipment['data']->shipment_id;
+                } else {
+                    //order error note
+                    $order = wc_get_order($order_id);
+                    $order->add_order_note(
+                        __('Terminal Africa Error: ' . $create_shipment['message'], 'terminal-africa-shipping')
+                    );
+                    //return
+                    return;
+                }
+            }
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);

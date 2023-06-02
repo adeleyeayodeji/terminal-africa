@@ -38,6 +38,24 @@ if ($get_rate_data['code'] == 200) {
 }
 $states = get_terminal_states($saved_address ? $saved_address->country : 'NG');
 $states = $states['data'];
+
+//get order currency
+$order_currency = $order->get_currency();
+//loop through shipping method
+$shippingItems    = (array) $order->get_items('shipping');
+//$shipping_cost
+$shipping_cost = $saved_others->amount;
+// Loop through shipping shippingItems
+foreach ($shippingItems as $item) {
+    //get shipping method id
+    $shipping_method_id = $item->get_method_id();
+    //if shipping method id is terminal_delivery
+    if ($shipping_method_id == "terminal_delivery") {
+        //get shipping cost
+        $shipping_cost = $item->get_total();
+        break;
+    }
+}
 ?>
 <style>
     b {
@@ -212,7 +230,7 @@ $states = $states['data'];
     margin-right: 4px;" src="' . esc_url($saved_others->carrier_logo) . '" >' . esc_html($saved_others->carrier_name . ' : ' . $saved_others->carrier_rate_description) : ''; ?></b>
                     </p>
                     <p>
-                        <b>Shipping Price:</b> <?php echo $saved_others ? wc_price($saved_others->amount) : 0; ?>
+                        <b>Shipping Price:</b> <?php echo $saved_others ? wc_price($shipping_cost, ['currency' => $order_currency]) : 0; ?>
                     </p>
                     <p>
                         <b>Shipment Status:</b> <b style="color:orange;text-transform: uppercase;" id="terminal_shipment_status" data-shipment-id="<?php echo esc_html($shipping_id) ?>">....</b>

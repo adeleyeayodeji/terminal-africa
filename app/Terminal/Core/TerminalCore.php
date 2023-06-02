@@ -29,7 +29,7 @@ class TerminalCore
         $args = [
             'post_type' => 'shop_order',
             'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
-            'posts_per_page' => 10,
+            'posts_per_page' => -1,
             //page 
             'paged' => 1,
             'meta_query' => [

@@ -123,7 +123,6 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         }
         //if exist
         if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
-            $shipment_id = sanitize_text_field(WC()->session->get('terminal_africa_shipment_id' . $guest_email));
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);
@@ -137,7 +136,6 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                     'duration' => $terminal_africa_duration,
                     'carrier' => $terminal_africa_carriername,
                     'amount' => $terminal_africa_amount,
-                    'shipment_id' => $shipment_id,
                     'rate_id' => $terminal_africa_rateid,
                     'pickup_time' => $terminal_africa_pickuptime,
                     'carrier_logo' => $terminal_africa_carrierlogo,
