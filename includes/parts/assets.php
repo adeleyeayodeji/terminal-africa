@@ -50,6 +50,8 @@ trait Assets
         wp_enqueue_script('terminal-africa-izitoast-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/iziToast.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //terminal africa scripts
         wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery', 'select2', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
+        //terminal africa scripts
+        wp_enqueue_script('terminal-africa-admin-scripts-loggin', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/admin-scripts-loggin.js', array('jquery', 'select2', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
         //wallet page url
         $wallet_url = add_query_arg(array('tab' => 'deposit'), admin_url('admin.php?page=terminal-africa-wallet'));
         $packaging_id = get_option('terminal_default_packaging_id');
@@ -72,6 +74,19 @@ trait Assets
     public static function enqueue_frontend_script()
     {
         if (function_exists('WC')) {
+            //check if its cart page
+            if (is_cart()) {
+                //init add to cart ajax
+                wp_enqueue_script('terminal-africa-terminaldata-for-parcel-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-parcel.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+                //localize scripts
+                wp_localize_script('terminal-africa-terminaldata-for-parcel-scripts', 'terminal_africa_parcel', array(
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('terminal_africa_nonce'),
+                    'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+                    'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL
+                ));
+            }
+            //check if checkiut page
             if (is_checkout()) {
                 $enabled = true;
                 //check if address is set
