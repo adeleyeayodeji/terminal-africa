@@ -16,7 +16,7 @@ class TerminalLogHandler
     public static function terminalActivatorHandler()
     {
         //logger handler
-        self::terminalLoggerHandler('plugin');
+        self::terminalLoggerHandler('plugin/activate');
     }
 
     /**
@@ -26,6 +26,23 @@ class TerminalLogHandler
     {
         //logger handler
         self::terminalLoggerHandler('plugin/deactivate');
+    }
+
+    /**
+     * Terminal on plugin update
+     */
+    public static function terminalUpdateHandler($upgrader_object, $options)
+    {
+        $current_plugin_path_name = plugin_basename(__FILE__);
+
+        if ($options['action'] == 'update' && $options['type'] == 'plugin') {
+            foreach ($options['plugins'] as $each_plugin) {
+                if ($each_plugin == $current_plugin_path_name) {
+                    //logger handler
+                    self::terminalLoggerHandler('plugin/activate');
+                }
+            }
+        }
     }
 
     /**
