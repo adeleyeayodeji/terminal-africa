@@ -7,6 +7,8 @@ $userCarriersI = getUserCarriers('international');
 $userCarriersR = getUserCarriers('regional');
 $internationalCarriers = getTerminalCarriers('international');
 $regionalCarriers = getTerminalCarriers('regional');
+//terminal_custom_price_mark_up
+$terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '');
 //carriers data array
 $carriersData = [
     'domestic' => [
@@ -31,14 +33,26 @@ $carriersData = [
     <div class="t-body" style="padding-top: 10px;">
         <div class="t-row">
             <div class="t-col-12">
-                <div class="t-address-info">
-                    <!-- instructions -->
-                    <h3 class="t-title">
-                        <strong>Carriers:</strong>
-                    </h3>
-                    <p class="t-text">
-                        Select your choice of carriers from our available partners below
-                    </p>
+                <div class="t-address-info t-display-flex">
+                    <div class="t-carriers-title-tag">
+                        <!-- instructions -->
+                        <h3 class="t-title">
+                            <strong>Carriers:</strong>
+                        </h3>
+                        <p class="t-text">
+                            Select your choice of carriers from our available partners below
+                        </p>
+                    </div>
+                    <div class="t-carriers-custom-markup">
+                        <!-- custom price mark up -->
+                        <h3 class="t-title t-mb-1">
+                            <strong>Custom price mark up:</strong>
+                        </h3>
+                        <span>
+                            Enter a custom price mark up for all your shipments in percentage (%)
+                        </span>
+                        <input type="number" name="terminal_custom_price_mark_up" placeholder="e.g 10 for 10%" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>">
+                    </div>
                 </div>
             </div>
             <?php

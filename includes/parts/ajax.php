@@ -489,10 +489,12 @@ trait Ajax
             $get_rates = getTerminalRatesvbyAddressId($address_from, $address_to, $parcel);
             //check if rates is gotten
             if ($get_rates['code'] == 200) {
+                $terminal_price_markup = get_option('terminal_custom_price_mark_up', '');
                 //return
                 wp_send_json([
                     'code' => 200,
                     'message' => 'Rates gotten successfully',
+                    'terminal_price_markup' => $terminal_price_markup,
                     'data' => $get_rates['data']
                 ]);
             } else {
@@ -1091,5 +1093,38 @@ trait Ajax
                 'message' => $cancel_shipment['message'],
             ]);
         }
+    }
+
+    /**
+     * Ajax save_terminal_custom_price_mark_up
+     * @return mixed
+     * @since 1.10.4
+     */
+    public function save_terminal_custom_price_mark_up()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $percentage = sanitize_text_field($_POST['percentage']);
+        //save custom price mark up
+        update_option('terminal_custom_price_mark_up', $percentage);
+        //check if percentage is empty
+        if (empty($percentage)) {
+            //return error
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Default price mark up saved successfully',
+            ]);
+        }
+        //return
+        wp_send_json([
+            'code' => 200,
+            'message' => 'Custom price mark up saved successfully',
+        ]);
     }
 }

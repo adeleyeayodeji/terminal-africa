@@ -1960,6 +1960,61 @@ if (terminal_africa.packaging_id == "no") {
 
 //.t-carrier-switch
 jQuery(document).ready(function ($) {
+  //listen to #terminal_custom_price_mark_up on focus out
+  $("#terminal_custom_price_mark_up").on("focusout", function (e) {
+    //get value
+    let value = $(this).val();
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "save_terminal_custom_price_mark_up",
+        nonce: terminal_africa.nonce,
+        percentage: value
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //izitoast
+        iziToast.show({
+          theme: "dark",
+          title: "Saving custom price mark up",
+          position: "topRight",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown",
+          timeout: false
+        });
+      },
+      success: function (response) {
+        //close izitoast
+        iziToast.destroy();
+        if (response.code == 200) {
+          //izitoast
+          iziToast.success({
+            title: "Success",
+            message: response.message,
+            position: "topRight",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        } else {
+          //izitoast
+          iziToast.error({
+            theme: "dark",
+            title: "Error",
+            message: response.message,
+            position: "topCenter",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        }
+      },
+      error: function (error) {
+        console.log(error);
+      }
+    });
+  });
+
   //each element
   $(".t-carrier-switch").each(function (i, v) {
     //find input checkbox and change event

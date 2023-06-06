@@ -924,6 +924,30 @@ let terminalCheckoutWC = {
           `;
             //loop through response.data
             $.each(response.data, function (indexInArray, value) {
+              //overwrite value.amount
+              let terminalAfricaPriceMarkUpPercentage =
+                response.terminal_price_markup;
+              //check if not empty
+              if (terminalAfricaPriceMarkUpPercentage) {
+                //parse to int
+                terminalAfricaPriceMarkUpPercentage = parseInt(
+                  terminalAfricaPriceMarkUpPercentage
+                );
+                //apply percentage
+                value.amount =
+                  value.amount +
+                  (value.amount * terminalAfricaPriceMarkUpPercentage) / 100;
+
+                //do same to default_amount
+                if (value.default_amount) {
+                  value.default_amount =
+                    value.default_amount +
+                    (value.default_amount *
+                      terminalAfricaPriceMarkUpPercentage) /
+                      100;
+                }
+              }
+              //process the amount
               let amount = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: terminal_africa.currency

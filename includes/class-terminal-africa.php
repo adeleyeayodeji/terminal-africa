@@ -126,6 +126,9 @@ class TerminalAfricaShippingPlugin
         //ajax cancel_terminal_shipment
         add_action('wp_ajax_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
         add_action('wp_ajax_nopriv_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
+        //add ajax save_terminal_custom_price_mark_up
+        add_action('wp_ajax_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
+        add_action('wp_ajax_nopriv_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)
