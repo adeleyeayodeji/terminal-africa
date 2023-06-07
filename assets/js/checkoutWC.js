@@ -143,7 +143,7 @@ let terminalCheckoutWC = {
             <h3 class="cfw-shipping-methods-heading">${cfw_shipping_methods_heading_html}</h3>
           </div>
           <div class="terminalCheckoutWC-container-inner">
-            <b class="t-restoreInner" onclick="terminalCheckoutWC.reloadCarrierData(event)"><img src="${terminal_africa.plugin_url}/img/logo-footer.png" /> Get Carriers</b>
+            <b class="t-restoreInner" onclick="terminalCheckoutWC.reloadCarrierData(event)"><img src="${terminal_africa.plugin_url}/img/logo-footer.png" /> Get Shipping Rates</b>
           </div>
        </div>
       `);

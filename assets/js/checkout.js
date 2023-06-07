@@ -790,7 +790,7 @@ jQuery(document).ready(function ($) {
       <span>
         City <abbr class="required" title="required">*</abbr>
       </span>
-      <b class="t-restore terminal-woo-checkout-get-rate" onclick="reloadCarrierData(event)"><img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" /> Get Carriers</b>
+      <b class="t-restore terminal-woo-checkout-get-rate" onclick="reloadCarrierData(event)"><img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" /> Get Shipping Rates</b>
       </label>
       `);
     }
