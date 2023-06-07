@@ -255,3 +255,16 @@ if (!function_exists('verifyDefaultPackaging')) {
         return TerminalAfricaShippingPlugin::verifyDefaultPackaging($packaging_id);
     }
 }
+
+//TerminalAfrica\Includes\Parts\Assets::check_checkout_product_for_shipping_support
+if (!function_exists('terminal_check_checkout_product_for_shipping_support')) {
+    //check checkout product for shipping support
+    /**
+     * @param $product_id
+     * @return bool
+     */
+    function terminal_check_checkout_product_for_shipping_support()
+    {
+        return TerminalAfrica\Includes\Parts\Assets::check_checkout_product_for_shipping_support();
+    }
+}

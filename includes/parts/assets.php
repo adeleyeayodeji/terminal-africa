@@ -74,18 +74,20 @@ trait Assets
     public static function enqueue_frontend_script()
     {
         if (function_exists('WC')) {
-            //check if its cart page
-            if (is_cart()) {
-                //init add to cart ajax
-                wp_enqueue_script('terminal-africa-terminaldata-for-parcel-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-parcel.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
-                //localize scripts
-                wp_localize_script('terminal-africa-terminaldata-for-parcel-scripts', 'terminal_africa_parcel', array(
-                    'ajax_url' => admin_url('admin-ajax.php'),
-                    'nonce' => wp_create_nonce('terminal_africa_nonce'),
-                    'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
-                    'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL
-                ));
-            }
+            $cart_item = WC()->cart->get_cart();
+            //init add to cart ajax
+            wp_enqueue_script('terminal-africa-terminaldata-for-parcel-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-parcel.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+            //localize scripts
+            wp_localize_script('terminal-africa-terminaldata-for-parcel-scripts', 'terminal_africa_parcel', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('terminal_africa_nonce'),
+                'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+                'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
+                'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
+                //check if cart item is empty
+                'is_cart_empty' => empty($cart_item) ? 'yes' : 'no'
+            ));
+
             //check if checkiut page
             if (is_checkout()) {
                 $enabled = true;
@@ -200,25 +202,38 @@ trait Assets
      */
     public static function check_checkout_product_for_shipping_support()
     {
-        //check if product is supported for shipping
-        if (get_option('terminal_check_checkout_product_for_shipping_support') == 'yes') {
-            //get cart items
-            $cartItems = WC()->cart->get_cart();
-            //loop through cart items
-            foreach ($cartItems as $cartItem) {
-                //get product id
-                $productId = $cartItem['product_id'];
-                //get product
-                $product = wc_get_product($productId);
-                //check if product is supported for shipping
-                if ($product->get_shipping_class_id() == 0) {
-                    //return false
-                    return "false";
-                }
+        //get cart items
+        $cartItems = WC()->cart->get_cart();
+        //check if cart is empty
+        if (empty($cartItems)) {
+            //return false
+            return "false";
+        }
+        //status
+        $status_array = [];
+        //loop through cart items
+        foreach ($cartItems as $cartItem) {
+            //get product id
+            $productId = $cartItem['product_id'];
+            //get product
+            $product = wc_get_product($productId);
+            //check if product is virtual or downloadable
+            if ($product->is_virtual() || $product->is_downloadable()) {
+                //append
+                $status_array[] = "false";
+            } else {
+                //append
+                $status_array[] = "true";
             }
         }
-        //return true
-        return "true";
+        //check if all is false
+        if (count(array_unique($status_array)) === 1 && end($status_array) === 'false') {
+            //return false
+            return "false";
+        } else {
+            //return true
+            return "true";
+        }
     }
 
     //wp head checkout

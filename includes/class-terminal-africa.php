@@ -119,7 +119,7 @@ class TerminalAfricaShippingPlugin
         //ajax update user carrier
         add_action('wp_ajax_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
         add_action('wp_ajax_nopriv_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
-        add_action('woocommerce_add_to_cart', array($this, 'remove_wc_session_on_cart_action'), 10, 6);
+        // add_action('woocommerce_add_to_cart', array($this, 'remove_wc_session_on_cart_action'), 10, 6);
         //ajax deactivate_terminal_africa
         add_action('wp_ajax_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
         add_action('wp_ajax_nopriv_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
@@ -129,6 +129,56 @@ class TerminalAfricaShippingPlugin
         //add ajax save_terminal_custom_price_mark_up
         add_action('wp_ajax_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
         add_action('wp_ajax_nopriv_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
+        //listen to add to cart
+        add_action('woocommerce_add_to_cart', array($this, 'add_to_cart_event'), 10, 6);
+        //listen to update cart
+        // add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
+        //listen to remove cart
+        add_action('woocommerce_cart_item_removed', array($this, 'remove_cart_event'), 10, 2);
+    }
+
+    /**
+     * Added to cart event
+     * @param $cart_item_key
+     * @param $product_id
+     * @param $quantity
+     * @param $variation_id
+     * @param $variation
+     * @param $cart_item_data
+     * @since 1.10.5
+     * @return void
+     */
+    public function add_to_cart_event($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data)
+    {
+        //create or update terminal parcel
+        $this->terminal_africa_save_cart_item_event();
+    }
+
+    /**
+     * Update cart event
+     * @param $cart_item_key
+     * @param $quantity
+     * @param $old_quantity
+     * @since 1.10.5
+     * @return void
+     */
+    public function update_cart_event($cart_item_key, $quantity, $old_quantity)
+    {
+        //create or update terminal parcel
+        $this->terminal_africa_save_cart_item_event();
+    }
+
+    /**
+     * Remove cart event
+     * @param $cart_item_key
+     * @param $cart
+     * @since 1.10.5
+     * @return void
+     */
+    public function remove_cart_event($cart_item_key, $cart)
+    {
+        //create or update terminal parcel
+        $this->terminal_africa_save_cart_item_event("removed");
     }
 
     public function checkout_update_refresh_shipping_methods($post_data)
@@ -137,6 +187,103 @@ class TerminalAfricaShippingPlugin
         $packages = WC()->cart->get_shipping_packages();
         foreach ($packages as $package_key => $package) {
             WC()->session->set('shipping_for_package_' . $package_key, false); // Or true
+        }
+    }
+
+    /**
+     * Process terminal parcel on cart event
+     * @since 1.10.5
+     * @return void
+     */
+    public function terminal_africa_save_cart_item_event($type = null)
+    {
+        //terminal_check_checkout_product_for_shipping_support
+        $check_shipping_support = terminal_check_checkout_product_for_shipping_support();
+        ///check if check_shipping_support is "false"
+        if ($check_shipping_support === "false") {
+            //check if type is remove 
+            if (!empty($type) && $type == "removed") {
+                //do nothing
+            } else {
+                //return
+                return;
+            }
+        }
+
+        //recaculate cart total
+        WC()->cart->calculate_totals();
+
+        //get cart item
+        $cart_item = WC()->cart->get_cart();
+        //check if type is remove 
+        if (!empty($type) && $type == "removed") {
+            //do nothing
+        } else {
+            //check if cart item is empty
+            if (empty($cart_item)) {
+                //do nothing
+                return;
+            }
+        }
+
+        $data_items = [];
+        //loop through cart items
+        foreach ($cart_item as $item) {
+            $data_items[] = [
+                'name' => $item['data']->get_name(),
+                'quantity' => $item['quantity'],
+                'value' => $item['line_total'],
+                'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
+                'type' => 'parcel',
+                'currency' => get_woocommerce_currency(),
+                'weight' => (float)$item['data']->get_weight() ?: 0.1,
+            ];
+        }
+        //check if terminal_default_packaging_id is set
+        $packaging_id = get_option('terminal_default_packaging_id');
+        //verify packaging id
+        $verifyDefaultPackaging = verifyDefaultPackaging($packaging_id);
+        //check if verifyDefaultPackaging is 200
+        if ($verifyDefaultPackaging['code'] != 200) {
+            //do nothing
+            return;
+        }
+        //get new packaging id
+        $packaging_id = $verifyDefaultPackaging['packaging_id'];
+        //arrange parcel
+        $parcel = [
+            'packaging' => $packaging_id,
+            'weight_unit' => 'kg',
+            'items' => $data_items,
+            'description' => 'Order from ' . get_bloginfo('name'),
+        ];
+        //check if terminal_africa_parcel_id is set
+        $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+        if (!empty($parcel_id)) {
+            //update parcel
+            $response = updateTerminalParcel($parcel_id, $parcel);
+            //check if response is 200
+            if ($response['code'] == 200) {
+                //do nothing
+                return;
+            } else {
+                //do nothing
+                return;
+            }
+        }
+        //post request
+        $response = createTerminalParcel($parcel);
+        //check if response is 200
+        if ($response['code'] == 200) {
+            //save parcel wc session
+            WC()->session->set('terminal_africa_parcel_id', $response['data']->parcel_id);
+            //packaging wc session
+            WC()->session->set('terminal_africa_packaging_id', $response['data']->packaging);
+            //do nothing
+            return;
+        } else {
+            //do nothing
+            return;
         }
     }
 

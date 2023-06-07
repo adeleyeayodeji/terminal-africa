@@ -10,19 +10,30 @@ class TerminalDataParcel {
   constructor() {
     this.jquery = jQuery;
     this.createOrupdateParcel();
+    //on add to cart
+    this.listenToCart();
   }
 
   /**
    * Create or update parcel
    * @since 1.10.3
    */
-  createOrupdateParcel() {
+  createOrupdateParcel(updatBtn = false) {
     //set session storage terminal_africa_save_cart_itemcount
     sessionStorage.setItem("terminal_africa_save_cart_itemcount", "0");
-    //Check if shipping is enabled by woocommerce
-    var terminal_delivery_html = this.jquery(".Terminal-delivery-logo");
-    //check if terminal_delivery_html exist
-    if (!terminal_delivery_html.length) {
+    //check if update btn is true
+    if (!updatBtn) {
+      //check if cart is empty
+      if (terminal_africa_parcel.is_cart_empty == "yes") {
+        //do nothing
+        return;
+      }
+    }
+    //Check if product support shipment
+    if (
+      terminal_africa_parcel.terminal_check_checkout_product_for_shipping_support ==
+      "false"
+    ) {
       //do nothing
       return;
     }
@@ -93,6 +104,21 @@ class TerminalDataParcel {
         }
       }
     });
+  }
+
+  /**
+   * Listen to cart
+   * @since 1.10.4
+   */
+  listenToCart() {
+    //listen to added to cart
+    this.jquery(document.body).on(
+      "added_to_cart",
+      (e, fragments, cart_hash) => {
+        //trigger
+        this.createOrupdateParcel(true);
+      }
+    );
   }
 }
 

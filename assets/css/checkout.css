@@ -137,8 +137,8 @@
 }
 
 .terminal-woo-checkout-get-rate img {
-  height: 18px;
-  margin-right: 5px;
+  height: 18px !important;
+  margin-right: 5px !important;
 }
 
 .terminal-overlay-checkout {

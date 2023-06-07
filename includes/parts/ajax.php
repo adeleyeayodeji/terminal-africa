@@ -318,6 +318,7 @@ trait Ajax
     //terminal_africa_save_cart_item
     public function terminal_africa_save_cart_item()
     {
+        //check if its ajax
         $nonce = sanitize_text_field($_POST['nonce']);
         if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
             wp_send_json([
@@ -325,9 +326,21 @@ trait Ajax
                 'message' => 'Wrong nonce, please refresh the page and try again'
             ]);
         }
+        //terminal_check_checkout_product_for_shipping_support
+        $check_shipping_support = terminal_check_checkout_product_for_shipping_support();
+        ///check if check_shipping_support is "false"
+        if ($check_shipping_support === "false") {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Downloadable products are not supported'
+            ]);
+        }
+
+        //recaculate cart total
+        WC()->cart->calculate_totals();
+
         //get cart item
-        global $woocommerce;
-        $cart_item = $woocommerce->cart->get_cart();
+        $cart_item = WC()->cart->get_cart();
         //check if cart item is empty
         if (empty($cart_item)) {
             wp_send_json([
@@ -335,6 +348,7 @@ trait Ajax
                 'message' => 'Cart is empty'
             ]);
         }
+
         $data_items = [];
         //loop through cart items
         foreach ($cart_item as $item) {
