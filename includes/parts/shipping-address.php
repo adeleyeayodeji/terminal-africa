@@ -1333,4 +1333,53 @@ trait Shipping
             ];
         }
     }
+
+    /**
+     * updateDefaultCurrencyCode
+     * @param string $currency_code
+     */
+    public static function updateDefaultCurrencyCode($currency_code = 'NGN')
+    {
+        //check $skkey
+        if (!self::$skkey) {
+            return [
+                'code' => 404,
+                'message' => "Invalid API Key",
+                'data' => [],
+            ];
+        }
+
+        $response = Requests::post(
+            self::$enpoint . 'users/default-currency',
+            [
+                'Authorization' => 'Bearer ' . self::$skkey,
+                'Content-Type' => 'application/json'
+            ],
+            json_encode(
+                [
+                    "currency" => $currency_code
+                ]
+            ),
+            //time out 60 seconds
+            ['timeout' => 60]
+        );
+        $body = json_decode($response->body);
+        //check if response is ok
+        if ($response->status_code == 200) {
+            //return countries
+            $data = $body->data;
+            //return data
+            return [
+                'code' => 200,
+                'message' => 'success',
+                'data' => $data,
+            ];
+        } else {
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        }
+    }
 }

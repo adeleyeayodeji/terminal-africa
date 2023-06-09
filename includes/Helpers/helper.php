@@ -268,3 +268,16 @@ if (!function_exists('terminal_check_checkout_product_for_shipping_support')) {
         return TerminalAfrica\Includes\Parts\Assets::check_checkout_product_for_shipping_support();
     }
 }
+
+//updateDefaultCurrencyCode
+if (!function_exists('updateDefaultCurrencyCode')) {
+    //update default currency code
+    /**
+     * @param $currency_code
+     * @return bool
+     */
+    function updateDefaultCurrencyCode($currency_code)
+    {
+        return TerminalAfricaShippingPlugin::updateDefaultCurrencyCode($currency_code);
+    }
+}

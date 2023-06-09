@@ -300,6 +300,20 @@ jQuery(document).ready(function ($) {
     templateSelection: formatState
   });
 
+  //init select2 .t-terminal-country
+  $(".t-terminal-country-default-settings").select2({
+    placeholder: "Select country",
+    allowClear: true,
+    width: "100%",
+    //select class
+    dropdownCssClass: "t-form-control",
+    //dropdown parent
+    dropdownParent: $(".t-terminal-country-default-settings").parent(),
+    //template
+    templateResult: formatState,
+    templateSelection: formatState
+  });
+
   //event onchange
   $(".t-terminal-country").change(function (e) {
     //prevent default
@@ -2156,5 +2170,71 @@ jQuery(document).ready(function ($) {
         //log data are empty
         console.log("data are empty", carrierObj);
       });
+  });
+
+  //terminal_default_currency_code
+  $("select[name=terminal_default_currency_code]").change(function (e) {
+    e.preventDefault();
+    //get the selected value
+    let value = $(this).val();
+    //get isoCode
+    let isocode = $(this).find("option:selected").data("isocode");
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "save_terminal_default_currency_code",
+        nonce: terminal_africa.nonce,
+        currency_code: value,
+        isocode
+      },
+      beforeSend: () => {
+        //izitoast
+        iziToast.show({
+          theme: "dark",
+          title: "Saving default currency code",
+          position: "topRight",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown",
+          timeout: false
+        });
+      },
+      dataType: "json",
+      success: function (response) {
+        //close izitoast
+        iziToast.destroy();
+        if (response.code == 200) {
+          //izitoast
+          iziToast.success({
+            title: "Success",
+            message: response.message,
+            position: "topRight",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        } else {
+          //izitoast
+          iziToast.error({
+            theme: "dark",
+            title: "Error",
+            message: response.message,
+            position: "topCenter",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        }
+      },
+      error: function (error) {
+        iziToast.error({
+          theme: "dark",
+          title: "Error",
+          message: "Something went wrong",
+          position: "topCenter",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown"
+        });
+      }
+    });
   });
 });

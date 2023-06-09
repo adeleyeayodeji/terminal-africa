@@ -135,6 +135,9 @@ class TerminalAfricaShippingPlugin
         // add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
         //listen to remove cart
         add_action('woocommerce_cart_item_removed', array($this, 'remove_cart_event'), 10, 2);
+        //add ajax save_terminal_default_currency_code
+        add_action('wp_ajax_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
+        add_action('wp_ajax_nopriv_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
     }
 
     /**

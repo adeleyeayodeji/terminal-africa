@@ -1600,3 +1600,28 @@ input:checked + .t-slider:before {
 .t-mb-5 {
   margin-bottom: 25px;
 }
+
+.t-ml-0 {
+  margin-left: 0px !important;
+}
+
+.t-pl-0 {
+  padding-left: 0px !important;
+}
+
+.t-settings-section {
+  margin-left: 25px;
+  padding-left: 25px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 91%;
+}
+
+.t-settings-section .t-title {
+  color: black;
+  font-weight: 400;
+}
+
+.t-justify-content-between {
+  justify-content: space-between;
+}

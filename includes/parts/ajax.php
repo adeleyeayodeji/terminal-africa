@@ -46,6 +46,13 @@ trait Ajax
             update_option('terminal_africa_settings', $settings);
             //terminal_africa_merchant_id
             update_option('terminal_africa_merchant_id', $body->data->user->user_id);
+            //check if metadata exist
+            if (isset($body->data->user->metadata)) {
+                //$isoCode
+                $isoCode = $body->data->user->country;
+                //save metadata
+                update_option('terminal_default_currency_code', ['currency_code' => $body->data->user->metadata->default_currency, 'isoCode' => $isoCode]);
+            }
             //get shipping settings
             $settings = get_option('woocommerce_terminal_delivery_settings');
             //update shipping settings
@@ -1140,5 +1147,43 @@ trait Ajax
             'code' => 200,
             'message' => 'Custom price mark up saved successfully',
         ]);
+    }
+
+    /**
+     * save_terminal_default_currency_code
+     * @return mixed
+     * @since 1.10.5
+     */
+    public function save_terminal_default_currency_code()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //data
+        $currency_code = sanitize_text_field($_POST['currency_code']);
+        //isoCode
+        $isoCode = sanitize_text_field($_POST['isocode']);
+        //update default currency code on terminal server
+        $update_default_currency_code = updateDefaultCurrencyCode($currency_code);
+        //check if currency code is updated
+        if ($update_default_currency_code['code'] == 200) {
+            //save default currency code
+            update_option('terminal_default_currency_code', ['currency_code' => $currency_code, 'isoCode' => $isoCode]);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Default currency code saved successfully',
+            ]);
+        } else {
+            //return error
+            wp_send_json([
+                'code' => 400,
+                'message' => $update_default_currency_code['message'],
+            ]);
+        }
     }
 }
