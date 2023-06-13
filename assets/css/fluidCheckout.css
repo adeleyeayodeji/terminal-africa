@@ -1,0 +1,14 @@
+/**
+Fluid checkout manipulation
+*/
+.fluid-checkout-state {
+  clear: both;
+  width: 100% !important;
+  float: none !important;
+}
+
+.fluid-checkout-city {
+  width: 100% !important;
+  float: none !important;
+  margin-right: 0px !important;
+}

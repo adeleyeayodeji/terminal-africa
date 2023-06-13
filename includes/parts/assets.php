@@ -116,16 +116,27 @@ trait Assets
                 if (!$enabled) {
                     return;
                 }
-                //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
-                if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-                    //filter checkout wc
-                    self::checkoutWCAsset();
-                } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-                    //filter checkout wc
-                    self::checkoutWCAsset();
-                } else {
-                    //wc checkout asset core
-                    self::checkoutWCAssetCore();
+                //use switch statement
+                foreach (apply_filters('active_plugins', get_option('active_plugins')) as $active) {
+                    switch ($active) {
+                            //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
+                        case 'checkout-for-woocommerce/checkout-for-woocommerce.php':
+                            //filter checkout wc
+                            self::checkoutWCAsset();
+                            break;
+                        case 'checkoutwc-lite/checkout-for-woocommerce.php':
+                            //filter checkout wc
+                            self::checkoutWCAsset();
+                            break;
+                        case 'fluid-checkout/fluid-checkout.php':
+                            //filter fluid checkout wc
+                            self::fluidCheckoutWCAsset();
+                            break;
+                        default:
+                            //wc checkout asset core
+                            self::checkoutWCAssetCore();
+                            break;
+                    }
                 }
             }
         }
@@ -189,6 +200,73 @@ trait Assets
         ));
     }
 
+    /**
+     * fluidCheckoutWCAsset
+     */
+    public static function fluidCheckoutWCAsset()
+    {
+        //sweet alert styles
+        wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+        //checkoutcss
+        wp_enqueue_style('terminal-africa-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/checkout.css', array(), TERMINAL_AFRICA_VERSION);
+        //sweet alert scripts
+        wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
+        //checkout
+        wp_enqueue_script('terminal-africa-fluid-checkoutWC-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/fluidCheckout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //localize scripts
+        wp_localize_script('terminal-africa-fluid-checkoutWC-scripts', 'terminal_africa', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('terminal_africa_nonce'),
+            'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
+            'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
+            'getting_started_url' => get_option('terminal_africa_merchant_address_id') ? 'none' : admin_url('admin.php?page=terminal-africa-get-started'),
+            'currency' => get_woocommerce_currency(),
+            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
+            'terminal_africal_countries' => get_terminal_countries(),
+            'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
+            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', '')
+        ));
+    }
+
+    /**
+     * Fluid checkout override style
+     */
+    public static function fluid_checkout_override_style()
+    {
+?>
+        <style>
+            /**
+            Fluid checkout manipulation
+            */
+            .fluid-checkout-state {
+                clear: both;
+                width: 100% !important;
+                float: none !important;
+            }
+
+            .fluid-checkout-city {
+                width: 100% !important;
+                float: none !important;
+                margin-right: 0px !important;
+            }
+
+            @media (min-width: 550px) {
+                div.woocommerce form .form-row.form-row-last.fluid-checkout-state {
+                    clear: none;
+                    float: none !important;
+                    width: 100% !important
+                }
+
+                div.woocommerce form .form-row.form-row-first.fluid-checkout-city {
+                    clear: none;
+                    float: none !important;
+                    width: 100% !important
+                }
+            }
+        </style>
+        <?php
+    }
+
     //header
     public static function header($icon, $title)
     {
@@ -249,7 +327,7 @@ trait Assets
         ];
         if (function_exists('WC')) {
             if (is_checkout()) {
-?>
+        ?>
                 <style>
                     .select2-container {
                         width: 100% !important;
