@@ -156,3 +156,11 @@
   justify-content: space-between !important;
   align-items: center !important;
 }
+
+.terminal-custom-fluid-added {
+  padding: 10px 5px;
+}
+
+.terminal-custom-fluid-added-shipping-city {
+  padding: 10px 5px;
+}
