@@ -512,102 +512,107 @@ class WC_Terminal_Delivery
     //update_order_review
     public function update_order_review($data)
     {
-        //format url data 
-        $formdata = array();
-        parse_str($data, $formdata);
-        //billing_postcode
-        $billing_postcode = sanitize_text_field($formdata['billing_postcode']);
-        $billing_state = sanitize_text_field($formdata['shipping_state']);
-        $billing_city = sanitize_text_field($formdata['shipping_city']);
-        //country
-        $billing_country = sanitize_text_field($formdata['billing_country']);
-        //check if city is not empty
-        if (!empty($billing_city)) {
-            $billing_city = sanitize_text_field($billing_city);
-            //check if , is in billing city
-            if (strpos($billing_city, ',') !== false) {
-                $billing_city = explode(',', $billing_city);
-                $billing_city = $billing_city[0];
-            }
-        }
-        //check if logged in
-        if (is_user_logged_in()) {
-            //update user meta
-            $user_id = get_current_user_id();
-            if (!empty($billing_state)) {
-                update_user_meta($user_id, 'billing_state', $billing_state);
-            }
+        try {
+            //format url data 
+            $formdata = array();
+            parse_str($data, $formdata);
+            //billing_postcode
+            $billing_postcode = sanitize_text_field($formdata['billing_postcode']);
+            $billing_state = sanitize_text_field($formdata['shipping_state']);
+            $billing_city = sanitize_text_field($formdata['shipping_city']);
+            //country
+            $billing_country = sanitize_text_field($formdata['billing_country']);
             //check if city is not empty
             if (!empty($billing_city)) {
-                update_user_meta($user_id, 'billing_city', $billing_city);
-                update_user_meta($user_id, 'shipping_city', $billing_city);
+                $billing_city = sanitize_text_field($billing_city);
+                //check if , is in billing city
+                if (strpos($billing_city, ',') !== false) {
+                    $billing_city = explode(',', $billing_city);
+                    $billing_city = $billing_city[0];
+                }
             }
-            if (!empty($billing_state)) {
-                //shipping_state
-                update_user_meta($user_id, 'shipping_state', $billing_state);
-            }
-        }
-        //update session
-        if (!empty($billing_postcode)) {
-            //get billing_postcode
-            if (WC()->session->get('billing_postcode')) {
-                WC()->session->__unset('billing_postcode');
-            }
-            WC()->session->set('billing_postcode', $billing_postcode);
-
-            //get shipping_postcode
-            if (WC()->session->get('shipping_postcode')) {
-                WC()->session->__unset('shipping_postcode');
-            }
-            WC()->session->set('shipping_postcode', $billing_postcode);
-
             //check if logged in
             if (is_user_logged_in()) {
                 //update user meta
                 $user_id = get_current_user_id();
-                //shipping postcode
-                update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
-                update_user_meta($user_id, 'billing_postcode', $billing_postcode);
+                if (!empty($billing_state)) {
+                    update_user_meta($user_id, 'billing_state', $billing_state);
+                }
+                //check if city is not empty
+                if (!empty($billing_city)) {
+                    update_user_meta($user_id, 'billing_city', $billing_city);
+                    update_user_meta($user_id, 'shipping_city', $billing_city);
+                }
+                if (!empty($billing_state)) {
+                    //shipping_state
+                    update_user_meta($user_id, 'shipping_state', $billing_state);
+                }
             }
-        }
-        if (!empty($billing_state)) {
-            //get billing_state
-            if (WC()->session->get('billing_state')) {
-                WC()->session->__unset('billing_state');
-            }
-            WC()->session->set('billing_state', $billing_state);
-        }
-        //$billing_country
-        if (!empty($billing_country)) {
-            //get billing_country
-            if (WC()->session->get('billing_country')) {
-                WC()->session->__unset('billing_country');
-            }
-            WC()->session->set('billing_country', $billing_country);
-        }
-        //check if city is not empty
-        if (!empty($billing_city)) {
-            //get billing_city
-            if (WC()->session->get('billing_city')) {
-                WC()->session->__unset('billing_city');
-            }
-            WC()->session->set('billing_city', $billing_city);
+            //update session
+            if (!empty($billing_postcode)) {
+                //get billing_postcode
+                if (WC()->session->get('billing_postcode')) {
+                    WC()->session->__unset('billing_postcode');
+                }
+                WC()->session->set('billing_postcode', $billing_postcode);
 
-            //get shipping_city
-            if (WC()->session->get('shipping_city')) {
-                WC()->session->__unset('shipping_city');
+                //get shipping_postcode
+                if (WC()->session->get('shipping_postcode')) {
+                    WC()->session->__unset('shipping_postcode');
+                }
+                WC()->session->set('shipping_postcode', $billing_postcode);
+
+                //check if logged in
+                if (is_user_logged_in()) {
+                    //update user meta
+                    $user_id = get_current_user_id();
+                    //shipping postcode
+                    update_user_meta($user_id, 'shipping_postcode', $billing_postcode);
+                    update_user_meta($user_id, 'billing_postcode', $billing_postcode);
+                }
             }
-            WC()->session->set(
-                'shipping_city',
-                $billing_city
-            );
+            if (!empty($billing_state)) {
+                //get billing_state
+                if (WC()->session->get('billing_state')) {
+                    WC()->session->__unset('billing_state');
+                }
+                WC()->session->set('billing_state', $billing_state);
+            }
+            //$billing_country
+            if (!empty($billing_country)) {
+                //get billing_country
+                if (WC()->session->get('billing_country')) {
+                    WC()->session->__unset('billing_country');
+                }
+                WC()->session->set('billing_country', $billing_country);
+            }
+            //check if city is not empty
+            if (!empty($billing_city)) {
+                //get billing_city
+                if (WC()->session->get('billing_city')) {
+                    WC()->session->__unset('billing_city');
+                }
+                WC()->session->set('billing_city', $billing_city);
+
+                //get shipping_city
+                if (WC()->session->get('shipping_city')) {
+                    WC()->session->__unset('shipping_city');
+                }
+                WC()->session->set(
+                    'shipping_city',
+                    $billing_city
+                );
+            }
+            //get shipping_state
+            if (WC()->session->get('shipping_state')) {
+                WC()->session->__unset('shipping_state');
+            }
+            WC()->session->set('shipping_state', $billing_state);
+            return $data;
+        } catch (\Exception $e) {
+            error_log($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            return $data;
         }
-        //get shipping_state
-        if (WC()->session->get('shipping_state')) {
-            WC()->session->__unset('shipping_state');
-        }
-        WC()->session->set('shipping_state', $billing_state);
-        return $data;
     }
 
     /**

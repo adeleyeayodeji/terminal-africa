@@ -101,6 +101,11 @@
   justify-content: space-between;
 }
 
+.terminalFluid-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .t-restoreInner,
 .terminal-woo-checkout-get-rate {
   text-align: center;
@@ -118,10 +123,42 @@
   transition-timing-function: ease-in-out;
 }
 
+.terminalFluid-container .t-restoreInner,
+.terminalFluid-container .terminal-woo-checkout-get-rate {
+  text-align: center;
+  cursor: pointer;
+  padding-left: 5px;
+  padding-right: 5px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding-top: 4px;
+  font-size: 14px;
+}
+
+.terminalFluid-container .t-restoreInner:hover,
+.terminalFluid-container .terminal-woo-checkout-get-rate:hover {
+  background: lightgray;
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
 .terminalCheckoutWC-container-inner .t-restoreInner {
   font-size: 12px;
   font-weight: 500;
   padding: 6px 10px;
+}
+
+.terminalFluid-container-inner .t-restoreInner {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+}
+
+.terminalFluid-container-inner h3 {
+  color: var(--fluidcheckout--color--dark-grey, #535156);
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
 }
 
 .terminal-woo-checkout-get-rate {
@@ -134,6 +171,13 @@
 .terminalCheckoutWC-container-inner img {
   height: 10px;
   margin-right: 2px;
+}
+
+.terminalFluid-container-inner img {
+  height: 17px;
+  margin-right: 8px;
+  margin-top: 3px;
+  margin-left: 4px;
 }
 
 .terminal-woo-checkout-get-rate img {
@@ -158,6 +202,10 @@
 }
 
 .terminal-custom-fluid-added {
+  padding: 10px 5px;
+}
+
+.terminal-custom-fluid-country-added {
   padding: 10px 5px;
 }
 

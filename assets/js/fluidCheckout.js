@@ -52,12 +52,66 @@ class FluidCheckoutTerminal {
    */
   setInterval() {
     setInterval(() => {
+      //add event to country selection
+      this.addEventToCountrySelection();
+      //switchTownCityWithState
       this.switchTownCityWithState();
       //addEventToStateSelect
       this.addEventToStateSelect();
       //setShippingCodeIfEmpty
       this.setShippingCodeIfEmpty();
+      //removeElementWithClassTCheckoutCarriers
+      this.removeElementWithClassTCheckoutCarriers();
+      //replaceShipmentMethodTitle
+      this.replaceShipmentMethodTitle();
     }, 300);
+  }
+
+  /**
+   * Replace Shipment Method Title
+   */
+  replaceShipmentMethodTitle() {
+    //check if element exist .terminalFluid-container
+    if (this.$(".terminalFluid-container").length > 0) {
+      return;
+    }
+    //get h3 class fc-step__substep-title--shipping_method
+    let fluidCheckoutMehtodTitle = this.$(
+      ".fc-step__substep-title--shipping_method"
+    );
+    //get the html
+    let fluidCheckoutMehtodTitle_html = fluidCheckoutMehtodTitle.html();
+    //replace with
+    fluidCheckoutMehtodTitle.replaceWith(`
+       <div class="terminalFluid-container">
+          <div class="terminalFluid-container-inner">
+            <h3 class="fc-step__substep-title--shipping_method">${fluidCheckoutMehtodTitle_html}</h3>
+          </div>
+          <div class="terminalFluid-container-inner t-restoreInner" onclick="terminalFluidCheckout.reloadCarrierData(event)">
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" />
+            Get Shipping Rates
+          </div>
+       </div>
+      `);
+  }
+
+  /**
+   * reloadCarrierData
+   * @param {*} event
+   */
+  reloadCarrierData(event) {
+    console.log("reloadCarrierData");
+  }
+
+  /**
+   * Remove element with class t-checkout-carriers
+   */
+  removeElementWithClassTCheckoutCarriers() {
+    //check if class t-checkout-carriers exist
+    if (this.$(".t-checkout-carriers").length) {
+      //remove class t-checkout-carriers
+      this.$(".t-checkout-carriers").remove();
+    }
   }
 
   /**
@@ -77,7 +131,7 @@ class FluidCheckoutTerminal {
         //replace with new shipping_postcode_field
         this.$("#shipping_postcode_field").replaceWith(
           `
-          <p class="form-row address-field form-row-first" id="shipping_postcode_field" data-priority="90" data-o_class="form-row " style="display: block;width:100% !important;">
+          <p class="form-row address-field form-row-wide" id="shipping_postcode_field" data-priority="90" data-o_class="form-row " style="display: block;width:100% !important;">
             <label for="shipping_postcode" class="">Postcode&nbsp;<abbr class="required" title="required">*</abbr></label>
             <span class="woocommerce-input-wrapper">
               <input type="text" class="input-text " name="shipping_postcode" data-autofocus="" required id="shipping_postcode" value="" data-autocomplete="shipping postal-code" autocomplete="shipping postal-code" placeholder="Postcode / ZIP" onfocusout="terminalFluidCheckout.postCodeFocusedOut(event)">
@@ -85,6 +139,28 @@ class FluidCheckoutTerminal {
           </p>
           `
         );
+      } else {
+        //check if label has span.optional
+        if (
+          this.$("#shipping_postcode_field").find("label").find("span.optional")
+        ) {
+          //replacewith
+          this.$("#shipping_postcode_field").find("label").find("span.optional")
+            .replaceWith(`
+            <abbr class="required" title="required">*</abbr>
+            `);
+          //set placeholder to Postcode / ZIP
+          this.$("#shipping_postcode_field")
+            .find("input")
+            .attr("placeholder", "Postcode / ZIP");
+          //check if shipping_postcode_field has form-row-first class
+          if (this.$("#shipping_postcode_field").hasClass("form-row-first")) {
+            //remove and add class form-row-wide
+            this.$("#shipping_postcode_field")
+              .removeClass("form-row-first")
+              .addClass("form-row-wide");
+          }
+        }
       }
     }
     //check if shipping_postcode_field prev element id is shipping_address_1_field
@@ -99,6 +175,11 @@ class FluidCheckoutTerminal {
     }
   }
 
+  /**
+   * Postcode focused out
+   * @param {*} event
+   * @returns
+   */
   postCodeFocusedOut(event) {
     //prevent default
     event.preventDefault();
@@ -151,7 +232,6 @@ class FluidCheckoutTerminal {
     });
     //check if class exist .terminal-custom-fluid-added in document
     if (!this.$(".terminal-custom-fluid-added").length) {
-      console.log("Am here");
       //destroy select2
       state_select.select2("destroy");
       //replace state_select with new state_select
@@ -171,13 +251,58 @@ class FluidCheckoutTerminal {
   }
 
   /**
+   * Add event to country selection
+   */
+  addEventToCountrySelection() {
+    //get country select
+    var country_select = this.$("#shipping_country");
+    //get all country options
+    var shippingcountryOptions = country_select.find("option");
+    //options html
+    let shippingcountryOptionsHtml = "";
+    //loop
+    shippingcountryOptions.each((index, element) => {
+      //pass option to html
+      shippingcountryOptionsHtml += this.$(element).prop("outerHTML");
+    });
+    //check if class exist .terminal-custom-fluid-country-added in document
+    if (!this.$(".terminal-custom-fluid-country-added").length) {
+      //destroy select2
+      country_select.select2("destroy");
+      //replace country_select with new country_select
+      country_select.replaceWith(
+        `
+      <select name="shipping_country" id="shipping_country_custom" class="terminal-custom-fluid-country-added" autocomplete="address-level1" data-placeholder="Select country…" tabindex="-1" aria-hidden="true">
+        ${shippingcountryOptionsHtml}
+      </select>
+      `
+      );
+      //add event to .terminal-custom-fluid-country-added
+      this.$(".terminal-custom-fluid-country-added").on(
+        "change",
+        this.countryOnchangeEvent.bind(
+          this,
+          ".terminal-custom-fluid-country-added"
+        )
+      );
+    }
+  }
+
+  /**
    * Add event to state select
+   * @param {HTMLElement} elem
    */
   stateOnchangeEvent(elem) {
     //get the value
     var state = this.$(elem).val();
     //get the country
-    var country = this.$("#shipping_country").val();
+    var country = this.$("select[name='shipping_country']");
+    //check if country exists
+    if (country.length > 0) {
+      country = country.val();
+    } else {
+      country = this.$("input[name='shipping_country']").val();
+    }
     //check if value is not empty
     if (country == "") {
       //show alert
@@ -196,6 +321,121 @@ class FluidCheckoutTerminal {
     }
     //get local governments by details
     this.getLocalGovernments(country, state);
+  }
+
+  /**
+   * countryOnchangeEvent
+   * @param {HTMLElement} elem
+   */
+  countryOnchangeEvent(elem) {
+    //get the value
+    var country = this.$(elem).val();
+    //check if value is not empty
+    if (country == "") {
+      //show alert
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select a country",
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      //return
+      return;
+    }
+    //get state
+    this.countryOnChange(country);
+  }
+
+  /**
+   * Get States by country
+   * @param {string} country
+   */
+  countryOnChange(country) {
+    //ajax to get states
+    this.$.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_get_states",
+        countryCode: country,
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //block form name="checkout"
+        this.$("#fc-wrapper").block({
+          message: null,
+          overlayCSS: {
+            background: "#fff",
+            opacity: 0.6
+          }
+        });
+      },
+      success: (response) => {
+        //unblock
+        this.$("#fc-wrapper").unblock();
+        //check if response code 200
+        if (response.code != 200) {
+          //swal
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+          });
+          return;
+        }
+        var states = response.states;
+        //options
+        var state_options = "<option value=''>Select State</option>";
+        //loop through states
+        for (var i = 0; i < states.length; i++) {
+          var state = states[i];
+          state_options += `<option value="${state.isoCode}">${state.name}</option>`;
+        }
+        //set state options
+        this.$('select[name="shipping_state"]').html(state_options);
+        //clear select name terminal_custom_shipping_lga2
+        let lga = this.$('select[name="shipping_city"]');
+        //check if element exist
+        if (lga.length > 0) {
+          //clear
+          this.$('select[name="shipping_city"]').html("");
+        } else {
+          //clear
+          this.$("input[name='shipping_city']").val("");
+        }
+      },
+      error: () => {
+        //unblock
+        this.$("#fc-wrapper").unblock();
+        //error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong...",
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+        });
+      }
+    });
   }
 
   /**
@@ -267,6 +507,8 @@ class FluidCheckoutTerminal {
           .animate({ marginTop: 0 }, 1000);
       },
       error: function (error) {
+        //unblock
+        this.$("#fc-wrapper").unblock();
         //swal
         Swal.fire({
           icon: "error",
@@ -287,7 +529,7 @@ class FluidCheckoutTerminal {
 
   /**
    *
-   * @param {*} elem
+   * @param {HTMLElement} elem
    */
   cityOnChange(elem) {
     //Check if shipping is enabled by woocommerce
@@ -298,7 +540,13 @@ class FluidCheckoutTerminal {
       return;
     }
     //get country value
-    let country = this.$("#shipping_country").val();
+    let country = this.$("select[name='shipping_country']");
+    //check if country exists
+    if (country.length > 0) {
+      country = country.val();
+    } else {
+      country = this.$("input[name='shipping_country']").val();
+    }
     //get state selected option value
     let state = this.$("select[name=shipping_state]").val();
     //get city selected option value
