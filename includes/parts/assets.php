@@ -129,6 +129,7 @@ trait Assets
                             self::checkoutWCAsset();
                             break;
                         case 'fluid-checkout/fluid-checkout.php':
+                            break; //disable for now
                             //filter fluid checkout wc
                             self::fluidCheckoutWCAsset();
                             break;

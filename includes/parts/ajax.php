@@ -452,7 +452,7 @@ trait Ajax
         $line_1 = sanitize_text_field($_POST['line_1']);
         //clean phone allow only numbers and +
         $phone = sanitize_text_field($_POST['phone']);
-        $phone = preg_replace('/[^0-9\+]/', '', $phone);
+        // $phone = preg_replace('/[^0-9\+]/', '', $phone);
         // $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
         $email = sanitize_text_field($_POST['email']);
         $line_2 = "";
@@ -1185,5 +1185,29 @@ trait Ajax
                 'message' => $update_default_currency_code['message'],
             ]);
         }
+    }
+
+    /**
+     * Reset carriers data
+     */
+    public function terminal_reset_carriers_data()
+    {
+        $nonce = sanitize_text_field($_POST['nonce']);
+        if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Wrong nonce, please refresh the page and try again'
+            ]);
+        }
+        //reset carrier data or delete session
+        WC()->session->__unset('terminal_africa_carriername');
+        WC()->session->__unset('terminal_africa_amount');
+        WC()->session->__unset('terminal_africa_duration');
+        WC()->session->__unset('terminal_africa_rateid');
+        //return
+        wp_send_json([
+            'code' => 200,
+            'message' => 'Carriers data reset successfully',
+        ]);
     }
 }

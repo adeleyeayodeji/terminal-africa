@@ -120,7 +120,36 @@ class TerminalDataParcel {
       }
     );
   }
+
+  /**
+   * Clear carrier data
+   */
+  clearCarrierData() {
+    //clear local storage terminal_delivery_html
+    localStorage.removeItem("terminal_delivery_html");
+    //check if element exist
+    if (this.jquery(".t-checkout-carriers").length) {
+      //clear .t-checkout-carriers
+      this.jquery(".t-checkout-carriers").remove();
+    }
+    //ajax
+    this.jquery.ajax({
+      type: "POST",
+      url: terminal_africa_parcel.ajax_url,
+      data: {
+        action: "terminal_reset_carriers_data",
+        nonce: terminal_africa_parcel.nonce
+      },
+      dataType: "json",
+      success: (response) => {
+        //update woocommerce
+        this.jquery(document.body).trigger("update_checkout");
+        console.log(response);
+        this.jquery(document.body).trigger("update_checkout");
+      }
+    });
+  }
 }
 
 //init
-new TerminalDataParcel();
+let termianlDataParcel = new TerminalDataParcel();

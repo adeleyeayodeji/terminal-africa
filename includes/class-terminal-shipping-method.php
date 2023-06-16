@@ -121,8 +121,19 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                 $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
             }
         }
+        //check if empty $terminal_africa_carriername
+        if (empty($terminal_africa_carriername)) {
+            //add rate
+            $this->add_rate(array(
+                'id'        => $this->id . $this->instance_id,
+                'label'     => "Terminal",
+                'cost'      => 0,
+                'meta_data' => [],
+            ));
+            return;
+        }
         //if exist
-        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
+        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $terminal_africa_rateid) {
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);

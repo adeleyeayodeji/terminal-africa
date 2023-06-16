@@ -140,6 +140,9 @@ class TerminalAfricaShippingPlugin
         //add ajax save_terminal_default_currency_code
         add_action('wp_ajax_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
         add_action('wp_ajax_nopriv_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
+        //add ajax terminal_reset_carriers_data
+        add_action('wp_ajax_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
+        add_action('wp_ajax_nopriv_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
     }
 
     /**

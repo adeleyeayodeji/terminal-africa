@@ -68,11 +68,15 @@ function terminalsetValue2(elem) {
       phonecode = "+" + phonecode;
     }
     //remove - and space
-    phonecode = phonecode.replace(/[- ]/g, "");
+    // phonecode = phonecode.replace(/[- ]/g, "");
     //remove + and space and special characters form phone
-    phone = phone.replace(/[-+()]/g, "");
-    //append to phone
-    phone = phonecode + phone;
+    // phone = phone.replace(/[-+()]/g, "");
+    //check if phone has +
+    if (!phone.includes("+")) {
+      //append to phone
+      phone = phonecode + phone;
+    }
+
     var line_1 = $('input[name="billing_address_1"]').val();
     var billing_postcode = $('input[name="billing_postcode"]').val();
     //process updateCoreWoocommerceElements
@@ -84,6 +88,8 @@ function terminalsetValue2(elem) {
       //do nothing
       return;
     }
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //ajax
     $.ajax({
       type: "POST",
@@ -622,6 +628,7 @@ jQuery(document).ready(function ($) {
         });
       },
       success: function (response) {
+        termianlDataParcel.clearCarrierData();
         //unblock
         $("form[name='checkout']").unblock();
         //check if response code 200
@@ -694,6 +701,8 @@ jQuery(document).ready(function ($) {
           });
         },
         success: function (response) {
+          //reset carrier data
+          termianlDataParcel.clearCarrierData();
           //unblock
           $("form[name='checkout']").unblock();
           //check if response code 200

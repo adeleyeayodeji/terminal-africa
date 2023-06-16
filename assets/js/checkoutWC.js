@@ -178,6 +178,8 @@ let terminalCheckoutWC = {
           });
         },
         success: function (response) {
+          //reset carrier data
+          termianlDataParcel.clearCarrierData();
           //unblock
           $("#order_review").unblock();
           //check if response code 200
@@ -455,6 +457,8 @@ let terminalCheckoutWC = {
           });
         },
         success: function (response) {
+          //reset carrier data
+          termianlDataParcel.clearCarrierData();
           //unblock
           $("#order_review").unblock();
           //check if response code 200
@@ -684,6 +688,8 @@ let terminalCheckoutWC = {
         //do nothing
         return;
       }
+      //reset carrier data
+      termianlDataParcel.clearCarrierData();
       //get country value
       let country = $("#shipping_country").val();
       //get state selected option value
@@ -861,11 +867,13 @@ let terminalCheckoutWC = {
         phonecode = "+" + phonecode;
       }
       //remove - and space
-      phonecode = phonecode.replace(/[- ]/g, "");
+      // phonecode = phonecode.replace(/[- ]/g, "");
       //remove + and space and special characters form phone
-      phone = phone.replace(/[-+()]/g, "");
-      //append to phone
-      phone = phonecode + phone;
+      // phone = phone.replace(/[-+()]/g, "");
+      if (!phone.includes("+")) {
+        //append to phone
+        phone = phonecode + phone;
+      }
       //get line_1
       let line_1 = customer_details.address;
       //get billing_postcode
