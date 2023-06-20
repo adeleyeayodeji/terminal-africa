@@ -129,7 +129,6 @@ trait Assets
                             self::checkoutWCAsset();
                             break;
                         case 'fluid-checkout/fluid-checkout.php':
-                            break; //disable for now
                             //filter fluid checkout wc
                             self::fluidCheckoutWCAsset();
                             break;
@@ -210,6 +209,8 @@ trait Assets
         wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
         //checkoutcss
         wp_enqueue_style('terminal-africa-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/checkout.css', array(), TERMINAL_AFRICA_VERSION);
+        //fluid checkout css
+        wp_enqueue_style('terminal-africa-fluid-checkout-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/fluidCheckout.css', array(), TERMINAL_AFRICA_VERSION);
         //sweet alert scripts
         wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //checkout

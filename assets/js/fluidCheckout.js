@@ -13,9 +13,9 @@ class FluidCheckoutTerminal {
    */
   init() {
     //Check if shipping is enabled by woocommerce
-    var terminal_delivery_html = this.$(".Terminal-delivery-logo");
+    var terminal_delivery_html = this.isTerminalRunning();
     //check if terminal_delivery_html exist
-    if (!terminal_delivery_html.length) {
+    if (!terminal_delivery_html) {
       //do nothing
       return;
     }
@@ -61,10 +61,160 @@ class FluidCheckoutTerminal {
       //setShippingCodeIfEmpty
       this.setShippingCodeIfEmpty();
       //removeElementWithClassTCheckoutCarriers
-      this.removeElementWithClassTCheckoutCarriers();
+      // this.removeElementWithClassTCheckoutCarriers();
+      //setTerminalCarriersHTML
+      this.setTerminalCarriersHTML();
       //replaceShipmentMethodTitle
       this.replaceShipmentMethodTitle();
+      //addGetCityButton
+      this.addGetCityButton();
     }, 300);
+  }
+
+  /**
+   * Determine terminal is running on checkout page
+   * @return boolean
+   */
+  isTerminalRunning(elem = false) {
+    var terminalIsActive = false;
+    var elemenData;
+    //get all .shipping_method class
+    var shipping_method = this.$(".shipping_method");
+    //check the element id match with terminal_delivery
+    shipping_method.each((index, element) => {
+      //get element id
+      var element_id = this.$(element).attr("id");
+      //check if element_id match with terminal_delivery
+      if (element_id.includes("terminal_delivery")) {
+        //set terminalIsActive to true
+        terminalIsActive = true;
+        //set elemenData
+        elemenData = this.$(element);
+      }
+    });
+    //check if elem is true
+    if (elem) {
+      //return elemenData
+      return elemenData;
+    } else {
+      //return terminalIsActive
+      return terminalIsActive;
+    }
+  }
+
+  /**
+   * Set Terminal Carriers HTML
+   * @return void
+   */
+  setTerminalCarriersHTML() {
+    //get all .shipping_method class
+    var shipping_method = this.$(".shipping_method");
+    //check the element id match with terminal_delivery
+    shipping_method.each((index, element) => {
+      //get element id
+      var element_id = this.$(element).attr("id");
+      //check if element_id match with terminal_delivery
+      if (element_id.includes("terminal_delivery")) {
+        //append to terminal_html
+        var terminal_delivery_html = this.$(`#${element_id}`);
+        //find parent li
+        var terminal_delivery_li = terminal_delivery_html.parent();
+        //save terminal_html to localstorage
+        var oldCarriers = localStorage.getItem("terminal_delivery_html");
+        //check if oldCarriers exist
+        if (oldCarriers) {
+          //check if element exist .t-checkout-carriers-checkoutFluid
+          if (this.$(".t-checkout-carriers-checkoutFluid").length) {
+            //check if class exist t-checkout-carriers in t-checkout-carriers-checkoutFluid
+            if (
+              !this.$(".t-checkout-carriers-checkoutFluid").find(
+                ".t-checkout-carriers"
+              ).length
+            ) {
+              //overwrite html
+              this.$(".t-checkout-carriers-checkoutFluid").replaceWith(
+                oldCarriers
+              );
+            }
+          } else {
+            //append to li
+            terminal_delivery_li.append(oldCarriers);
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * Add Get City Button
+   * @return void
+   */
+  addGetCityButton() {
+    //check if class exist terminalGetShippingCities
+    if (this.$(".terminalGetShippingCities").length) return false;
+    //get label with for="shipping_city"
+    let label = this.$("label[for='shipping_city']");
+    //check if label exist
+    if (label.length) {
+      //get old html
+      let old_html = label.html();
+      //replace with new html
+      label.html(`
+      <div class="terminalGetShippingCities">
+         <div>
+            ${old_html}
+         </div>
+         <div>
+            <button class="button" onclick="terminalFluidCheckout.getCity(event)">
+             <img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" /> Get Cities
+            </button>
+         </div>
+      </div>
+      `);
+    }
+  }
+
+  /**
+   * Get City on click
+   * @param {*} event
+   */
+  getCity(event) {
+    //prevent default
+    event.preventDefault();
+    //get shipping state
+    let shipping_state = this.$("#shipping_state_custom");
+    //check if element exist
+    if (shipping_state.length) {
+      //check if value is empty
+      if (shipping_state.val() == "") {
+        //show error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Please select a state first",
+          footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+        });
+      }
+      //trigger change
+      shipping_state.trigger("change");
+      //return
+      return;
+    }
+    //show error
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Please select a state first",
+      footer: `
+      <div>
+        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+      </div>
+    `
+    });
   }
 
   /**
@@ -87,7 +237,7 @@ class FluidCheckoutTerminal {
           <div class="terminalFluid-container-inner">
             <h3 class="fc-step__substep-title--shipping_method">${fluidCheckoutMehtodTitle_html}</h3>
           </div>
-          <div class="terminalFluid-container-inner t-restoreInner" onclick="terminalFluidCheckout.reloadCarrierData(event)">
+          <div class="terminalFluid-container-inner t-restoreInner" onclick="terminalFluidCheckout.reloadCarrierData()">
             <img src="${terminal_africa.plugin_url}/img/logo-footer.png" align="left" />
             Get Shipping Rates
           </div>
@@ -97,20 +247,78 @@ class FluidCheckoutTerminal {
 
   /**
    * reloadCarrierData
-   * @param {*} event
    */
-  reloadCarrierData(event) {
-    console.log("reloadCarrierData");
+  reloadCarrierData() {
+    //check if shipping city is available as select and not input
+    if (!this.$("#shipping_city").is("select")) {
+      //trigger change to state
+      this.$("#shipping_state_custom").trigger("change");
+      //swal
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select state and city first!",
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        //footer
+        footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+      });
+      return;
+    }
+    //check if shipping city is empty
+    if (this.$("#shipping_city").val() == "") {
+      //swal
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select state and city first!",
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        //footer
+        footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+      });
+      return;
+    }
+    //check if this.$("select[name='shipping_city']") exist
+    if (this.$("select[name='shipping_city']").length) {
+      //trigger event change
+      this.$("select[name='shipping_city']").trigger("change");
+    } else {
+      //trigger change to state
+      this.$("#shipping_state_custom").trigger("change");
+      //show error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select state and city again!",
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        //footer
+        footer: `
+        <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+            `
+      });
+    }
   }
 
   /**
-   * Remove element with class t-checkout-carriers
+   * Remove element with class t-checkout-carriers-checkoutFluid
    */
   removeElementWithClassTCheckoutCarriers() {
-    //check if class t-checkout-carriers exist
-    if (this.$(".t-checkout-carriers").length) {
-      //remove class t-checkout-carriers
-      this.$(".t-checkout-carriers").remove();
+    //check if class t-checkout-carriers-checkoutFluid exist
+    if (this.$(".t-checkout-carriers-checkoutFluid").length) {
+      //remove class t-checkout-carriers-checkoutFluid
+      this.$(".t-checkout-carriers-checkoutFluid").remove();
     }
   }
 
@@ -188,7 +396,8 @@ class FluidCheckoutTerminal {
       //do nothing
       return;
     }
-    //get shipping_state
+    //reload carrier
+    this.reloadCarrierData();
   }
 
   /**
@@ -319,6 +528,8 @@ class FluidCheckoutTerminal {
       //return
       return;
     }
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //get local governments by details
     this.getLocalGovernments(country, state);
   }
@@ -346,6 +557,8 @@ class FluidCheckoutTerminal {
       //return
       return;
     }
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //get state
     this.countryOnChange(country);
   }
@@ -506,7 +719,7 @@ class FluidCheckoutTerminal {
           })
           .animate({ marginTop: 0 }, 1000);
       },
-      error: function (error) {
+      error: (error) => {
         //unblock
         this.$("#fc-wrapper").unblock();
         //swal
@@ -533,12 +746,14 @@ class FluidCheckoutTerminal {
    */
   cityOnChange(elem) {
     //Check if shipping is enabled by woocommerce
-    var terminal_delivery_html = this.$(".Terminal-delivery-logo");
+    var terminal_delivery_html = this.isTerminalRunning();
     //check if terminal_delivery_html exist
-    if (!terminal_delivery_html.length) {
+    if (!terminal_delivery_html) {
       //do nothing
       return;
     }
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //get country value
     let country = this.$("select[name='shipping_country']");
     //check if country exists
@@ -583,8 +798,6 @@ class FluidCheckoutTerminal {
       //return
       return;
     }
-    console.log("Am moving forward...", country, state, city);
-    return;
     //getCustomerDetails
     let customer_details = this.getCustomerDetails();
     //check if customer_details is empty
@@ -610,7 +823,7 @@ class FluidCheckoutTerminal {
     //country
     customer_details.country = country;
     //get terminal shipping rate
-    terminalCheckoutWC.getTerminalShippingRate(customer_details);
+    terminalFluidCheckout.getTerminalShippingRate(customer_details);
   }
 
   /**
@@ -691,6 +904,9 @@ class FluidCheckoutTerminal {
    * @param {object} customer_details
    */
   getTerminalShippingRate(customer_details) {
+    //update woocommerce
+    this.$(document.body).trigger("update_checkout");
+    //get terminal countries
     let tm_countries = terminal_africa.terminal_africal_countries;
     //get country
     let countryCode = customer_details.country;
@@ -750,8 +966,6 @@ class FluidCheckoutTerminal {
       },
       dataType: "json",
       beforeSend: () => {
-        //update woocommerce
-        this.$(document.body).trigger("update_checkout");
         // Swal loader
         Swal.fire({
           title: "Please wait...",
@@ -774,10 +988,10 @@ class FluidCheckoutTerminal {
         //check response is 200
         if (response.code === 200) {
           //do something cool
-          //clear .t-checkout-carriers
-          this.$(".t-checkout-carriers").remove();
+          //clear .t-checkout-carriers-checkoutFluid
+          this.$(".t-checkout-carriers-checkoutFluid").remove();
           let terminal_html = `
-          <div class="t-checkout-carriers-checkoutWC">
+          <div class="t-checkout-carriers-checkoutFluid">
           <div class="t-checkout-carriers">
           `;
           //loop through response.data
@@ -829,7 +1043,7 @@ class FluidCheckoutTerminal {
             }
             //append to terminal_html
             terminal_html += `
-                <div class="t-checkout-single" onclick="terminalCheckoutWC.terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${default_amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
+                <div class="t-checkout-single" onclick="terminalFluidCheckout.terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${default_amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
                 <label for="shipping">
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${value.carrier_name}" title="${value.carrier_name}" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${value.carrier_logo}">
@@ -847,12 +1061,11 @@ class FluidCheckoutTerminal {
           </div>
           `;
           //append to terminal_html
-          var terminal_delivery_html = this.$(".Terminal-delivery-logo");
+          var terminal_delivery_html = this.$(
+            "#shipping_method_0_terminal_delivery12"
+          );
           //find parent li
-          var terminal_delivery_li = terminal_delivery_html
-            .parent()
-            .parent()
-            .parent();
+          var terminal_delivery_li = terminal_delivery_html.parent();
           //save terminal_html to localstorage
           localStorage.setItem("terminal_delivery_html", terminal_html);
           //append to li
@@ -877,6 +1090,111 @@ class FluidCheckoutTerminal {
           icon: "error",
           title: "Oops...",
           text: "Something went wrong!",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      }
+    });
+  }
+
+  /**
+   * section | setshipping
+   * terminalSetShippingCrarrier
+   */
+  terminalSetShippingCrarrier(elem, event) {
+    //get terminal shipping input
+    let terminalimage = this.isTerminalRunning(true);
+    //check if terminal_image_prev is not empty
+    if (terminalimage.length) {
+      //check if terminal_image_prev is input type radio
+      if (terminalimage.is("input[type='radio']")) {
+        //check the input
+        terminalimage.trigger("click");
+      }
+    }
+    let carriername = this.$(elem).attr("data-carrier-name");
+    let amount = this.$(elem).attr("data-amount");
+    let duration = this.$(elem).attr("data-duration");
+    let pickup = this.$(elem).attr("data-pickup");
+    let email = this.$('input[name="billing_email"]').val();
+    let rateid = this.$(elem).attr("data-rateid");
+    let carrierlogo = this.$(elem).attr("data-image-url");
+    //save to session
+    this.$.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_save_shipping_carrier",
+        nonce: terminal_africa.nonce,
+        carriername: carriername,
+        amount: amount,
+        duration: duration,
+        email: email,
+        rateid: rateid,
+        pickup: pickup,
+        carrierlogo: carrierlogo
+      },
+      dataType: "json",
+      beforeSend: () => {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "Applying " + carriername,
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: (response) => {
+        //close swal
+        Swal.close();
+        //if response code 200
+        if (response.code == 200) {
+          //TODO add realtime update to terminal_carrier_logo
+          //save carrier logo to session
+          localStorage.setItem("terminal_carrier_logo", carrierlogo); //i stopped here
+          //update woocommerce
+          this.$(document.body).trigger("update_checkout");
+        } else {
+          //show error
+          Swal.fire({
+            title: "Error",
+            text: response.message,
+            icon: "error",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: true,
+            footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+          });
+        }
+      },
+      error: (response) => {
+        //close swal
+        Swal.close();
+        //show error
+        Swal.fire({
+          title: "Error",
+          text: "Something went wrong, please try again",
+          icon: "error",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: true,
           footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
