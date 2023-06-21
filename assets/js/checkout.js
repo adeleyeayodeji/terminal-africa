@@ -606,6 +606,7 @@ jQuery(document).ready(function ($) {
       });
       return;
     }
+    termianlDataParcel.clearCarrierData();
     //ajax
     $.ajax({
       type: "GET",
@@ -628,7 +629,6 @@ jQuery(document).ready(function ($) {
         });
       },
       success: function (response) {
-        termianlDataParcel.clearCarrierData();
         //unblock
         $("form[name='checkout']").unblock();
         //check if response code 200
@@ -680,6 +680,8 @@ jQuery(document).ready(function ($) {
     $('select[name="billing_country"]').change(function (e) {
       e.preventDefault();
       var country = $(this).val();
+      //reset carrier data
+      termianlDataParcel.clearCarrierData();
       //ajax to get states
       $.ajax({
         type: "GET",
@@ -701,8 +703,6 @@ jQuery(document).ready(function ($) {
           });
         },
         success: function (response) {
-          //reset carrier data
-          termianlDataParcel.clearCarrierData();
           //unblock
           $("form[name='checkout']").unblock();
           //check if response code 200
@@ -820,3 +820,6 @@ jQuery(document).ready(function ($) {
   //set timeout
   clearCurrentFields();
 });
+
+//remove old local storage terminal_delivery_html
+localStorage.removeItem("terminal_delivery_html");

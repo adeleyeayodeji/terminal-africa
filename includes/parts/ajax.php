@@ -343,6 +343,11 @@ trait Ajax
             ]);
         }
 
+        //check if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         //recaculate cart total
         WC()->cart->calculate_totals();
 
@@ -1198,6 +1203,10 @@ trait Ajax
                 'code' => 400,
                 'message' => 'Wrong nonce, please refresh the page and try again'
             ]);
+        }
+        //check if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
         //reset carrier data or delete session
         WC()->session->__unset('terminal_africa_carriername');

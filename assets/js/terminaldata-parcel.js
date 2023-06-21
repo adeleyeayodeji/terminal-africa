@@ -12,6 +12,8 @@ class TerminalDataParcel {
     this.createOrupdateParcel();
     //on add to cart
     this.listenToCart();
+    //remove available carriers
+    this.clearCarrierData();
   }
 
   /**
@@ -123,6 +125,8 @@ class TerminalDataParcel {
 
   /**
    * Clear carrier data
+   * @since 1.10.4
+   * @return void
    */
   clearCarrierData() {
     //clear local storage terminal_delivery_html
@@ -145,7 +149,10 @@ class TerminalDataParcel {
         //update woocommerce
         this.jquery(document.body).trigger("update_checkout");
         console.log(response);
-        this.jquery(document.body).trigger("update_checkout");
+        setTimeout(() => {
+          this.jquery(document.body).trigger("update_checkout");
+          console.log("updated successfully");
+        }, 3000);
       }
     });
   }

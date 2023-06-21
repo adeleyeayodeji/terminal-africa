@@ -116,27 +116,21 @@ trait Assets
                 if (!$enabled) {
                     return;
                 }
-                //use switch statement
-                foreach (apply_filters('active_plugins', get_option('active_plugins')) as $active) {
-                    switch ($active) {
-                            //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
-                        case 'checkout-for-woocommerce/checkout-for-woocommerce.php':
-                            //filter checkout wc
-                            self::checkoutWCAsset();
-                            break;
-                        case 'checkoutwc-lite/checkout-for-woocommerce.php':
-                            //filter checkout wc
-                            self::checkoutWCAsset();
-                            break;
-                        case 'fluid-checkout/fluid-checkout.php':
-                            //filter fluid checkout wc
-                            self::fluidCheckoutWCAsset();
-                            break;
-                        default:
-                            //wc checkout asset core
-                            self::checkoutWCAssetCore();
-                            break;
-                    }
+                //haystack
+                $haystack = apply_filters('active_plugins', get_option('active_plugins'));
+                //use in array check
+                if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', $haystack)) {
+                    //filter checkout wc
+                    self::checkoutWCAsset();
+                } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', $haystack)) {
+                    //filter checkout wc
+                    self::checkoutWCAsset();
+                } else if (in_array('fluid-checkout/fluid-checkout.php', $haystack)) {
+                    //filter fluid checkout wc
+                    self::fluidCheckoutWCAsset();
+                } else {
+                    //wc checkout asset core
+                    self::checkoutWCAssetCore();
                 }
             }
         }

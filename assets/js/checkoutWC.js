@@ -10,6 +10,8 @@ let terminalCheckoutWC = {
         //do nothing
         return;
       }
+      //remove old local storage terminal_delivery_html
+      localStorage.removeItem("terminal_delivery_html");
       //check if element exist #shipping_country
       let shippingCountry = $("#shipping_country");
       if (!shippingCountry.length) {
@@ -435,6 +437,8 @@ let terminalCheckoutWC = {
   //getLocalGovernments
   getLocalGovernments: (country, state) => {
     jQuery(document).ready(function ($) {
+      //reset carrier data
+      termianlDataParcel.clearCarrierData();
       //ajax
       $.ajax({
         type: "GET",
@@ -457,8 +461,6 @@ let terminalCheckoutWC = {
           });
         },
         success: function (response) {
-          //reset carrier data
-          termianlDataParcel.clearCarrierData();
           //unblock
           $("#order_review").unblock();
           //check if response code 200
@@ -752,6 +754,8 @@ let terminalCheckoutWC = {
       customer_details.state = state;
       //country
       customer_details.country = country;
+      //reset carrier data
+      termianlDataParcel.clearCarrierData();
       //get terminal shipping rate
       terminalCheckoutWC.getTerminalShippingRate(customer_details);
     });
@@ -841,6 +845,9 @@ let terminalCheckoutWC = {
   //getTerminalShippingRate
   getTerminalShippingRate: (customer_details) => {
     jQuery(function ($) {
+      //reset carrier data
+      termianlDataParcel.clearCarrierData();
+      //get terminal countries
       let tm_countries = terminal_africa.terminal_africal_countries;
       //get country
       let countryCode = customer_details.country;

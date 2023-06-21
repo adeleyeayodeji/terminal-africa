@@ -103,6 +103,11 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             return;
         }
 
+        //check if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         //check if session exists
         $terminal_africa_carriername = sanitize_text_field(WC()->session->get('terminal_africa_carriername'));
         $terminal_africa_amount = sanitize_text_field(WC()->session->get('terminal_africa_amount'));

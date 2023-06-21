@@ -19,10 +19,38 @@ class FluidCheckoutTerminal {
       //do nothing
       return;
     }
+    //remove old local storage terminal_delivery_html
+    localStorage.removeItem("terminal_delivery_html");
     //setDefaultCountryAndStateToEmpty
     this.setDefaultCountryAndStateToEmpty();
     //init interval
     this.setInterval();
+  }
+
+  /**
+   * Set interval for 3 milliseconds
+   */
+  setInterval() {
+    setInterval(() => {
+      //add event to country selection
+      this.addEventToCountrySelection();
+      //switchTownCityWithState
+      this.switchTownCityWithState();
+      //addEventToStateSelect
+      this.addEventToStateSelect();
+      //setShippingCodeIfEmpty
+      this.setShippingCodeIfEmpty();
+      //removeElementWithClassTCheckoutCarriers
+      // this.removeElementWithClassTCheckoutCarriers();
+      //setTerminalCarriersHTML
+      this.setTerminalCarriersHTML();
+      //replaceShipmentMethodTitle
+      this.replaceShipmentMethodTitle();
+      //addGetCityButton
+      this.addGetCityButton();
+      //blockPlaceOrderButtonClick
+      this.blockPlaceOrderButtonClick();
+    }, 300);
   }
 
   /**
@@ -48,27 +76,90 @@ class FluidCheckoutTerminal {
   }
 
   /**
-   * Set interval for 3 milliseconds
+   * Block place order button click
+   * @return void
    */
-  setInterval() {
-    setInterval(() => {
-      //add event to country selection
-      this.addEventToCountrySelection();
-      //switchTownCityWithState
-      this.switchTownCityWithState();
-      //addEventToStateSelect
-      this.addEventToStateSelect();
-      //setShippingCodeIfEmpty
-      this.setShippingCodeIfEmpty();
-      //removeElementWithClassTCheckoutCarriers
-      // this.removeElementWithClassTCheckoutCarriers();
-      //setTerminalCarriersHTML
-      this.setTerminalCarriersHTML();
-      //replaceShipmentMethodTitle
-      this.replaceShipmentMethodTitle();
-      //addGetCityButton
-      this.addGetCityButton();
-    }, 300);
+  blockPlaceOrderButtonClick() {
+    //check if .terminal-overlay-checkout exist
+    if (this.$(".terminal-overlay-checkout").length == 0) {
+      //Check if shipping is enabled by woocommerce
+      var terminal_delivery_html = this.isTerminalRunning(true);
+      //check if terminal_delivery_html exist
+      if (!terminal_delivery_html) {
+        //do nothing
+        return;
+      }
+      //check if parent has element .woocommerce-Price-amount amount
+      if (
+        !terminal_delivery_html.parent().find(".woocommerce-Price-amount")
+          .length
+      ) {
+        //check if the place order button has type button
+        if (this.$("#place_order").attr("type") == "button") {
+          //do nothing
+          return;
+        }
+        //change type to button
+        this.$("#place_order").replaceWith(
+          `
+            <button type="button" class="button alt fc-place-order-button" name="woocommerce_checkout_place_order" id="place_order" value="Place order" data-value="Place order" onclick="terminalFluidCheckout.checkForCarriers(this,event)">Place order</button>
+          `
+        );
+      } else {
+        //change type to submit
+        this.$("#place_order").attr("type", "submit");
+      }
+    } else {
+      //change type to submit
+      this.$("#place_order").attr("type", "submit");
+      //check if cfw-place-order-wrap has a element with class blockUI blockOverlay
+      if (this.$("#place_order").find(".blockUI.blockOverlay")) {
+        //remove blockUI blockOverlay
+        this.$("#place_order").find(".blockUI.blockOverlay").hide();
+      }
+    }
+  }
+
+  /**
+   * Check for place order button lock
+   * @param {HTMLElement} elem
+   * @param event
+   * @return void
+   */
+  checkForCarriers(elem, e) {
+    //prevent default
+    e.preventDefault();
+    //Check if shipping is enabled by woocommerce
+    var terminal_delivery_html = this.isTerminalRunning(true);
+    //check if terminal_delivery_html exist
+    if (!terminal_delivery_html) {
+      //do nothing
+      return;
+    }
+    //check if parent has element .woocommerce-Price-amount amount
+    if (
+      !terminal_delivery_html.parent().find(".woocommerce-Price-amount").length
+    ) {
+      //check if class exist woocommerce-Price-amount
+      //show error
+      Swal.fire({
+        icon: "error",
+        title: "Please select a carrier",
+        text: "Please choose your delivery option to complete your order",
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        //footer
+        footer: `
+            <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+            `
+      });
+      return;
+    } else {
+      //submit form name checkout
+      this.$("form[name=checkout]").submit();
+    }
   }
 
   /**
@@ -752,8 +843,6 @@ class FluidCheckoutTerminal {
       //do nothing
       return;
     }
-    //reset carrier data
-    termianlDataParcel.clearCarrierData();
     //get country value
     let country = this.$("select[name='shipping_country']");
     //check if country exists
@@ -822,6 +911,8 @@ class FluidCheckoutTerminal {
     customer_details.state = state;
     //country
     customer_details.country = country;
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //get terminal shipping rate
     terminalFluidCheckout.getTerminalShippingRate(customer_details);
   }
@@ -904,6 +995,8 @@ class FluidCheckoutTerminal {
    * @param {object} customer_details
    */
   getTerminalShippingRate(customer_details) {
+    //reset carrier data
+    termianlDataParcel.clearCarrierData();
     //update woocommerce
     this.$(document.body).trigger("update_checkout");
     //get terminal countries

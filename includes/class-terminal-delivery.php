@@ -298,6 +298,10 @@ class WC_Terminal_Delivery
     //save_terminal_delivery_order_meta
     public function save_terminal_delivery_order_meta($order_id)
     {
+        //check if session is started
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         //check if session exists
         $terminal_africa_carriername = WC()->session->get('terminal_africa_carriername');
         $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
@@ -531,6 +535,12 @@ class WC_Terminal_Delivery
                     $billing_city = $billing_city[0];
                 }
             }
+
+            //check if session is started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
             //check if logged in
             if (is_user_logged_in()) {
                 //update user meta
