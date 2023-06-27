@@ -958,11 +958,12 @@ trait Ajax
         $rate_id = sanitize_text_field($_GET['rate_id']);
         //get shipment status
         $get_shipment_status = getTerminalShipmentStatus($shipment_id);
-        //cancellation_request
-        $cancellation_request = $get_shipment_status['shipment_info']->cancellation_request;
         //check if shipment status is gotten
         if ($get_shipment_status['code'] == 200) {
             $status = $get_shipment_status['data'];
+            //cancellation_request
+            $cancellation_request = $get_shipment_status['shipment_info']->cancellation_request;
+            //get terminal template
             switch ($status) {
                 case 'draft':
                     $getTerminalTemplate = getTerminalTemplate('shipment-button/button', compact('rate_id', 'order_id', 'shipment_id'));

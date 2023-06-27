@@ -2,8 +2,6 @@
 
 namespace TerminalAfrica\Includes\Parts;
 
-use function Breakdance\GlobalScripts\enqueue;
-
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 

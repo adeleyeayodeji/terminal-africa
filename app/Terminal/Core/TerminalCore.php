@@ -27,11 +27,15 @@ class TerminalCore
             }
         }
         $args = [
+            //post type
             'post_type' => 'shop_order',
+            //post status
             'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
+            //posts per page
             'posts_per_page' => -1,
             //page 
             'paged' => 1,
+            //meta query
             'meta_query' => [
                 //Terminal_africa_shipment_id
                 [
