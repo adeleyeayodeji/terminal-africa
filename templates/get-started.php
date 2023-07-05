@@ -26,7 +26,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                         <div class="t-tips-block t-add-products">
                             <h1 class="t-header2 t-terminal-black t-dashboard">Learn how to ship on Terminal</h1>
                             <p class="t-sub-header t-grey">Packaging, Carriers, Rates, and much more. Get the basics on how you can deliver products to your customers around the world with ease.</p>
-                            <div class="t-w-embed-youtubevideo" style="padding-top: 56.1702%;"><iframe src="https://www.youtube.com/embed/UpE7h9o8gOA?rel=0&amp;amp;controls=1&amp;amp;autoplay=0&amp;amp;mute=0&amp;amp;start=0" frameborder="0" allow="autoplay; encrypted-media" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; pointer-events: auto;"></iframe></div>
+                            <div class="t-w-embed-youtubevideo" style="padding-top: 56.1702%;"><iframe src="https://www.youtube.com/embed/S4Vwe07EEqQ?rel=0&amp;amp;controls=1&amp;amp;autoplay=0&amp;amp;mute=0&amp;amp;start=0" frameborder="0" allow="autoplay; encrypted-media" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; pointer-events: auto;"></iframe></div>
                         </div>
                         <div class="t-tips-block t-get-support" style="display: none;">
                             <h1 class="t-header2 t-terminal-black t-dashboard">Speak to an expert</h1>

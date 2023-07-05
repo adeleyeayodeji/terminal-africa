@@ -8,7 +8,7 @@ use App\Terminal\Core\TerminalCore;
 //check if function exists
 /**
  * Get terminal orders
- * @return array
+ * @return mixed
  */
 if (!function_exists('getTerminalOrders')) {
     function getTerminalOrders()

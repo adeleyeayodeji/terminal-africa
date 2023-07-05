@@ -32,7 +32,7 @@ class TerminalCore
             //post status
             'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
             //posts per page
-            'posts_per_page' => -1,
+            'posts_per_page' => 10,
             //page 
             'paged' => 1,
             //meta query
