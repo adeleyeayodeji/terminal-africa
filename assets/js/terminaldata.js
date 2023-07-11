@@ -515,5 +515,7 @@ setInterval(function () {
     labelTerminal.replaceWith(
       `<label for="billing_postcode">Postcode / ZIP <abbr class="required" title="required">*</abbr></label>`
     );
+    //localstorage data
+    restoreCarriers();
   });
 }, 1000);

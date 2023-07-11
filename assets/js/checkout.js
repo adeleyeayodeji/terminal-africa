@@ -525,14 +525,11 @@ let terminalButton = () => {
 
 let restoreCarriers = () => {
   jQuery(document).ready(function ($) {
-    //TODO
     //check if local storage is not empty
     if (localStorage.getItem("terminal_delivery_html") != null) {
       //check if t-restore does not exist
-      if (!$(".t-restore").length) {
-        let terminal_html = `<div class="t-checkout-carriers t-update">`;
-        terminal_html += `<b class="t-restore" onclick="restoreCarrierData(this)">Change Carrier</b>`;
-        terminal_html += `</div>`;
+      if (!$(".t-checkout-carriers").length) {
+        let terminal_html = localStorage.getItem("terminal_delivery_html");
         //append to terminal_html
         var terminal_delivery_html = $(".Terminal-delivery-logo");
         //check if terminal_delivery_html exist
@@ -540,18 +537,22 @@ let restoreCarriers = () => {
           //do nothing
           return;
         }
-        //check if terminal_delivery_html is more one
+        //check if terminal_html exist is more than one
         if (terminal_delivery_html.length > 1) {
-          //loop
-          terminal_delivery_html.each(function (index, element) {
+          //loop through terminal_delivery_html
+          $.each(terminal_delivery_html, function (indexInArray, value) {
             //find parent li
-            var terminal_delivery_li = $(element).parent();
+            var terminal_delivery_li = $(value).parent().parent();
+            //save terminal_html to localstorage
+            localStorage.setItem("terminal_delivery_html", terminal_html);
             //append to li
             terminal_delivery_li.append(terminal_html);
           });
         } else {
           //find parent li
           var terminal_delivery_li = terminal_delivery_html.parent().parent();
+          //save terminal_html to localstorage
+          localStorage.setItem("terminal_delivery_html", terminal_html);
           //append to li
           terminal_delivery_li.append(terminal_html);
         }
