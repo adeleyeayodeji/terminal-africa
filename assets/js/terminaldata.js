@@ -1,3 +1,4 @@
+//do jquery
 jQuery(document).ready(function ($) {
   //set session storage terminal_africa_save_cart_itemcount
   sessionStorage.setItem("terminal_africa_save_cart_itemcount", "0");
