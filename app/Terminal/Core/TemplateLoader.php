@@ -15,11 +15,17 @@ class TemplateLoader
     //load template
     public static function load($template, $data = [])
     {
-        $dir = TERMINAL_AFRICA_PLUGIN_DIR . '/templates/';
-        $file = $dir . $template . '.php';
-        if (file_exists($file)) {
-            extract($data);
-            include $file;
+        try {
+            $dir = TERMINAL_AFRICA_PLUGIN_DIR . '/templates/';
+            $file = $dir . $template . '.php';
+            if (file_exists($file)) {
+                extract($data);
+                include $file;
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //throw
+            throw $e;
         }
     }
 

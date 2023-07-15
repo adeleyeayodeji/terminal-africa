@@ -30,6 +30,7 @@ trait Activation
                 exit;
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             //log error 
             error_log($e->getMessage());
         }
@@ -47,6 +48,7 @@ trait Activation
                 'message' => 'Plugin deactivated successfully'
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 500,
                 'message' => $e->getMessage()
@@ -117,6 +119,7 @@ trait Activation
             //use prepared statement
             $wpdb->prepare("DELETE FROM $wpdb->options WHERE option_name LIKE %s;", ['terminal_africa_states%']);
         } catch (\Exception $e) {
+            logTerminalError($e);
             //log error 
             error_log($e->getMessage());
         }

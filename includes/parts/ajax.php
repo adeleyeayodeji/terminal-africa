@@ -73,6 +73,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e, 'users/secrete');
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong. Please try again"
@@ -102,6 +103,7 @@ trait Ajax
                 'mode' => 'test'
             ];
         } catch (\Exception $e) {
+            logTerminalError($e);
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                 'mode' => 'test'
@@ -180,6 +182,7 @@ trait Ajax
                 }
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -240,6 +243,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -277,6 +281,7 @@ trait Ajax
                 'message' => 'States loaded',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'data' => [],
@@ -316,6 +321,7 @@ trait Ajax
                 'message' => 'Cities loaded',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'cities' => [],
@@ -345,6 +351,7 @@ trait Ajax
                 'message' => 'Signed out successfully',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -375,6 +382,7 @@ trait Ajax
                 'message' => 'Terminal enabled successfully',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -496,6 +504,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -610,6 +619,7 @@ trait Ajax
                 'message' => 'Terminal Merchant address not set'
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage()
@@ -650,6 +660,7 @@ trait Ajax
                 'message' => 'Carrier saved successfully'
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage()
@@ -697,6 +708,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -737,6 +749,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -792,6 +805,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -866,6 +880,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -906,6 +921,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -946,6 +962,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1002,6 +1019,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1048,6 +1066,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1086,6 +1105,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1154,6 +1174,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1254,6 +1275,7 @@ trait Ajax
                 'message' => 'Something went wrong, please try again',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1291,6 +1313,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1331,6 +1354,7 @@ trait Ajax
                 'message' => 'Custom price mark up saved successfully',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1376,6 +1400,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1411,6 +1436,7 @@ trait Ajax
                 'message' => 'Carriers data reset successfully',
             ]);
         } catch (\Exception $e) {
+            logTerminalError($e);
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),

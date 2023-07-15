@@ -2,6 +2,30 @@
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 $orders = getTerminalOrders();
+//terminal page
+$terminal_page = intval(terminal_param('terminal_page', 1));
+//next page
+$next_page = $terminal_page + 1;
+//prev page
+$prev_page = $terminal_page - 1;
+//check if next page is greater than 1
+if ($next_page < 1) {
+    $next_page = 1;
+}
+//check if prev page is greater than 1
+if ($prev_page < 1) {
+    $prev_page = 1;
+}
+//plugin url
+$plugin_url = admin_url('admin.php?page=terminal-africa');
+//append to prev
+$prev_url = add_query_arg('terminal_page', $prev_page, $plugin_url);
+//append to next
+$next_url = add_query_arg('terminal_page', $next_page, $plugin_url);
+//sanitize url
+$prev_url = esc_url($prev_url);
+//sanitize url
+$next_url = esc_url($next_url);
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-cart-plus", "Shipping"); ?>
@@ -26,8 +50,6 @@ $orders = getTerminalOrders();
                             $order_date = $order->post_date;
                             $timeago = human_time_diff(strtotime($order_date), current_time('timestamp')) . ' ago';
                             $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
-                            //plugin url
-                            $plugin_url = admin_url('admin.php?page=terminal-africa');
                             //arg
                             $arg = array(
                                 'page' => 'terminal-africa',
@@ -39,7 +61,7 @@ $orders = getTerminalOrders();
                             );
                             $shipping_url = add_query_arg($arg, $plugin_url);
                     ?>
-                            <tr class="terminal-dashboard-order-row" style="margin-bottom: 20px; background-color: rgb(255, 255, 255); padding: 10px; height: 80px; box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px 0px; cursor: pointer;" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
+                            <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
                                     <div class="terminal-dashboard-order-link" style="margin-bottom: 0px; font-size: 16px; color: rgb(255, 153, 0); text-transform: capitalize;">
                                         <?php echo esc_html($shipment_id); ?>
@@ -62,11 +84,33 @@ $orders = getTerminalOrders();
                                 </td>
                             </tr>
                         <?php endforeach;
+                        ?>
+                        <tr>
+                            <td colspan="4">
+                                <div class="t-flex">
+                                    <div class="t-prev-btn">
+                                        <a href="<?php echo $prev_url; ?>" class="t-btn <?php echo $terminal_page == 1 ? 't-disabled' : ''; ?>">Previous</a>
+                                    </div>
+                                    <div class="t-next-btn">
+                                        <a href="<?php echo $next_url; ?>" class="t-btn">Next</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php
                     else : ?>
                         <tr>
                             <td colspan="4">
                                 <div class="terminal-dashboard-order-name">
                                     <p style="color: rgb(255, 153, 0); text-decoration: none;">No Shipment</p>
+                                    <?php
+                                    //check if page is greater than 1
+                                    if ($prev_page > 1) :
+                                    ?>
+                                        <div class="t-prev-btn t-mt-3">
+                                            <a href="<?php echo $prev_url; ?>" class="t-btn">Previous</a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>

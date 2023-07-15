@@ -38,6 +38,7 @@ trait Shipping
             }
             return [];
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'countries');
             return [];
         }
     }
@@ -89,6 +90,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'states?country_code=' . $countryCode);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -157,6 +159,10 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'cities?' . http_build_query([
+                'country_code' => $countryCode,
+                'state_code' => $state_code,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -183,6 +189,7 @@ trait Shipping
             }
             return $countries;
         } catch (\Exception $e) {
+            logTerminalError($e);
             return $countries;
         }
     }
@@ -215,6 +222,7 @@ trait Shipping
             $states[$countryCode] = $states_d;
             return $states;
         } catch (\Exception $e) {
+            logTerminalError($e);
             return $states;
         }
     }
@@ -271,6 +279,18 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'addresses?' . http_build_query([
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'phone' => $phone,
+                'line1' => $line_1,
+                'line2' => $line_2,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'zip' => $zip_code,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -339,6 +359,18 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'addresses/' . $merchant_address_id . '?' . http_build_query([
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'phone' => $phone,
+                'line1' => $line_1,
+                'line2' => $line_2,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'zip' => $zip_code,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -390,6 +422,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'parcels' . "?" . http_build_query($body));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -441,6 +474,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'parcels' . "/" . $parcel_id . "?" . http_build_query($body));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -489,6 +523,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'parcels' . "/" . $parcel_id);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -545,6 +580,12 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments' . "?" . http_build_query([
+                'address_from' => $address_from,
+                'address_to' => $address_to,
+                'parcel' => $parcel_id,
+                'source' => 'wordpress'
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -619,6 +660,14 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'rates/shipment' . "?" . http_build_query([
+                'shipment_id' => $shipment_id,
+                'merchant_address_id' => $merchant_address_id,
+                'customer_address_id' => $customer_address_id,
+                'parcel' => $parcel,
+                'source' => 'wordpress',
+                'currency' => get_woocommerce_currency(),
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -684,6 +733,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'rates/' . $rate_id);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -761,6 +811,7 @@ trait Shipping
                 'url' => $plugin_url,
             ];
         } catch (\Exception $e) {
+            logTerminalError($e);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -824,6 +875,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$endpoint . 'users/wallet?' . http_build_query(['user_id' => $user_id]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -887,6 +939,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$endpoint . 'carriers?' . http_build_query(['type' => $type]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -951,6 +1004,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$endpoint . 'carriers/multiple/enable?' . http_build_query(['carriers' => $carriers]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1002,6 +1056,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$endpoint . 'carriers/multiple/enable?' . http_build_query($carriers));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1066,6 +1121,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$endpoint . 'carriers/multiple/disable?' . http_build_query(['carriers' => $carriers]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1118,6 +1174,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'carriers/multiple/disable?' . http_build_query($carriers));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1194,6 +1251,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'packaging');
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1265,6 +1323,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'packaging');
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1322,6 +1381,7 @@ trait Shipping
                 }
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'packaging/' . $packaging_id);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1377,6 +1437,10 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/pickup?' . http_build_query([
+                "shipment_id" => $shipment_id,
+                "rate_id" => $rate_id,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1421,6 +1485,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/' . $shipment_id);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1478,6 +1543,7 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'users/carriers?type=' . $type);
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1532,6 +1598,9 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/cancel?' . http_build_query([
+                "shipment_id" => $shipment_id,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),
@@ -1589,6 +1658,9 @@ trait Shipping
                 ];
             }
         } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'users/default-currency?' . http_build_query([
+                "currency" => $currency_code,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),

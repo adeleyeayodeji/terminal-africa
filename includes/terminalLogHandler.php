@@ -93,6 +93,11 @@ class TerminalLogHandler
             );
             //silent is golden
         } catch (\Exception $e) {
+            //check if function exists
+            if (function_exists('logTerminalError')) {
+                //log error
+                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . $path);
+            }
             //log error
             error_log($e->getMessage());
         }
@@ -104,35 +109,49 @@ class TerminalLogHandler
      */
     public static function checkIfPluginAlreadyLogged()
     {
-        //site url
-        $site_url = site_url();
-        $domain = parse_url($site_url, PHP_URL_HOST);
-        //log activation of terminal
-        $response = Requests::post(
-            TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find',
-            [
-                'Content-Type' => 'application/json'
-            ],
-            json_encode([
-                'email' => get_bloginfo('admin_email'),
-                'domain' => $domain,
-                'platform' => 'wordpress'
-            ])
-        );
-        //get response
-        $response = json_decode($response->body);
-        //check if plugin is already logged
-        if ($response->status && $response->message == "Plugin found") {
+        try {
+            //site url
+            $site_url = site_url();
+            $domain = parse_url($site_url, PHP_URL_HOST);
+            //log activation of terminal
+            $response = Requests::post(
+                TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find',
+                [
+                    'Content-Type' => 'application/json'
+                ],
+                json_encode([
+                    'email' => get_bloginfo('admin_email'),
+                    'domain' => $domain,
+                    'platform' => 'wordpress'
+                ])
+            );
+            //get response
+            $response = json_decode($response->body);
+            //check if plugin is already logged
+            if ($response->status && $response->message == "Plugin found") {
+                wp_send_json([
+                    'status' => true,
+                    'message' => 'Plugin already logged'
+                ]);
+            } else {
+                //logger handler
+                self::terminalLoggerHandler('plugin/activate');
+                wp_send_json([
+                    'status' => true,
+                    'message' => 'Plugin logged'
+                ]);
+            }
+        } catch (\Exception $e) {
+            //check if function exists
+            if (function_exists('logTerminalError')) {
+                //log error
+                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find');
+            }
+            //log error
+            error_log($e->getMessage());
             wp_send_json([
-                'status' => true,
-                'message' => 'Plugin already logged'
-            ]);
-        } else {
-            //logger handler
-            self::terminalLoggerHandler('plugin/activate');
-            wp_send_json([
-                'status' => true,
-                'message' => 'Plugin logged'
+                'status' => false,
+                'message' => 'Error occured'
             ]);
         }
     }

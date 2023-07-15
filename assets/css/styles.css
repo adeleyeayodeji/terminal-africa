@@ -71,6 +71,7 @@ a.t-btn {
 
 .t-btn:hover {
   background-color: #f60;
+  color: #000;
 }
 
 .t-btn:focus {
@@ -1624,4 +1625,23 @@ input:checked + .t-slider:before {
 
 .t-justify-content-between {
   justify-content: space-between;
+}
+
+.t-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.t-terminal-dashboard-order-row {
+  margin-bottom: 20px;
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  height: 80px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px 0px;
+  cursor: pointer;
+  transition: all 0.2s ease 0s;
+}
+
+.t-terminal-dashboard-order-row:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px 0px;
 }

@@ -281,3 +281,17 @@ if (!function_exists('updateDefaultCurrencyCode')) {
         return TerminalAfricaShippingPlugin::updateDefaultCurrencyCode($currency_code);
     }
 }
+
+//terminal_param
+if (!function_exists('terminal_param')) {
+    //terminal param
+    /**
+     * @param $param
+     * @return mixed
+     */
+    function terminal_param($param, $default = null)
+    {
+        $request = $_REQUEST;
+        return isset($request[$param]) ? $request[$param] : $default;
+    }
+}

@@ -64,3 +64,19 @@ if (!function_exists('sanitize_array')) {
         return $terminal_core->sanitize_array($array);
     }
 }
+
+//App\Terminal\Core\TerminalCore::logTerminalError
+//check if function exists
+/**
+ * Log terminal error
+ * @param \Exception $e
+ * @param string $endpoint
+ * @return bool
+ */
+if (!function_exists('logTerminalError')) {
+    function logTerminalError($e, $endpoint = 'none')
+    {
+        $terminal_core = new TerminalCore();
+        return $terminal_core->logTerminalError($e, $endpoint);
+    }
+}
