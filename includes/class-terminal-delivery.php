@@ -510,6 +510,91 @@ class WC_Terminal_Delivery
             'clear' => true,
             'priority' => 80,
         );
+
+        //Shipping
+        //enable first name
+        $fields['shipping']['shipping_first_name'] = array(
+            'label' => __('First name', 'terminal-africa'),
+            'placeholder' => _x('First name', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-first'),
+            'clear' => true,
+            'priority' => 10,
+        );
+        //shipping_email
+        $fields['shipping']['shipping_email'] = array(
+            'label' => __('Email address', 'terminal-africa'),
+            'placeholder' => _x('Email address', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 20,
+        );
+        //enable last name
+        $fields['shipping']['shipping_last_name'] = array(
+            'label' => __('Last name', 'terminal-africa'),
+            'placeholder' => _x('Last name', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-last'),
+            'clear' => true,
+            'priority' => 20,
+        );
+        //address
+        $fields['shipping']['shipping_address_1'] = array(
+            'label' => __('Address', 'terminal-africa'),
+            'placeholder' => _x('Address', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 30,
+        );
+        //postcode
+        $fields['shipping']['shipping_postcode'] = array(
+            'label' => __('Postcode / ZIP', 'terminal-africa'),
+            'placeholder' => _x('Postcode / ZIP', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'clear' => true,
+            'priority' => 40,
+        );
+        //phone
+        $fields['shipping']['shipping_phone'] = array(
+            'label' => __('Phone', 'terminal-africa'),
+            'placeholder' => _x('Phone', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'clear' => true,
+            'priority' => 50,
+        );
+        //country
+        $fields['shipping']['shipping_country'] = array(
+            'type' => 'country',
+            'label' => __('Country', 'terminal-africa'),
+            'placeholder' => _x('Country', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field', 'update_totals_on_change'),
+            'clear' => true,
+            'priority' => 60,
+        );
+        //state
+        $fields['shipping']['shipping_state'] = array(
+            'type' => 'state',
+            'label' => __('State', 'terminal-africa'),
+            'placeholder' => _x('County', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'validate' => array('state'),
+            'clear' => true,
+            'priority' => 70,
+        );
+        //city
+        $fields['shipping']['shipping_city'] = array(
+            'label' => __('City', 'terminal-africa'),
+            'placeholder' => _x('City', 'placeholder', 'terminal-africa'),
+            'required' => true,
+            'class' => array('form-row-wide', 'address-field'),
+            'clear' => true,
+            'priority' => 80,
+        );
+        //return fields
+
         return $fields;
     }
 

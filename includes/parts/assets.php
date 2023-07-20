@@ -149,6 +149,10 @@ trait Assets
         wp_enqueue_script('terminal-africa-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
         //terminaldata
         wp_enqueue_script('terminal-africa-terminaldata-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //add checkout-for-shipping
+        wp_enqueue_script('terminal-africa-checkout-for-shipping-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout-for-shipping.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //add terminaldata-for-shipping
+        wp_enqueue_script('terminal-africa-terminaldata-for-shipping-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-for-shipping.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
         //localize scripts
         wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -375,6 +379,10 @@ trait Assets
                 $billing_postcode = $checkout->get_value('billing_postcode') ?: '';
                 //shipping post code
                 $shipping_postcode = $checkout->get_value('shipping_postcode') ?: '';
+                //terminal_shipping_state
+                $terminal_shipping_state = $checkout->get_value('shipping_state') ?: '';
+                //terminal_shipping_city
+                $terminal_shipping_city = $checkout->get_value('shipping_city') ?: '';
                 //check if , is in billing city
                 if (strpos($billing_city, ',') !== false) {
                     $billing_city = explode(',', $billing_city);
@@ -384,6 +392,8 @@ trait Assets
                 <script>
                     var terminal_billing_state = '<?php echo esc_html($billing_state); ?>';
                     var terminal_billing_city = '<?php echo esc_html($billing_city); ?>';
+                    var terminal_shipping_state = '<?php echo esc_html($terminal_shipping_state); ?>';
+                    var terminal_shipping_city = '<?php echo esc_html($terminal_shipping_city); ?>';
                     var terminal_billing_postcode = '<?php echo esc_html($billing_postcode); ?>';
                     var terminal_shipping_postcode = '<?php echo esc_html($shipping_postcode); ?>';
                 </script>

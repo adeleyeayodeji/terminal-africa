@@ -37,7 +37,14 @@ $carriersData = [
             <div class="t-col-12">
                 <div class="t-address-card-carriers t-settings-section">
                     <div class="t-carrier-card-header">
-                        <h4 class="t-address-card-header-text t-pl-0">Terminal Settings</h4>
+                        <div class="t-flex">
+                            <div class="t-carriers-title-tag">
+                                <h4 class="t-address-card-header-text t-pl-0">Terminal Settings</h4>
+                            </div>
+                            <div class="t-merchant-id">
+                                <h4 class="t-address-card-header-text t-pl-0">Merchant ID: <span class="t-merchant-id-text"><?php echo esc_html(get_option('terminal_africa_merchant_id')); ?></span></h4>
+                            </div>
+                        </div>
                     </div>
                     <div class="t-carrier-card-body">
                         <div class="t-row t-justify-content-between">
