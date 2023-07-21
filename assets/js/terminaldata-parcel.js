@@ -160,3 +160,25 @@ class TerminalDataParcel {
 
 //init
 let termianlDataParcel = new TerminalDataParcel();
+
+//////////// Functions ////////////////////////////////////////////////////////////
+let terminalFormatCurrency = function (amount) {
+  //check if terminal_africa.multicurrency length is greater than 0
+  if (terminal_africa.multicurrency.length > 0) {
+    //init amount
+    let initialAmount = terminal_africa.multicurrency[0];
+    //other amount
+    let otherAmount = terminal_africa.multicurrency[1];
+    //add up
+    let totalAmount = parseFloat(initialAmount) + parseFloat(otherAmount);
+    //multiply amount
+    let multipliedAmount = amount * totalAmount;
+    //round up to whole number
+    multipliedAmount = Math.round(multipliedAmount);
+    //return amount
+    return multipliedAmount;
+  } else {
+    //return amount
+    return amount;
+  }
+};

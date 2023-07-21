@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
 Tested up to: 6.2
-Stable tag: 1.10.14
+Stable tag: 1.10.15
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -78,6 +78,12 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
+
+= 1.10.15 =
+
+- Added update to the checkout page
+- Fix bugs
+- Added support for Cart Flow Plugin
 
 = 1.10.14 =
 Added error logging to the plugin

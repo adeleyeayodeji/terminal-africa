@@ -83,7 +83,9 @@ trait Assets
                 'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL,
                 'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
                 //check if cart item is empty
-                'is_cart_empty' => empty($cart_item) ? 'yes' : 'no'
+                'is_cart_empty' => empty($cart_item) ? 'yes' : 'no',
+                'terminal_user_carrier_shipment_timeline' => get_option('terminal_user_carrier_shipment_timeline', 'false'),
+                'update_user_carrier_shipment_rate_terminal' => get_option('update_user_carrier_shipment_rate_terminal', 'false'),
             ));
 
             //check if checkiut page
@@ -164,7 +166,8 @@ trait Assets
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
-            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', '')
+            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'multicurrency' => self::wooMulticurrency(),
         ));
     }
 
@@ -227,6 +230,27 @@ trait Assets
     }
 
     /**
+     * WooCommerce Multi Currency 
+     * check if multi currency is available
+     */
+    public static function wooMulticurrency()
+    {
+        //check if multi currency class exist 'WOOMULTI_CURRENCY'
+        if (!class_exists('WOOMULTI_CURRENCY')) {
+            return [];
+        }
+        $data = get_option('woo_multi_currency_params', array());
+        //$rate
+        $rate = [];
+        //loop through the currency
+        foreach ($data["currency"] as $key => $value) {
+            $var = [$data["currency_rate"][$key], $data["currency_rate_fee"][$key]];
+            $rate[$value] = $var;
+        }
+        return $rate[get_woocommerce_currency()];
+    }
+
+    /**
      * Fluid checkout override style
      */
     public static function fluid_checkout_override_style()
@@ -270,6 +294,16 @@ trait Assets
     {
         ob_start();
         require TERMINAL_AFRICA_PLUGIN_PATH . '/templates/parts/header.php';
+        return ob_get_clean();
+    }
+
+    //get template part
+    public static function getTerminalPart($template, $args = [])
+    {
+        ob_start();
+        //extract args
+        extract($args);
+        require TERMINAL_AFRICA_PLUGIN_PATH . "/templates/parts/$template.php";
         return ob_get_clean();
     }
 

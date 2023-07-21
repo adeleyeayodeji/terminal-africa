@@ -143,6 +143,12 @@ class TerminalAfricaShippingPlugin
         //add ajax terminal_reset_carriers_data
         add_action('wp_ajax_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
         add_action('wp_ajax_nopriv_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
+        //ajax update_user_carrier_shipment_timeline_terminal
+        add_action('wp_ajax_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
+        add_action('wp_ajax_nopriv_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
+        //ajax update_user_carrier_shipment_rate_terminal
+        add_action('wp_ajax_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
+        add_action('wp_ajax_nopriv_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
     }
 
     /**

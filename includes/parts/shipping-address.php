@@ -36,6 +36,8 @@ trait Shipping
                 //return data
                 return $data;
             }
+            //logTerminalErrorData
+            logTerminalErrorData($response->body, self::$enpoint . 'countries');
             return [];
         } catch (\Exception $e) {
             logTerminalError($e, self::$enpoint . 'countries');
@@ -83,6 +85,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'states?country_code=' . $countryCode);
                 //
                 return [
                     'code' => $response->status_code,
@@ -153,6 +157,11 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'cities?' . http_build_query([
+                    'country_code' => $countryCode,
+                    'state_code' => $state_code,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -273,6 +282,19 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'addresses?' . http_build_query([
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'line1' => $line_1,
+                    'line2' => $line_2,
+                    'city' => $city,
+                    'state' => $state,
+                    'country' => $country,
+                    'zip' => $zip_code,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -353,6 +375,19 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'addresses/' . $merchant_address_id . '?' . http_build_query([
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'line1' => $line_1,
+                    'line2' => $line_2,
+                    'city' => $city,
+                    'state' => $state,
+                    'country' => $country,
+                    'zip' => $zip_code,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -416,6 +451,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'parcels' . "?" . http_build_query($body));
                 //
                 return [
                     'code' => $response->status_code,
@@ -469,6 +506,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'parcels' . "/" . $parcel_id . "?" . http_build_query($body));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -518,6 +557,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'parcels' . "/" . $parcel_id);
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -575,6 +616,13 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'shipments' . "?" . http_build_query([
+                    'address_from' => $address_from,
+                    'address_to' => $address_to,
+                    'parcel' => $parcel_id,
+                    'source' => 'wordpress'
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -655,6 +703,15 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'rates/shipment' . "?" . http_build_query([
+                    'shipment_id' => $shipment_id,
+                    'merchant_address_id' => $merchant_address_id,
+                    'customer_address_id' => $customer_address_id,
+                    'parcel' => $parcel,
+                    'source' => 'wordpress',
+                    'currency' => get_woocommerce_currency(),
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -727,6 +784,8 @@ trait Shipping
                     'from' => 'api',
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'rates/' . $rate_id);
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -870,6 +929,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'users/wallet?' . http_build_query(['user_id' => $user_id]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -934,6 +995,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'carriers?' . http_build_query(['type' => $type]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -999,6 +1062,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'carriers/multiple/enable?' . http_build_query(['carriers' => $newconverted]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1051,6 +1116,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'carriers/multiple/enable?' . http_build_query($carriers));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1116,6 +1183,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'carriers/multiple/disable?' . http_build_query(['carriers' => $newconverted]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1169,6 +1238,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'carriers/multiple/disable?' . http_build_query($carriers));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1246,6 +1317,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'packaging');
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1318,6 +1391,18 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'packaging?' . http_build_query([
+                    "height" => 1,
+                    "length" => 47,
+                    "name" => "DHL Express Large Flyer",
+                    "size_unit" => "cm",
+                    "type" => "soft-packaging",
+                    "user" => $terminal_africa_merchant_id,
+                    "weight" => 0.1,
+                    "weight_unit" => "kg",
+                    "width" => 38
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1375,6 +1460,8 @@ trait Shipping
                         'packaging_id' => $create['data']->packaging_id
                     ];
                 } else {
+                    //logTerminalErrorData
+                    logTerminalErrorData($response->body, self::$endpoint . 'packaging/' . $packaging_id);
                     return [
                         'code' => 404,
                         'message' => "Unable to create default packaging",
@@ -1432,6 +1519,11 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'shipments/pickup?' . http_build_query([
+                    "shipment_id" => $shipment_id,
+                    "rate_id" => $rate_id,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1479,6 +1571,8 @@ trait Shipping
                     'shipment_info' => $body->data
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'shipments/' . $shipment_id);
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1538,6 +1632,8 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'users/carriers?type=' . $type);
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1593,6 +1689,10 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'shipments/cancel?' . http_build_query([
+                    "shipment_id" => $shipment_id,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -1653,6 +1753,10 @@ trait Shipping
                     'data' => $data,
                 ];
             } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'users/default-currency?' . http_build_query([
+                    "currency" => $currency_code,
+                ]));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,

@@ -1443,4 +1443,66 @@ trait Ajax
             ]);
         }
     }
+
+    /**
+     * update_user_carrier_shipment_timeline_terminal
+     */
+    public function update_user_carrier_shipment_timeline_terminal()
+    {
+        try {
+            $nonce = sanitize_text_field($_POST['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+            //status
+            $status = sanitize_text_field($_POST['status']);
+            //update option
+            update_option('terminal_user_carrier_shipment_timeline', $status);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Shipment timeline updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * update_user_carrier_shipment_rate_terminal
+     */
+    public function update_user_carrier_shipment_rate_terminal()
+    {
+        try {
+            $nonce = sanitize_text_field($_POST['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+            //status
+            $status = sanitize_text_field($_POST['status']);
+            //update option
+            update_option('update_user_carrier_shipment_rate_terminal', $status);
+            //return
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Shipment rate updated successfully',
+            ]);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
 }

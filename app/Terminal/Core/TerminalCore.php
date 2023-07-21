@@ -242,4 +242,68 @@ class TerminalCore
             return false;
         }
     }
+
+    /**
+     * Error logs for non exceptions data
+     * @param string $endpoint
+     * @return bool
+     */
+    public function logTerminalErrorData($data, $endpoint = 'none')
+    {
+        try {
+            //get wc current user city
+            $city = get_option('woocommerce_store_city');
+            //get wc current user state
+            $countrystate = get_option('woocommerce_default_country');
+            $state = explode(':', $countrystate)[1];
+            //get wc current user country
+            $country = explode(':', $countrystate)[0];
+            //get merchant id
+            $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
+            //terminal_africa_settings
+            $terminal_africa_settings = get_option('terminal_africa_settings');
+            //request to terminal africa api
+            $response = wp_remote_post('https://api.terminal.africa/v1/error-log', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode([
+                    'endpoint' => $endpoint,
+                    'data_sent' => [
+                        'city' => $city,
+                        'state' => $state,
+                        'country' => $country,
+                    ],
+                    'page' => $_SERVER['REQUEST_URI'],
+                    'user_id' => $terminal_africa_merchant_id,
+                    'platform' => 'wordpress',
+                    'metadata' => [
+                        'data' => $data,
+                        'terminal_africa_settings' => $terminal_africa_settings,
+                        'wordpress_user_id' => get_current_user_id(),
+                        'admin_email' => get_option('admin_email'),
+                        'site_url' => get_site_url(),
+                        'site_name' => get_bloginfo('name'),
+                        'site_description' => get_bloginfo('description'),
+                    ],
+                ]),
+            ]);
+            //check if response is not an error
+            if (is_wp_error($response)) {
+                //store
+                error_log($response->get_error_message());
+            }
+            //check if response is not 200
+            if (wp_remote_retrieve_response_code($response) != 200) {
+                //store
+                error_log(wp_remote_retrieve_response_message($response));
+            }
+            //return true
+            return true;
+        } catch (\Exception $e) {
+            //log error
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }

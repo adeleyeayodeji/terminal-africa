@@ -295,3 +295,18 @@ if (!function_exists('terminal_param')) {
         return isset($request[$param]) ? $request[$param] : $default;
     }
 }
+
+
+//getTerminalTemplatePart
+if (!function_exists('getTerminalTemplatePart')) {
+    //get terminal part
+    /**
+     * @param $part
+     * @param $args
+     * @return mixed
+     */
+    function getTerminalTemplatePart($part, $args = [])
+    {
+        return TerminalAfricaShippingPlugin::getTerminalPart($part, $args);
+    }
+}

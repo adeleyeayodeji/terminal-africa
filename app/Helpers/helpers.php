@@ -80,3 +80,18 @@ if (!function_exists('logTerminalError')) {
         return $terminal_core->logTerminalError($e, $endpoint);
     }
 }
+
+//check if function exists
+/**
+ * Log terminal error
+ * @param $data
+ * @param string $endpoint
+ * @return bool
+ */
+if (!function_exists('logTerminalErrorData')) {
+    function logTerminalErrorData($data, $endpoint = 'none')
+    {
+        $terminal_core = new TerminalCore();
+        return $terminal_core->logTerminalErrorData($data, $endpoint);
+    }
+}
