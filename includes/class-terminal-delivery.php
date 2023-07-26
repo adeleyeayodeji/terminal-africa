@@ -510,6 +510,20 @@ class WC_Terminal_Delivery
             'clear' => true,
             'priority' => 80,
         );
+        //haystack
+        $haystack = apply_filters('active_plugins', get_option('active_plugins'));
+        //use in array check
+        if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', $haystack)) {
+            //return and stop here for checkout wc
+            return $fields;
+        } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', $haystack)) {
+            //return and stop here for checkout wc
+            return $fields;
+        } else if (in_array('fluid-checkout/fluid-checkout.php', $haystack)) {
+            //return and stop here for fluid checkout
+            return $fields;
+        }
+        //continue for woocommerce native checkout
 
         //Shipping
         //enable first name

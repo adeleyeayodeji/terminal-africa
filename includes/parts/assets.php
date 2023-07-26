@@ -195,7 +195,8 @@ trait Assets
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
-            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', '')
+            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'multicurrency' => self::wooMulticurrency()
         ));
     }
 
@@ -225,7 +226,8 @@ trait Assets
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
-            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', '')
+            'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'multicurrency' => self::wooMulticurrency()
         ));
     }
 
