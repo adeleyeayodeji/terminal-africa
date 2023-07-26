@@ -537,7 +537,14 @@ trait Ajax
             // $phone = preg_replace('/[^0-9\+]/', '', $phone);
             // $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
             $email = sanitize_text_field($_POST['email']);
+            //check if line_1 is greater than 45 characters
             $line_2 = "";
+            if (strlen($line_1) > 45) {
+                //break to line_2
+                $line_2 = substr($line_1, 45);
+                //remove the 45 character
+                $line_1 = substr($line_1, 0, 45);
+            }
             //check if merchant_address_id is set
             $merchant_address_id = get_option('terminal_africa_merchant_address_id');
             if (!empty($merchant_address_id)) {
