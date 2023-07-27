@@ -238,10 +238,12 @@ trait Assets
      */
     public static function wooMulticurrency()
     {
-        //check if multi currency class exist 'WOOMULTI_CURRENCY'
-        if (!class_exists('WOOMULTI_CURRENCY')) {
+        //check if multi currency class exist 'WOOMULTI_CURRENCY' or 'WOOMULTI_CURRENCY_F'
+        if (!class_exists('WOOMULTI_CURRENCY') && !class_exists('WOOMULTI_CURRENCY_F')) {
+            // Multi-currency class doesn't exist, return []
             return [];
         }
+        //check if multi currency freemium exist
         $data = get_option('woo_multi_currency_params', array());
         //$rate
         $rate = [];
@@ -250,6 +252,8 @@ trait Assets
             $var = [$data["currency_rate"][$key], $data["currency_rate_fee"][$key]];
             $rate[$value] = $var;
         }
+        //log
+        // file_put_contents(__DIR__ . '/log.txt', json_encode($rate[get_woocommerce_currency()]));
         return $rate[get_woocommerce_currency()];
     }
 
