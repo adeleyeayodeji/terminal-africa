@@ -1385,9 +1385,9 @@ trait Ajax
                 ]);
             }
             //data
-            $currency_code = sanitize_text_field($_POST['currency_code']);
+            $currency_code = sanitize_text_field($_POST['currency_code']) ?: "NGN";
             //isoCode
-            $isoCode = sanitize_text_field($_POST['isocode']);
+            $isoCode = sanitize_text_field($_POST['isocode']) ?: "NG";
             //update default currency code on terminal server
             $update_default_currency_code = updateDefaultCurrencyCode($currency_code);
             //check if currency code is updated

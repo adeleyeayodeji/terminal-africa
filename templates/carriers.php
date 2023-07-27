@@ -8,7 +8,7 @@ $userCarriersR = getUserCarriers('regional');
 $internationalCarriers = getTerminalCarriers('international');
 $regionalCarriers = getTerminalCarriers('regional');
 $countries = get_terminal_countries();
-$saved_currency = get_option("terminal_default_currency_code", "NGN");
+$saved_currency = get_option("terminal_default_currency_code", ['isoCode' => 'NG', 'currency_code' => 'NGN']);
 //terminal_custom_price_mark_up
 $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '');
 //carriers data array

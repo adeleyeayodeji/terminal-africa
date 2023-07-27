@@ -234,6 +234,7 @@ trait Assets
     /**
      * WooCommerce Multi Currency 
      * check if multi currency is available
+     * @return array
      */
     public static function wooMulticurrency()
     {
@@ -254,6 +255,7 @@ trait Assets
 
     /**
      * Fluid checkout override style
+     * @return void
      */
     public static function fluid_checkout_override_style()
     {
