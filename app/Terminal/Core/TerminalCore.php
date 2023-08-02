@@ -185,17 +185,18 @@ class TerminalCore
     public function logTerminalError($e, $endpoint = 'none')
     {
         try {
-            //get wc current user city
-            $city = get_option('woocommerce_store_city');
-            //get wc current user state
-            $countrystate = get_option('woocommerce_default_country');
-            $state = explode(':', $countrystate)[1];
-            //get wc current user country
-            $country = explode(':', $countrystate)[0];
             //get merchant id
             $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
-            //terminal_africa_settings
-            $terminal_africa_settings = get_option('terminal_africa_settings');
+            //confirm if endpoint is url
+            if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
+                //extract the parsed parameters on the endoint
+                $url_components = parse_url($endpoint);
+                parse_str($url_components['query'], $body);
+                //get url 
+                $endpoint = $url_components['path'];
+            } else {
+                $body = [];
+            }
             //request to terminal africa api
             $response = wp_remote_post('https://api.terminal.africa/v1/error-log', [
                 'headers' => [
@@ -203,11 +204,7 @@ class TerminalCore
                 ],
                 'body' => json_encode([
                     'endpoint' => $endpoint,
-                    'data_sent' => [
-                        'city' => $city,
-                        'state' => $state,
-                        'country' => $country,
-                    ],
+                    'data_sent' => $body,
                     'page' => $_SERVER['REQUEST_URI'],
                     'user_id' => $terminal_africa_merchant_id,
                     'platform' => 'wordpress',
@@ -215,8 +212,6 @@ class TerminalCore
                         'error' => $e->getMessage(),
                         'file' => $e->getFile(),
                         'line' => $e->getLine(),
-                        'terminal_africa_settings' => $terminal_africa_settings,
-                        'wordpress_user_id' => get_current_user_id(),
                         'admin_email' => get_option('admin_email'),
                         'site_url' => get_site_url(),
                         'site_name' => get_bloginfo('name'),
@@ -251,17 +246,18 @@ class TerminalCore
     public function logTerminalErrorData($data, $endpoint = 'none')
     {
         try {
-            //get wc current user city
-            $city = get_option('woocommerce_store_city');
-            //get wc current user state
-            $countrystate = get_option('woocommerce_default_country');
-            $state = explode(':', $countrystate)[1];
-            //get wc current user country
-            $country = explode(':', $countrystate)[0];
             //get merchant id
             $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
-            //terminal_africa_settings
-            $terminal_africa_settings = get_option('terminal_africa_settings');
+            //confirm if endpoint is url
+            if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
+                //extract the parsed parameters on the endoint
+                $url_components = parse_url($endpoint);
+                parse_str($url_components['query'], $body);
+                //get url 
+                $endpoint = $url_components['path'];
+            } else {
+                $body = [];
+            }
             //request to terminal africa api
             $response = wp_remote_post('https://api.terminal.africa/v1/error-log', [
                 'headers' => [
@@ -269,18 +265,12 @@ class TerminalCore
                 ],
                 'body' => json_encode([
                     'endpoint' => $endpoint,
-                    'data_sent' => [
-                        'city' => $city,
-                        'state' => $state,
-                        'country' => $country,
-                    ],
+                    'data_sent' => $body,
                     'page' => $_SERVER['REQUEST_URI'],
                     'user_id' => $terminal_africa_merchant_id,
                     'platform' => 'wordpress',
                     'metadata' => [
-                        'data' => $data,
-                        'terminal_africa_settings' => $terminal_africa_settings,
-                        'wordpress_user_id' => get_current_user_id(),
+                        'response_body' => $data,
                         'admin_email' => get_option('admin_email'),
                         'site_url' => get_site_url(),
                         'site_name' => get_bloginfo('name'),

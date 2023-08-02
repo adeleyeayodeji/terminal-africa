@@ -104,9 +104,6 @@ class TerminalDataParcel {
             }
           }
         }
-      },
-      error: function (xhr, status, error) {
-        console.log(xhr.responseText);
       }
     });
   }
@@ -151,7 +148,7 @@ class TerminalDataParcel {
       success: (response) => {
         //update woocommerce
         this.jquery(document.body).trigger("update_checkout");
-        // console.log(response);
+        console.log(response);
         setTimeout(() => {
           this.jquery(document.body).trigger("update_checkout");
           // console.log("updated successfully");

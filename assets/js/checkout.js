@@ -275,12 +275,12 @@ function terminalsetValue2(elem) {
           });
         }
       },
-      error: function (error) {
+      error: function (xhr, status, error) {
         //swal error
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Something went wrong!",
+          text: "Something went wrong!: " + xhr.responseText,
           footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
@@ -733,12 +733,12 @@ jQuery(document).ready(function ($) {
         localStorage.setItem("terminal_delivery_cities", cities);
         do_terminal_calculation(response.cities);
       },
-      error: function (error) {
+      error: function (xhr, status, error) {
         //swal
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Something went wrong!",
+          text: "Something went wrong!: " + xhr.responseText,
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
           //footer

@@ -125,7 +125,7 @@ jQuery(document).ready(function ($) {
               });
             }
           },
-          error: function (xhr, status, error) {
+          error: function (error) {
             //close loader
             Swal.close();
             //swal error
@@ -133,7 +133,7 @@ jQuery(document).ready(function ($) {
               icon: "error",
 
               title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
+              text: "Something went wrong!",
               confirmButtonColor: "rgb(246 146 32)",
               cancelButtonColor: "rgb(0 0 0)",
               //footer
@@ -254,14 +254,14 @@ jQuery(document).ready(function ($) {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function (error) {
         //close loader
         Swal.close();
         //swal error
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Something went wrong!: " + xhr.responseText,
+          text: "Something went wrong!",
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
           //footer
@@ -421,7 +421,7 @@ jQuery(document).ready(function ($) {
             });
           }
         },
-        error: function (xhr, status, error) {
+        error: function (error) {
           //close loader
           Swal.close();
           //swal error
@@ -429,7 +429,7 @@ jQuery(document).ready(function ($) {
             icon: "error",
 
             title: "Oops...",
-            text: "Something went wrong!: " + xhr.responseText,
+            text: "Something went wrong!",
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
             //footer
@@ -578,7 +578,7 @@ jQuery(document).ready(function ($) {
             });
           }
         },
-        error: function (xhr, status, error) {
+        error: function (error) {
           //close loader
           Swal.close();
           //swal error
@@ -586,7 +586,7 @@ jQuery(document).ready(function ($) {
             icon: "error",
 
             title: "Oops...",
-            text: "Something went wrong!: " + xhr.responseText,
+            text: "Something went wrong!",
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
             //footer
@@ -722,7 +722,7 @@ jQuery(document).ready(function ($) {
               });
             }
           },
-          error: function (xhr, status, error) {
+          error: function (error) {
             //close loader
             Swal.close();
             //swal error
@@ -730,7 +730,7 @@ jQuery(document).ready(function ($) {
               icon: "error",
 
               title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
+              text: "Something went wrong!",
               confirmButtonColor: "rgb(246 146 32)",
               cancelButtonColor: "rgb(0 0 0)",
               //footer
@@ -878,7 +878,7 @@ jQuery(document).ready(function ($) {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function (error) {
         //close loader
         Swal.close();
         //swal error
@@ -886,7 +886,7 @@ jQuery(document).ready(function ($) {
           icon: "error",
 
           title: "Oops...",
-          text: "Something went wrong!: " + xhr.responseText,
+          text: "Something went wrong!",
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
           //footer
@@ -1030,14 +1030,14 @@ let changeTerminalCarrier = (elem, e) => {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function (error) {
         //swal error
         Swal.fire({
           icon: "error",
           title: "Oops...",
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
-          text: "Something went wrong!: " + xhr.responseText,
+          text: "Something went wrong!",
           footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
@@ -1132,12 +1132,12 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function (error) {
         //swal error
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: "Something went wrong!: " + xhr.responseText,
+          text: "Something went wrong!",
           confirmButtonColor: "rgb(246 146 32)",
           cancelButtonColor: "rgb(0 0 0)",
           footer: `
@@ -1267,7 +1267,7 @@ let arrangeTerminalDelivery = (elem, e) => {
             Swal.fire({
               icon: "error",
               title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
+              text: "Something went wrong!",
               confirmButtonColor: "rgb(246 146 32)",
               cancelButtonColor: "rgb(0 0 0)",
               footer: `
@@ -1910,12 +1910,12 @@ jQuery(document).ready(function ($) {
           }
         },
         error: function (error) {
-          // console.log(error);
+          console.log(error);
           //Swal error
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Something went wrong!: " + xhr.responseText,
+            text: "Something went wrong!",
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
             footer: `

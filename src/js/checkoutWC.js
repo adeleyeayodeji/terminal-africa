@@ -501,12 +501,12 @@ let terminalCheckoutWC = {
             })
             .animate({ marginTop: 0 }, 1000);
         },
-        error: function (xhr, status, error) {
+        error: function (error) {
           //swal
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Something went wrong!: " + xhr.responseText,
+            text: "Something went wrong!",
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
             //footer
@@ -1058,12 +1058,12 @@ let terminalCheckoutWC = {
             });
           }
         },
-        error: function (xhr, status, error) {
+        error: function (error) {
           //swal error
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "Something went wrong!: " + xhr.responseText,
+            text: "Something went wrong!",
             footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">

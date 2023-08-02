@@ -1,5 +1,6 @@
-@import url(https://fonts.googleapis.com/css2?family=Lato:wght@100;200;300;400;500;600;700;800&display=swap);
 /* import local Lato font */
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;200;300;400;500;600;700;800&display=swap");
+
 #wpbody {
   /* background: #f4f4f4; */
   background: #f7f8f9;
@@ -9,7 +10,6 @@
   height: 56px;
   margin-bottom: 10px;
 }
-
 .t-container {
   max-width: 100%;
   font-family: Lato, sans-serif;
@@ -134,7 +134,6 @@ a.t-btn {
 .t-right a i.fa-power-off:hover {
   color: #000;
 }
-
 /* centered content .t-content-auth */
 .t-content-auth {
   margin: 0 auto;
@@ -190,8 +189,8 @@ a.t-btn {
   box-shadow: 0 0 5px #e7e7e7;
 }
 
-.t-form-group button[type=submit],
-.t-form-group button[type=button] {
+.t-form-group button[type="submit"],
+.t-form-group button[type="button"] {
   display: block;
   width: 90%;
   margin-top: 0px;
@@ -300,14 +299,14 @@ select.t-form-control:focus {
 }
 
 /* hover button */
-.t-form-group button[type=submit]:hover {
+.t-form-group button[type="submit"]:hover {
   background-color: #f60;
 }
 
 /* floating input */
-.t-form-group input[type=text]:focus ~ label,
-.t-form-group input[type=email]:focus ~ label,
-.t-form-group input[type=password]:focus ~ label {
+.t-form-group input[type="text"]:focus ~ label,
+.t-form-group input[type="email"]:focus ~ label,
+.t-form-group input[type="password"]:focus ~ label {
   color: #000;
   font-size: 12px;
   font-weight: 600;
@@ -320,17 +319,16 @@ select.t-form-control:focus {
 .swal2-image {
   height: 100px;
 }
-
 .swal2-popup.swal2-modal {
   background: #f6f6f6;
 }
 
 .swal2-confirm.swal2-styled {
-  background-color: rgb(246, 146, 32);
+  background-color: rgb(246 146 32);
 }
 
 .swal2-cancel.swal2-styled {
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(0 0 0);
 }
 
 .swal-text {
@@ -345,7 +343,7 @@ select.t-form-control:focus {
 }
 
 .t-font-sign-out:hover {
-  color: rgb(246, 146, 32);
+  color: rgb(246 146 32);
 }
 
 .t-font-sign-out:focus {
@@ -353,14 +351,15 @@ select.t-form-control:focus {
 }
 
 .t-font-sign-out:active {
-  color: rgb(246, 146, 32);
+  color: rgb(246 146 32);
 }
 
 .t-font-sign-out:disabled {
-  color: rgb(246, 146, 32);
+  color: rgb(246 146 32);
 }
 
 .t-display-information {
+  position: -webkit-sticky;
   position: sticky;
   top: 40px;
   overflow: auto;
@@ -380,10 +379,9 @@ select.t-form-control:focus {
   padding: 0px;
   margin: 0px;
 }
-
 .t-display-information p {
   font-family: Lato, sans-serif;
-  color: rgba(0, 0, 0, 0.7019607843);
+  color: #000000b3;
   font-size: 14px;
   font-weight: 300;
   margin: 3px;
@@ -504,7 +502,9 @@ select.t-form-control:focus {
   padding-top: 10px;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__arrow {
   height: 47px;
 }
 
@@ -513,7 +513,8 @@ select.t-form-control:focus {
   border: 1px solid #fff;
 }
 
-.select2-container--default.select2-container--disabled .select2-selection--single:disabled {
+.select2-container--default.select2-container--disabled
+  .select2-selection--single:disabled {
   opacity: 0.5 !important;
 }
 
@@ -550,10 +551,20 @@ a#t-sign-out:focus {
 }
 
 .t-get-started-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   height: auto;
   margin-bottom: 100px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -569,18 +580,24 @@ a#t-sign-out:focus {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: #fff;
-  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 3px 0 rgb(0 0 0 / 10%);
 }
 
 .t-intro-block {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   width: 93%;
   border-radius: 0px 0px 10px 10px;
   background-color: #fff;
-  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 3px 0 rgb(0 0 0 / 10%);
 }
 
 .t-intro-list-block {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   width: 100%;
   margin-top: 0px;
@@ -601,6 +618,9 @@ a#t-sign-out:focus {
   position: relative;
   width: 70%;
   height: auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   padding: 100px;
   padding-top: 0px;
@@ -610,6 +630,7 @@ a#t-sign-out:focus {
 .t-dashboard-intro-list-item.t-products-active {
   border-left: 4px solid #acdeb4;
   background-color: #fff;
+  -webkit-filter: saturate(200%);
   filter: saturate(200%);
 }
 
@@ -618,7 +639,9 @@ a#t-sign-out:focus {
   padding-top: 20px;
   padding-left: 40px;
   background-color: hsla(0, 0%, 93.3%, 0.5);
+  -webkit-filter: saturate(0%);
   filter: saturate(0%);
+  -webkit-transition: border 200ms ease, background-color 400ms ease;
   transition: border 200ms ease, background-color 400ms ease;
   cursor: pointer;
 }
@@ -638,7 +661,6 @@ a#t-sign-out:focus {
 .t-dashboard-intro-icon {
   display: inline-block;
 }
-
 img.t-dashboard-intro-icon {
   max-width: 100%;
   vertical-align: middle;
@@ -731,7 +753,10 @@ img.t-dashboard-intro-icon {
   background-position: 10% 50%;
   background-size: 25px;
   background-repeat: no-repeat;
+  -webkit-transition: -webkit-transform 400ms ease;
+  transition: -webkit-transform 400ms ease;
   transition: transform 400ms ease;
+  transition: transform 400ms ease, -webkit-transform 400ms ease;
   font-family: Lato, sans-serif;
   color: #000;
   font-size: 18px;
@@ -742,6 +767,8 @@ img.t-dashboard-intro-icon {
 }
 
 .t-support-actions-link:hover {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
   transform: scale(1.1);
 }
 
@@ -770,11 +797,9 @@ img.t-dashboard-intro-icon {
 .t-address-info .t-text {
   font-size: 16px !important;
 }
-
 .t-address-info h3 {
   color: #000 !important;
 }
-
 .t-address-info {
   padding-left: 28px;
   padding-right: 30px;
@@ -876,7 +901,6 @@ img.t-dashboard-intro-icon {
 .t-balance-container {
   margin-left: auto;
   margin-right: auto;
-  max-width: -moz-fit-content;
   max-width: fit-content;
   display: flex;
 }
@@ -890,9 +914,15 @@ img.t-dashboard-intro-icon {
   padding: 20px 20px 40px 40px;
   border-radius: 20px;
   background-color: #fff;
-  box-shadow: 2px 2px 4px 1px hsla(0, 0%, 74%, 0.5);
+  box-shadow: 2px 2px 4px 1px hsl(0deg 0% 74% / 50%);
+  -webkit-transform: scale(0.9);
+  -ms-transform: scale(0.9);
   transform: scale(0.9);
+  -webkit-transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
+  transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
   transition: transform 500ms ease, box-shadow 500ms ease;
+  transition: transform 500ms ease, box-shadow 500ms ease,
+    -webkit-transform 500ms ease;
   cursor: pointer;
 }
 
@@ -929,7 +959,7 @@ img.t-dashboard-intro-icon {
   padding: 20px 10px;
   border-radius: 10px;
   background-color: #fff;
-  box-shadow: 1px 1px 3px 0 hsla(0, 0%, 74%, 0.5);
+  box-shadow: 1px 1px 3px 0 hsl(0deg 0% 74% / 50%);
   cursor: pointer;
   -o-object-fit: fill;
   object-fit: fill;
@@ -938,12 +968,20 @@ img.t-dashboard-intro-icon {
 .t-landing-action-link-button:hover {
   transition: 0.2s;
   transition-timing-function: ease-in-out;
-  box-shadow: 2px 2px 3px 1px hsla(0, 0%, 74%, 0.7);
+  box-shadow: 2px 2px 3px 1px hsl(0deg 0% 74% / 70%);
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
   transform: scale(1.1);
 }
 
 .t-wallet-link-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   text-decoration: none;
 }
@@ -974,6 +1012,7 @@ img.t-dashboard-intro-icon {
   background-position: 0% 50%;
   background-size: 20px;
   background-repeat: no-repeat;
+  -webkit-transition: color 400ms ease;
   transition: color 400ms ease;
   font-family: Lato, sans-serif;
   color: #333;
@@ -984,6 +1023,9 @@ img.t-dashboard-intro-icon {
 .t-top-up-wallet-wrapper {
   height: auto;
   padding: 20px 40px 40px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   border-top: 20px solid #acdeb4;
   border-radius: 20px;
@@ -1001,17 +1043,29 @@ img.t-dashboard-intro-icon {
 
 .t-list-item-section {
   position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   width: auto;
   margin-top: 0px;
   margin-bottom: 0px;
   padding: 20px 100px;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   border-top: 1px solid #e4e4e4;
   /* -webkit-filter: saturate(0%);
   filter: saturate(0%); */
+  -webkit-transition: -webkit-filter 400ms ease;
+  transition: -webkit-filter 400ms ease;
   transition: filter 400ms ease;
+  transition: filter 400ms ease, -webkit-filter 400ms ease;
 }
 
 .t-top-up-amount-input {
@@ -1110,8 +1164,12 @@ img.t-dashboard-intro-icon {
   padding: 20px 10px;
   border-radius: 10px;
   background-color: #acdeb4;
-  box-shadow: 1px 1px 3px 0 hsla(0, 0%, 74%, 0.5);
+  box-shadow: 1px 1px 3px 0 hsl(0deg 0% 74% / 50%);
+  -webkit-transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
+  transition: box-shadow 500ms ease, -webkit-transform 500ms ease;
   transition: box-shadow 500ms ease, transform 500ms ease;
+  transition: box-shadow 500ms ease, transform 500ms ease,
+    -webkit-transform 500ms ease;
   font-family: Lato, sans-serif;
   color: #fff;
   font-size: 28px;
@@ -1124,7 +1182,9 @@ img.t-dashboard-intro-icon {
 }
 
 .t-topup-cta-link:hover {
-  box-shadow: 2px 2px 3px 1px hsla(0, 0%, 74%, 0.7);
+  box-shadow: 2px 2px 3px 1px hsl(0deg 0% 74% / 70%);
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
   transform: scale(1.1);
   color: white;
 }
@@ -1149,6 +1209,9 @@ img.t-dashboard-intro-icon {
   margin-top: 0px;
   margin-right: 40px;
   clear: none;
+  -webkit-align-self: auto;
+  -ms-flex-item-align: auto;
+  -ms-grid-row-align: auto;
   align-self: auto;
   -o-object-fit: fill;
   object-fit: fill;
@@ -1163,6 +1226,9 @@ img.t-dashboard-intro-icon {
 .t-confirm-top-up-wallet-block {
   height: auto;
   padding: 40px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
   border-top: 20px solid #f69220;
   border-radius: 20px;
@@ -1204,16 +1270,21 @@ img.t-dashboard-intro-icon {
 .t-bank-details-list-item {
   position: static;
   display: block;
-  width: -moz-fit-content;
   width: fit-content;
   margin-top: 40px;
   margin-bottom: 40px;
   padding: 20px 100px 10px;
   float: none;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   border-top: 1px solid #e4e4e4;
   border-bottom: 1px solid #e4e4e4;
+  -webkit-transition: -webkit-filter 400ms ease;
+  transition: -webkit-filter 400ms ease;
   transition: filter 400ms ease;
+  transition: filter 400ms ease, -webkit-filter 400ms ease;
 }
 
 .t-bank-account-icon {
@@ -1224,6 +1295,8 @@ img.t-dashboard-intro-icon {
   margin-left: auto;
   float: none;
   clear: none;
+  -webkit-align-self: baseline;
+  -ms-flex-item-align: baseline;
   align-self: baseline;
   text-align: center;
   -o-object-fit: fill;
@@ -1326,26 +1399,57 @@ img.t-dashboard-intro-icon {
 
 .t-carrier-region-listing-block {
   position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   margin-bottom: 10px;
   padding: 10px;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   border-bottom: 1px solid #f4f4f4;
 }
 
 .t-carrier-name-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
   flex: 1;
 }
 
 .t-carrier-logo-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   margin-right: 10px;
   padding: 5px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   background-color: #fff;
 }
@@ -1360,11 +1464,24 @@ img.t-dashboard-intro-icon {
 }
 
 .t-carrier-embed {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   width: 150px;
   height: 50px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
   flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -1396,6 +1513,7 @@ img.t-dashboard-intro-icon {
   right: 0;
   bottom: 0;
   background-color: #ccc;
+  -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
@@ -1407,6 +1525,7 @@ img.t-dashboard-intro-icon {
   left: 4px;
   bottom: 4px;
   background-color: white;
+  -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
@@ -1419,6 +1538,8 @@ input:focus + .t-slider {
 }
 
 input:checked + .t-slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
 

@@ -435,7 +435,7 @@ trait Ajax
             foreach ($cart_item as $item) {
                 $data_items[] = [
                     'name' => $item['data']->get_name(),
-                    'quantity' => $item['quantity'],
+                    'quantity' => intval($item['quantity']) ?: 1,
                     'value' => $item['line_total'],
                     'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
                     'type' => 'parcel',
