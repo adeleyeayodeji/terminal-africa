@@ -76,6 +76,8 @@ class TerminalLogHandler
     public static function terminalLoggerHandler($path = 'plugin')
     {
         try {
+            //get user data
+            $userData = self::getUserData();
             //site url
             $site_url = site_url();
             $domain = parse_url($site_url, PHP_URL_HOST);
@@ -89,7 +91,7 @@ class TerminalLogHandler
                     'email' => get_bloginfo('admin_email'),
                     'domain' => $domain,
                     'platform' => 'wordpress'
-                ])
+                ] + $userData)
             );
             //silent is golden
         } catch (\Exception $e) {
@@ -104,14 +106,68 @@ class TerminalLogHandler
     }
 
     /**
+     * Get Terminal User Data
+     * @return array
+     */
+    public static function getUserData()
+    {
+        try {
+            // get user data
+            $userData = get_option('terminal_africa_settings', []);
+            //check if user data is available
+            if (!empty($userData)) {
+                //get the raw user data 
+                $raw = $userData['others']->user;
+                //prepare data for logging
+                $data = [
+                    'user_id' => $raw->user_id,
+                    'first_name' => $raw->first_name,
+                    'last_name' => $raw->last_name,
+                    'email' => $raw->email,
+                ];
+            } else {
+                //prepare default data for logging
+                $data = [
+                    'user_id' => 0,
+                    'first_name' => "Site",
+                    'last_name' => "Administrator",
+                    'email' => get_bloginfo('admin_email'),
+                ];
+            }
+            //return data
+            return $data;
+        } catch (\Exception $e) {
+            //log error
+            //check if function exists
+            if (function_exists('logTerminalError')) {
+                //log error
+                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find');
+            }
+            //log error
+            error_log($e->getMessage());
+            //return default data
+            $data = [
+                'user_id' => 0,
+                'first_name' => "Site",
+                'last_name' => "Administrator",
+                'email' => get_bloginfo('admin_email'),
+            ];
+            //return
+            return $data;
+        }
+    }
+
+    /**
      * Check if plugin already logged
      * @since version 1.10.3
      */
     public static function checkIfPluginAlreadyLogged()
     {
         try {
+            $userData = self::getUserData();
             //site url
             $site_url = site_url();
+            //get the domain
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
             $response = Requests::post(
@@ -120,10 +176,9 @@ class TerminalLogHandler
                     'Content-Type' => 'application/json'
                 ],
                 json_encode([
-                    'email' => get_bloginfo('admin_email'),
                     'domain' => $domain,
                     'platform' => 'wordpress'
-                ])
+                ] + $userData)
             );
             //get response
             $response = json_decode($response->body);

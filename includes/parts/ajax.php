@@ -31,6 +31,7 @@ trait Ajax
             }
             //validate keys
             $validate_keys = $this->checkKeys($public_key, $secret_key);
+            //send request
             $response = Requests::get($validate_keys["endpoint"] . "users/secrete", [
                 'Authorization' => 'Bearer ' . $secret_key
             ]);
@@ -44,6 +45,7 @@ trait Ajax
                     'user_id' => $body->data->user->user_id,
                     'others' => $body->data
                 );
+                // Save settings
                 update_option('terminal_africa_settings', $settings);
                 //terminal_africa_merchant_id
                 update_option('terminal_africa_merchant_id', $body->data->user->user_id);

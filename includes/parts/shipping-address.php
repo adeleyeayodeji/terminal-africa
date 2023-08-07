@@ -659,17 +659,23 @@ trait Shipping
             $currency = get_woocommerce_currency();
             //allowed currencies
             /*
-            NGN. Available options are AED, AUD, CAD, CNY, EUR, GBP, GHS, HKD, KES, NGN, TZS, UGX, USD, ZAR.
-        */
+                NGN. Available options are AED, AUD, CAD, CNY, EUR, GBP, GHS, HKD, KES, NGN, TZS, UGX, USD, ZAR.
+            */
             $allowed_currencies =  ['AED', 'AUD', 'CAD', 'CNY', 'EUR', 'GBP', 'GHS', 'HKD', 'KES', 'NGN', 'TZS', 'UGX', 'USD', 'ZAR'];
             //check if currency is allowed
             if (!in_array($currency, $allowed_currencies)) {
                 //set default usd
                 $currency = 'USD';
             }
+            //site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
             //query
             $query = [
                 'currency' => $currency,
+                'source' => "wordpress",
+                'domain' => $domain
             ];
             //check if merchant address id is set
             if ($merchant_address_id && $customer_address_id && $parcel) {

@@ -21,10 +21,12 @@ class TerminalAfricaShippingPlugin
     public static $skkey;
     /**
      * ~Deprecated~ property - please use <s>$endpoint</s> instead.
+     * @since 1.10.19
      */
     public static $enpoint;
     /**
      * Get Terminal Endpoint
+     * @since 1.10.19
      */
     public static $endpoint;
     public static $plugin_mode;
