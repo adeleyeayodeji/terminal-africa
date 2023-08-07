@@ -1262,19 +1262,23 @@ let arrangeTerminalDelivery = (elem, e) => {
               }
             }
           },
-          error: function (error) {
+          error: function (xhr, status, error) {
+            //close loader
+            Swal.close();
             //swal error
             Swal.fire({
               icon: "error",
+
               title: "Oops...",
               text: "Something went wrong!: " + xhr.responseText,
               confirmButtonColor: "rgb(246 146 32)",
               cancelButtonColor: "rgb(0 0 0)",
+              //footer
               footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
             });
           }
         });
@@ -1909,20 +1913,23 @@ jQuery(document).ready(function ($) {
             });
           }
         },
-        error: function (error) {
-          // console.log(error);
-          //Swal error
+        error: function (xhr, status, error) {
+          //close loader
+          Swal.close();
+          //swal error
           Swal.fire({
             icon: "error",
+
             title: "Oops...",
             text: "Something went wrong!: " + xhr.responseText,
             confirmButtonColor: "rgb(246 146 32)",
             cancelButtonColor: "rgb(0 0 0)",
+            //footer
             footer: `
-            <div>
-              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-            </div>
-          `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
           });
         }
       });
@@ -2337,11 +2344,11 @@ jQuery(document).ready(function ($) {
           });
         }
       },
-      error: function (error) {
+      error: function (xhr, status, error) {
         iziToast.error({
           theme: "dark",
           title: "Error",
-          message: "Something went wrong",
+          message: "Something went wrong!: " + xhr.responseText,
           position: "topCenter",
           progressBarColor: "rgb(246 146 32)",
           transitionIn: "fadeInDown"

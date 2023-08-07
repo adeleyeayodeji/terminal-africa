@@ -19,7 +19,14 @@ class TerminalAfricaShippingPlugin
 {
     //skkey
     public static $skkey;
+    /**
+     * ~Deprecated~ property - please use <s>$endpoint</s> instead.
+     */
     public static $enpoint;
+    /**
+     * Get Terminal Endpoint
+     */
+    public static $endpoint;
     public static $plugin_mode;
 
     use Menus, Ajax, Shipping, Activation, Assets;
@@ -32,10 +39,14 @@ class TerminalAfricaShippingPlugin
             self::$skkey = $settings["secret_key"];
             $validate_keys = $this->checkKeys($settings["public_key"], $settings["secret_key"]);
             self::$enpoint = $validate_keys['endpoint'];
+            //set the value
+            self::$endpoint = $validate_keys['endpoint'];
             self::$plugin_mode = $validate_keys['mode'];
         } else {
             self::$skkey = null;
             self::$enpoint = null;
+            //set the value
+            self::$endpoint = null;
             self::$plugin_mode = null;
         }
     }
