@@ -86,6 +86,7 @@ trait Assets
                 'is_cart_empty' => empty($cart_item) ? 'yes' : 'no',
                 'terminal_user_carrier_shipment_timeline' => get_option('terminal_user_carrier_shipment_timeline', 'false'),
                 'update_user_carrier_shipment_rate_terminal' => get_option('update_user_carrier_shipment_rate_terminal', 'false'),
+                'terminal_autoload_merchant_address' => get_option('terminal_autoload_merchant_address', [])
             ));
 
             //check if checkiut page
@@ -132,6 +133,9 @@ trait Assets
                     //wc checkout asset core
                     self::checkoutWCAssetCore();
                 }
+
+                //enqueue_extension_frontend_script
+                self::enqueue_extension_frontend_script();
             }
         }
     }
@@ -229,6 +233,15 @@ trait Assets
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
             'multicurrency' => self::wooMulticurrency()
         ));
+    }
+
+    /**
+     * enqueue_extension_frontend_script
+     */
+    public static function enqueue_extension_frontend_script()
+    {
+        //enqueue extension scripts
+        wp_enqueue_script('terminal-africa-extension-native-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/extension/native-checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
     }
 
     /**

@@ -1,3 +1,7 @@
+////////////////////////////// Terminal Africa Checkout ////////////////////////////
+/// This is for the fluidCheckout wordpress plugin and its checkout page integration
+////////////////////////////////////////////////////////////
+
 /**
  * Fluid extension for terminal shipment plugin
  */

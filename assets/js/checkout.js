@@ -1,4 +1,12 @@
 ////////////////////////////// Terminal Africa Checkout ////////////////////////////
+/// This is for the core woocommerce plugin and the native checkout page and woocommerce checkout plugin 'Cartflow'.
+////////////////////////////////////////////////////////////
+
+/**
+ * updateCoreWoocommerceElements
+ * @param {*} state
+ * @param {*} finaltext
+ */
 let updateCoreWoocommerceElements = (state = "", finaltext = "") => {
   jQuery(document).ready(function ($) {
     //find select[name='billing_state'] option with value and set it to selected
@@ -36,6 +44,10 @@ let updateCoreWoocommerceElements = (state = "", finaltext = "") => {
   });
 };
 
+/**
+ * terminalsetValue2
+ * @param {*} elem
+ */
 function terminalsetValue2(elem) {
   jQuery(document).ready(function ($) {
     var lga = $(elem).val();
@@ -293,7 +305,13 @@ function terminalsetValue2(elem) {
   });
 }
 
-//get Woocommerce state select
+/**
+ * wooSelectElementOptions
+ *
+ * get Woocommerce state select
+ *
+ * @param {*} $
+ */
 let wooSelectElementOptions = ($) => {
   //data option
   var data_options = {
@@ -343,6 +361,11 @@ let wooSelectElementOptions = ($) => {
 
 /////// EVENT //////////////////////////////////
 
+/**
+ * do_terminal_calculation
+ * @param {*} datas
+ * @param {*} selected
+ */
 let do_terminal_calculation = (datas, selected = "") => {
   jQuery(document).ready(function ($) {
     //check data count
@@ -413,7 +436,11 @@ let do_terminal_calculation = (datas, selected = "") => {
   });
 };
 
-//overide submit button
+/**
+ * terminalButton
+ *
+ * overide submit button
+ */
 let terminalButton = () => {
   jQuery(document).ready(function ($) {
     //Check if shipping is enabled by woocommerce
@@ -554,6 +581,9 @@ let terminalButton = () => {
   });
 };
 
+/**
+ * restoreCarriers
+ */
 let restoreCarriers = () => {
   jQuery(document).ready(function ($) {
     //check if local storage is not empty
@@ -592,6 +622,9 @@ let restoreCarriers = () => {
   });
 };
 
+/**
+ * clearCurrentFields
+ */
 let clearCurrentFields = () => {
   jQuery(document).ready(function ($) {
     //set timeout

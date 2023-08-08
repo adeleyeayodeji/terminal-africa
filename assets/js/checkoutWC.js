@@ -1,6 +1,10 @@
 ////////////////////////////// Terminal Africa Checkout ////////////////////////////
+/// This is for the checkoutWC wordpress plugin and its checkout page integration
+////////////////////////////////////////////////////////////
 let terminalCheckoutWC = {
-  //init
+  /**
+   * init
+   */
   init: () => {
     jQuery(function ($) {
       //Check if shipping is enabled by woocommerce
@@ -154,7 +158,13 @@ let terminalCheckoutWC = {
       shippingCity.val("");
     });
   },
-  //country change
+  /**
+   * countryOnChange
+   *
+   * country change
+   * @param {*} elem
+   * @param {*} e
+   */
   countryOnChange: (elem, e) => {
     jQuery(document).ready(function ($) {
       e.preventDefault();
@@ -248,7 +258,13 @@ let terminalCheckoutWC = {
       });
     });
   },
-  //save terminal cart
+  /**
+   * initCartData
+   *
+   * save terminal cart
+   * @param {*} $
+   * @returns
+   */
   initCartData: ($) => {
     //Check if shipping is enabled by woocommerce
     var terminal_delivery_html = $(".Terminal-delivery-logo");
@@ -325,7 +341,11 @@ let terminalCheckoutWC = {
       }
     });
   },
-  //terminalSetShippingCrarrier
+  /**
+   * terminalSetShippingCrarrier
+   * @param {*} elem
+   * @param {*} e
+   */
   terminalSetShippingCrarrier: (elem, e) => {
     e.preventDefault();
     jQuery(document).ready(function ($) {
@@ -434,7 +454,11 @@ let terminalCheckoutWC = {
       });
     });
   },
-  //getLocalGovernments
+  /**
+   * getLocalGovernments
+   * @param {*} country
+   * @param {*} state
+   */
   getLocalGovernments: (country, state) => {
     jQuery(document).ready(function ($) {
       //reset carrier data
@@ -520,7 +544,11 @@ let terminalCheckoutWC = {
       });
     });
   },
-  //restore carriers button
+  /**
+   * restoreCarriers
+   *
+   * restore carriers button
+   */
   restoreCarriers: () => {
     jQuery(document).ready(function ($) {
       //check if local storage is not empty
@@ -547,7 +575,12 @@ let terminalCheckoutWC = {
       }
     });
   },
-  //restore carrier data
+  /**
+   * restoreCarrierData
+   *
+   * restore carrier data
+   * @param {*} e
+   */
   restoreCarrierData: (e) => {
     jQuery(document).ready(function ($) {
       //check if local storage is not empty
@@ -567,7 +600,12 @@ let terminalCheckoutWC = {
       }
     });
   },
-  //reload carrier data
+  /**
+   * reloadCarrierData
+   *
+   * reload carrier data
+   * @param {*} e
+   */
   reloadCarrierData: (e) => {
     e.preventDefault();
     jQuery(document).ready(function ($) {
@@ -611,7 +649,14 @@ let terminalCheckoutWC = {
       $("select[name='shipping_city']").trigger("change");
     });
   },
-  //overide state select
+  /**
+   * overrideStateSelect
+   *
+   * overide state select
+   * @param {*} shippingState
+   * @param {*} $
+   * @returns
+   */
   overrideStateSelect: (shippingState, $) => {
     //data option
     var data_options = {
@@ -653,7 +698,13 @@ let terminalCheckoutWC = {
       data_options
     };
   },
-  //state on change event
+  /**
+   * stateOnChange
+   *
+   * state on change event
+   * @param {*} elem
+   * @param {*} e
+   */
   stateOnChange: (elem, e) => {
     jQuery(function ($) {
       //get country value
@@ -680,7 +731,13 @@ let terminalCheckoutWC = {
       terminalCheckoutWC.getLocalGovernments(country, state);
     });
   },
-  //city on change event
+  /**
+   * cityOnChange
+   *
+   * city on change event
+   * @param {*} elem
+   * @param {*} e
+   */
   cityOnChange: (elem, e) => {
     jQuery(document).ready(function ($) {
       //Check if shipping is enabled by woocommerce
@@ -760,7 +817,13 @@ let terminalCheckoutWC = {
       terminalCheckoutWC.getTerminalShippingRate(customer_details);
     });
   },
-  //get customer details
+  /**
+   * getCustomerDetails
+   *
+   * get customer details
+   * @param {*} $
+   * @returns
+   */
   getCustomerDetails: ($) => {
     //get customer details
     let customer_details = {};
@@ -842,7 +905,10 @@ let terminalCheckoutWC = {
     //return
     return customer_details;
   },
-  //getTerminalShippingRate
+  /**
+   * getTerminalShippingRate
+   * @param {*} customer_details
+   */
   getTerminalShippingRate: (customer_details) => {
     jQuery(function ($) {
       //reset carrier data
@@ -1074,7 +1140,9 @@ let terminalCheckoutWC = {
       });
     });
   },
-  //checkForCarriers
+  /**
+   * checkForCarriers
+   */
   checkForCarriers: function () {
     jQuery(document).ready(function ($) {
       //check if shipment is applied
@@ -1114,7 +1182,11 @@ let terminalCheckoutWC = {
     }
     terminalCheckoutWC.reloadCarrierData(e);
   },
-  //set carrier logo
+  /**
+   * setCarrierLogo
+   *
+   * set carrier logo
+   */
   setCarrierLogo: function () {
     //set interval carrier logo
     setInterval(function () {

@@ -489,6 +489,8 @@ class WC_Terminal_Delivery
             'clear' => true,
             'priority' => 60,
         );
+        //Get default merchant autoload address data
+        $defaultMerchantAddress = get_option('terminal_autoload_merchant_address', []);
         //country
         $fields['billing']['billing_country'] = array(
             'type' => 'country',
@@ -498,6 +500,7 @@ class WC_Terminal_Delivery
             'class' => array('form-row-wide', 'address-field', 'update_totals_on_change'),
             'clear' => true,
             'priority' => 70,
+            'default' => !empty($defaultMerchantAddress) ? $defaultMerchantAddress['country'] : '',
         );
         //state
         $fields['billing']['billing_state'] = array(
@@ -509,6 +512,7 @@ class WC_Terminal_Delivery
             'validate' => array('state'),
             'clear' => true,
             'priority' => 80,
+            'default' => !empty($defaultMerchantAddress) ? $defaultMerchantAddress['state'] : '',
         );
         //haystack
         $haystack = apply_filters('active_plugins', get_option('active_plugins'));
