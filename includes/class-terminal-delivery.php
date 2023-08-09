@@ -132,6 +132,57 @@ class WC_Terminal_Delivery
     }
 
     /**
+     * terminal_autoload_merchant_address
+     * @return mixed
+     */
+    public static function terminal_autoload_merchant_address()
+    {
+        try {
+            //check if php session started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            //check if merchant_address_data is set
+            if (isset($_SESSION['terminal_africa_merchant_address_data'])) {
+                return $_SESSION['terminal_africa_merchant_address_data'];
+            }
+
+            //get merchant_address_id
+            $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+            //check if merchant_address_id is set
+            if (!$merchant_address_id) {
+                return [];
+            }
+
+            //get merchant address data
+            $merchant_address_data = getTerminalAddressById($merchant_address_id);
+            //check if code is 200
+            if ($merchant_address_data['code'] == 200) {
+                $data = $merchant_address_data['data'];
+                //get availables cities for the merchant address
+                $available_cities = get_terminal_cities($data->country, $data->state_code);
+                //mdata
+                $mdata = [
+                    'country' => $data->country,
+                    'state' => $data->state_code,
+                    'city' => $data->city,
+                    'zip' => $data->zip,
+                    'cities' => $available_cities['data'],
+                ];
+                //save to session
+                $_SESSION['terminal_africa_merchant_address_data'] = $mdata;
+                //return merchant_address_data
+                return $mdata;
+            }
+            //return empty array if nothing found
+            return [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
      * filter_postal_code
      * @return void
      */
@@ -490,7 +541,7 @@ class WC_Terminal_Delivery
             'priority' => 60,
         );
         //Get default merchant autoload address data
-        $defaultMerchantAddress = get_option('terminal_autoload_merchant_address', []);
+        $defaultMerchantAddress = terminal_autoload_merchant_address();
         //country
         $fields['billing']['billing_country'] = array(
             'type' => 'country',
@@ -500,7 +551,7 @@ class WC_Terminal_Delivery
             'class' => array('form-row-wide', 'address-field', 'update_totals_on_change'),
             'clear' => true,
             'priority' => 70,
-            'default' => !empty($defaultMerchantAddress) ? $defaultMerchantAddress['country'] : '',
+            'default' => isset($defaultMerchantAddress['country']) ? $defaultMerchantAddress['country'] : '',
         );
         //state
         $fields['billing']['billing_state'] = array(
@@ -512,7 +563,7 @@ class WC_Terminal_Delivery
             'validate' => array('state'),
             'clear' => true,
             'priority' => 80,
-            'default' => !empty($defaultMerchantAddress) ? $defaultMerchantAddress['state'] : '',
+            'default' => isset($defaultMerchantAddress['state']) ? $defaultMerchantAddress['state'] : '',
         );
         //haystack
         $haystack = apply_filters('active_plugins', get_option('active_plugins'));

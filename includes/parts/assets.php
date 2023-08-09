@@ -86,7 +86,7 @@ trait Assets
                 'is_cart_empty' => empty($cart_item) ? 'yes' : 'no',
                 'terminal_user_carrier_shipment_timeline' => get_option('terminal_user_carrier_shipment_timeline', 'false'),
                 'update_user_carrier_shipment_rate_terminal' => get_option('update_user_carrier_shipment_rate_terminal', 'false'),
-                'terminal_autoload_merchant_address' => get_option('terminal_autoload_merchant_address', [])
+                'terminal_autoload_merchant_address' => terminal_autoload_merchant_address()
             ));
 
             //check if checkiut page

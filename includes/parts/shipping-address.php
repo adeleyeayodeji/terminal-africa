@@ -5,6 +5,7 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
+use phpDocumentor\Reflection\Types\Integer;
 use \WpOrg\Requests\Requests;
 
 trait Shipping
@@ -237,6 +238,55 @@ trait Shipping
         }
     }
 
+    /**
+     * Get Terminal Address Data
+     * @param string $address_id
+     * @return mixed
+     */
+    public static function getAddressById($address_id)
+    {
+        try {
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+            //get address
+            $response  = Requests::get(self::$enpoint . 'addresses/' . $address_id, [
+                'Authorization' => 'Bearer ' . self::$skkey,
+            ]);
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return address data
+                $data = $body->data;
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $data,
+                ];
+            }
+            //logTerminalErrorData
+            logTerminalErrorData($response->body, self::$enpoint . 'addresses/' . $address_id);
+            return [
+                'code' => 404,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'addresses?' . $address_id);
+            //return
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
     //create address
     public static function createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
     {
@@ -249,24 +299,41 @@ trait Shipping
                 ];
             }
 
+            //address fields
+            $addressFields = [
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'phone' => $phone,
+                'line1' => $line_1,
+                'line2' => $line_2,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'zip' => $zip_code,
+            ];
+
+            //check the address fields and remove empty fields
+            foreach ($addressFields as $key => $value) {
+                if (empty($value)) {
+                    unset($addressFields[$key]);
+                }
+                //check key phone and count the number
+                if ($key == 'phone') {
+                    //count the value and remove is length is less 6
+                    if (strlen($value) < 6) {
+                        unset($addressFields[$key]);
+                    }
+                }
+            }
+
             $response = Requests::post(
                 self::$enpoint . 'addresses',
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
                 ],
-                json_encode([
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'line1' => $line_1,
-                    'line2' => $line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'country' => $country,
-                    'zip' => $zip_code,
-                ]),
+                json_encode($addressFields),
                 //time out 60 seconds
                 ['timeout' => 60]
             );
@@ -283,18 +350,7 @@ trait Shipping
                 ];
             } else {
                 //logTerminalErrorData
-                logTerminalErrorData($response->body, self::$enpoint . 'addresses?' . http_build_query([
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'line1' => $line_1,
-                    'line2' => $line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'country' => $country,
-                    'zip' => $zip_code,
-                ]));
+                logTerminalErrorData($response->body, self::$enpoint . 'addresses?' . http_build_query($addressFields));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,
@@ -341,6 +397,35 @@ trait Shipping
                     'data' => [],
                 ];
             }
+
+            //address fields 
+            $addressFields = [
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'email' => $email,
+                'phone' => $phone,
+                'line1' => $line_1,
+                'line2' => $line_2,
+                'city' => $city,
+                'state' => $state,
+                'country' => $country,
+                'zip' => $zip_code,
+            ];
+
+            //check the address fields and remove empty fields
+            foreach ($addressFields as $key => $value) {
+                if (empty($value)) {
+                    unset($addressFields[$key]);
+                }
+                //check key phone and count the number
+                if ($key == 'phone') {
+                    //count the value and remove is length is less 6
+                    if (strlen($value) < 6) {
+                        unset($addressFields[$key]);
+                    }
+                }
+            }
+
             //request 
             $response = Requests::put(
                 self::$enpoint . 'addresses/' . $merchant_address_id,
@@ -348,18 +433,7 @@ trait Shipping
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
                 ],
-                json_encode([
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'line1' => $line_1,
-                    'line2' => $line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'country' => $country,
-                    'zip' => $zip_code,
-                ]), //time out 60 seconds
+                json_encode($addressFields), //time out 60 seconds
                 ['timeout' => 60]
             );
             //decode response
@@ -376,18 +450,7 @@ trait Shipping
                 ];
             } else {
                 //logTerminalErrorData
-                logTerminalErrorData($response->body, self::$enpoint . 'addresses/' . $merchant_address_id . '?' . http_build_query([
-                    'first_name' => $first_name,
-                    'last_name' => $last_name,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'line1' => $line_1,
-                    'line2' => $line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'country' => $country,
-                    'zip' => $zip_code,
-                ]));
+                logTerminalErrorData($response->body, self::$enpoint . 'addresses/' . $merchant_address_id . '?' . http_build_query($addressFields));
                 return [
                     'code' => $response->status_code,
                     'message' => $body->message,

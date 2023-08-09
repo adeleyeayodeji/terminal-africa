@@ -29,6 +29,10 @@ class TerminalNativeWoocommerce {
     this.setCountryDefaultSelection();
     //set the state default based on the state default
     this.setStateDefaultSelection();
+    //set default zip code
+    this.setDefaultZipCode();
+    //initialize the default cities
+    this.initDefaultCities();
   }
 
   /**
@@ -75,6 +79,46 @@ class TerminalNativeWoocommerce {
     }
     // Trigger the Select2 event to update the styled select box
     state.trigger("change.select2");
+  }
+
+  /**
+   * Initialize the default cities
+   */
+  initDefaultCities() {
+    //set the default state cities
+    do_terminal_calculation(this.terminal_autoload_merchant_address["cities"]);
+    //set a delay initialisation to the dom selection due to dom element creation
+    setTimeout(() => {
+      //get the cities element
+      let citiesElement = document.querySelector(
+        "select[name='terminal_custom_shipping_lga2']"
+      );
+      //get the default city
+      let defaultCity = this.terminal_autoload_merchant_address["city"];
+      // set the value of the cities element to the default city
+      citiesElement.value = defaultCity;
+      // Trigger the Select2 event to update the styled select box
+      citiesElement.dispatchEvent(new Event("change"));
+      /////////////// save the cities to local storage ///////////////////
+      //stringify
+      var cities = JSON.stringify(
+        this.terminal_autoload_merchant_address["cities"]
+      );
+      //save to local storage this.terminal_autoload_merchant_address["cities"]
+      localStorage.setItem("terminal_delivery_cities", cities);
+    }, 1000);
+  }
+
+  /**
+   * Set Default Zip Code
+   */
+  setDefaultZipCode() {
+    //get the default
+    let defaultZipCode = this.terminal_autoload_merchant_address["zip"];
+    //get the element
+    let zipCodeElement = this.$('input[name="billing_postcode"]');
+    //set the default zip code
+    zipCodeElement.val(defaultZipCode);
   }
 }
 

@@ -310,3 +310,28 @@ if (!function_exists('getTerminalTemplatePart')) {
         return TerminalAfricaShippingPlugin::getTerminalPart($part, $args);
     }
 }
+
+//TerminalAfrica\Includes\Parts\Shipping::getAddressById
+if (!function_exists('getTerminalAddressById')) {
+    //get address by id
+    /**
+     * @param $address_id
+     * @return mixed
+     */
+    function getTerminalAddressById($address_id)
+    {
+        return TerminalAfricaShippingPlugin::getAddressById($address_id);
+    }
+}
+
+if (!function_exists('terminal_autoload_merchant_address')) {
+    //autoload merchant address
+    /**
+     * @param $address_id
+     * @return mixed
+     */
+    function terminal_autoload_merchant_address()
+    {
+        return WC_Terminal_Delivery::terminal_autoload_merchant_address();
+    }
+}
