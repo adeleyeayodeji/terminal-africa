@@ -138,11 +138,10 @@ class WC_Terminal_Delivery
     public static function terminal_autoload_merchant_address()
     {
         try {
-            //check if php session started
+            //check if session is started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
-
             //check if merchant_address_data is set
             if (isset($_SESSION['terminal_africa_merchant_address_data'])) {
                 return $_SESSION['terminal_africa_merchant_address_data'];
