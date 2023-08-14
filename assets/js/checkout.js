@@ -83,10 +83,15 @@ function terminalsetValue2(elem) {
     // phonecode = phonecode.replace(/[- ]/g, "");
     //remove + and space and special characters form phone
     // phone = phone.replace(/[-+()]/g, "");
-    //check if phone has +
-    if (!phone.includes("+")) {
+    if (phone) {
+      if (!phone.includes("+")) {
+        //check if phone has +
+        //append to phone
+        phone = phonecode + phone;
+      }
+    } else {
       //append to phone
-      phone = phonecode + phone;
+      phone = "";
     }
 
     var line_1 = $('input[name="billing_address_1"]').val();

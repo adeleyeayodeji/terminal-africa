@@ -506,24 +506,7 @@ let terminalCheckoutWC = {
             return;
           }
           //pass data to #shipping_city
-          let content = `
-          <select name="shipping_city" id="shipping_city" class="state_select cfw-no-select2 garlic-auto-save" data-parsley-trigger="keyup change focusout" data-saved-value="CFW_EMPTY" data-parsley-required="true" data-parsley-group="cfw-customer-info" autocomplete="address-level1" data-placeholder="City" data-input-classes="cfw-no-select2" data-label="City" placeholder="City" onchange="terminalCheckoutWC.cityOnChange(this,event)">
-              <option value="">Select City</option>
-               ${response.cities
-                 .map((city) => {
-                   return `<option value="${city.name}">${city.name}</option>`;
-                 })
-                 .join("")}
-          </select>
-          `;
-          //replace with #shipping_city
-          $("#shipping_city").replaceWith(content);
-          //animate from     margin-top: -10px; to margin-top: 0px;
-          $("#shipping_city")
-            .css({
-              marginTop: "-10px"
-            })
-            .animate({ marginTop: 0 }, 1000);
+          terminalCheckoutWC.passCitiesToShippingCity(response.cities);
         },
         error: function (xhr, status, error) {
           //swal
@@ -542,6 +525,35 @@ let terminalCheckoutWC = {
           });
         }
       });
+    });
+  },
+  /**
+   * Pass cities to shipping city
+   * @param {*} cities
+   * @param {*} selected
+   */
+  passCitiesToShippingCity: (cities, selected = "") => {
+    jQuery(document).ready(function ($) {
+      let content = `
+          <select name="shipping_city" id="shipping_city" class="state_select cfw-no-select2 garlic-auto-save" data-parsley-trigger="keyup change focusout" data-saved-value="CFW_EMPTY" data-parsley-required="true" data-parsley-group="cfw-customer-info" autocomplete="address-level1" data-placeholder="City" data-input-classes="cfw-no-select2" data-label="City" placeholder="City" onchange="terminalCheckoutWC.cityOnChange(this,event)">
+              <option value="">Select City</option>
+               ${cities
+                 .map((city) => {
+                   return `<option value="${city.name}" ${
+                     selected == city.name ? "selected" : ""
+                   }>${city.name}</option>`;
+                 })
+                 .join("")}
+          </select>
+          `;
+      //replace with #shipping_city
+      $("#shipping_city").replaceWith(content);
+      //animate from     margin-top: -10px; to margin-top: 0px;
+      $("#shipping_city")
+        .css({
+          marginTop: "-10px"
+        })
+        .animate({ marginTop: 0 }, 1000);
     });
   },
   /**
@@ -789,6 +801,12 @@ let terminalCheckoutWC = {
       }
       //getCustomerDetails
       let customer_details = terminalCheckoutWC.getCustomerDetails($);
+      //append to customer_details
+      customer_details.city = city;
+      //state
+      customer_details.state = state;
+      //country
+      customer_details.country = country;
       //check if customer_details is empty
       if (Object.keys(customer_details).length === 0) {
         //show alert
@@ -805,12 +823,6 @@ let terminalCheckoutWC = {
         //return
         return;
       }
-      //append to customer_details
-      customer_details.city = city;
-      //state
-      customer_details.state = state;
-      //country
-      customer_details.country = country;
       //reset carrier data
       termianlDataParcel.clearCarrierData();
       //get terminal shipping rate
@@ -943,7 +955,7 @@ let terminalCheckoutWC = {
       // phonecode = phonecode.replace(/[- ]/g, "");
       //remove + and space and special characters form phone
       // phone = phone.replace(/[-+()]/g, "");
-      if (!phone.includes("+")) {
+      if (phone && !phone.includes("+")) {
         //append to phone
         phone = phonecode + phone;
       }

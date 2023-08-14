@@ -123,19 +123,24 @@ trait Assets
                 if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', $haystack)) {
                     //filter checkout wc
                     self::checkoutWCAsset();
+                    //enqueue_extension_frontend_script
+                    // self::enqueue_extension_frontend_script_checkoutwc();
                 } else if (in_array('checkoutwc-lite/checkout-for-woocommerce.php', $haystack)) {
                     //filter checkout wc
                     self::checkoutWCAsset();
+                    //enqueue_extension_frontend_script
+                    // self::enqueue_extension_frontend_script_checkoutwc();
                 } else if (in_array('fluid-checkout/fluid-checkout.php', $haystack)) {
                     //filter fluid checkout wc
                     self::fluidCheckoutWCAsset();
+                    //enqueue_extension_frontend_script
+                    self::enqueue_extension_frontend_script_fluidcheckout();
                 } else {
                     //wc checkout asset core
                     self::checkoutWCAssetCore();
+                    //enqueue_extension_frontend_script
+                    self::enqueue_extension_frontend_script();
                 }
-
-                //enqueue_extension_frontend_script
-                self::enqueue_extension_frontend_script();
             }
         }
     }
@@ -242,6 +247,24 @@ trait Assets
     {
         //enqueue extension scripts
         wp_enqueue_script('terminal-africa-extension-native-checkout-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/extension/native-checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+    }
+
+    /**
+     * enqueue_extension_frontend_script checkoutwc
+     */
+    public static function enqueue_extension_frontend_script_checkoutwc()
+    {
+        //enqueue extension scripts
+        wp_enqueue_script('terminal-africa-extension-native-checkout-scripts-checkoutwc', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/extension/checkoutWC.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+    }
+
+    /**
+     * enqueue_extension_frontend_script fluidcheckout
+     */
+    public static function enqueue_extension_frontend_script_fluidcheckout()
+    {
+        //enqueue extension scripts
+        wp_enqueue_script('terminal-africa-extension-native-checkout-scripts-fluidcheckout', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/extension/fluid-checkout.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
     }
 
     /**

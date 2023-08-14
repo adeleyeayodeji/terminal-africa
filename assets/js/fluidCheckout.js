@@ -431,13 +431,17 @@ class FluidCheckoutTerminal {
         .removeClass();
       //check if display is none
       if (this.$("#shipping_postcode_field").css("display") == "none") {
+        //get terminal_default_zip_code
+        var terminal_default_zip_code = localStorage.getItem(
+          "terminal_default_zip_code"
+        );
         //replace with new shipping_postcode_field
         this.$("#shipping_postcode_field").replaceWith(
           `
           <p class="form-row address-field form-row-wide" id="shipping_postcode_field" data-priority="90" data-o_class="form-row " style="display: block;width:100% !important;">
             <label for="shipping_postcode" class="">Postcode&nbsp;<abbr class="required" title="required">*</abbr></label>
             <span class="woocommerce-input-wrapper">
-              <input type="text" class="input-text " name="shipping_postcode" data-autofocus="" required id="shipping_postcode" value="" data-autocomplete="shipping postal-code" autocomplete="shipping postal-code" placeholder="Postcode / ZIP" onfocusout="terminalFluidCheckout.postCodeFocusedOut(event)">
+              <input type="text" class="input-text " name="shipping_postcode" data-autofocus="" required id="shipping_postcode" value="" data-autocomplete="shipping postal-code" autocomplete="shipping postal-code" placeholder="Postcode / ZIP" onfocusout="terminalFluidCheckout.postCodeFocusedOut(event)" value="${terminal_default_zip_code}">
             </span>
           </p>
           `
@@ -795,24 +799,7 @@ class FluidCheckoutTerminal {
           return;
         }
         //pass data to #shipping_city
-        let content = `
-          <select name="shipping_city" id="shipping_city" class="terminal-custom-fluid-added-shipping-city" data-label="City" placeholder="City" onchange="terminalFluidCheckout.cityOnChange(this,event)">
-              <option value="">Select City</option>
-               ${response.cities
-                 .map((city) => {
-                   return `<option value="${city.name}">${city.name}</option>`;
-                 })
-                 .join("")}
-          </select>
-          `;
-        //replace with #shipping_city
-        this.$("#shipping_city").replaceWith(content);
-        //animate from     margin-top: -10px; to margin-top: 0px;
-        this.$("#shipping_city")
-          .css({
-            marginTop: "-10px"
-          })
-          .animate({ marginTop: 0 }, 1000);
+        this.passValuesToCities(response.cities);
       },
       error: (xhr, status, error) => {
         //unblock
@@ -833,6 +820,34 @@ class FluidCheckoutTerminal {
         });
       }
     });
+  }
+
+  /**
+   * Pass values to cities
+   * @param {array} cities
+   * @param {string} selected
+   */
+  passValuesToCities(cities, selected = "") {
+    let content = `
+          <select name="shipping_city" id="shipping_city" class="terminal-custom-fluid-added-shipping-city" data-label="City" placeholder="City" onchange="terminalFluidCheckout.cityOnChange(this,event)">
+              <option value="">Select City</option>
+               ${cities
+                 .map((city) => {
+                   return `<option value="${city.name}" ${
+                     selected == city.name ? 'selected="selected"' : ""
+                   }>${city.name}</option>`;
+                 })
+                 .join("")}
+          </select>
+          `;
+    //replace with #shipping_city
+    this.$("#shipping_city").replaceWith(content);
+    //animate from     margin-top: -10px; to margin-top: 0px;
+    this.$("#shipping_city")
+      .css({
+        marginTop: "-10px"
+      })
+      .animate({ marginTop: 0 }, 1000);
   }
 
   /**
@@ -893,6 +908,12 @@ class FluidCheckoutTerminal {
     }
     //getCustomerDetails
     let customer_details = this.getCustomerDetails();
+    //append to customer_details
+    customer_details.city = city;
+    //state
+    customer_details.state = state;
+    //country
+    customer_details.country = country;
     //check if customer_details is empty
     if (Object.keys(customer_details).length === 0) {
       //show alert
@@ -909,12 +930,6 @@ class FluidCheckoutTerminal {
       //return
       return;
     }
-    //append to customer_details
-    customer_details.city = city;
-    //state
-    customer_details.state = state;
-    //country
-    customer_details.country = country;
     //reset carrier data
     termianlDataParcel.clearCarrierData();
     //get terminal shipping rate
@@ -1032,9 +1047,14 @@ class FluidCheckoutTerminal {
     //remove - and space
     phonecode = phonecode.replace(/[- ]/g, "");
     //remove + and space and special characters form phone
-    phone = phone.replace(/[-+()]/g, "");
-    //append to phone
-    phone = phonecode + phone;
+    if (phone) {
+      phone = phone.replace(/[-+()]/g, "");
+      //append to phone
+      phone = phonecode + phone;
+    } else {
+      //set phone to phonecode
+      phone = "";
+    }
     //get line_1
     let line_1 = customer_details.address;
     //get billing_postcode
