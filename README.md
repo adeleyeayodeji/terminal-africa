@@ -5,7 +5,7 @@ Author URI: http://www.terminal.africa
 Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
-Tested up to: 6.2
+Tested up to: 6.3
 Stable tag: 1.10.22
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
