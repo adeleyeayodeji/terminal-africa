@@ -82,6 +82,7 @@ You can get the API key from your Terminal Africa account. You can create an acc
 = 1.10.22 =
 
 - Fix bugs
+- Added support for wp 6.3
 
 = 1.10.21 =
 
