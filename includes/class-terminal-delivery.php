@@ -138,42 +138,43 @@ class WC_Terminal_Delivery
     public static function terminal_autoload_merchant_address()
     {
         try {
+            return [];
             //check if session is started
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            //check if merchant_address_data is set
-            if (isset($_SESSION['terminal_africa_merchant_address_data'])) {
-                return $_SESSION['terminal_africa_merchant_address_data'];
-            }
+            // if (session_status() == PHP_SESSION_NONE) {
+            //     session_start();
+            // }
+            // //check if merchant_address_data is set
+            // if (isset($_SESSION['terminal_africa_merchant_address_data'])) {
+            //     return $_SESSION['terminal_africa_merchant_address_data'];
+            // }
 
-            //get merchant_address_id
-            $merchant_address_id = get_option('terminal_africa_merchant_address_id');
-            //check if merchant_address_id is set
-            if (!$merchant_address_id) {
-                return [];
-            }
+            // //get merchant_address_id
+            // $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+            // //check if merchant_address_id is set
+            // if (!$merchant_address_id) {
+            //     return [];
+            // }
 
-            //get merchant address data
-            $merchant_address_data = getTerminalAddressById($merchant_address_id);
-            //check if code is 200
-            if ($merchant_address_data['code'] == 200) {
-                $data = $merchant_address_data['data'];
-                //get availables cities for the merchant address
-                $available_cities = get_terminal_cities($data->country, $data->state_code);
-                //mdata
-                $mdata = [
-                    'country' => $data->country,
-                    'state' => $data->state_code,
-                    'city' => $data->city,
-                    'zip' => $data->zip,
-                    'cities' => $available_cities['data'],
-                ];
-                //save to session
-                $_SESSION['terminal_africa_merchant_address_data'] = $mdata;
-                //return merchant_address_data
-                return $mdata;
-            }
+            // //get merchant address data
+            // $merchant_address_data = getTerminalAddressById($merchant_address_id);
+            // //check if code is 200
+            // if ($merchant_address_data['code'] == 200) {
+            //     $data = $merchant_address_data['data'];
+            //     //get availables cities for the merchant address
+            //     $available_cities = get_terminal_cities($data->country, $data->state_code);
+            //     //mdata
+            //     $mdata = [
+            //         'country' => $data->country,
+            //         'state' => $data->state_code,
+            //         'city' => $data->city,
+            //         'zip' => $data->zip,
+            //         'cities' => $available_cities['data'],
+            //     ];
+            //     //save to session
+            //     $_SESSION['terminal_africa_merchant_address_data'] = $mdata;
+            //     //return merchant_address_data
+            //     return $mdata;
+            // }
             //return empty array if nothing found
             return [];
         } catch (\Exception $e) {
