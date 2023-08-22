@@ -162,6 +162,74 @@ class TerminalAfricaShippingPlugin
         //ajax update_user_carrier_shipment_rate_terminal
         add_action('wp_ajax_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
         add_action('wp_ajax_nopriv_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
+        //add new column to shop order page
+        add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
+        //add new column to shop order page
+        add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
+    }
+
+    /**
+     * Add new column to shop order page
+     * @param $columns
+     * @since 1.10.5
+     * @return void
+     */
+    public function terminal_add_new_order_admin_list_column($columns)
+    {
+        $filter = '<span>
+        <img src="' . TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png" style="margin-right: 5px;" alt="" align="left"> Terminal Africa
+        </span>';
+
+        //add column to the second position
+        $columns = array_slice($columns, 0, 2, true) +
+            ['terminal_shipment_status' => $filter] +
+            array_slice($columns, 2, count($columns) - 2, true);
+
+        return $columns;
+    }
+
+    /**
+     * Add new column to shop order page
+     * @param $column
+     * @since 1.10.5
+     * @return void
+     */
+    public function terminal_add_new_order_admin_list_column_content($column, $post_id)
+    {
+        if ('terminal_shipment_status' === $column) {
+            //check if the order status is in processing, on-hold, completed, pending
+            $order = wc_get_order($post_id);
+            //get order status
+            $order_status = $order->get_status();
+            //check if order status is processing, on-hold, completed, pending
+            if (in_array($order_status, ['processing', 'on-hold', 'completed', 'pending'])) {
+                //get terminal shipment status
+                $terminal_shipment_id = get_post_meta($post_id, 'Terminal_africa_shipment_id', true);
+                //rate id
+                $rate_id = get_post_meta($post_id, 'Terminal_africa_rateid', true);
+                //check if terminal_shipment_id is set
+                if (!empty($terminal_shipment_id)) {
+                    //echo terminal_shipment_id
+                    //plugin url
+                    $plugin_url = admin_url('admin.php?page=terminal-africa');
+                    //arg
+                    $arg = array(
+                        'page' => 'terminal-africa',
+                        'action' => 'edit',
+                        'id' => esc_html($terminal_shipment_id),
+                        'order_id' => esc_html($post_id),
+                        'rate_id' => esc_html($rate_id),
+                        'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
+                    );
+                    $plugin_url = add_query_arg($arg, $plugin_url);
+                    //echo woocommerce status button 
+                    echo "<a href='{$plugin_url}' class='button' title='Manage Terminal Shipment' style='font-size: 11px;min-height: 25px;'>Manage Shipment</a>";
+                }
+            } else {
+                //do nothing
+                echo "N/A";
+            }
+        }
     }
 
     /**
