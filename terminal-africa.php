@@ -121,6 +121,7 @@ class WC_Terminal_Delivery_Loader
             include_once dirname(__FILE__) . '/includes/parts/ajax.php';
             include_once dirname(__FILE__) . '/includes/parts/assets.php';
             include_once dirname(__FILE__) . '/includes/parts/activation.php';
+            include_once dirname(__FILE__) . '/includes/parts/api.php';
             include_once dirname(__FILE__) . '/includes/parts/shipping-address.php';
             include_once dirname(__FILE__) . '/includes/class-terminal-africa.php';
             include_once dirname(__FILE__) . '/includes/Helpers/helper.php';

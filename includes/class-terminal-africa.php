@@ -5,6 +5,8 @@ use TerminalAfrica\Includes\Parts\Ajax;
 use TerminalAfrica\Includes\Parts\Shipping;
 use TerminalAfrica\Includes\Parts\Activation;
 use TerminalAfrica\Includes\Parts\Assets;
+use TerminalAfrica\Includes\Parts\TerminalRESTAPI;
+
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 //class
@@ -31,7 +33,7 @@ class TerminalAfricaShippingPlugin
     public static $endpoint;
     public static $plugin_mode;
 
-    use Menus, Ajax, Shipping, Activation, Assets;
+    use Menus, Ajax, Shipping, Activation, Assets, TerminalRESTAPI;
 
     public function __construct()
     {
@@ -166,6 +168,8 @@ class TerminalAfricaShippingPlugin
         add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
         //add new column to shop order page
         add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
+        //initAPI
+        $this->initAPI();
     }
 
     /**
