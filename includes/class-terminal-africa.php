@@ -200,13 +200,19 @@ class TerminalAfricaShippingPlugin
      */
     public function terminal_add_new_order_admin_list_column_content($column, $post_id)
     {
+        global $terminal_allowed_order_statuses;
+        //remove all "wc" in terminal_allowed_order_statuses array
+        $terminal_allowed_order_statuses = array_map(function ($status) {
+            return str_replace('wc-', '', $status);
+        }, $terminal_allowed_order_statuses);
+
         if ('terminal_shipment_status' === $column) {
             //check if the order status is in processing, on-hold, completed, pending
             $order = wc_get_order($post_id);
             //get order status
             $order_status = $order->get_status();
             //check if order status is processing, on-hold, completed, pending
-            if (in_array($order_status, ['processing', 'on-hold', 'completed', 'pending'])) {
+            if (in_array($order_status, ['processing', 'on-hold', 'completed', 'pending', ...$terminal_allowed_order_statuses])) {
                 //get terminal shipment status
                 $terminal_shipment_id = get_post_meta($post_id, 'Terminal_africa_shipment_id', true);
                 //rate id

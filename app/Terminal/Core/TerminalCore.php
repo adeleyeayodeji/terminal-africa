@@ -16,6 +16,8 @@ class TerminalCore
     //get wc orders where shipment_id exist in metal
     public function get_orders()
     {
+        global $terminal_allowed_order_statuses;
+
         try {
             //get query var terminal_page
             $terminal_page = terminal_param('terminal_page', 1);
@@ -34,7 +36,7 @@ class TerminalCore
                 //post type
                 'post_type' => 'shop_order',
                 //post status
-                'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'],
+                'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending', ...$terminal_allowed_order_statuses],
                 //posts per page
                 'posts_per_page' => 10,
                 //page 

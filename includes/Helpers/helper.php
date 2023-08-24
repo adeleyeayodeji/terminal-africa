@@ -335,3 +335,8 @@ if (!function_exists('terminal_autoload_merchant_address')) {
         return WC_Terminal_Delivery::terminal_autoload_merchant_address();
     }
 }
+
+/**
+ * $allowed_order_statuses
+ */
+$GLOBALS['terminal_allowed_order_statuses'] = TerminalAfricaShippingPlugin::$allowed_order_statuses;
