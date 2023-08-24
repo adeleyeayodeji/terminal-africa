@@ -20,12 +20,12 @@ trait TerminalRESTAPI
      * @var array
      */
     public static $allowed_order_statuses = [
-        'wc-shipment-draft',
-        'wc-shipment-cancelled',
-        'wc-shipment-confirmed',
-        'wc-shipment-pending',
-        'wc-shipment-delivered',
-        'wc-shipment-intransit',
+        'wc-tdraft',
+        'wc-tcancelled',
+        'wc-tconfirmed',
+        'wc-tpending',
+        'wc-tdelivered',
+        'wc-tintransit',
     ];
 
     //overide init
@@ -46,7 +46,7 @@ trait TerminalRESTAPI
     {
         //add custom status   
         return $order_statuses + [
-            'wc-shipment-draft'    => array(
+            'wc-tdraft'    => array(
                 'label'                     => _x('Terminal Shipment Draft', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
@@ -55,7 +55,7 @@ trait TerminalRESTAPI
                 /* translators: %s: number of orders */
                 'label_count'               => _n_noop('Terminal Shipment Draft <span class="count">(%s)</span>', 'Terminal Shipment Draft <span class="count">(%s)</span>', 'woocommerce'),
             ),
-            'wc-shipment-cancelled'    => array(
+            'wc-tcancelled'    => array(
                 'label'                     => _x('Terminal Shipment Cancelled', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
@@ -64,7 +64,7 @@ trait TerminalRESTAPI
                 /* translators: %s: number of orders */
                 'label_count'               => _n_noop('Terminal Shipment Cancelled <span class="count">(%s)</span>', 'Terminal Shipment Cancelled <span class="count">(%s)</span>', 'woocommerce'),
             ),
-            'wc-shipment-confirmed'    => array(
+            'wc-tconfirmed'    => array(
                 'label'                     => _x('Terminal Shipment Confirmed', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
@@ -73,8 +73,8 @@ trait TerminalRESTAPI
                 /* translators: %s: number of orders */
                 'label_count'               => _n_noop('Terminal Shipment Confirmed <span class="count">(%s)</span>', 'Terminal Shipment Confirmed <span class="count">(%s)</span>', 'woocommerce'),
             ),
-            'wc-shipment-pending'    => array(
-                'label'                     => _x('Terminal Shipment Pending', 'Order status', 'woocommerce'),
+            'wc-tpending'    => array(
+                'label'                     => _x('Terminal Shipment Pending ℹ️', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
@@ -82,8 +82,8 @@ trait TerminalRESTAPI
                 /* translators: %s: number of orders */
                 'label_count'               => _n_noop('Terminal Shipment Pending <span class="count">(%s)</span>', 'Terminal Shipment Pending <span class="count">(%s)</span>', 'woocommerce'),
             ),
-            'wc-shipment-delivered'    => array(
-                'label'                     => _x('Terminal Shipment Delivered', 'Order status', 'woocommerce'),
+            'wc-tdelivered'    => array(
+                'label'                     => _x('Terminal Shipment Delivered ✅', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
@@ -91,8 +91,8 @@ trait TerminalRESTAPI
                 /* translators: %s: number of orders */
                 'label_count'               => _n_noop('Terminal Shipment Delivered <span class="count">(%s)</span>', 'Terminal Shipment Delivered <span class="count">(%s)</span>', 'woocommerce'),
             ),
-            'wc-shipment-intransit'    => array(
-                'label'                     => _x('Terminal Shipment In Transit', 'Order status', 'woocommerce'),
+            'wc-tintransit'    => array(
+                'label'                     => _x('Terminal Shipment In Transit 🚚', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
@@ -112,18 +112,18 @@ trait TerminalRESTAPI
     {
         //custom status
         $custom_status = [
-            //wc-shipment-draft
-            'wc-shipment-draft' => _x('Terminal Shipment Draft', 'Order status', 'terminal-africa'),
-            //wc-shipment-cancelled
-            'wc-shipment-cancelled' => _x('Terminal Shipment Cancelled', 'Order status', 'terminal-africa'),
-            //wc-shipment-confirmed
-            'wc-shipment-confirmed' => _x('Terminal Shipment Confirmed', 'Order status', 'terminal-africa'),
-            //wc-shipment-pending
-            'wc-shipment-pending' => _x('Terminal Shipment Pending', 'Order status', 'terminal-africa'),
-            //wc-shipment-delivered
-            'wc-shipment-delivered' => _x('Terminal Shipment Delivered', 'Order status', 'terminal-africa'),
-            //wc-shipment-in-transit
-            'wc-shipment-in-transit' => _x('Terminal Shipment In Transit', 'Order status', 'terminal-africa'),
+            //wc-draft
+            'wc-tdraft' => _x('Terminal Shipment Draft', 'Order status', 'terminal-africa'),
+            //wc-cancelled
+            'wc-tcancelled' => _x('Terminal Shipment Cancelled', 'Order status', 'terminal-africa'),
+            //wc-confirmed
+            'wc-tconfirmed' => _x('Terminal Shipment Confirmed', 'Order status', 'terminal-africa'),
+            //wc-pending
+            'wc-tpending' => _x('Terminal Shipment Pending ℹ️', 'Order status', 'terminal-africa'),
+            //wc-delivered
+            'wc-tdelivered' => _x('Terminal Shipment Delivered ✅', 'Order status', 'terminal-africa'),
+            //wc-in-transit
+            'wc-tintransit' => _x('Terminal Shipment In Transit 🚚', 'Order status', 'terminal-africa'),
         ];
         //return
         return array_merge($order_statuses, $custom_status);
