@@ -38,7 +38,7 @@ trait Shipping
                 return $data;
             }
             //logTerminalErrorData
-            logTerminalErrorData($response->body, self::$enpoint . 'countries');
+            // logTerminalErrorData($response->body, self::$enpoint . 'countries');
             return [];
         } catch (\Exception $e) {
             logTerminalError($e, self::$enpoint . 'countries');
