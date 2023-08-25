@@ -2,6 +2,7 @@
 
 namespace TerminalAfrica\Includes\Parts;
 
+use TerminalAfricaShippingPlugin;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -37,6 +38,58 @@ trait TerminalRESTAPI
         add_filter('woocommerce_register_shop_order_post_statuses', [$this, 'add_custom_order_status_v2']);
         //add custom status to wc orders
         add_filter('wc_order_statuses', [$this, 'add_custom_order_status']);
+        //wc new order
+        add_action('woocommerce_new_order', [$this, 'new_order_fcm_notification'], 10, 1);
+        //wc checkout order process
+        add_action('woocommerce_checkout_order_processed', [$this, 'new_order_fcm_notification'], 10, 1);
+        //wc status change
+        add_action('woocommerce_order_status_changed', [$this, 'order_status_changed'], 10, 3);
+    }
+
+    /**
+     * Update order status
+     * @param integer $order_id
+     * @param string $old_status
+     * @param string $new_status
+     */
+    public function order_status_changed($order_id, $old_status, $new_status)
+    {
+        //check if status is cancelled
+        if ($new_status === 'cancelled') {
+            //ping terminal api server as a webhook
+            $this->ping_terminal_api_server($order_id, $new_status);
+        }
+    }
+
+    /**
+     * ping_terminal_api_server
+     * @param integer $order_id
+     * @param string $status
+     */
+    public function ping_terminal_api_server($order_id, $status)
+    {
+        try {
+            //do ping here
+            //TODO
+        } catch (\Exception $e) {
+            //log error
+            $this->log($e->getMessage());
+        }
+    }
+
+    /**
+     * New order fcm notification
+     * @param $order_id
+     */
+    public function new_order_fcm_notification($order_id)
+    {
+        try {
+            //send FCM notification
+            //TODO: send FCM notification to customer device tokens with order id 
+        } catch (\Exception $e) {
+            //log error
+            $this->log($e->getMessage());
+        }
     }
 
     /**
@@ -135,18 +188,37 @@ trait TerminalRESTAPI
     public function register_api()
     {
         //register api
-        register_rest_route('terminal-africa/v1', '/orders', [
-            'methods' => WP_REST_Server::READABLE,
-            'callback' => [$this, 'orders'],
-            'permission_callback' => [$this, 'api_permission']
-        ]);
+        register_rest_route(
+            'terminal-africa/v1',
+            '/orders',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'orders'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
 
         //register update order status
-        register_rest_route('terminal-africa/v1', '/update-order-status', [
-            'methods' => WP_REST_Server::EDITABLE,
-            'callback' => [$this, 'update_order_status'],
-            'permission_callback' => [$this, 'api_permission']
-        ]);
+        register_rest_route(
+            'terminal-africa/v1',
+            '/update-order-status',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_order_status'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
+
+        //order_meta
+        register_rest_route(
+            'terminal-africa/v1',
+            '/order_meta',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_order_meta'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
     }
 
     /**
@@ -220,6 +292,10 @@ trait TerminalRESTAPI
             $date_to = $request->get_param('date_to');
             //customer email
             $customer_email = $request->get_param('customer_email');
+            //orderby
+            $orderby = $request->get_param('orderby');
+            //order
+            $ordermode = $request->get_param('ordermode');
             //get all orders
             $orders = wc_get_orders([
                 'limit' => $limit ?: 10,
@@ -229,9 +305,9 @@ trait TerminalRESTAPI
                 'status' => ['processing', 'completed', 'on-hold', 'pending'],
                 'billing_email' => $customer_email,
                 //order by date
-                'orderby' => 'date',
+                'orderby' => $orderby ?: 'date',
                 //order type
-                'order' => 'ASC',
+                'order' => $ordermode ?: 'ASC',
                 //where order id
                 'include' => [$order_id]
             ]);
@@ -278,9 +354,16 @@ trait TerminalRESTAPI
                         "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1
                     ];
                 }
+                //check if order has Terminal_africa_shipment_id
+                $shipment_id = get_post_meta(
+                    $order_id,
+                    'Terminal_africa_shipment_id',
+                    true
+                );
                 //orders list
                 $orders_list[] = [
                     "id" => $order_id,
+                    "shipment_id" => $shipment_id ?: "none",
                     "products" => $products,
                     "extral" => $order_data,
                 ];
@@ -343,9 +426,12 @@ trait TerminalRESTAPI
                     "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1
                 ];
             }
+            //check if order has Terminal_africa_shipment_id
+            $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
             //orders list
             $orders_list[] = [
                 "id" => $order_id,
+                "shipment_id" => $shipment_id ?: "none",
                 "products" => $products,
                 "extral" => $order_data,
             ];
@@ -433,6 +519,84 @@ trait TerminalRESTAPI
             $response = [
                 "status" => 500,
                 "message" => "Error updating order status",
+                "data" => $e->getMessage(),
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
+    }
+
+    /**
+     * update_order_meta
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function update_order_meta(WP_REST_Request $request)
+    {
+        try {
+            //order id
+            $order_id = $request->get_param('order_id');
+            //order meta
+            $order_meta = $request->get_param('order_meta');
+            //check if the order meta is set
+            if (!$order_meta && is_array($order_meta)) {
+                //response
+                $response = [
+                    "status" => 400,
+                    "message" => "Order meta is required",
+                    "data" => [],
+                ];
+                //return
+                return new WP_REST_Response($response, 400);
+            }
+            //get the order
+            $order = wc_get_order($order_id);
+            //check if the order is set
+            if ($order) {
+                //check if mode is live or test
+                $mode = 'test';
+                //check plugin mode
+                if (self::$plugin_mode) {
+                    $mode = self::$plugin_mode;
+                }
+                //get merchant id
+                $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+                //update order status
+                update_post_meta($order_id, 'Terminal_africa_carriername', $order_meta['carrier']);
+                update_post_meta($order_id, 'Terminal_africa_amount', $order_meta['amount']);
+                update_post_meta($order_id, 'Terminal_africa_duration', $order_meta['duration']);
+                update_post_meta($order_id, 'Terminal_africa_rateid', $order_meta['rate_id']);
+                update_post_meta($order_id, 'Terminal_africa_shipment_id', $order_meta['shipment_id']);
+                update_post_meta($order_id, 'Terminal_africa_pickuptime', $order_meta['pickup_time']);
+                update_post_meta($order_id, 'Terminal_africa_carrierlogo', $order_meta['carrier_logo']);
+                update_post_meta($order_id, 'Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+                update_post_meta($order_id, 'Terminal_africa_mode', $mode);
+                //update through api
+                update_post_meta($order_id, 'Terminal_africa_api_ping', "yes");
+                //save the order
+                $order->save();
+                //response
+                $response = [
+                    "status" => 200,
+                    "message" => "Order meta updated successfully",
+                    "data" => $order_meta,
+                ];
+                //return
+                return new WP_REST_Response($response, 200);
+            }
+            //response
+            $response = [
+                "status" => 404,
+                "message" => "Order not found",
+                "data" => [],
+            ];
+            //return
+            return new WP_REST_Response($response, 404);
+        } catch (\Exception $e) {
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error updating order meta",
                 "data" => $e->getMessage(),
             ];
             //return

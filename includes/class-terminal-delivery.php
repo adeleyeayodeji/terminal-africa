@@ -213,7 +213,11 @@ class WC_Terminal_Delivery
         $order->calculate_totals();
     }
 
-    //add_order_meta_box
+    /**
+     * Add order meta box
+     * @param $order 
+     * @return void
+     */
     public function add_order_meta_box($order)
     {
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
@@ -249,13 +253,20 @@ class WC_Terminal_Delivery
         $carrier_name = get_post_meta($order_id, 'Terminal_africa_carriername', true);
         $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
         $delivery_time = get_post_meta($order_id, 'Terminal_africa_duration', true);
+        //terminal api ping
+        $terminal_africa_api_ping = get_post_meta($order_id, 'Terminal_africa_api_ping', true);
+        //if shipment id is empty
         if (empty($shipment_id)) {
             return;
         }
         //check if order shipping method is terminal_delivery
         $shipping_method = $order->get_shipping_methods();
         if (empty($shipping_method)) {
-            return;
+            //check Terminal_africa_api_ping is yes
+            if ($terminal_africa_api_ping != 'yes') {
+                //return if not active
+                return;
+            }
         }
         //get order currency
         $order_currency = $order->get_currency();
@@ -277,9 +288,19 @@ class WC_Terminal_Delivery
                 break;
             }
         }
+        //check if terminal_africa_api_ping is yes
+        if ($terminal_africa_api_ping == 'yes') {
+            //update the shipping cost to the api amount
+            $shipping_cost = get_post_meta($order_id, "Terminal_africa_amount", true) ?: $shipping_cost;
+        }
+
         //if terminal method is not active
         if (!$terminal_method_is_active) {
-            return;
+            //check Terminal_africa_api_ping is yes
+            if ($terminal_africa_api_ping != 'yes') {
+                //return if not active
+                return;
+            }
         }
         //check if terminal_africa_delivery_arranged is yes
         $terminal_africa_delivery_arranged = get_post_meta($order_id, 'terminal_africa_delivery_arranged', true);
@@ -300,6 +321,8 @@ class WC_Terminal_Delivery
             'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         );
         $plugin_url = add_query_arg($arg, $plugin_url);
+        //guest email
+        $guestEmail = get_post_meta($order_id, 'Terminal_africa_guest_email', true);
         //get order 
         echo "<h4> <img src='" . esc_url($icon_url) . "' align='left' style='margin-right: 5px;width: auto;
     height: auto;
@@ -310,7 +333,9 @@ class WC_Terminal_Delivery
         echo "<p><strong>Delivery Time: </strong>" . esc_html($delivery_time) . "</p>";
         echo "<p><strong>Delivery Rate ID: </strong>" . esc_html($rate_id) . "</p>";
         echo "<p><strong>Shipment ID: </strong>" . esc_html($shipment_id) . "</p>";
-        echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
+        if (!empty($guestEmail)) {
+            echo "<p><strong>Delivery Guest Email: </strong>" . esc_html(get_post_meta($order_id, 'Terminal_africa_guest_email', true)) . "</p>";
+        }
         //manage shipping from terminal delivery
         echo "<p><strong><a href='" . esc_url($plugin_url) . "' style='background: orange;
     text-decoration: none;
