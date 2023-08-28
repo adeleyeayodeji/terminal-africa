@@ -275,6 +275,11 @@ trait TerminalRESTAPI
     public function orders(WP_REST_Request $request)
     {
         try {
+            global $terminal_allowed_order_statuses;
+            //remove all "wc" in terminal_allowed_order_statuses array
+            $terminal_allowed_order_statuses = array_map(function ($status) {
+                return str_replace('wc-', '', $status);
+            }, $terminal_allowed_order_statuses);
             //order id
             $order_id = $request->get_param('order_id');
             //sanitize order id
@@ -318,7 +323,7 @@ trait TerminalRESTAPI
                 'page' => $page ?: 1,
                 'date_before' => $date_to ?: '',
                 'date_after' => $date_from ?: '',
-                'status' => ['processing', 'completed', 'on-hold', 'pending'],
+                'status' => ['processing', 'completed', 'on-hold', 'pending', ...$terminal_allowed_order_statuses],
                 'billing_email' => $customer_email,
                 //order by date
                 'orderby' => $orderby ?: 'date',
@@ -333,7 +338,7 @@ trait TerminalRESTAPI
                 'page' => 1,
                 'date_before' => $date_to ?: '',
                 'date_after' => $date_from ?: '',
-                'status' => ['processing', 'completed', 'on-hold', 'pending'],
+                'status' => ['processing', 'completed', 'on-hold', 'pending', ...$terminal_allowed_order_statuses],
                 'billing_email' => $customer_email,
                 //where order id
                 'include' => [$order_id]
