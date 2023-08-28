@@ -234,6 +234,8 @@ class TerminalAfricaShippingPlugin
                     $plugin_url = add_query_arg($arg, $plugin_url);
                     //echo woocommerce status button 
                     echo "<a href='{$plugin_url}' class='button' title='Manage Terminal Shipment' style='font-size: 11px;min-height: 25px;'>Manage Shipment</a>";
+                } else {
+                    echo "N/A";
                 }
             } else {
                 //do nothing
