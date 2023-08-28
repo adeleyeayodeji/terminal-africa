@@ -277,6 +277,8 @@ trait TerminalRESTAPI
         try {
             //order id
             $order_id = $request->get_param('order_id');
+            //sanitize order id
+            $order_id = sanitize_text_field($order_id);
             //check if the order id is set
             if ($order_id) {
                 //load single order
@@ -284,18 +286,32 @@ trait TerminalRESTAPI
             }
             //page
             $page = $request->get_param('page');
+            //sanitize page id
+            $page = sanitize_text_field($page);
             //limit
             $limit = $request->get_param('limit');
+            //sanitize limit
+            $limit = sanitize_text_field($limit);
             //date_from
             $date_from = $request->get_param('date_from');
+            //sanitize date from
+            $date_from = sanitize_text_field($date_from);
             //date_to
             $date_to = $request->get_param('date_to');
+            //sanitize date to
+            $date_to = sanitize_text_field($date_to);
             //customer email
             $customer_email = $request->get_param('customer_email');
+            //sanitize customer email
+            $customer_email = sanitize_text_field($customer_email);
             //orderby
             $orderby = $request->get_param('orderby');
+            //sanitize order by
+            $orderby = sanitize_text_field($orderby);
             //order
             $ordermode = $request->get_param('ordermode');
+            //sanitize
+            $ordermode = sanitize_text_field($ordermode);
             //get all orders
             $orders = wc_get_orders([
                 'limit' => $limit ?: 10,
@@ -465,8 +481,12 @@ trait TerminalRESTAPI
         try {
             //order id
             $order_id = $request->get_param('order_id');
+            //sanitize order id
+            $order_id = sanitize_text_field($order_id);
             //order status
             $order_status = $request->get_param('order_status');
+            //sanitize order status
+            $order_status = sanitize_text_field($order_status);
             //check if the order status is set
             if (!$order_status) {
                 //response
@@ -536,8 +556,12 @@ trait TerminalRESTAPI
         try {
             //order id
             $order_id = $request->get_param('order_id');
+            //sanitize order id
+            $order_id = sanitize_text_field($order_id);
             //order meta
             $order_meta = $request->get_param('order_meta');
+            //sanitize array
+            $order_meta = sanitize_array($order_meta);
             //check if the order meta is set
             if (!$order_meta && is_array($order_meta)) {
                 //response
