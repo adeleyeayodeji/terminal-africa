@@ -85,7 +85,7 @@ trait TerminalRESTAPI
     {
         try {
             //send FCM notification
-            //TODO: send FCM notification to customer device tokens with order id 
+            //TODO: send FCM notification to customer with order id 
         } catch (\Exception $e) {
             //log error
             $this->log($e->getMessage());
@@ -100,58 +100,58 @@ trait TerminalRESTAPI
         //add custom status   
         return $order_statuses + [
             'wc-tdraft'    => array(
-                'label'                     => _x('Terminal Shipment Draft', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment Draft ✏️', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment Draft <span class="count">(%s)</span>', 'Terminal Shipment Draft <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment Draft <span class="count">(%s)</span>', 'Shipment Draft <span class="count">(%s)</span>', 'woocommerce'),
             ),
             'wc-tcancelled'    => array(
-                'label'                     => _x('Terminal Shipment Cancelled', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment Cancelled 🛑', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment Cancelled <span class="count">(%s)</span>', 'Terminal Shipment Cancelled <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment Cancelled <span class="count">(%s)</span>', 'Shipment Cancelled <span class="count">(%s)</span>', 'woocommerce'),
             ),
             'wc-tconfirmed'    => array(
-                'label'                     => _x('Terminal Shipment Confirmed', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment Confirmed 🙂', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment Confirmed <span class="count">(%s)</span>', 'Terminal Shipment Confirmed <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment Confirmed <span class="count">(%s)</span>', 'Shipment Confirmed <span class="count">(%s)</span>', 'woocommerce'),
             ),
             'wc-tpending'    => array(
-                'label'                     => _x('Terminal Shipment Pending ℹ️', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment Pending ⌛️', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment Pending <span class="count">(%s)</span>', 'Terminal Shipment Pending <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment Pending <span class="count">(%s)</span>', 'Shipment Pending <span class="count">(%s)</span>', 'woocommerce'),
             ),
             'wc-tdelivered'    => array(
-                'label'                     => _x('Terminal Shipment Delivered ✅', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment Delivered ✅', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment Delivered <span class="count">(%s)</span>', 'Terminal Shipment Delivered <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment Delivered <span class="count">(%s)</span>', 'Shipment Delivered <span class="count">(%s)</span>', 'woocommerce'),
             ),
             'wc-tintransit'    => array(
-                'label'                     => _x('Terminal Shipment In Transit 🚚', 'Order status', 'woocommerce'),
+                'label'                     => _x('Shipment In Transit ✈️', 'Order status', 'woocommerce'),
                 'public'                    => false,
                 'exclude_from_search'       => false,
                 'show_in_admin_all_list'    => true,
                 'show_in_admin_status_list' => true,
                 /* translators: %s: number of orders */
-                'label_count'               => _n_noop('Terminal Shipment In Transit <span class="count">(%s)</span>', 'Terminal Shipment In Transit <span class="count">(%s)</span>', 'woocommerce'),
+                'label_count'               => _n_noop('Shipment In Transit <span class="count">(%s)</span>', 'Shipment In Transit <span class="count">(%s)</span>', 'woocommerce'),
             ),
         ];
     }
@@ -166,17 +166,17 @@ trait TerminalRESTAPI
         //custom status
         $custom_status = [
             //wc-draft
-            'wc-tdraft' => _x('Terminal Shipment Draft', 'Order status', 'terminal-africa'),
+            'wc-tdraft' => _x('Shipment Draft ✏️', 'Order status', 'terminal-africa'),
             //wc-cancelled
-            'wc-tcancelled' => _x('Terminal Shipment Cancelled', 'Order status', 'terminal-africa'),
+            'wc-tcancelled' => _x('Shipment Cancelled 🛑', 'Order status', 'terminal-africa'),
             //wc-confirmed
-            'wc-tconfirmed' => _x('Terminal Shipment Confirmed', 'Order status', 'terminal-africa'),
+            'wc-tconfirmed' => _x('Shipment Confirmed 🙂', 'Order status', 'terminal-africa'),
             //wc-pending
-            'wc-tpending' => _x('Terminal Shipment Pending ℹ️', 'Order status', 'terminal-africa'),
+            'wc-tpending' => _x('Shipment Pending ⌛️', 'Order status', 'terminal-africa'),
             //wc-delivered
-            'wc-tdelivered' => _x('Terminal Shipment Delivered ✅', 'Order status', 'terminal-africa'),
+            'wc-tdelivered' => _x('Shipment Delivered ✅', 'Order status', 'terminal-africa'),
             //wc-in-transit
-            'wc-tintransit' => _x('Terminal Shipment In Transit 🚚', 'Order status', 'terminal-africa'),
+            'wc-tintransit' => _x('Shipment In Transit ✈️', 'Order status', 'terminal-africa'),
         ];
         //return
         return array_merge($order_statuses, $custom_status);

@@ -1,3 +1,9 @@
+/**
+ * Terminal Africa | Admin Script
+ * @package Terminal Africa
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 jQuery(document).ready(function ($) {
   //auth
   $("#t_form").submit(function (e) {
@@ -2250,6 +2256,62 @@ jQuery(document).ready(function ($) {
       url: terminal_africa.ajax_url,
       data: {
         action: "update_user_carrier_shipment_rate_terminal",
+        nonce: terminal_africa.nonce,
+        status: shipment_rate
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //block element
+        $(parent).block({
+          message: "<i class='fa fa-spinner fa-spin'></i>",
+          overlayCSS: {
+            background: "#fff",
+            opacity: 0.8,
+            cursor: "wait"
+          },
+          css: {
+            border: 0,
+            padding: 0,
+            backgroundColor: "transparent"
+          }
+        });
+      },
+      success: function (response) {
+        //unblock element
+        $(parent).unblock();
+        //izitoast success if response code is 200
+        if (response.code == 200) {
+          iziToast.info({
+            title: "Success",
+            message: response.message,
+            position: "topRight",
+            timeout: 3000,
+            transitionIn: "flipInX",
+            transitionOut: "flipOutX"
+          });
+        }
+      },
+      error: function (error) {
+        console.log(error);
+      }
+    });
+  });
+
+  /**
+   * Enable_Terminal_Insurance
+   */
+  $("input[name=Enable_Terminal_Insurance]").on("change", function (e) {
+    e.preventDefault();
+    //switch
+    let parent = $(this).parent();
+    //checked
+    let shipment_rate = $(this).is(":checked") ? "true" : "false";
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "update_user_carrier_shipment_insurance_terminal",
         nonce: terminal_africa.nonce,
         status: shipment_rate
       },

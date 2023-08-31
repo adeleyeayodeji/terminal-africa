@@ -715,6 +715,17 @@ class WC_Terminal_Delivery
                 }
             }
 
+            //save first name and last name
+            $billing_first_name = sanitize_text_field($formdata['billing_first_name']);
+            $billing_last_name = sanitize_text_field($formdata['billing_last_name']);
+            $billing_email = sanitize_text_field($formdata['billing_email']);
+            $billing_phone = sanitize_text_field($formdata['billing_phone']);
+            //company name
+            $billing_company = sanitize_text_field($formdata['billing_company']);
+
+            //Street address
+            $billing_address_1 = sanitize_text_field($formdata['billing_address_1']);
+
             //check if session is started
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
@@ -735,6 +746,36 @@ class WC_Terminal_Delivery
                 if (!empty($billing_state)) {
                     //shipping_state
                     update_user_meta($user_id, 'shipping_state', $billing_state);
+                }
+
+                //country
+                if (!empty($billing_country)) {
+                    update_user_meta($user_id, 'billing_country', $billing_country);
+                }
+
+                //phone
+                if (!empty($billing_phone)) {
+                    update_user_meta($user_id, 'billing_phone', $billing_phone);
+                }
+                //billing_email
+                if (!empty($billing_email)) {
+                    update_user_meta($user_id, 'billing_email', $billing_email);
+                }
+                //billing_first_name
+                if (!empty($billing_first_name)) {
+                    update_user_meta($user_id, 'billing_first_name', $billing_first_name);
+                }
+                //billing_last_name
+                if (!empty($billing_last_name)) {
+                    update_user_meta($user_id, 'billing_last_name', $billing_last_name);
+                }
+                //billing_address_1
+                if (!empty($billing_address_1)) {
+                    update_user_meta($user_id, 'billing_address_1', $billing_address_1);
+                }
+                //billing_company
+                if (!empty($billing_company)) {
+                    update_user_meta($user_id, 'billing_company', $billing_company);
                 }
             }
             //update session

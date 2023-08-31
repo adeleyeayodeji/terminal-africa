@@ -33,9 +33,13 @@
                                         <input type="checkbox" name="Hide_Shipment_Timeline" id="Hide_Shipment_Timeline" <?php echo get_option('terminal_user_carrier_shipment_timeline') == 'true' ? 'checked' : ''; ?>>
                                         <label for="Hide_Shipment_Timeline">Hide Shipment Timeline</label>
                                     </div>
-                                    <div class="t-col">
+                                    <div class="t-col" style="margin-bottom: 10px;">
                                         <input type="checkbox" name="Hide_Shipment_Rate" id="Hide_Shipment_Rate" <?php echo get_option('update_user_carrier_shipment_rate_terminal') == 'true' ? 'checked' : ''; ?>>
                                         <label for="Hide_Shipment_Rate">Hide Shipment Rate</label>
+                                    </div>
+                                    <div class="t-col">
+                                        <input type="checkbox" name="Enable_Terminal_Insurance" id="Enable_Terminal_Insurance" <?php echo get_option('update_user_carrier_shipment_insurance_terminal') == 'true' ? 'checked' : ''; ?>>
+                                        <label for="Enable_Terminal_Insurance">Enable Shipment Insurance</label>
                                     </div>
                                 </div>
                             </div>

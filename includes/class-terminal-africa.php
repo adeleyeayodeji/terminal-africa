@@ -164,6 +164,9 @@ class TerminalAfricaShippingPlugin
         //ajax update_user_carrier_shipment_rate_terminal
         add_action('wp_ajax_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
         add_action('wp_ajax_nopriv_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
+        //add ajax update_user_carrier_shipment_insurance_terminal
+        add_action('wp_ajax_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
+        add_action('wp_ajax_nopriv_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
         //add new column to shop order page
         add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
         //add new column to shop order page
