@@ -158,6 +158,11 @@ function terminalsetValue2_terminalShipping(elem) {
           `;
           //loop through response.data
           $.each(response.data, function (indexInArray, value) {
+            /////////// APPLY TERMINAL SHIPMENT INSURANCE FEE IF ENABLED /////////
+            value.amount = value.amount + value.metadata.insurance_fee;
+            value.default_amount =
+              value.default_amount + value.metadata.insurance_default_fee;
+            ////////// APPLY TERMINAL SHIPMENT INSURANCE FEE IF ENABLED /////////
             //overwrite value.amount
             let terminalAfricaPriceMarkUpPercentage =
               response.terminal_price_markup;

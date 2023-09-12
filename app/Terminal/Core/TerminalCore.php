@@ -187,6 +187,12 @@ class TerminalCore
     public function logTerminalError($e, $endpoint = 'none')
     {
         try {
+            $errorMessage = $e->getMessage();
+            //check if error message matched 'Operation timed out'
+            if (strpos($errorMessage, 'Operation timed out') !== false) {
+                //return true
+                return true;
+            }
             //get merchant id
             $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
             //confirm if endpoint is url

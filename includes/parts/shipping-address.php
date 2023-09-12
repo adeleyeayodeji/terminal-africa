@@ -750,6 +750,14 @@ trait Shipping
                 $query['shipment_id'] = $shipment_id;
             }
 
+            //check if shipment insurance is set
+            $shipmentInsurance = get_option('update_user_carrier_shipment_insurance_terminal') == 'true' ? true : false;
+            //check if shipment insurance is true
+            if ($shipmentInsurance) {
+                //set shipment insurance
+                $query['include_insurance'] = true;
+            }
+            //query builder
             $query = http_build_query($query);
             $response = Requests::get(
                 self::$enpoint . 'rates/shipment?' . $query,
