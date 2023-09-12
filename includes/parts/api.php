@@ -84,6 +84,10 @@ trait TerminalRESTAPI
      */
     public function new_order_fcm_notification($order_id)
     {
+        //silent till launch.
+        return true;
+
+
         try {
             //send FCM notification
             if (!self::$skkey) {
@@ -103,14 +107,14 @@ trait TerminalRESTAPI
             //data_query
             $data_query = [
                 'title' => "New WooCommerce Order",
-                'body' => "You have a new woocommerce order with id: {$order_id}",
+                'body' => "You have a new woocommerce order with id: #{$order_id}",
                 'click_action' => "./OrderActivity",
-                'unique_id' => $order_id,
-                'metadata' => [
+                'unique_id' => strval($order_id),
+                'metadata' => json_encode([
                     'source' => 'wordpress',
                     'user_id' => $terminal_africa_merchant_id ?: 'none',
                     'domain' => $domain,
-                ]
+                ])
             ];
 
             $response = Requests::post(
