@@ -6,6 +6,7 @@ use TerminalAfricaShippingPlugin;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
+use WpOrg\Requests\Requests;
 
 //security
 defined('ABSPATH') or die('No script kiddies please!');
@@ -73,7 +74,7 @@ trait TerminalRESTAPI
             //TODO
         } catch (\Exception $e) {
             //log error
-            $this->log($e->getMessage());
+            logTerminalError($e);
         }
     }
 
@@ -85,10 +86,62 @@ trait TerminalRESTAPI
     {
         try {
             //send FCM notification
-            //TODO: send FCM notification to customer with order id 
+            if (!self::$skkey) {
+                //log error to debug
+                error_log("Terminal Africa Shipping Plugin: Secret key is not set");
+                return false;
+            }
+
+            //get terminal africa merchant id
+            $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+
+            //get site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
+            //data_query
+            $data_query = [
+                'title' => "New WooCommerce Order",
+                'body' => "You have a new woocommerce order with id: {$order_id}",
+                'click_action' => "./OrderActivity",
+                'unique_id' => $order_id,
+                'metadata' => [
+                    'source' => 'wordpress',
+                    'user_id' => $terminal_africa_merchant_id ?: 'none',
+                    'domain' => $domain,
+                ]
+            ];
+
+            $response = Requests::post(
+                self::$enpoint . 'users/notifications/push',
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ],
+                json_encode(
+                    $data_query
+                ),
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //append $body to data_query
+            $data_query['endpoint_response'] = $body;
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return true
+                return true;
+            } else {
+                //error log to debug
+                error_log("Terminal Africa Shipping Plugin: " . $response->body);
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'users/notifications/push' . "?" . http_build_query($data_query));
+                return false;
+            }
         } catch (\Exception $e) {
             //log error
-            $this->log($e->getMessage());
+            logTerminalError($e);
         }
     }
 

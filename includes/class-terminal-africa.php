@@ -220,6 +220,8 @@ class TerminalAfricaShippingPlugin
                 $terminal_shipment_id = get_post_meta($post_id, 'Terminal_africa_shipment_id', true);
                 //rate id
                 $rate_id = get_post_meta($post_id, 'Terminal_africa_rateid', true);
+                //get Terminal_africa_carrierlogo
+                $carrirer_logo = get_post_meta($post_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png';
                 //check if terminal_shipment_id is set
                 if (!empty($terminal_shipment_id)) {
                     //echo terminal_shipment_id
@@ -236,7 +238,14 @@ class TerminalAfricaShippingPlugin
                     );
                     $plugin_url = add_query_arg($arg, $plugin_url);
                     //echo woocommerce status button 
-                    echo "<a href='{$plugin_url}' class='button' title='Manage Terminal Shipment' style='font-size: 11px;min-height: 25px;'>Manage Shipment</a>";
+                    echo "<a href='{$plugin_url}' class='button' title='Manage Terminal Shipment' style='font-size: 11px;min-height: 25px;'>
+                    <span style='margin-right: 5px;'>
+                       <img src='" . esc_attr($carrirer_logo) . "' style='height:10px;' />
+                    </span> 
+                    <span>
+                       Manage Shipment
+                    </span>
+                    </a>";
                 } else {
                     echo "N/A";
                 }

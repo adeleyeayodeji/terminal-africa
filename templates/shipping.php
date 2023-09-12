@@ -60,6 +60,8 @@ $next_url = esc_url($next_url);
                                 'nonce' => wp_create_nonce('terminal_africa_edit_shipment')
                             );
                             $shipping_url = add_query_arg($arg, $plugin_url);
+                            //get Terminal_africa_carrierlogo
+                            $carrirer_logo = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png';
                     ?>
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
@@ -70,7 +72,14 @@ $next_url = esc_url($next_url);
                                     </div>
                                 </td>
                                 <td>
-                                    <?php echo esc_html($carrier); ?>
+                                    <p>
+                                        <span>
+                                            <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:10px;">
+                                        </span>
+                                        <span>
+                                            <?php echo esc_html($carrier); ?>
+                                        </span>
+                                    </p>
                                 </td>
                                 <td>
                                     <div class="terminal-dashboard-order-name">
