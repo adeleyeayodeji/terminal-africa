@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
 Tested up to: 6.3
-Stable tag: 1.10.22
+Stable tag: 1.10.23
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -43,6 +43,10 @@ Our WooCommerce plugin allows you to integrate Terminal Africa into your online 
 3. Search for Terminal Africa
 4. Follow the steps in option 2 to integrate
 
+### Video Tutorial
+
+[youtube https://www.youtube.com/watch?v=S4Vwe07EEqQ]
+
 == Frequently Asked Questions ==
 = What are the benefits of integrating the Terminal Africa plugin? =
 
@@ -78,6 +82,11 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
+
+= 1.10.23 =
+
+- Fix bugs
+- Added update to the checkout page
 
 = 1.10.22 =
 
