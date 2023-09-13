@@ -86,8 +86,7 @@ trait TerminalRESTAPI
     {
         //silent till launch.
         return true;
-
-
+        /////////// NEW ORDER FCM NOTIFICATION /////////////
         try {
             //send FCM notification
             if (!self::$skkey) {
@@ -577,6 +576,15 @@ trait TerminalRESTAPI
             if ($order) {
                 //update the order status
                 $order->update_status($order_status);
+                //add customer order note
+                $order->add_order_note(
+                    sprintf(
+                        __('Order status changed to %s', 'terminal-africa'),
+                        wc_get_order_status_name($order_status)
+                    )
+                );
+                //save the order
+                $order->save();
                 //trigger the order status change
                 do_action('woocommerce_order_status_' . $order_status, $order_id);
                 //response

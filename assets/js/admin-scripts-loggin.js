@@ -9,6 +9,8 @@ class TerminalAfricaAdminLoggin {
    */
   constructor() {
     this.init();
+    //remove screen distraction
+    this.removeScreenDistraction();
   }
 
   /**
@@ -45,6 +47,29 @@ class TerminalAfricaAdminLoggin {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  /**
+   * Remove screen distraction
+   * @return {void}
+   */
+  removeScreenDistraction() {
+    //check if wpbody-content has any child other than 'style, .t-container, .clear' and remove them
+    let wpBodyContent = document.querySelector("#wpbody-content");
+    let wpBodyContentChildren = wpBodyContent.children;
+    let wpBodyContentChildrenArray = Array.from(wpBodyContentChildren);
+    //remove all children
+    wpBodyContentChildrenArray.forEach((child) => {
+      if (
+        child.classList.contains("t-container") ||
+        child.classList.contains("clear") ||
+        child.tagName === "STYLE"
+      ) {
+        //do nothing
+      } else {
+        child.remove();
+      }
+    });
   }
 }
 

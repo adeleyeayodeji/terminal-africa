@@ -7,10 +7,15 @@
  <?php $mode = getTerminalPluginMode(); ?>
  <div class="t-header">
      <div class="t-row">
-         <div class="t-col-6">
+         <div class="t-col-4">
              <h2 class="t-title"><i class="fas <?php echo esc_html($icon); ?>" aria-hidden="true"></i> <?php echo esc_html($title); ?></h2>
          </div>
-         <div class="t-col-6">
+         <div class="t-col-4 t-center">
+             <a href="<?php echo esc_url(admin_url('admin.php?page=terminal-africa')) ?>" class="t-header-logo">
+                 <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png') ?>" alt="Terminal Africa">
+             </a>
+         </div>
+         <div class="t-col-4">
              <div class="t-right">
                  <div class="t-flex">
                      <p class="t-m-p-0 <?php echo $mode == "test" ? "t-signal-sandbox" : "t-signal"; ?>">
