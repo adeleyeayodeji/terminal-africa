@@ -135,6 +135,14 @@ trait Ajax
             $state = sanitize_text_field($_POST['state']);
             $country = sanitize_text_field($_POST['country']);
             $zip_code = sanitize_text_field($_POST['zip_code']);
+
+            if (strlen($line_1) > 45) {
+                //break to line_2
+                $line_2 = substr($line_1, 45);
+                //remove the 45 character
+                $line_1 = substr($line_1, 0, 45);
+            }
+
             //check if any field is empty
             if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($line_1) || empty($city) || empty($state) || empty($country)) {
                 wp_send_json([
@@ -219,6 +227,13 @@ trait Ajax
             $zip_code = sanitize_text_field($_POST['zip_code']);
             $address_id = sanitize_text_field($_POST['address_id']);
             $rate_id = sanitize_text_field($_POST['rate_id']);
+
+            if (strlen($line_1) > 45) {
+                //break to line_2
+                $line_2 = substr($line_1, 45);
+                //remove the 45 character
+                $line_1 = substr($line_1, 0, 45);
+            }
             //check if any field is empty
             if (empty($first_name) || empty($last_name) || empty($email) || empty($phone) || empty($line_1) || empty($city) || empty($state) || empty($country) || empty($address_id)) {
                 wp_send_json([

@@ -64,7 +64,8 @@ trait Assets
             'wallet_home' => admin_url('admin.php?page=terminal-africa-wallet'),
             'packaging_id' => $packaging_id ? 'yes' : 'no',
             'currency' => get_woocommerce_currency(),
-            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE
+            'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
+            'terminal_africal_countries' => get_terminal_countries(),
         ));
     }
 

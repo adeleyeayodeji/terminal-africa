@@ -168,12 +168,42 @@ jQuery(document).ready(function ($) {
     if (type == "customer") {
       actionData = "terminal_customer_save_address";
     }
+    var countryCode = form.find('select[name="country"]').val();
+    var phone = form.find('input[name="phone"]').val();
+    let tm_countries = terminal_africa.terminal_africal_countries;
+    //find country where isoCode is NG
+    let tm_country = tm_countries.find(
+      (country) => country.isoCode === countryCode
+    );
+    //phone code
+    let phonecode = tm_country.phonecode;
+    var plussign = encodeURIComponent("+");
+    //check if phonecode not include +
+    if (!phonecode.includes("+")) {
+      phonecode = "+" + phonecode;
+    }
+    if (phone) {
+      //check if phone has +
+      if (!phone.includes("+")) {
+        //append to phone
+        phone = phonecode + phone;
+      }
+    } else {
+      //append to phone
+      phone = "";
+    }
+    //replace + with encoded +
+    phone = phone.replace("+", plussign);
+    //get form serialized
+    let formSerialized = form.serialize();
+    //replace form input 'phone' with new phone number
+    formSerialized = formSerialized.replace(/phone=[^&]+/, "phone=" + phone);
     //ajax
     $.ajax({
       type: "POST",
       url: terminal_africa.ajax_url,
       data:
-        form.serialize() +
+        formSerialized +
         "&action=" +
         actionData +
         "&nonce=" +
