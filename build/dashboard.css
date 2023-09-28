@@ -1,0 +1,20 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/terminal-phonebook.scss ***!
+  \*********************************************************************************************************************************************************************************************************************************************************/
+.t-scroll-area-div::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-thumb {
+  background: #888 !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}
+
+/*# sourceMappingURL=dashboard.css.map*/

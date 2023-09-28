@@ -50,6 +50,12 @@ trait Assets
         wp_enqueue_script('terminal-africa-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/scripts.js', array('jquery', 'select2', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
         //terminal africa scripts
         wp_enqueue_script('terminal-africa-admin-scripts-loggin', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/admin-scripts-loggin.js', array('jquery', 'select2', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
+        //add style wp-components-css
+        wp_enqueue_style('wp-components');
+        //terminal phone book react module
+        wp_enqueue_script('terminal-phonebook-react-module', TERMINAL_AFRICA_PLUGIN_URL . '/build/dashboard.js', array('wp-element', 'wp-components'), TERMINAL_AFRICA_VERSION, true);
+        //terminal phonebook css
+        wp_enqueue_style('terminal-phonebook-react-module-css', TERMINAL_AFRICA_PLUGIN_URL . '/build/dashboard.css', array(), TERMINAL_AFRICA_VERSION);
         //wallet page url
         $wallet_url = add_query_arg(array('tab' => 'deposit'), admin_url('admin.php?page=terminal-africa-wallet'));
         $packaging_id = get_option('terminal_default_packaging_id');

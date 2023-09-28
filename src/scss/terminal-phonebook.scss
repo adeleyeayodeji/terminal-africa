@@ -1,0 +1,16 @@
+//reduce the div scroll width
+.t-scroll-area-div::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-thumb {
+  background: #888 !important;
+}
+
+.t-scroll-area-div::-webkit-scrollbar-thumb:hover {
+  background: #555 !important;
+}

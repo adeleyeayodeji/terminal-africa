@@ -16,15 +16,23 @@ $saved_address_state = "LA";
                     <div class="t-row">
                         <div class="t-col-12">
                             <div class="t-address-info">
-                                <!-- instructions -->
-                                <h3 class="t-title">
-                                    <strong>Instructions:</strong>
-                                </h3>
-                                <p class="t-text">
-                                    Please fill in your address details below. This address will be used to pick up your items from your location.
-                                </p>
+                                <div class="t-address" style="width: 94%;">
+                                    <div class="t-flex">
+                                        <div class="t-address-info-title">
+                                            <!-- instructions -->
+                                            <h3 class="t-title">
+                                                <strong>Instructions:</strong>
+                                            </h3>
+                                            <p class="t-text">
+                                                Please fill in your address details below. This address will be used to pick up your items from your location.
+                                            </p>
+                                        </div>
+                                        <div class="t-phonebook-container" id="t-phonebook-container">
+                                            ...
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                         <div class="t-col-12">
                             <div class="t-address">
