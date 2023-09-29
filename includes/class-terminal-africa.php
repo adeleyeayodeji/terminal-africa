@@ -171,6 +171,9 @@ class TerminalAfricaShippingPlugin
         add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
         //add new column to shop order page
         add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
+        //ajax terminal_africa_get_address_book
+        add_action('wp_ajax_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
+        add_action('wp_ajax_nopriv_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
         //initAPI
         $this->initAPI();
     }

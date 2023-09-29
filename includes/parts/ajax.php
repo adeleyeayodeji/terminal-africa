@@ -136,6 +136,13 @@ trait Ajax
             $country = sanitize_text_field($_POST['country']);
             $zip_code = sanitize_text_field($_POST['zip_code']);
 
+            ////////////// address_id///////////
+            if (isset($_POST['address_id'])) {
+                $address_id = sanitize_text_field($_POST['address_id']);
+                //update terminal_africa_merchant_address_id
+                update_option('terminal_africa_merchant_address_id', $address_id);
+            }
+
             if (strlen($line_1) > 45) {
                 //break to line_2
                 $line_2 = substr($line_1, 45);
@@ -1552,6 +1559,51 @@ trait Ajax
                 'code' => 200,
                 'message' => 'Shipment insurance updated successfully',
             ]);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Get Address Book
+     */
+    public function terminal_africa_get_address_book()
+    {
+        try {
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get page
+            $page = sanitize_text_field($_GET['page']);
+
+            //get the addresses from the server
+            $addresses = terminalAfricaAddresses(25, $page);
+
+            //check if addresses are gotten
+            if ($addresses['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Addresses gotten successfully',
+                    'data' => $addresses['data']
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $addresses['message'],
+                    'endpoint' => 'get_addresses'
+                ]);
+            }
         } catch (\Exception $e) {
             logTerminalError($e);
             wp_send_json([

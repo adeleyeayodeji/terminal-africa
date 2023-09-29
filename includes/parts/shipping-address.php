@@ -277,7 +277,7 @@ trait Shipping
                 'data' => [],
             ];
         } catch (\Exception $e) {
-            logTerminalError($e, self::$enpoint . 'addresses?' . $address_id);
+            logTerminalError($e, self::$enpoint . 'addresses?id=' . $address_id);
             //return
             return [
                 'code' => 500,
@@ -470,6 +470,80 @@ trait Shipping
                 'country' => $country,
                 'zip' => $zip_code,
             ]));
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
+    /**
+     * Get Address
+     */
+    public static function getAddresses($perPage = 25, $page = 1)
+    {
+        try {
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            //if session is not started start it
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            //check if terminal_africa_addresses is set
+            if (isset($_SESSION['terminal_africa_addresses'][$page . $perPage])) {
+                //return countries
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => sanitize_array($_SESSION['terminal_africa_addresses'][$page . $perPage]),
+                ];
+            }
+
+            //param
+            $param = [
+                'perPage' => $perPage,
+                'page' => $page,
+            ];
+
+            //build query
+            $query = http_build_query($param);
+
+            //get address
+            $response  = Requests::get(self::$enpoint . 'addresses?' . $query, [
+                'Authorization' => 'Bearer ' . self::$skkey,
+            ]);
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return address data
+                $data = $body->data;
+                //set session
+                $_SESSION['terminal_africa_addresses'][$page . $perPage] = $data;
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $data,
+                ];
+            }
+            //logTerminalErrorData
+            logTerminalErrorData($response->body, self::$enpoint . 'addresses');
+            return [
+                'code' => 404,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'addresses');
+            //return
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),

@@ -6,13 +6,14 @@ $states = get_terminal_states("NG");
 $states = $states['data'];
 $saved_address = get_option('terminal_africa_merchant_address', false);
 $saved_address_state = "LA";
+$merchant_address_id = get_option('terminal_africa_merchant_address_id', '');
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-map", "Pickup Address"); ?>
     <div class="t-body">
         <div class="t-row">
             <div class="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">
-                <form method="post" id="t-form-submit" data-type="merchant">
+                <form method="post" id="t-form-submit" data-type="merchant" data-address-id="<?php echo esc_attr($merchant_address_id) ?>">
                     <div class="t-row">
                         <div class="t-col-12">
                             <div class="t-address-info">

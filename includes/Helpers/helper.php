@@ -336,6 +336,20 @@ if (!function_exists('terminal_autoload_merchant_address')) {
     }
 }
 
+//terminalAfricaAddresses
+if (!function_exists('terminalAfricaAddresses')) {
+    //terminal africa addresses
+    /**
+     * @param int $perpage 
+     * @param mixed $page
+     * @return mixed
+     */
+    function terminalAfricaAddresses($perpage = 25, $page = 1)
+    {
+        return TerminalAfricaShippingPlugin::getAddresses($perpage, $page);
+    }
+}
+
 /**
  * $allowed_order_statuses
  */

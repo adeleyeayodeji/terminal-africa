@@ -70,35 +70,97 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     this.state = {
       showModal: false,
       closeModal: false,
-      value: ""
+      value: "",
+      addressBook: [],
+      isLoading: true,
+      isLoadingNew: false,
+      scrolledToBottom: false,
+      defaultPage: 1,
+      nextPageisAvailable: false
     };
   }
 
   /**
    * componentDidMount
    */
-  componentDidMount() {
-    //get phone book
-    this.props.getPhoneBook();
-  }
+  componentDidMount() {}
+  componentWillUnmount() {}
 
   /**
    * Get phone book
    */
-  getPhoneBook = () => {
+  getAddressBook = () => {
     //ajax
-    jQuery(document).ready(function () {
-      //TODO
+    jQuery(document).ready($ => {
       //ajax
-      // $.ajax({
-      //   type: "Get",
-      //   url: terminal_africa.ajax_url,
-      //   data: "data",
-      //   dataType: "dataType",
-      //   success: function (response) {
-      //   }
-      // });
+      $.ajax({
+        type: "GET",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "terminal_africa_get_address_book",
+          nonce: terminal_africa.nonce,
+          page: this.state.defaultPage
+        },
+        dataType: "json",
+        beforeSend: () => {
+          //set state
+          this.setState({
+            isLoadingNew: true
+          });
+        },
+        success: response => {
+          //hasnextpage
+          var hasNextPage = response.data.pagination.hasNextPage;
+          //parse to bool
+          hasNextPage = Boolean(hasNextPage);
+          //check if the response code is 200
+          if (response.code === 200) {
+            //set state
+            this.setState({
+              addressBook: [...this.state.addressBook, ...response.data.addresses],
+              isLoading: false,
+              isLoadingNew: false,
+              nextPageisAvailable: hasNextPage
+            });
+          } else {
+            //set state
+            this.setState({
+              isLoading: false
+            });
+          }
+        },
+        error: (xhr, status, error) => {
+          //show gutenberg toast
+          try {
+            wp.data.dispatch("core/notices").createNotice("success", "Error: " + xhr.responseText, {
+              type: "snackbar",
+              isDismissible: true
+            });
+          } catch (error) {}
+        }
+      });
     });
+  };
+  handleScroll = e => {
+    const scrollableDiv = e.target;
+    //round up scroll
+    var totalScroll = scrollableDiv.scrollTop + scrollableDiv.clientHeight;
+    totalScroll = Math.ceil(totalScroll);
+    if (totalScroll >= scrollableDiv.scrollHeight) {
+      this.setState({
+        scrolledToBottom: true,
+        defaultPage: this.state.defaultPage + 1
+      });
+      //check if has hasNextPage
+      if (this.state.nextPageisAvailable) {
+        //get address book
+        this.getAddressBook();
+      } else {}
+    } else {
+      this.setState({
+        scrolledToBottom: false
+      });
+    }
   };
 
   /**
@@ -112,6 +174,8 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     this.setState({
       showModal: true
     });
+    //get phone book
+    this.getAddressBook();
   };
 
   /**
@@ -133,10 +197,84 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       value: value
     });
   };
+
+  /**
+   * Handle Item Click
+   * @returns {void}
+   */
+  handleItemClick = event => {
+    //prevent default
+    event.preventDefault();
+    //get address id
+    var addressId = event.currentTarget.getAttribute("data-address-id");
+    //search for address where address id
+    var address = this.state.addressBook.find(address => address.address_id === addressId);
+
+    //check if address exist
+    if (!address) {
+      //show gutenberg toast
+      try {
+        wp.data.dispatch("core/notices").createNotice("success", "Address not found", {
+          type: "snackbar",
+          isDismissible: true
+        });
+      } catch (error) {}
+      return;
+    }
+
+    //set address
+    /////////////////////
+
+    jQuery(document).ready($ => {
+      const $tbody = $(".t-body");
+      // update first name
+      $tbody.find('input[name="first_name"]').val(address.first_name);
+      // update last name
+      $tbody.find('input[name="last_name"]').val(address.last_name);
+      // update email
+      $tbody.find('input[name="email"]').val(address.email);
+      // update phone
+      $tbody.find('input[name="phone"]').val(address.phone);
+      // update line_1
+      $tbody.find('input[name="line_1"]').val(address.line1);
+      // update line_2
+      $tbody.find('input[name="line_2"]').val(address.line2);
+      // update zip_code
+      $tbody.find('input[name="zip_code"]').val(address.zip);
+      //check if input element with name 'address_id' exist
+      if ($tbody.find('input[name="address_id"]').length) {
+        //update address_id
+        $tbody.find('input[name="address_id"]').val(address.address_id);
+      } else {
+        //create input element
+        var input = $("<input>").attr("type", "hidden").attr("name", "address_id").val(address.address_id);
+        //append to form
+        $tbody.find("form").append($(input));
+      }
+      // update zip_code
+      $tbody.find('input[name="zip_code"]').val(address.zip);
+
+      //close modal
+      this.closeModal();
+
+      //remove all city options
+      $tbody.find('select[name="lga"] option').remove().trigger("select2.change");
+
+      // update select2 country
+      const countrySelect = $tbody.find('select[name="country"]');
+      countrySelect.val(address.country);
+      //trigger event
+      countrySelect.trigger("change");
+    });
+  };
   render() {
     let {
       showModal,
-      value
+      value,
+      isLoading,
+      addressBook,
+      scrolledToBottom,
+      isLoadingNew
     } = this.state;
     //return view
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, showModal && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Modal, {
@@ -151,6 +289,7 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SearchControl, {
       label: "Search Address Book",
       placeholder: "Search Address Book",
+      className: "t-phonebook-search",
       value: value,
       onChange: v => this.handleChange(v)
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -160,18 +299,34 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         maxHeight: 200
       },
       smoothScroll: true,
+      onScroll: this.handleScroll,
       className: "t-scroll-area-div"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       style: {
         maxHeight: 500
       }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], null))))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    }, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalItemGroup, null, addressBook.map((item, index) => {
+      return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalItem, {
+        key: index,
+        className: "t-phonebook-item",
+        "data-address-id": item.address_id,
+        onClick: this.handleItemClick
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "t-phonebook-item-content"
+      }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "t-phonebook-item-name"
+      }, item.city, ", ", item.state, ", ", item.country), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+        className: "t-phonebook-item-phone"
+      }, item.line1)));
+    })), scrolledToBottom && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-phonebook-scrolled-to-bottom-message"
+    }, isLoadingNew ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, "You've reached the end of the list."))))))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       className: "t-phonebook",
       onClick: this.showModal
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("i", {
       className: "fa fa-address-book",
       ariaHidden: "true"
-    }), " Import phonebook"));
+    }), " Import Address"));
   }
 }
 /* harmony default export */ __webpack_exports__["default"] = (TerminalPhoneBook);
