@@ -83,7 +83,7 @@ class TerminalLogHandler
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
             $response = Requests::post(
-                TERMINAL_AFRICA_API_ENDPOINT . $path,
+                TerminalAfricaShippingPlugin::$endpoint . $path,
                 [
                     'Content-Type' => 'application/json'
                 ],
@@ -98,7 +98,7 @@ class TerminalLogHandler
             //check if function exists
             if (function_exists('logTerminalError')) {
                 //log error
-                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . $path);
+                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . $path);
             }
             //log error
             error_log($e->getMessage());
@@ -141,7 +141,7 @@ class TerminalLogHandler
             //check if function exists
             if (function_exists('logTerminalError')) {
                 //log error
-                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find');
+                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
             }
             //log error
             error_log($e->getMessage());
@@ -171,7 +171,7 @@ class TerminalLogHandler
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
             $response = Requests::post(
-                TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find',
+                TerminalAfricaShippingPlugin::$endpoint . 'plugin/find',
                 [
                     'Content-Type' => 'application/json'
                 ],
@@ -200,7 +200,7 @@ class TerminalLogHandler
             //check if function exists
             if (function_exists('logTerminalError')) {
                 //log error
-                logTerminalError($e, TERMINAL_AFRICA_API_ENDPOINT . 'plugin/find');
+                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
             }
             //log error
             error_log($e->getMessage());

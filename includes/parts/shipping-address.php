@@ -481,7 +481,7 @@ trait Shipping
     /**
      * Get Address
      */
-    public static function getAddresses($perPage = 25, $page = 1)
+    public static function getAddresses($perPage = 25, $page = 1, $search = '')
     {
         try {
             if (!self::$skkey) {
@@ -498,12 +498,12 @@ trait Shipping
             }
 
             //check if terminal_africa_addresses is set
-            if (isset($_SESSION['terminal_africa_addresses'][$page . $perPage])) {
+            if (isset($_SESSION['terminal_africa_addresses'][$page . $perPage . $search])) {
                 //return countries
                 return [
                     'code' => 200,
                     'message' => 'success',
-                    'data' => sanitize_array($_SESSION['terminal_africa_addresses'][$page . $perPage]),
+                    'data' => sanitize_array($_SESSION['terminal_africa_addresses'][$page . $perPage . $search]),
                 ];
             }
 
@@ -512,6 +512,11 @@ trait Shipping
                 'perPage' => $perPage,
                 'page' => $page,
             ];
+
+            //check if search is not empty
+            if (!empty($search)) {
+                $param['search'] = $search;
+            }
 
             //build query
             $query = http_build_query($param);
@@ -526,7 +531,7 @@ trait Shipping
                 //return address data
                 $data = $body->data;
                 //set session
-                $_SESSION['terminal_africa_addresses'][$page . $perPage] = $data;
+                $_SESSION['terminal_africa_addresses'][$page . $perPage . $search] = $data;
                 //return data
                 return [
                     'code' => 200,

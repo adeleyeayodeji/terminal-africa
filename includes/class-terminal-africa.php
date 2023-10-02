@@ -35,6 +35,9 @@ class TerminalAfricaShippingPlugin
 
     use Menus, Ajax, Shipping, Activation, Assets, TerminalRESTAPI;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         //check if terminal_africa_settings is set
@@ -54,6 +57,11 @@ class TerminalAfricaShippingPlugin
             self::$plugin_mode = null;
         }
     }
+
+    /**
+     * Init the plugin
+     * @since 1.0.0
+     */
     public function init()
     {
         //add settings page

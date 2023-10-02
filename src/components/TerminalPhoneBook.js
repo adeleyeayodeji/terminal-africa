@@ -8,6 +8,7 @@ import {
   __experimentalItemGroup as ItemGroup,
   __experimentalItem as Item
 } from "@wordpress/components";
+
 import "./../scss/terminal-phonebook.scss";
 import TerminalLoader from "./Loader";
 
@@ -20,7 +21,7 @@ class TerminalPhoneBook extends Component {
     this.state = {
       showModal: false,
       closeModal: false,
-      value: "",
+      search: "",
       addressBook: [],
       isLoading: true,
       isLoadingNew: false,
@@ -35,6 +36,9 @@ class TerminalPhoneBook extends Component {
    */
   componentDidMount() {}
 
+  /**
+   * componentDidUpdate
+   */
   componentWillUnmount() {}
 
   /**
@@ -50,12 +54,19 @@ class TerminalPhoneBook extends Component {
         data: {
           action: "terminal_africa_get_address_book",
           nonce: terminal_africa.nonce,
-          page: this.state.defaultPage
+          page: this.state.defaultPage,
+          search: this.state.search
         },
         dataType: "json",
         beforeSend: () => {
-          //set state
-          this.setState({ isLoadingNew: true });
+          //check if search is not empty
+          if (this.state.search !== "") {
+            //loading state
+            this.setState({ isLoading: true });
+          } else {
+            //set state
+            this.setState({ isLoadingNew: true });
+          }
         },
         success: (response) => {
           //hasnextpage
@@ -64,6 +75,11 @@ class TerminalPhoneBook extends Component {
           hasNextPage = Boolean(hasNextPage);
           //check if the response code is 200
           if (response.code === 200) {
+            //check if search is not empty
+            if (this.state.search !== "") {
+              //clear the previous address book data
+              this.setState({ addressBook: [] });
+            }
             //set state
             this.setState({
               addressBook: [
@@ -76,7 +92,11 @@ class TerminalPhoneBook extends Component {
             });
           } else {
             //set state
-            this.setState({ isLoading: false });
+            this.setState({
+              isLoading: false,
+              nextPageisAvailable: false,
+              isLoadingNew: false
+            });
           }
         },
         error: (xhr, status, error) => {
@@ -108,7 +128,6 @@ class TerminalPhoneBook extends Component {
       if (this.state.nextPageisAvailable) {
         //get address book
         this.getAddressBook();
-      } else {
       }
     } else {
       this.setState({ scrolledToBottom: false });
@@ -141,7 +160,13 @@ class TerminalPhoneBook extends Component {
    * @returns {void}
    */
   handleChange = (value) => {
-    this.setState({ value: value });
+    //update state
+    this.setState({ search: value, defaultPage: 1 });
+    //check if not empty string
+    if (value !== "") {
+      //search the server
+      this.getAddressBook();
+    }
   };
 
   /**
@@ -179,14 +204,24 @@ class TerminalPhoneBook extends Component {
       const $tbody = $(".t-body");
       // update first name
       $tbody.find('input[name="first_name"]').val(address.first_name);
+      //update p#t_first_name
+      $tbody.find("#t_first_name").text(address.first_name);
       // update last name
       $tbody.find('input[name="last_name"]').val(address.last_name);
+      //update p#t_last_name
+      $tbody.find("#t_last_name").text(address.last_name);
       // update email
       $tbody.find('input[name="email"]').val(address.email);
+      //update p#t_email
+      $tbody.find("#t_email").text(address.email);
       // update phone
       $tbody.find('input[name="phone"]').val(address.phone);
+      //update p#t_phone
+      $tbody.find("#t_phone").text(address.phone);
       // update line_1
       $tbody.find('input[name="line_1"]').val(address.line1);
+      //update p#t_address
+      $tbody.find("#t_address").text(address.line1 + " " + address.line2);
       // update line_2
       $tbody.find('input[name="line_2"]').val(address.line2);
       // update zip_code
@@ -227,7 +262,7 @@ class TerminalPhoneBook extends Component {
   render() {
     let {
       showModal,
-      value,
+      search,
       isLoading,
       addressBook,
       scrolledToBottom,
@@ -245,7 +280,7 @@ class TerminalPhoneBook extends Component {
                     label="Search Address Book"
                     placeholder="Search Address Book"
                     className="t-phonebook-search"
-                    value={value}
+                    value={search}
                     onChange={(v) => this.handleChange(v)}
                   />
                 </div>

@@ -342,11 +342,12 @@ if (!function_exists('terminalAfricaAddresses')) {
     /**
      * @param int $perpage 
      * @param mixed $page
+     * @param mixed $search
      * @return mixed
      */
-    function terminalAfricaAddresses($perpage = 25, $page = 1)
+    function terminalAfricaAddresses($perpage = 25, $page = 1, $search = '')
     {
-        return TerminalAfricaShippingPlugin::getAddresses($perpage, $page);
+        return TerminalAfricaShippingPlugin::getAddresses($perpage, $page, $search);
     }
 }
 

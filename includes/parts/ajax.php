@@ -459,12 +459,12 @@ trait Ajax
             foreach ($cart_item as $item) {
                 $data_items[] = [
                     'name' => $item['data']->get_name(),
-                    'quantity' => intval($item['quantity']) ?: 1,
+                    'quantity' => !empty($item['quantity']) ? intval($item['quantity']) : 1,
                     'value' => $item['line_total'],
                     'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
                     'type' => 'parcel',
                     'currency' => get_woocommerce_currency(),
-                    'weight' => (float)$item['data']->get_weight() ?: 0.1,
+                    'weight' => !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : 0.1,
                 ];
             }
             //check if terminal_default_packaging_id is set
@@ -1584,9 +1584,11 @@ trait Ajax
 
             //get page
             $page = sanitize_text_field($_GET['page']);
+            //search
+            $search = sanitize_text_field($_GET['search']);
 
             //get the addresses from the server
-            $addresses = terminalAfricaAddresses(25, $page);
+            $addresses = terminalAfricaAddresses(25, $page, $search);
 
             //check if addresses are gotten
             if ($addresses['code'] == 200) {
