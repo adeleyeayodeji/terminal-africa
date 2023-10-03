@@ -28,7 +28,7 @@ $prev_url = esc_url($prev_url);
 $next_url = esc_url($next_url);
 ?>
 <div class="t-container">
-    <?php terminal_header("fas fa-cart-plus", "Shipping"); ?>
+    <?php terminal_header("fas fa-cart-plus", "Shipments"); ?>
     <div class="t-body">
         <div class="t-shipping">
             <table width="100%" style="border-collapse: separate; border-spacing: 0px 20px; text-align: center;">
