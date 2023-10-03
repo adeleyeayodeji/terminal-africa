@@ -74,9 +74,16 @@ foreach ($shippingItems as $item) {
                     <div class="t-row">
                         <div class="t-col-12">
                             <div class="t-address-info">
-                                <p class="t-text">
-                                    Update your customer address here. <br>This address will be used to re-calculate the shipping cost if the customer changes the shipping address.
-                                </p>
+                                <div class="t-flex">
+                                    <div>
+                                        <p class="t-text">
+                                            Update your customer address here. <br>This address will be used to re-calculate the shipping cost if the customer changes the shipping address.
+                                        </p>
+                                    </div>
+                                    <div class="t-phonebook-container" id="t-phonebook-container" style="margin-right: 35px;">
+                                        ...
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="t-col-12">
