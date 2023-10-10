@@ -43,6 +43,10 @@ let updateCoreWoocommerceElements_terminalShipping = (
 
 function terminalsetValue2_terminalShipping(elem) {
   jQuery(document).ready(function ($) {
+    //fade in .terminal-woo-checkout-get-rate
+    $(".terminal-woo-checkout-get-rate").each(function () {
+      $(this).fadeIn();
+    });
     var lga = $(elem).val();
     var stateText = $(
       'select[name="terminal_custom_shipping_state2_terminalShipping"]'

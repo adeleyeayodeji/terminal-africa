@@ -213,3 +213,7 @@
 .terminal-custom-fluid-added-shipping-city {
   padding: 10px 5px;
 }
+
+.terminal-woo-checkout-get-rate {
+  display: none;
+}
