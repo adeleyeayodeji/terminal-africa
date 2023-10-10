@@ -17,7 +17,7 @@
 
 .t-phonebook-item {
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid #0000000d !important;
   cursor: pointer;
 }
 
@@ -78,4 +78,9 @@
 .t-phonebook:hover {
   background: #cdcccc;
   color: black !important;
+}
+
+.t-phonebook-item-sub {
+  font-weight: 600;
+  margin: 3px 0px 5px 0px;
 }

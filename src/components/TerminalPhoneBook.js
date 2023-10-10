@@ -305,6 +305,9 @@ class TerminalPhoneBook extends Component {
                                   onClick={this.handleItemClick}>
                                   <div className="t-phonebook-item-content">
                                     <div className="t-phonebook-item-name">
+                                      {item.first_name} {item.last_name}
+                                    </div>
+                                    <div className="t-phonebook-item-sub">
                                       {item.city}, {item.state}, {item.country}
                                     </div>
                                     <div className="t-phonebook-item-phone">
