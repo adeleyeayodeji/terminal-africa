@@ -52,7 +52,7 @@ class TerminalDataParcel {
         // check if response code is 200
         if (response.code != 200) {
           //check if response code is 400
-          if (response.code == 400) {
+          if (response.code == 400 || response.code == 401) {
             //Swal
             Swal.fire({
               title: "Error!",
@@ -92,8 +92,11 @@ class TerminalDataParcel {
             );
             //check if terminal_africa_save_cart_itemcount is less than 3
             if (terminal_africa_save_cart_itemcount < 3) {
-              //try again
-              saveCartTerminalData();
+              //check if function exist
+              if (typeof saveCartTerminalData === "function") {
+                //try again
+                saveCartTerminalData();
+              }
               //increment terminal_africa_save_cart_itemcount
               terminal_africa_save_cart_itemcount++;
               //save to session

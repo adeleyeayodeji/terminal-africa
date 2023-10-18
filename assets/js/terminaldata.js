@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
         // check if response code is 200
         if (response.code != 200) {
           //check if response code is 400
-          if (response.code == 400) {
+          if (response.code == 400 || response.code == 401) {
             //Swal
             Swal.fire({
               title: "Error!",

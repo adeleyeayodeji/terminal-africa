@@ -93,12 +93,26 @@ class TerminalLogHandler
                     'platform' => 'wordpress'
                 ] + $userData)
             );
+            //get the response body
+            $response = json_decode($response->body);
+            //check if response is successful
+            if ($response->status) {
+                //check if message is available
+                if (isset($response->message)) {
+                    //log message
+                    error_log($response->message);
+                }
+            }
             //silent is golden
         } catch (\Exception $e) {
             //check if function exists
             if (function_exists('logTerminalError')) {
-                //log error
-                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . $path);
+                try {
+                    //log error
+                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . $path);
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
             }
             //log error
             error_log($e->getMessage());
@@ -140,8 +154,12 @@ class TerminalLogHandler
             //log error
             //check if function exists
             if (function_exists('logTerminalError')) {
-                //log error
-                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                try {
+                    //log error
+                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                } catch (\Exception $th) {
+                    //throw $th;
+                }
             }
             //log error
             error_log($e->getMessage());
@@ -199,8 +217,12 @@ class TerminalLogHandler
         } catch (\Exception $e) {
             //check if function exists
             if (function_exists('logTerminalError')) {
-                //log error
-                logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                try {
+                    //log error
+                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                } catch (\Exception $e) {
+                    //throw $th;
+                }
             }
             //log error
             error_log($e->getMessage());

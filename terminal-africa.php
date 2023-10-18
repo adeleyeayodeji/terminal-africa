@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.10.25
+ * Version:     1.10.28
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -114,7 +114,6 @@ class WC_Terminal_Delivery_Loader
             add_action('admin_notices', array($this, 'terminal_delivery_disabled_notice'));
         }
 
-
         // Include the main Terminal Africa class.
         if (!class_exists('TerminalAfricaShippingPlugin')) {
             include_once dirname(__FILE__) . '/includes/parts/menus.php';
@@ -125,6 +124,15 @@ class WC_Terminal_Delivery_Loader
             include_once dirname(__FILE__) . '/includes/parts/shipping-address.php';
             include_once dirname(__FILE__) . '/includes/class-terminal-africa.php';
             include_once dirname(__FILE__) . '/includes/Helpers/helper.php';
+
+            //include terminal log handler
+            require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/terminalLogHandler.php';
+
+            // Register hooks that are fired when the plugin is activated or deactivated.
+            register_activation_hook(__FILE__, [TerminalLogHandler::class, 'terminalActivatorHandler']);
+            register_deactivation_hook(__FILE__, [TerminalLogHandler::class, 'terminalDeactionHandler']);
+            //upgrader_process_complete
+            add_action('upgrader_process_complete', [TerminalLogHandler::class, 'terminalUpdateHandler'], 10, 2);
         }
         //add settings page
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('TerminalAfricaShippingPlugin', 'add_settings_link'));
@@ -342,12 +350,3 @@ class WC_Terminal_Delivery_Loader
 
 // fire it up!
 WC_Terminal_Delivery_Loader::instance();
-
-//include terminal log handler
-require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/terminalLogHandler.php';
-
-// Register hooks that are fired when the plugin is activated or deactivated.
-register_activation_hook(__FILE__, [TerminalLogHandler::class, 'terminalActivatorHandler']);
-register_deactivation_hook(__FILE__, [TerminalLogHandler::class, 'terminalDeactionHandler']);
-//upgrader_process_complete
-add_action('upgrader_process_complete', [TerminalLogHandler::class, 'terminalUpdateHandler'], 10, 2);

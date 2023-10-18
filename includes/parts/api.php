@@ -440,9 +440,11 @@ trait TerminalRESTAPI
                 //orders list
                 $orders_list[] = [
                     "id" => $order_id,
-                    "shipment_id" => $shipment_id ?: "none",
+                    "shipment_id" => $shipment_id ?: null,
                     "products" => $products,
+                    "default_address" => get_option('terminal_africa_merchant_address_id', null),
                     "extral" => $order_data,
+                    "extra" => $order_data,
                 ];
             }
             //response

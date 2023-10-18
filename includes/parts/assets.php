@@ -80,6 +80,10 @@ trait Assets
     {
         if (function_exists('WC')) {
             $cart_item = WC()->cart->get_cart();
+            //sweet alert styles
+            wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
+            //sweet alert scripts
+            wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
             //init add to cart ajax
             wp_enqueue_script('terminal-africa-terminaldata-for-parcel-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-parcel.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
             //localize scripts
