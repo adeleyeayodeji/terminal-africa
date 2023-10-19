@@ -379,7 +379,7 @@ trait TerminalRESTAPI
                 'page' => $page ?: 1,
                 'date_before' => $date_to ?: '',
                 'date_after' => $date_from ?: '',
-                'status' => ['processing', 'completed', 'on-hold', 'pending', ...$terminal_allowed_order_statuses],
+                'status' => ['processing', 'completed', 'on-hold', 'pending'] + $terminal_allowed_order_statuses,
                 'billing_email' => $customer_email,
                 //order by date
                 'orderby' => $orderby ?: 'date',
@@ -394,7 +394,7 @@ trait TerminalRESTAPI
                 'page' => 1,
                 'date_before' => $date_to ?: '',
                 'date_after' => $date_from ?: '',
-                'status' => ['processing', 'completed', 'on-hold', 'pending', ...$terminal_allowed_order_statuses],
+                'status' => ['processing', 'completed', 'on-hold', 'pending'] + $terminal_allowed_order_statuses,
                 'billing_email' => $customer_email,
                 //where order id
                 'include' => [$order_id]

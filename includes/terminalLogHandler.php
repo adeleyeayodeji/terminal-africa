@@ -82,27 +82,27 @@ class TerminalLogHandler
             $site_url = site_url();
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
-            $response = Requests::post(
-                TerminalAfricaShippingPlugin::$endpoint . $path,
-                [
-                    'Content-Type' => 'application/json'
+            $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . $path, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
                 ],
-                json_encode([
+                'body' => json_encode([
                     'email' => get_bloginfo('admin_email'),
                     'domain' => $domain,
                     'platform' => 'wordpress'
-                ] + $userData)
-            );
-            //get the response body
-            $response = json_decode($response->body);
-            //check if response is successful
-            if ($response->status) {
-                //check if message is available
-                if (isset($response->message)) {
-                    //log message
-                    error_log($response->message);
-                }
+                ] + $userData),
+            ]);
+            //check if response is not an error
+            if (is_wp_error($response)) {
+                //store
+                error_log($response->get_error_message());
             }
+            //check if response is not 200
+            if (wp_remote_retrieve_response_code($response) != 200) {
+                //store
+                error_log(wp_remote_retrieve_response_message($response));
+            }
+
             //silent is golden
         } catch (\Exception $e) {
             //check if function exists
@@ -188,18 +188,31 @@ class TerminalLogHandler
             //get the domain
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
-            $response = Requests::post(
-                TerminalAfricaShippingPlugin::$endpoint . 'plugin/find',
-                [
-                    'Content-Type' => 'application/json'
+            $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . 'plugin/find', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
                 ],
-                json_encode([
+                'body' => json_encode([
                     'domain' => $domain,
                     'platform' => 'wordpress'
-                ] + $userData)
-            );
+                ] + $userData),
+            ]);
+
+            //check if response is not an error
+            if (is_wp_error($response)) {
+                //store
+                error_log($response->get_error_message());
+            }
+
+            //check if response is not 200
+            if (wp_remote_retrieve_response_code($response) != 200) {
+                //store
+                error_log(wp_remote_retrieve_response_message($response));
+            }
+
             //get response
-            $response = json_decode($response->body);
+            $response = json_decode(wp_remote_retrieve_body($response));
+
             //check if plugin is already logged
             if ($response->status && $response->message == "Plugin found") {
                 wp_send_json([

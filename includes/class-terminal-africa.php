@@ -64,126 +64,130 @@ class TerminalAfricaShippingPlugin
      */
     public function init()
     {
-        //add settings page
-        add_action('admin_menu', array(self::class, 'add_settings_page'), PHP_INT_MAX);
-        //woocommerce_countries
-        add_filter('woocommerce_countries', array(self::class, 'woocommerce_countries'), PHP_INT_MAX);
-        //woocommerce_states
-        add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), PHP_INT_MAX);
-        //plugin loaded
-        add_action('plugins_loaded', array(self::class, 'activate'), PHP_INT_MAX);
-        //enqueue scripts
-        add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), PHP_INT_MAX);
-        //enqueue scripts
-        add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), 1);
-        //fluid_checkout_override_style
-        add_action('wp_head', array(self::class, 'fluid_checkout_override_style'), PHP_INT_MAX);
-        //ajax terminal_africa_auth
-        add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
-        add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));
-        //ajax terminal_merchant_save_address
-        add_action('wp_ajax_terminal_merchant_save_address', array($this, 'terminal_merchant_save_address'));
-        add_action('wp_ajax_nopriv_terminal_merchant_save_address', array($this, 'terminal_merchant_save_address'));
-        //get states
-        add_action('wp_ajax_terminal_africa_get_states', array($this, 'terminal_africa_get_states'));
-        add_action('wp_ajax_nopriv_terminal_africa_get_states', array($this, 'terminal_africa_get_states'));
-        //ajax terminal_africa_get_cities
-        add_action('wp_ajax_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
-        add_action('wp_ajax_nopriv_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
-        //ajax terminal_africa_sign_out
-        add_action('wp_ajax_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
-        add_action('wp_ajax_nopriv_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
-        //ajax terminal_africa_enable_terminal
-        add_action('wp_ajax_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
-        add_action('wp_ajax_nopriv_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
-        //wp head
-        add_action('wp_head', array(self::class, 'wp_head_checkout'), PHP_INT_MAX);
-        add_action('woocommerce_checkout_update_order_review', array($this, 'checkout_update_refresh_shipping_methods'), PHP_INT_MAX, 1);
-        //ajax terminal_africa_save_cart_item
-        add_action('wp_ajax_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
-        add_action('wp_ajax_nopriv_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
-        //ajax terminal_africa_process_terminal_rates
-        add_action('wp_ajax_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
-        add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
-        //ajax terminal_africa_save_shipping_carrier
-        add_action('wp_ajax_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
-        add_action('wp_ajax_nopriv_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
-        //ajax get rate data
-        add_action('wp_ajax_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
-        add_action('wp_ajax_nopriv_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
-        //ajax terminal_customer_save_address
-        add_action('wp_ajax_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
-        add_action('wp_ajax_nopriv_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
-        //ajax terminal_africa_process_terminal_rates_customer
-        add_action('wp_ajax_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
-        add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
-        //ajax terminal_africa_apply_terminal_rates_customer
-        add_action('wp_ajax_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
-        add_action('wp_ajax_nopriv_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
-        //ajax terminal_africa_arrange_terminal_delivery
-        add_action('wp_ajax_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
-        add_action('wp_ajax_nopriv_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
-        //refresh_terminal_wallet
-        add_action('wp_ajax_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
-        add_action('wp_ajax_nopriv_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
-        //refresh_terminal_rate_data
-        add_action('wp_ajax_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
-        add_action('wp_ajax_nopriv_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
-        //ajax save_terminal_carrier_settings
-        add_action('wp_ajax_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
-        add_action('wp_ajax_nopriv_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
-        //ajax refresh_terminal_carriers_data
-        add_action('wp_ajax_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
-        add_action('wp_ajax_nopriv_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
-        //ajax get_terminal_packaging
-        add_action('wp_ajax_get_terminal_packaging', array($this, 'get_terminal_packaging'));
-        add_action('wp_ajax_nopriv_get_terminal_packaging', array($this, 'get_terminal_packaging'));
-        //ajax get_terminal_shipment_status
-        add_action('wp_ajax_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
-        add_action('wp_ajax_nopriv_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
-        //ajax update user carrier
-        add_action('wp_ajax_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
-        add_action('wp_ajax_nopriv_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
-        // add_action('woocommerce_add_to_cart', array($this, 'remove_wc_session_on_cart_action'), 10, 6);
-        //ajax deactivate_terminal_africa
-        add_action('wp_ajax_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
-        add_action('wp_ajax_nopriv_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
-        //ajax cancel_terminal_shipment
-        add_action('wp_ajax_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
-        add_action('wp_ajax_nopriv_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
-        //add ajax save_terminal_custom_price_mark_up
-        add_action('wp_ajax_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
-        add_action('wp_ajax_nopriv_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
-        //listen to add to cart
-        add_action('woocommerce_add_to_cart', array($this, 'add_to_cart_event'), 10, 6);
-        //listen to update cart
-        // add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
-        //listen to remove cart
-        add_action('woocommerce_cart_item_removed', array($this, 'remove_cart_event'), 10, 2);
-        //add ajax save_terminal_default_currency_code
-        add_action('wp_ajax_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
-        add_action('wp_ajax_nopriv_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
-        //add ajax terminal_reset_carriers_data
-        add_action('wp_ajax_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
-        add_action('wp_ajax_nopriv_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
-        //ajax update_user_carrier_shipment_timeline_terminal
-        add_action('wp_ajax_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
-        add_action('wp_ajax_nopriv_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
-        //ajax update_user_carrier_shipment_rate_terminal
-        add_action('wp_ajax_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
-        add_action('wp_ajax_nopriv_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
-        //add ajax update_user_carrier_shipment_insurance_terminal
-        add_action('wp_ajax_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
-        add_action('wp_ajax_nopriv_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
-        //add new column to shop order page
-        add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
-        //add new column to shop order page
-        add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
-        //ajax terminal_africa_get_address_book
-        add_action('wp_ajax_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
-        add_action('wp_ajax_nopriv_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
-        //initAPI
-        $this->initAPI();
+        try {
+            //add settings page
+            add_action('admin_menu', array(self::class, 'add_settings_page'), PHP_INT_MAX);
+            //woocommerce_countries
+            add_filter('woocommerce_countries', array(self::class, 'woocommerce_countries'), PHP_INT_MAX);
+            //woocommerce_states
+            add_filter('woocommerce_states', array(self::class, 'woocommerce_states'), PHP_INT_MAX);
+            //plugin loaded
+            add_action('plugins_loaded', array(self::class, 'activate'), PHP_INT_MAX);
+            //enqueue scripts
+            add_action('admin_enqueue_scripts', array(self::class, 'enqueue_scripts'), PHP_INT_MAX);
+            //enqueue scripts
+            add_action('wp_enqueue_scripts', array(self::class, 'enqueue_frontend_script'), 1);
+            //fluid_checkout_override_style
+            add_action('wp_head', array(self::class, 'fluid_checkout_override_style'), PHP_INT_MAX);
+            //ajax terminal_africa_auth
+            add_action('wp_ajax_terminal_africa_auth', array($this, 'terminal_africa_auth'));
+            add_action('wp_ajax_nopriv_terminal_africa_auth', array($this, 'terminal_africa_auth'));
+            //ajax terminal_merchant_save_address
+            add_action('wp_ajax_terminal_merchant_save_address', array($this, 'terminal_merchant_save_address'));
+            add_action('wp_ajax_nopriv_terminal_merchant_save_address', array($this, 'terminal_merchant_save_address'));
+            //get states
+            add_action('wp_ajax_terminal_africa_get_states', array($this, 'terminal_africa_get_states'));
+            add_action('wp_ajax_nopriv_terminal_africa_get_states', array($this, 'terminal_africa_get_states'));
+            //ajax terminal_africa_get_cities
+            add_action('wp_ajax_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
+            add_action('wp_ajax_nopriv_terminal_africa_get_cities', array($this, 'terminal_africa_get_cities'));
+            //ajax terminal_africa_sign_out
+            add_action('wp_ajax_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
+            add_action('wp_ajax_nopriv_terminal_africa_sign_out', array(self::class, 'terminal_africa_sign_out'));
+            //ajax terminal_africa_enable_terminal
+            add_action('wp_ajax_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
+            add_action('wp_ajax_nopriv_terminal_africa_enable_terminal', array(self::class, 'terminal_africa_enable_terminal'));
+            //wp head
+            add_action('wp_head', array(self::class, 'wp_head_checkout'), PHP_INT_MAX);
+            add_action('woocommerce_checkout_update_order_review', array($this, 'checkout_update_refresh_shipping_methods'), PHP_INT_MAX, 1);
+            //ajax terminal_africa_save_cart_item
+            add_action('wp_ajax_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
+            add_action('wp_ajax_nopriv_terminal_africa_save_cart_item', array($this, 'terminal_africa_save_cart_item'));
+            //ajax terminal_africa_process_terminal_rates
+            add_action('wp_ajax_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
+            add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates', array($this, 'terminal_africa_process_terminal_rates'));
+            //ajax terminal_africa_save_shipping_carrier
+            add_action('wp_ajax_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
+            add_action('wp_ajax_nopriv_terminal_africa_save_shipping_carrier', array($this, 'terminal_africa_save_shipping_carrier'));
+            //ajax get rate data
+            add_action('wp_ajax_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
+            add_action('wp_ajax_nopriv_terminal_africa_get_rate_data', array($this, 'terminal_africa_get_rate_data'));
+            //ajax terminal_customer_save_address
+            add_action('wp_ajax_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
+            add_action('wp_ajax_nopriv_terminal_customer_save_address', array($this, 'terminal_customer_save_address'));
+            //ajax terminal_africa_process_terminal_rates_customer
+            add_action('wp_ajax_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
+            add_action('wp_ajax_nopriv_terminal_africa_process_terminal_rates_customer', array($this, 'terminal_africa_process_terminal_rates_customer'));
+            //ajax terminal_africa_apply_terminal_rates_customer
+            add_action('wp_ajax_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
+            add_action('wp_ajax_nopriv_terminal_africa_apply_terminal_rates_customer', array($this, 'terminal_africa_apply_terminal_rates_customer'));
+            //ajax terminal_africa_arrange_terminal_delivery
+            add_action('wp_ajax_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
+            add_action('wp_ajax_nopriv_terminal_africa_arrange_terminal_delivery', array($this, 'terminal_africa_arrange_terminal_delivery'));
+            //refresh_terminal_wallet
+            add_action('wp_ajax_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
+            add_action('wp_ajax_nopriv_refresh_terminal_wallet', array($this, 'refresh_terminal_wallet'));
+            //refresh_terminal_rate_data
+            add_action('wp_ajax_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
+            add_action('wp_ajax_nopriv_refresh_terminal_rate_data', array($this, 'refresh_terminal_rate_data'));
+            //ajax save_terminal_carrier_settings
+            add_action('wp_ajax_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
+            add_action('wp_ajax_nopriv_save_terminal_carrier_settings', array($this, 'save_terminal_carrier_settings'));
+            //ajax refresh_terminal_carriers_data
+            add_action('wp_ajax_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
+            add_action('wp_ajax_nopriv_refresh_terminal_carriers_data', array($this, 'refresh_terminal_carriers_data'));
+            //ajax get_terminal_packaging
+            add_action('wp_ajax_get_terminal_packaging', array($this, 'get_terminal_packaging'));
+            add_action('wp_ajax_nopriv_get_terminal_packaging', array($this, 'get_terminal_packaging'));
+            //ajax get_terminal_shipment_status
+            add_action('wp_ajax_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
+            add_action('wp_ajax_nopriv_get_terminal_shipment_status', array($this, 'get_terminal_shipment_status'));
+            //ajax update user carrier
+            add_action('wp_ajax_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
+            add_action('wp_ajax_nopriv_update_user_carrier_terminal', array($this, 'update_user_carrier_terminal'));
+            // add_action('woocommerce_add_to_cart', array($this, 'remove_wc_session_on_cart_action'), 10, 6);
+            //ajax deactivate_terminal_africa
+            add_action('wp_ajax_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
+            add_action('wp_ajax_nopriv_deactivate_terminal_africa', array(self::class, 'deactivate_terminal_africa'));
+            //ajax cancel_terminal_shipment
+            add_action('wp_ajax_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
+            add_action('wp_ajax_nopriv_cancel_terminal_shipment', array(self::class, 'cancel_terminal_shipment'));
+            //add ajax save_terminal_custom_price_mark_up
+            add_action('wp_ajax_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
+            add_action('wp_ajax_nopriv_save_terminal_custom_price_mark_up', array($this, 'save_terminal_custom_price_mark_up'));
+            //listen to add to cart
+            add_action('woocommerce_add_to_cart', array($this, 'add_to_cart_event'), 10, 6);
+            //listen to update cart
+            // add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
+            //listen to remove cart
+            add_action('woocommerce_cart_item_removed', array($this, 'remove_cart_event'), 10, 2);
+            //add ajax save_terminal_default_currency_code
+            add_action('wp_ajax_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
+            add_action('wp_ajax_nopriv_save_terminal_default_currency_code', array($this, 'save_terminal_default_currency_code'));
+            //add ajax terminal_reset_carriers_data
+            add_action('wp_ajax_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
+            add_action('wp_ajax_nopriv_terminal_reset_carriers_data', array($this, 'terminal_reset_carriers_data'));
+            //ajax update_user_carrier_shipment_timeline_terminal
+            add_action('wp_ajax_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
+            add_action('wp_ajax_nopriv_update_user_carrier_shipment_timeline_terminal', array($this, 'update_user_carrier_shipment_timeline_terminal'));
+            //ajax update_user_carrier_shipment_rate_terminal
+            add_action('wp_ajax_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
+            add_action('wp_ajax_nopriv_update_user_carrier_shipment_rate_terminal', array($this, 'update_user_carrier_shipment_rate_terminal'));
+            //add ajax update_user_carrier_shipment_insurance_terminal
+            add_action('wp_ajax_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
+            add_action('wp_ajax_nopriv_update_user_carrier_shipment_insurance_terminal', array($this, 'update_user_carrier_shipment_insurance_terminal'));
+            //add new column to shop order page
+            add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
+            //add new column to shop order page
+            add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
+            //ajax terminal_africa_get_address_book
+            add_action('wp_ajax_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
+            add_action('wp_ajax_nopriv_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
+            //initAPI
+            $this->initAPI();
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_init_issue');
+        }
     }
 
     /**
@@ -226,7 +230,10 @@ class TerminalAfricaShippingPlugin
             //get order status
             $order_status = $order->get_status();
             //check if order status is processing, on-hold, completed, pending
-            if (in_array($order_status, ['processing', 'on-hold', 'completed', 'pending', ...$terminal_allowed_order_statuses])) {
+            $default_status = ['processing', 'on-hold', 'completed', 'pending'];
+            //append terminal_allowed_order_statuses to default_status
+            $default_status = $default_status + $terminal_allowed_order_statuses;
+            if (in_array($order_status, $default_status)) {
                 //get terminal shipment status
                 $terminal_shipment_id = get_post_meta($post_id, 'Terminal_africa_shipment_id', true);
                 //rate id
