@@ -1,3 +1,7 @@
+<?php
+//security
+defined('ABSPATH') or die('No script kiddies please!');
+?>
 <div class="t-row">
     <div class="t-col-12">
         <div class="t-address-card-carriers t-settings-section">

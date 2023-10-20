@@ -61,6 +61,22 @@ trait Menus
             'terminal-africa-carriers',
             array(self::class, 'settings_page')
         );
+
+        //settings
+        add_submenu_page(
+            'terminal-africa',
+            'Settings - Terminal Africa Shipping',
+            'Settings',
+            'manage_options',
+            'terminal-africa-settings',
+            array(self::class, 'settings_page')
+        );
+
+        //update submenu title for the first item
+        global $submenu;
+        if (isset($submenu['terminal-africa'])) {
+            $submenu['terminal-africa'][0][0] = 'Shipments';
+        }
     }
 
     //custom header css
@@ -102,6 +118,9 @@ trait Menus
                 break;
             case 'terminal-africa-carriers':
                 $page = 'carriers';
+                break;
+            case 'terminal-africa-settings':
+                $page = 'settings';
                 break;
             default:
                 $page = 'dashboard';

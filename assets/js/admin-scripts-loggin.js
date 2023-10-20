@@ -11,8 +11,6 @@ class TerminalAfricaAdminLoggin {
     this.init();
     //remove screen distraction
     this.removeScreenDistraction();
-    //update admin shipment title
-    this.updateAdminShipmentTitle();
   }
 
   /**
@@ -72,22 +70,6 @@ class TerminalAfricaAdminLoggin {
         child.remove();
       }
     });
-  }
-
-  /**
-   * updateAdminShipmentTitle
-   * @param {void}
-   */
-  updateAdminShipmentTitle() {
-    //get #toplevel_page_terminal-africa
-    let topLevelPageTerminalAfrica = document.querySelector(
-      "#toplevel_page_terminal-africa"
-    );
-    //find wp-first-item
-    let wpFirstItem =
-      topLevelPageTerminalAfrica.querySelector("a.wp-first-item");
-    //update text
-    wpFirstItem.innerText = "Shipments";
   }
 }
 
