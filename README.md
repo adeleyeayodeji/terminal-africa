@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 3.0.0
 Requires PHP: 5.6
 Tested up to: 6.3
-Stable tag: 1.10.31
+Stable tag: 1.10.32
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -82,6 +82,10 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
+
+= 1.10.32 =
+
+- Fix bugs
 
 = 1.10.31 =
 

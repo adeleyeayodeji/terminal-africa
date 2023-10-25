@@ -454,6 +454,16 @@ trait TerminalRESTAPI
                     "shipment_id" => $shipment_id ?: null,
                     "products" => $products,
                     "default_address" => get_option('terminal_africa_merchant_address_id', null),
+                    'order_meta' => [
+                        'carrier' => get_post_meta($order_id, 'Terminal_africa_carriername', true),
+                        'amount' => get_post_meta($order_id, 'Terminal_africa_amount', true),
+                        'duration' => get_post_meta($order_id, 'Terminal_africa_duration', true),
+                        'rate_id' => get_post_meta($order_id, 'Terminal_africa_rateid', true),
+                        'shipment_id' => get_post_meta($order_id, 'Terminal_africa_shipment_id', true),
+                        'pickup_time' => get_post_meta($order_id, 'Terminal_africa_pickuptime', true),
+                        'carrier_logo' => get_post_meta($order_id, 'Terminal_africa_carrierlogo', true),
+                        'status' => get_post_meta($order_id, 'Terminal_africa_status', true),
+                    ],
                     "extral" => $order_data,
                     "extra" => $order_data,
                 ];
@@ -669,13 +679,38 @@ trait TerminalRESTAPI
                 //get merchant id
                 $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
                 //update order status
-                update_post_meta($order_id, 'Terminal_africa_carriername', $order_meta['carrier']);
-                update_post_meta($order_id, 'Terminal_africa_amount', $order_meta['amount']);
-                update_post_meta($order_id, 'Terminal_africa_duration', $order_meta['duration']);
-                update_post_meta($order_id, 'Terminal_africa_rateid', $order_meta['rate_id']);
-                update_post_meta($order_id, 'Terminal_africa_shipment_id', $order_meta['shipment_id']);
-                update_post_meta($order_id, 'Terminal_africa_pickuptime', $order_meta['pickup_time']);
-                update_post_meta($order_id, 'Terminal_africa_carrierlogo', $order_meta['carrier_logo']);
+                //check if $order_meta['carrier'] is set
+                if (isset($order_meta['carrier'])) {
+                    update_post_meta($order_id, 'Terminal_africa_carriername', $order_meta['carrier']);
+                }
+                //check if $order_meta['amount'] is set
+                if (isset($order_meta['amount'])) {
+                    update_post_meta($order_id, 'Terminal_africa_amount', $order_meta['amount']);
+                }
+                //check if $order_meta['duration'] is set
+                if (isset($order_meta['duration'])) {
+                    update_post_meta($order_id, 'Terminal_africa_duration', $order_meta['duration']);
+                }
+                //check if $order_meta['rate_id'] is set
+                if (isset($order_meta['rate_id'])) {
+                    update_post_meta($order_id, 'Terminal_africa_rateid', $order_meta['rate_id']);
+                }
+                //check if $order_meta['shipment_id'] is set
+                if (isset($order_meta['shipment_id'])) {
+                    update_post_meta($order_id, 'Terminal_africa_shipment_id', $order_meta['shipment_id']);
+                }
+                //check if $order_meta['pickup_time'] is set
+                if (isset($order_meta['pickup_time'])) {
+                    update_post_meta($order_id, 'Terminal_africa_pickuptime', $order_meta['pickup_time']);
+                }
+                //check if $order_meta['carrier_logo'] is set
+                if (isset($order_meta['carrier_logo'])) {
+                    update_post_meta($order_id, 'Terminal_africa_carrierlogo', $order_meta['carrier_logo']);
+                }
+                //check if $order_meta['status'] is set
+                if (isset($order_meta['status'])) {
+                    update_post_meta($order_id, 'Terminal_africa_status', $order_meta['status']);
+                }
                 update_post_meta($order_id, 'Terminal_africa_merchant_id', $terminal_africa_merchant_id);
                 update_post_meta($order_id, 'Terminal_africa_mode', $mode);
                 //update through api
