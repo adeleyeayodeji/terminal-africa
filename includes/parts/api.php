@@ -464,7 +464,6 @@ trait TerminalRESTAPI
                         'carrier_logo' => get_post_meta($order_id, 'Terminal_africa_carrierlogo', true),
                         'status' => get_post_meta($order_id, 'Terminal_africa_status', true),
                     ],
-                    "extral" => $order_data,
                     "extra" => $order_data,
                 ];
             }
@@ -533,7 +532,17 @@ trait TerminalRESTAPI
                 "id" => $order_id,
                 "shipment_id" => $shipment_id ?: "none",
                 "products" => $products,
-                "extral" => $order_data,
+                "extra" => $order_data,
+                'order_meta' => [
+                    'carrier' => get_post_meta($order_id, 'Terminal_africa_carriername', true),
+                    'amount' => get_post_meta($order_id, 'Terminal_africa_amount', true),
+                    'duration' => get_post_meta($order_id, 'Terminal_africa_duration', true),
+                    'rate_id' => get_post_meta($order_id, 'Terminal_africa_rateid', true),
+                    'shipment_id' => get_post_meta($order_id, 'Terminal_africa_shipment_id', true),
+                    'pickup_time' => get_post_meta($order_id, 'Terminal_africa_pickuptime', true),
+                    'carrier_logo' => get_post_meta($order_id, 'Terminal_africa_carrierlogo', true),
+                    'status' => get_post_meta($order_id, 'Terminal_africa_status', true),
+                ],
             ];
             //response
             $response = [
