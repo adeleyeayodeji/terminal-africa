@@ -275,6 +275,17 @@ trait TerminalRESTAPI
                 'permission_callback' => [$this, 'api_permission']
             ]
         );
+
+        //deactivate the plugin
+        register_rest_route(
+            'terminal-africa/v1',
+            '/deactivate',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'deactivateThePlugin'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
     }
 
     /**
@@ -693,6 +704,37 @@ trait TerminalRESTAPI
             $response = [
                 "status" => 500,
                 "message" => "Error updating order meta",
+                "data" => $e->getMessage(),
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
+    }
+
+    /**
+     * Deactivate the plugin
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function deactivateThePlugin(WP_REST_Request $request)
+    {
+        try {
+            self::deactivate();
+            //deactivate the plugin
+            deactivate_plugins(TERMINAL_AFRICA_PLUGIN_BASENAME);
+            //response
+            $response = [
+                "status" => 200,
+                "message" => "Plugin deactivated successfully",
+                "data" => [],
+            ];
+            //return
+            return new WP_REST_Response($response, 200);
+        } catch (\Exception $e) {
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error deactivating plugin",
                 "data" => $e->getMessage(),
             ];
             //return

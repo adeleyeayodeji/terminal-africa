@@ -103,14 +103,17 @@ trait Activation
             //remove all woocomerce session
             //check if class exist
             if (function_exists('WC')) {
-                //get all session
-                $sessions = WC()->session->get_session_data();
-                //loop through sessions
-                foreach ($sessions as $key => $value) {
-                    //check if session is terminal_africa
-                    if (strpos($key, 'terminal_africa') !== false) {
-                        //remove session
-                        WC()->session->__unset($key);
+                //check if wc session exist
+                if (WC()->session) {
+                    //get all session
+                    $sessions = WC()->session->get_session_data();
+                    //loop through sessions
+                    foreach ($sessions as $key => $value) {
+                        //check if session is terminal_africa
+                        if (strpos($key, 'terminal_africa') !== false) {
+                            //remove session
+                            WC()->session->__unset($key);
+                        }
                     }
                 }
             }
