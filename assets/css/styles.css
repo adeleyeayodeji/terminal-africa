@@ -1559,3 +1559,37 @@ input:checked + .t-slider:before {
 .t-header-logo img:hover {
   transform: scale(1.1);
 }
+
+.t-settings-page {
+  width: auto !important;
+  margin: 20px;
+  padding: 25px 50px 50px 50px;
+  border-radius: 20px;
+  box-shadow: 1px 0px 6px -5px black;
+}
+
+.t-settings-page h3 {
+  font-family: Lato, sans-serif;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.t-settings-page-card {
+  background: #f6f3ef !important;
+  padding: 25px 0px 25px 30px;
+  border-radius: 16px;
+}
+
+.t-settings-page-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: Lato, sans-serif;
+  margin: 0px;
+}
+
+.t-settings-page-card-description {
+  font-family: Lato, sans-serif;
+  font-size: 16px;
+  margin: 0px;
+  margin-top: 8px;
+}
