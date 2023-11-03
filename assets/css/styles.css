@@ -1562,7 +1562,7 @@ input:checked + .t-slider:before {
 
 .t-settings-page {
   width: auto !important;
-  margin: 20px;
+  margin: 20px 70px 30px 60px;
   padding: 25px 50px 50px 50px;
   border-radius: 20px;
   box-shadow: 1px 0px 6px -5px black;

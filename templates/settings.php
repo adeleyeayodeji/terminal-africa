@@ -29,7 +29,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                         <div>
                             <div class="t-carrier-embed w-embed">
                                 <label class="t-switch t-carrier-switch">
-                                    <input type="checkbox" class="t-carrier-checkbox">
+                                    <input type="checkbox" class="t-carrier-checkbox" name="Hide_Shipment_Rate" id="Hide_Shipment_Rate" <?php echo get_option('update_user_carrier_shipment_rate_terminal') == 'true' ? 'checked' : ''; ?>>
                                     <span class="t-slider round"></span>
                                 </label>
                             </div>
@@ -39,16 +39,16 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     <div class="t-flex t-settings-page-card t-mb-4">
                         <div>
                             <p class="t-settings-page-card-title">
-                                Show Rates
+                                Show Delivery Timelines
                             </p>
                             <p class="t-settings-page-card-description">
-                                When enabled, your customer can see your rates.
+                                When enabled, your rates will show pickup and delivery timelines.
                             </p>
                         </div>
                         <div>
                             <div class="t-carrier-embed w-embed">
                                 <label class="t-switch t-carrier-switch">
-                                    <input type="checkbox" class="t-carrier-checkbox">
+                                    <input type="checkbox" class="t-carrier-checkbox" name="Hide_Shipment_Timeline" id="Hide_Shipment_Timeline" <?php echo get_option('terminal_user_carrier_shipment_timeline') == 'true' ? 'checked' : ''; ?>>
                                     <span class="t-slider round"></span>
                                 </label>
                             </div>
@@ -58,19 +58,54 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     <div class="t-flex t-settings-page-card t-mb-4">
                         <div>
                             <p class="t-settings-page-card-title">
-                                Show Rates
+                                Enable Insurance
                             </p>
                             <p class="t-settings-page-card-description">
-                                When enabled, your customer can see your rates.
+                                When enabled, all your rates will include insurance fees.
                             </p>
                         </div>
                         <div>
                             <div class="t-carrier-embed w-embed">
                                 <label class="t-switch t-carrier-switch">
-                                    <input type="checkbox" class="t-carrier-checkbox">
+                                    <input type="checkbox" class="t-carrier-checkbox" name="Enable_Terminal_Insurance" id="Enable_Terminal_Insurance" <?php echo get_option('update_user_carrier_shipment_insurance_terminal') == 'true' ? 'checked' : ''; ?>>
                                     <span class="t-slider round"></span>
                                 </label>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div>
+                            <p class="t-settings-page-card-title">
+                                Set Default Currency
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                Set the default currency code for the checkout page.
+                            </p>
+                        </div>
+                        <div style="margin-right: 30px;width: 170px;">
+                            <select class="t-form-control t-terminal-country-default-settings" name="terminal_default_currency_code" id="">
+                                <option value="">Country</option>
+                                <?php foreach ($countries as $key => $country) : ?>
+                                    <option value="<?php echo esc_html($country->currency); ?>" data-isocode="<?php echo esc_html($country->isoCode); ?>" data-flag="<?php echo esc_html($country->flag); ?>" <?php echo $saved_currency && $saved_currency['isoCode'] == $country->isoCode ? 'selected' : ''; ?>>
+                                        <?php echo esc_html($country->name); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div>
+                            <p class="t-settings-page-card-title">
+                                Custom price mark up
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                Set your own price markup for all your shipments as a percentage (%).
+                            </p>
+                        </div>
+                        <div style="margin-right: 30px;width: 170px;">
+                            <input type="number" class="t-form-control" name="terminal_custom_price_mark_up" placeholder="e.g 10 for 10%" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>" style="height: 49px;">
                         </div>
                     </div>
                 </div>
