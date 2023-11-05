@@ -1527,6 +1527,7 @@ trait Ajax
             wp_send_json([
                 'code' => 200,
                 'message' => 'Shipment rate updated successfully',
+                'shipment_rate' => $status
             ]);
         } catch (\Exception $e) {
             logTerminalError($e);

@@ -18,7 +18,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     <h3>Customise your Shipping Experience for your WooCommerce store.</h3>
 
                     <div class="t-flex t-settings-page-card t-mb-4">
-                        <div>
+                        <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Show Rates
                             </p>
@@ -36,8 +36,28 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                         </div>
                     </div>
 
+                    <div class="t-settings-page-card-notice-parent">
+                        <div class="t-flex t-settings-page-card t-settings-page-card-notice t-mb-4">
+                            <div class="t-settings-first">
+                                <p class="t-settings-page-card-title">
+                                    Notice!
+                                </p>
+                                <p class="t-settings-page-card-description">
+                                    Terminal Africa rates are currenctly disabled, please enable Terminal Africa rates or set up flat rates as a backup.
+                                </p>
+                            </div>
+                            <div style="min-width: 208px;">
+                                <p>
+                                    <a href="javascript:;" class="t-notice-section">
+                                        SET UP FLAT RATES
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="t-flex t-settings-page-card t-mb-4">
-                        <div>
+                        <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Show Delivery Timelines
                             </p>
@@ -56,7 +76,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     </div>
 
                     <div class="t-flex t-settings-page-card t-mb-4">
-                        <div>
+                        <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Enable Insurance
                             </p>
@@ -75,7 +95,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     </div>
 
                     <div class="t-flex t-settings-page-card t-mb-4">
-                        <div>
+                        <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Set Default Currency
                             </p>
@@ -96,7 +116,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                     </div>
 
                     <div class="t-flex t-settings-page-card t-mb-4">
-                        <div>
+                        <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Custom price mark up
                             </p>

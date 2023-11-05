@@ -2216,7 +2216,7 @@ jQuery(document).ready(function ($) {
           return;
         }
         //log data are empty
-        console.log("data are empty", carrierObj);
+        // console.log("data are empty", carrierObj);
       });
   });
 
@@ -2276,6 +2276,20 @@ jQuery(document).ready(function ($) {
     });
   });
 
+  let checkIfShipmentRateIsTrue = () => {
+    let input = $("input[name=Hide_Shipment_Rate]");
+    //check if input is checked
+    if (!input.is(":checked")) {
+      //slide in .t-settings-page-card-notice-parent
+      $(".t-settings-page-card-notice-parent").slideDown();
+    } else {
+      //fade out
+      $(".t-settings-page-card-notice-parent").fadeOut();
+    }
+  };
+
+  checkIfShipmentRateIsTrue();
+
   /**
    * Hide_Shipment_Rate
    */
@@ -2324,6 +2338,15 @@ jQuery(document).ready(function ($) {
             transitionIn: "flipInX",
             transitionOut: "flipOutX"
           });
+
+          //check if shipment_rate is true
+          if (response.shipment_rate == "false") {
+            //slide in .t-settings-page-card-notice-parent
+            $(".t-settings-page-card-notice-parent").slideDown();
+          } else {
+            //fade out
+            $(".t-settings-page-card-notice-parent").fadeOut();
+          }
         }
       },
       error: function (error) {
