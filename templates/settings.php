@@ -7,6 +7,8 @@ $countries = get_terminal_countries();
 $saved_currency = get_option("terminal_default_currency_code", ['isoCode' => 'NG', 'currency_code' => 'NGN']);
 //terminal_custom_price_mark_up
 $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '');
+//create link 'admin.php?page=wc-settings&tab=shipping'
+$settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
 
 ?>
 <div class="t-container">
@@ -48,7 +50,7 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
                             </div>
                             <div style="min-width: 208px;">
                                 <p>
-                                    <a href="javascript:;" class="t-notice-section">
+                                    <a href="javascript:;" class="t-notice-section t-notice-section-action" data-link="<?php echo esc_attr($settings_link); ?>">
                                         SET UP FLAT RATES
                                     </a>
                                 </p>

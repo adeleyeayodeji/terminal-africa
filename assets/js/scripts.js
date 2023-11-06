@@ -2476,4 +2476,27 @@ jQuery(document).ready(function ($) {
       }
     });
   });
+
+  /**
+   * Redirect to WooCommerce Flat Rate Page Settings
+   */
+  $(".t-notice-section-action").click(function (e) {
+    e.preventDefault();
+    //block ui
+    $.blockUI({
+      message: `<i class="fa fa-spinner fa-spin"></i> Redirecting...`,
+      css: {
+        border: 0,
+        padding: 0,
+        backgroundColor: "transparent"
+      },
+      overlayCSS: {
+        background: "#fff",
+        opacity: 0.8,
+        cursor: "wait"
+      }
+    });
+    //redirect to page
+    window.location.href = $(this).data("link");
+  });
 });
