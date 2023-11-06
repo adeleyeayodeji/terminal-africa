@@ -27,6 +27,13 @@ trait Assets
         if (strpos($_SERVER['REQUEST_URI'], 'terminal') === false) {
             return;
         }
+
+        //check if url match section=terminal_delivery
+        if (isset($_GET['section']) && $_GET['section'] == 'terminal_delivery' && isset($_GET['page']) && $_GET['page'] == 'wc-settings') {
+            //ignore for wc core page
+            return;
+        }
+
         //enqueue styles
         //font awesome 
         wp_enqueue_style('terminal-africa-font-awesome-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/fontawesome.min.css', array(), TERMINAL_AFRICA_VERSION);
@@ -117,6 +124,13 @@ trait Assets
                     //$enabled false
                     $enabled = false;
                 }
+
+                //check if hide shipment rate is true
+                if (get_option('update_user_carrier_shipment_rate_terminal') == 'false') {
+                    //$enabled false
+                    $enabled = false;
+                }
+
                 //check if enabled is set to no
                 $shipping = new \WC_Terminal_Delivery_Shipping_Method;
                 //check if shipping method is enabled 

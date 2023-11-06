@@ -241,12 +241,7 @@ function terminalsetValue2(elem) {
                   <p style=""> 
                         <span style="font-weight: bolder;">${
                           value.carrier_name
-                        }</span> ${
-                          terminal_africa_parcel.update_user_carrier_shipment_rate_terminal ==
-                          "true"
-                            ? ""
-                            : "- " + amount
-                        }  ${
+                        }</span> ${"- " + amount}  ${
                           terminal_africa_parcel.terminal_user_carrier_shipment_timeline ==
                           "true"
                             ? ""

@@ -1078,33 +1078,28 @@ let terminalCheckoutWC = {
                 <div class="t-checkout-single" onclick="terminalCheckoutWC.terminalSetShippingCrarrier(this, event)" data-carrier-name="${
                   value.carrier_name
                 }" data-amount="${default_amount}" data-duration="${
-                value.delivery_time
-              }" data-pickup="${value.pickup_time}" data-rateid="${
-                value.rate_id
-              }" data-image-url="${value.carrier_logo}">
+                  value.delivery_time
+                }" data-pickup="${value.pickup_time}" data-rateid="${
+                  value.rate_id
+                }" data-image-url="${value.carrier_logo}">
                 <label for="shipping">
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${
                     value.carrier_name
                   }" title="${
-                value.carrier_name
-              }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
-                value.carrier_logo
-              }">
+                    value.carrier_name
+                  }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
+                    value.carrier_logo
+                  }">
                   <p style=""> 
                         <span style="font-weight: bolder;">${
                           value.carrier_name
-                        }</span> ${
-                terminal_africa_parcel.update_user_carrier_shipment_rate_terminal ==
-                "true"
-                  ? ""
-                  : "- " + amount
-              }  ${
-                terminal_africa_parcel.terminal_user_carrier_shipment_timeline ==
-                "true"
-                  ? ""
-                  : "- " + value.delivery_time
-              }
+                        }</span> ${"- " + amount}  ${
+                          terminal_africa_parcel.terminal_user_carrier_shipment_timeline ==
+                          "true"
+                            ? ""
+                            : "- " + value.delivery_time
+                        }
                     </p>
                 </div>
                 </label>

@@ -1523,6 +1523,21 @@ trait Ajax
             $status = sanitize_text_field($_POST['status']);
             //update option
             update_option('update_user_carrier_shipment_rate_terminal', $status);
+
+            //get shipping settings
+            $settings = get_option('woocommerce_terminal_delivery_settings');
+
+            //check if status is true
+            if ($status == 'true') {
+                //update shipping settings
+                $settings['enabled'] = 'yes';
+            } else {
+                //update shipping settings
+                $settings['enabled'] = 'no';
+            }
+            //update method
+            update_option('woocommerce_terminal_delivery_settings', $settings);
+
             //return
             wp_send_json([
                 'code' => 200,

@@ -92,7 +92,7 @@ if ($wallet_balance['code'] == 200) {
 
         </div>
     </div>
-    <div class="t-transaction-container t-m-2">
+    <!-- <div class="t-transaction-container t-m-2">
         <div class="t-transaction-header t-flex">
             <div class="t-transaction-header-left">
                 <div class="">
@@ -107,5 +107,5 @@ if ($wallet_balance['code'] == 200) {
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

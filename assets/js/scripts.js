@@ -2500,3 +2500,28 @@ jQuery(document).ready(function ($) {
     window.location.href = $(this).data("link");
   });
 });
+
+/**
+ * Remove screen distraction
+ * @return {void}
+ */
+let removeScreenDistraction = () => {
+  //check if wpbody-content has any child other than 'style, .t-container, .clear' and remove them
+  let wpBodyContent = document.querySelector("#wpbody-content");
+  let wpBodyContentChildren = wpBodyContent.children;
+  let wpBodyContentChildrenArray = Array.from(wpBodyContentChildren);
+  //remove all children
+  wpBodyContentChildrenArray.forEach((child) => {
+    if (
+      child.classList.contains("t-container") ||
+      child.classList.contains("clear") ||
+      child.tagName === "STYLE"
+    ) {
+      //do nothing
+    } else {
+      child.remove();
+    }
+  });
+};
+
+removeScreenDistraction();

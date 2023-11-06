@@ -138,10 +138,10 @@ trait Menus
         } else {
             $shipping = new \WC_Terminal_Delivery_Shipping_Method;
             //check if shipping method is enabled 
-            if ($shipping->enabled == "no") {
-                //error page
-                $page = 'error';
-            }
+            // if ($shipping->enabled == "no") {
+            //     //error page
+            //     $page = 'error';
+            // }
         }
         //require files
         require_once TERMINAL_AFRICA_PLUGIN_DIR . '/templates/' . $page . '.php';
