@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.10.33
+ * Version:     1.10.34
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -76,6 +76,8 @@ class WC_Terminal_Delivery_Loader
         }
 
         if (!$this->wc_active_check()) {
+            //add install wc notice
+            add_action('admin_notices', array($this, 'terminal_install_wc_notice'));
             return;
         }
 
@@ -89,6 +91,18 @@ class WC_Terminal_Delivery_Loader
         if ($this->is_environment_compatible()) {
             add_action('plugins_loaded', array($this, 'init_plugin'));
         }
+    }
+
+    /**
+     * terminal_install_wc_notice
+     */
+    public function terminal_install_wc_notice()
+    {
+        $class = 'notice notice-error';
+        $message = __('Terminal Delivery requires WooCommerce to be installed and activated.', 'terminal-africa');
+        $link = admin_url('plugin-install.php?s=woocommerce&tab=search&type=term');
+
+        printf('<div class="%1$s"><p>%2$s <a href="%3$s">Install</a></p></div>', esc_attr($class), esc_html($message), esc_url($link));
     }
 
     /**
