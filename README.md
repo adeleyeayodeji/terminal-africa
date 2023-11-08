@@ -3,10 +3,10 @@ Contributors: terminalafrica, biggidroid
 Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping, terminalafrica
 Author URI: http://www.terminal.africa
 Author: Terminal
-Requires at least: 3.0.0
-Requires PHP: 5.6
-Tested up to: 6.3
-Stable tag: 1.10.34
+Requires at least: 6.0
+Requires PHP: 7.4
+Tested up to: 6.4
+Stable tag: 1.11.0
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -82,6 +82,11 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
+
+= 1.11.0 =
+
+- Added support for WooCommerce 8.2.0
+- Added support for WordPress 6.4
 
 = 1.10.34 =
 

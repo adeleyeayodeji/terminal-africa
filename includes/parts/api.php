@@ -416,8 +416,6 @@ trait TerminalRESTAPI
             foreach ($orders as $order) {
                 //get the order id
                 $order_id = $order->get_id();
-                //get the order
-                $order = wc_get_order($order_id);
                 //get the order data
                 $order_data = $order->get_data();
                 //get the order date
@@ -691,39 +689,55 @@ trait TerminalRESTAPI
                 //check if $order_meta['carrier'] is set
                 if (isset($order_meta['carrier'])) {
                     update_post_meta($order_id, 'Terminal_africa_carriername', $order_meta['carrier']);
+                    $order->update_meta_data('Terminal_africa_carriername', $order_meta['carrier']);
                 }
                 //check if $order_meta['amount'] is set
                 if (isset($order_meta['amount'])) {
                     update_post_meta($order_id, 'Terminal_africa_amount', $order_meta['amount']);
+                    $order->update_meta_data('Terminal_africa_amount', $order_meta['amount']);
                 }
                 //check if $order_meta['duration'] is set
                 if (isset($order_meta['duration'])) {
                     update_post_meta($order_id, 'Terminal_africa_duration', $order_meta['duration']);
+                    $order->update_meta_data('Terminal_africa_duration', $order_meta['duration']);
                 }
                 //check if $order_meta['rate_id'] is set
                 if (isset($order_meta['rate_id'])) {
                     update_post_meta($order_id, 'Terminal_africa_rateid', $order_meta['rate_id']);
+                    $order->update_meta_data('Terminal_africa_rateid', $order_meta['rate_id']);
                 }
                 //check if $order_meta['shipment_id'] is set
                 if (isset($order_meta['shipment_id'])) {
                     update_post_meta($order_id, 'Terminal_africa_shipment_id', $order_meta['shipment_id']);
+                    $order->update_meta_data('Terminal_africa_shipment_id', $order_meta['shipment_id']);
                 }
                 //check if $order_meta['pickup_time'] is set
                 if (isset($order_meta['pickup_time'])) {
                     update_post_meta($order_id, 'Terminal_africa_pickuptime', $order_meta['pickup_time']);
+                    $order->update_meta_data('Terminal_africa_pickuptime', $order_meta['pickup_time']);
                 }
                 //check if $order_meta['carrier_logo'] is set
                 if (isset($order_meta['carrier_logo'])) {
                     update_post_meta($order_id, 'Terminal_africa_carrierlogo', $order_meta['carrier_logo']);
+                    $order->update_meta_data('Terminal_africa_carrierlogo', $order_meta['carrier_logo']);
                 }
                 //check if $order_meta['status'] is set
                 if (isset($order_meta['status'])) {
                     update_post_meta($order_id, 'Terminal_africa_status', $order_meta['status']);
+                    $order->update_meta_data('Terminal_africa_status', $order_meta['status']);
                 }
                 update_post_meta($order_id, 'Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+
+                $order->update_meta_data('Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+
                 update_post_meta($order_id, 'Terminal_africa_mode', $mode);
+
+                $order->update_meta_data('Terminal_africa_mode', $mode);
+
                 //update through api
                 update_post_meta($order_id, 'Terminal_africa_api_ping', "yes");
+
+                $order->update_meta_data('Terminal_africa_api_ping', "yes");
                 //save the order
                 $order->save();
                 //response
