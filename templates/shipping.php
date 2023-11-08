@@ -42,12 +42,12 @@ $next_url = esc_url($next_url);
                 </thead>
                 <tbody>
                     <?php
-                    if (count($orders) > 0) :
-                        foreach ($orders as $order) :
-                            $order_id = $order->ID;
+                    if (!empty($orders->orders)) :
+                        foreach ($orders->orders as $order) :
+                            $order_id = $order->get_id();
                             $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
                             $carrier = get_post_meta($order_id, 'Terminal_africa_carriername', true);
-                            $order_date = $order->post_date;
+                            $order_date = $order->get_date_created()->date('Y-m-d H:i:s');
                             $timeago = human_time_diff(strtotime($order_date), current_time('timestamp')) . ' ago';
                             $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
                             //arg
@@ -61,7 +61,7 @@ $next_url = esc_url($next_url);
                             );
                             $shipping_url = add_query_arg($arg, $plugin_url);
                             //get Terminal_africa_carrierlogo
-                            $carrirer_logo = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png';
+                            $carrirer_logo = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.svg';
                     ?>
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>

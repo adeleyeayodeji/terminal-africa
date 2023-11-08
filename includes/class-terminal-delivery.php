@@ -43,14 +43,6 @@ class WC_Terminal_Delivery
     public function init_plugin()
     {
         $this->includes();
-
-        if (is_admin()) {
-            $this->admin_includes();
-        }
-
-        //ajax Terminal_delivery_get_status
-        add_action('wp_ajax_Terminal_delivery_get_status', array($this, 'getStatus'));
-        add_action('wp_ajax_nopriv_Terminal_delivery_get_status', array($this, 'getStatus'));
     }
 
     /**
@@ -61,11 +53,6 @@ class WC_Terminal_Delivery
     public function includes()
     {
         require __DIR__ . '/class-terminal-shipping-method.php';
-    }
-
-    public function admin_includes()
-    {
-        // require_once __DIR__ . '/class-wc-el-orders.php';
     }
 
     /**
@@ -85,6 +72,9 @@ class WC_Terminal_Delivery
         add_action('woocommerce_shipping_init', array($this, 'load_shipping_method'), PHP_INT_MAX);
 
         add_action('woocommerce_checkout_update_order_meta', array($this, 'save_terminal_delivery_order_meta'), PHP_INT_MAX);
+
+        //woocommerce_checkout_order_created
+        add_action('woocommerce_checkout_order_created', array($this, 'save_terminal_delivery_order_meta'), PHP_INT_MAX);
 
         // cancel a Terminal delivery task when an order is cancelled in WC
         // add_action('woocommerce_order_status_cancelled', array($this, 'cancel_order_shipping_task'));
@@ -246,7 +236,7 @@ class WC_Terminal_Delivery
         }
         $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
         $order_id = $order->get_id();
-        $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
+        $icon_url = plugins_url('assets/img/logo.svg', $plugin_path);
         //overwirte icon url
         $icon_url = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: $icon_url;
         $shipment_id = get_post_meta($order_id, 'Terminal_africa_shipment_id', true);
@@ -355,7 +345,7 @@ class WC_Terminal_Delivery
         if ($method->method_id == 'terminal_delivery') {
             $plugin_path = TERMINAL_AFRICA_PLUGIN_FILE;
             $logo_title = 'Terminal Delivery';
-            $icon_url = plugins_url('assets/img/logo.png', $plugin_path);
+            $icon_url = plugins_url('assets/img/logo.svg', $plugin_path);
             $img = '<img class="Terminal-delivery-logo" align="left"' .
                 ' alt="' . $logo_title . '"' .
                 ' title="' . $logo_title . '"' .
@@ -372,8 +362,16 @@ class WC_Terminal_Delivery
     }
 
     //save_terminal_delivery_order_meta
-    public function save_terminal_delivery_order_meta($order_id)
+    public function save_terminal_delivery_order_meta($order)
     {
+        //check if order is an instance of WC_Order
+        if ($order && $order instanceof WC_Order) {
+            //get order id
+            $order_id = $order->get_id();
+        } else {
+            //get order id
+            $order_id = $order;
+        }
         //check if session is started
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -449,6 +447,41 @@ class WC_Terminal_Delivery
             update_post_meta($order_id, 'Terminal_africa_merchant_id', $terminal_africa_merchant_id);
             update_post_meta($order_id, 'Terminal_africa_mode', $mode);
 
+            //save to wc order meta
+            if ($order && $order instanceof WC_Order) {
+                //save 
+                $order->update_meta_data('Terminal_africa_carriername', $terminal_africa_carriername);
+                $order->update_meta_data('Terminal_africa_amount', $terminal_africa_amount);
+                $order->update_meta_data('Terminal_africa_duration', $terminal_africa_duration);
+                $order->update_meta_data('Terminal_africa_guest_email', $guest_email);
+                $order->update_meta_data('Terminal_africa_rateid', $terminal_africa_rateid);
+                $order->update_meta_data('Terminal_africa_shipment_id', $shipment_id);
+                $order->update_meta_data('Terminal_africa_pickuptime', $terminal_africa_pickuptime);
+                $order->update_meta_data('Terminal_africa_carrierlogo', $terminal_africa_carrierlogo);
+                $order->update_meta_data('Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+                $order->update_meta_data('Terminal_africa_mode', $mode);
+                //save order
+                $order->save();
+            } else {
+                //get order id
+                $order_id = $order;
+                //get order
+                $order = wc_get_order($order_id);
+                //save
+                $order->update_meta_data('Terminal_africa_carriername', $terminal_africa_carriername);
+                $order->update_meta_data('Terminal_africa_amount', $terminal_africa_amount);
+                $order->update_meta_data('Terminal_africa_duration', $terminal_africa_duration);
+                $order->update_meta_data('Terminal_africa_guest_email', $guest_email);
+                $order->update_meta_data('Terminal_africa_rateid', $terminal_africa_rateid);
+                $order->update_meta_data('Terminal_africa_shipment_id', $shipment_id);
+                $order->update_meta_data('Terminal_africa_pickuptime', $terminal_africa_pickuptime);
+                $order->update_meta_data('Terminal_africa_carrierlogo', $terminal_africa_carrierlogo);
+                $order->update_meta_data('Terminal_africa_merchant_id', $terminal_africa_merchant_id);
+                $order->update_meta_data('Terminal_africa_mode', $mode);
+                //save order
+                $order->save();
+            }
+
             //delete session
             WC()->session->__unset('terminal_africa_carriername');
             WC()->session->__unset('terminal_africa_amount');
@@ -469,37 +502,6 @@ class WC_Terminal_Delivery
             }
         } else {
             return;
-        }
-    }
-
-    /**
-     * Adds the tracking information to the View Order page.
-     *
-     * @internal
-     *
-     * @since 2.0.0
-     *
-     * @param int|\WC_Order $order the order object
-     */
-    public function add_view_order_tracking($order)
-    {
-        $order = wc_get_order($order);
-        $Terminal_africa_shipment_id = get_post_meta($order->get_id(), 'Terminal_africa_shipment_id', true);
-
-        if ($Terminal_africa_shipment_id) {
-?>
-            <table id="wc_Terminal_delivery_order_meta_box">
-                <tr>
-                    <th><strong><?php esc_html_e('Unique Refrence ID') ?> : </strong></th>
-                    <td><?php echo esc_html((empty($Terminal_africa_shipment_id)) ? __('N/A') : $Terminal_africa_shipment_id); ?></td>
-                </tr>
-
-                <tr>
-                    <th><strong>Manage Shipment</strong></th>
-                </tr>
-            </table>
-
-<?php
         }
     }
 

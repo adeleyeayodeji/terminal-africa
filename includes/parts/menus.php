@@ -18,7 +18,7 @@ trait Menus
             'terminal-africa',
             array(self::class, 'settings_page'),
             //icon
-            TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/logo.png',
+            TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/logo.svg',
             5
         );
 
@@ -76,6 +76,13 @@ trait Menus
         global $submenu;
         if (isset($submenu['terminal-africa'])) {
             $submenu['terminal-africa'][0][0] = 'Shipments';
+
+            //move terminal-africa-get-started to first index of menu
+            $get_started = $submenu['terminal-africa'][1];
+            //unset terminal-africa-get-started
+            unset($submenu['terminal-africa'][1]);
+            //add terminal-africa-get-started to first index of menu
+            array_unshift($submenu['terminal-africa'], $get_started);
         }
     }
 

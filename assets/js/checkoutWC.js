@@ -1095,7 +1095,7 @@ let terminalCheckoutWC = {
                         <span style="font-weight: bolder;">${
                           value.carrier_name
                         }</span> ${"- " + amount}  ${
-                          terminal_africa_parcel.terminal_user_carrier_shipment_timeline ==
+                          terminal_africa_parcel.terminal_user_carrier_shipment_timeline !=
                           "true"
                             ? ""
                             : "- " + value.delivery_time

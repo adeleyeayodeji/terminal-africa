@@ -33,33 +33,23 @@ class TerminalCore
                 }
             }
             $args = [
-                //post type
-                'post_type' => 'shop_order',
-                //post status
-                'post_status' => ['wc-processing', 'wc-completed', 'wc-on-hold', 'wc-pending'] + $terminal_allowed_order_statuses,
-                //posts per page
-                'posts_per_page' => 10,
-                //page 
-                'paged' => $terminal_page,
-                //meta query
+                'status' => array_merge(['wc-processing', 'completed', 'on-hold', 'pending'], $terminal_allowed_order_statuses),
+                'limit' => 10,
+                'paginate' => true,
+                'page' => $terminal_page,
+                'meta_key' => 'Terminal_africa_shipment_id',
+                'meta_compare' => 'EXISTS',
                 'meta_query' => [
-                    //Terminal_africa_shipment_id
-                    [
-                        'key' => 'Terminal_africa_shipment_id',
-                        'compare' => 'EXISTS',
-                    ],
-                    //Terminal_africa_rateid
+                    'relation' => 'AND',
                     [
                         'key' => 'Terminal_africa_rateid',
                         'compare' => 'EXISTS',
                     ],
-                    //Terminal_africa_merchant_id 
                     [
                         'key' => 'Terminal_africa_merchant_id',
                         'value' => $terminal_africa_merchant_id,
                         'compare' => '=',
                     ],
-                    //Terminal_africa_mode
                     [
                         'key' => 'Terminal_africa_mode',
                         'value' => $mode,
@@ -67,7 +57,8 @@ class TerminalCore
                     ],
                 ],
             ];
-            $orders = get_posts($args);
+
+            $orders = wc_get_orders($args);
 
             return $orders ?: [];
         } catch (\Exception $e) {

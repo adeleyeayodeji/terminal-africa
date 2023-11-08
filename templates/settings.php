@@ -17,7 +17,14 @@ $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
         <div class="t-row">
             <div class="t-col-12">
                 <div class="t-address-card t-settings-page">
-                    <h3>Customise your Shipping Experience for your WooCommerce store.</h3>
+                    <div class="t-flex">
+                        <div class="t-carriers-title-tag">
+                            <h3 class="t-address-card-header-text t-pl-0">Terminal Africa Settings</h3>
+                        </div>
+                        <div class="t-merchant-id">
+                            <h3 class="t-address-card-header-text t-pl-0">Merchant ID: <span class="t-merchant-id-text"><?php echo esc_html(get_option('terminal_africa_merchant_id')); ?></span></h3>
+                        </div>
+                    </div>
 
                     <div class="t-flex t-settings-page-card t-mb-4">
                         <div class="t-settings-first">

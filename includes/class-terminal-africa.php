@@ -180,6 +180,10 @@ class TerminalAfricaShippingPlugin
             add_filter('manage_edit-shop_order_columns', array($this, 'terminal_add_new_order_admin_list_column'), 20);
             //add new column to shop order page
             add_action('manage_shop_order_posts_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 20, 2);
+            //filter woocommerce_' . $this->order_type . '_list_table_columns
+            add_filter('woocommerce_shop_order_list_table_columns', array($this, 'terminal_add_new_order_admin_list_column'), 10);
+            //woocommerce_' . $this->order_type . '_list_table_custom_column
+            add_action('woocommerce_shop_order_list_table_custom_column', array($this, 'terminal_add_new_order_admin_list_column_content'), 10, 2);
             //ajax terminal_africa_get_address_book
             add_action('wp_ajax_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
             add_action('wp_ajax_nopriv_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
@@ -199,7 +203,7 @@ class TerminalAfricaShippingPlugin
     public function terminal_add_new_order_admin_list_column($columns)
     {
         $filter = '<span>
-        <img src="' . TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png" style="margin-right: 5px;" alt="" align="left"> Terminal Africa
+        <img src="' . TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.svg" style="margin-right: 5px;" alt="" align="left"> Terminal Africa
         </span>';
 
         //add column to the second position
@@ -216,13 +220,22 @@ class TerminalAfricaShippingPlugin
      * @since 1.10.5
      * @return void
      */
-    public function terminal_add_new_order_admin_list_column_content($column, $post_id)
+    public function terminal_add_new_order_admin_list_column_content($column, $order)
     {
         global $terminal_allowed_order_statuses;
         //remove all "wc" in terminal_allowed_order_statuses array
         $terminal_allowed_order_statuses = array_map(function ($status) {
             return str_replace('wc-', '', $status);
         }, $terminal_allowed_order_statuses);
+
+        //check if order is an instance of WC_Order
+        if ($order && $order instanceof WC_Order) {
+            //get order id
+            $post_id = $order->get_id();
+        } else {
+            //get order id
+            $post_id = $order;
+        }
 
         if ('terminal_shipment_status' === $column) {
             //check if the order status is in processing, on-hold, completed, pending
@@ -239,7 +252,7 @@ class TerminalAfricaShippingPlugin
                 //rate id
                 $rate_id = get_post_meta($post_id, 'Terminal_africa_rateid', true);
                 //get Terminal_africa_carrierlogo
-                $carrirer_logo = get_post_meta($post_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png';
+                $carrirer_logo = get_post_meta($post_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.svg';
                 //check if terminal_shipment_id is set
                 if (!empty($terminal_shipment_id)) {
                     //echo terminal_shipment_id

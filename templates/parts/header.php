@@ -12,7 +12,7 @@
          </div>
          <div class="t-col-4 t-center">
              <a href="<?php echo esc_url(admin_url('admin.php?page=terminal-africa')) ?>" class="t-header-logo">
-                 <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.png') ?>" alt="Terminal Africa">
+                 <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.svg') ?>" alt="Terminal Africa">
              </a>
          </div>
          <div class="t-col-4">
