@@ -92,7 +92,7 @@ if ($wallet_balance['code'] == 200) {
 
         </div>
     </div>
-    <!-- <div class="t-transaction-container t-m-2">
+    <div class="t-transaction-container t-m-2">
         <div class="t-transaction-header t-flex">
             <div class="t-transaction-header-left">
                 <div class="">
@@ -107,5 +107,49 @@ if ($wallet_balance['code'] == 200) {
                 </div>
             </div>
         </div>
-    </div> -->
+        <div class="t-transaction-body t-table-wallet">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Wallet Funding</th>
+                        <th scope="col">Reference Number</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Date">04/01/2016 7:23PM</td>
+                        <td data-label="Wallet Funding">Bank Transfer</td>
+                        <td data-label="Reference Number">9328388493493</td>
+                        <td data-label="Amount">₦25,000,456.00</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">04/01/2016 7:23PM</td>
+                        <td data-label="Wallet Funding">Bank Transfer</td>
+                        <td data-label="Reference Number">9328388493493</td>
+                        <td data-label="Amount">₦25,000,456.00</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">04/01/2016 7:23PM</td>
+                        <td data-label="Wallet Funding">Bank Transfer</td>
+                        <td data-label="Reference Number">9328388493493</td>
+                        <td data-label="Amount">₦25,000,456.00</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">04/01/2016 7:23PM</td>
+                        <td data-label="Wallet Funding">Bank Transfer</td>
+                        <td data-label="Reference Number">9328388493493</td>
+                        <td data-label="Amount">₦25,000,456.00</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Date">04/01/2016 7:23PM</td>
+                        <td data-label="Wallet Funding">Bank Transfer</td>
+                        <td data-label="Reference Number">9328388493493</td>
+                        <td data-label="Amount">₦25,000,456.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

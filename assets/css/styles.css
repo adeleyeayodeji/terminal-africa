@@ -1608,3 +1608,96 @@ input:checked + .t-slider:before {
 .t-settings-page-card-notice-parent {
   display: none;
 }
+
+.t-transaction-container {
+  background: white;
+  padding: 10px 14px 18px 18px;
+}
+
+.t-table-wallet table {
+  border: none !important;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 10px;
+}
+
+.t-table-wallet table caption {
+  font-size: 1.5em;
+  margin: 0.5em 0 0.75em;
+}
+
+.t-table-wallet table tr {
+  background-color: #ffffff;
+  /* border: 1px solid #ddd; */
+  padding: 0.35em;
+}
+
+.t-table-wallet table th,
+.t-table-wallet table td {
+  padding: 0.625em;
+  text-align: center;
+  padding: 10px;
+}
+
+.t-table-wallet table th {
+  font-size: 0.85em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.t-table-wallet table thead {
+  border-bottom: 1px solid lightgray;
+}
+
+@media screen and (max-width: 600px) {
+  .t-table-wallet table {
+    border: 0;
+  }
+
+  .t-table-wallet table caption {
+    font-size: 1.3em;
+  }
+
+  .t-table-wallet table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .t-table-wallet table tr {
+    /* border-bottom: 3px solid #ddd; */
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  .t-table-wallet table td {
+    border-bottom: 1px solid #000000;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  .t-table-wallet table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .t-table-wallet table td:last-child {
+    border-bottom: 0;
+  }
+}
