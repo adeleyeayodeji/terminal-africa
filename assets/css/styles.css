@@ -589,10 +589,18 @@ a#t-sign-out:focus {
   margin-top: 0px;
 }
 
+.t-ml-2 {
+  margin-left: 10px;
+}
+
 .t-intro-list {
   width: 30%;
   max-width: 250px;
   margin-top: 0px;
+}
+
+.t-transaction-header-left-arrow {
+  color: #f7941f;
 }
 
 .t-w-list-unstyled {
@@ -1611,7 +1619,7 @@ input:checked + .t-slider:before {
 
 .t-transaction-container {
   background: white;
-  padding: 10px 14px 18px 18px;
+  padding: 18px 26px 22px 26px;
 }
 
 .t-table-wallet table {
@@ -1633,13 +1641,14 @@ input:checked + .t-slider:before {
   background-color: #ffffff;
   /* border: 1px solid #ddd; */
   padding: 0.35em;
+  border-bottom: 1px solid #d3d3d399;
 }
 
 .t-table-wallet table th,
 .t-table-wallet table td {
   padding: 0.625em;
   text-align: center;
-  padding: 10px;
+  padding: 12px;
 }
 
 .t-table-wallet table th {
@@ -1648,8 +1657,27 @@ input:checked + .t-slider:before {
   text-transform: uppercase;
 }
 
-.t-table-wallet table thead {
-  border-bottom: 1px solid lightgray;
+.t-search-placeholder img {
+  margin-right: 5px;
+  height: 18px;
+  width: 18px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.t-search-placeholder input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.t-search-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d3d3d399;
+  padding: 7px 14px 7px 15px;
+  border-radius: 15px;
 }
 
 @media screen and (max-width: 600px) {
@@ -1670,7 +1698,7 @@ input:checked + .t-slider:before {
     padding: 0;
     position: absolute;
     width: 1px;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid #d3d3d399;
   }
 
   .t-table-wallet table tr {

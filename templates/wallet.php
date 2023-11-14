@@ -92,16 +92,16 @@ if ($wallet_balance['code'] == 200) {
 
         </div>
     </div>
-    <div class="t-transaction-container t-m-2">
+    <div class="t-transaction-container">
         <div class="t-transaction-header t-flex">
             <div class="t-transaction-header-left">
-                <div class="">
-                    <span>All Transactions</span>
-                    <span>All <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/arrow_down.svg'); ?>" alt=""></span>
+                <div class="t-flex">
+                    <p>All Transactions</p>
+                    <p class="t-transaction-header-left-arrow t-ml-2">All <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/arrow_down.svg'); ?>" alt=""></p>
                 </div>
             </div>
             <div class="t-transaction-header-right">
-                <div>
+                <div class="t-search-placeholder">
                     <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/search.png'); ?>" alt="">
                     <input type="text" placeholder="Search">
                 </div>
