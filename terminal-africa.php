@@ -36,7 +36,7 @@ define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipmen
 
 /**
  * WooCommerce Terminal Delivery Loader.
- *
+ * 
  */
 class WC_Terminal_Delivery_Loader
 {

@@ -148,6 +148,18 @@ if ($wallet_balance['code'] == 200) {
                         <td data-label="Reference Number">9328388493493</td>
                         <td data-label="Amount">₦25,000,456.00</td>
                     </tr>
+                    <tr style="border-bottom: none !important;">
+                        <td colspan="4">
+                            <div class="t-flex t-m-1">
+                                <div class="t-prev-btn">
+                                    <a href="#" class="t-btn t-disabled">Previous</a>
+                                </div>
+                                <div class="t-next-btn">
+                                    <a href="#" class="t-btn">Next</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
