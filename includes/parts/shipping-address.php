@@ -1930,4 +1930,120 @@ trait Shipping
             ];
         }
     }
+
+    /**
+     * Get Transactions
+     * 
+     * @since 1.11.1
+     */
+    public static function getTransactions($page = 1, $filter = [], $force = false)
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            //check if session is started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $userData = get_option("terminal_africa_settings");
+
+            if (!isset($userData['others']->user->wallet)) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid Wallet ID",
+                    'data' => [],
+                ];
+            }
+
+            $userWalletId = $userData['others']->user->wallet;
+
+            $dataQuery =
+                [
+                    "perPage" => 10,
+                    "page" => $page,
+                    "wallet" => $userWalletId
+                ];
+
+            //append if filter is set and value not empty
+            if (!empty($filter)) {
+                //loop through filter
+                $filter = array_filter($filter, function ($value) {
+                    //ignore empty values
+                    return !empty($value);
+                });
+
+                //check if filter is not empty
+                if (!empty($filter)) {
+                    //append to query
+                    $dataQuery = array_merge($dataQuery, $filter);
+                }
+            }
+
+            //hash $dataQuery
+            $dataHash = md5(json_encode($dataQuery));
+
+            //check if session is set
+            if (isset($_SESSION['terminal_africa_transactions'][$dataHash]) && !$force) {
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => sanitize_array($_SESSION['terminal_africa_transactions'][$dataHash]),
+                    'from' => 'session',
+                ];
+            }
+
+            $response = Requests::get(
+                self::$enpoint . 'transactions?' . http_build_query($dataQuery),
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ],
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return countries
+                $data = $body->data;
+                //save to session
+                $_SESSION['terminal_africa_transactions'][$dataHash] = $data;
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'transactions?' . http_build_query([
+                    "perPage" => 25,
+                    "page" => $page
+                ]));
+                return [
+                    'code' => $response->status_code,
+                    'message' => $body->message,
+                    'data' => [],
+                ];
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'transactions?' . http_build_query([
+                "perPage" => 25,
+                "page" => $page
+            ]));
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
 }

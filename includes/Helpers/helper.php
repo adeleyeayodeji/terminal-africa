@@ -296,6 +296,22 @@ if (!function_exists('terminal_param')) {
     }
 }
 
+//terminal_current_url
+if (!function_exists('terminal_current_url')) {
+    //terminal current url
+    /**
+     * @return string
+     */
+    function terminal_current_url()
+    {
+        $request = $_SERVER['REQUEST_URI'];
+        //extract from wp-admin
+        $request = explode('wp-admin/', $request);
+        $request = isset($request[1]) ? $request[1] : $request[0];
+        return $request;
+    }
+}
+
 
 //getTerminalTemplatePart
 if (!function_exists('getTerminalTemplatePart')) {
@@ -348,6 +364,20 @@ if (!function_exists('terminalAfricaAddresses')) {
     function terminalAfricaAddresses($perpage = 25, $page = 1, $search = '')
     {
         return TerminalAfricaShippingPlugin::getAddresses($perpage, $page, $search);
+    }
+}
+
+//getTransactions
+if (!function_exists('getTransactions')) {
+    //get transactions
+    /**
+     * @param mixed $page
+     * @param mixed $force
+     * @return mixed
+     */
+    function getTransactions($page = 1, $filter = [], $force = false)
+    {
+        return TerminalAfricaShippingPlugin::getTransactions($page, $filter, $force);
     }
 }
 

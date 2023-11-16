@@ -187,6 +187,9 @@ class TerminalAfricaShippingPlugin
             //ajax terminal_africa_get_address_book
             add_action('wp_ajax_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
             add_action('wp_ajax_nopriv_terminal_africa_get_address_book', array($this, 'terminal_africa_get_address_book'));
+            //add ajax terminal_africa_get_transactions
+            add_action('wp_ajax_terminal_africa_get_transactions', array($this, 'terminal_africa_get_transactions'));
+            add_action('wp_ajax_nopriv_terminal_africa_get_transactions', array($this, 'terminal_africa_get_transactions'));
             //initAPI
             $this->initAPI();
         } catch (\Exception $e) {

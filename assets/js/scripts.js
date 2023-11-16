@@ -2499,6 +2499,92 @@ jQuery(document).ready(function ($) {
     //redirect to page
     window.location.href = $(this).data("link");
   });
+
+  /**
+   * On t-filter-transaction click
+   */
+  $(".t-filter-transaction").click(function (e) {
+    e.preventDefault();
+
+    //get t_start_date
+    let t_start_date = $("#t_start_date").val();
+    //check if not empty
+    if (t_start_date === "") {
+      //Swal error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        confirmButtonColor: "rgb(246 146 32)",
+        //confirm button text
+        confirmButtonText: "Continue",
+        text: "Please select a start date",
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      return;
+    }
+    //get t_end_date
+    let t_end_date = $("#t_end_date").val();
+    //check if not empty
+    if (t_end_date === "") {
+      //Swal error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        confirmButtonColor: "rgb(246 146 32)",
+        //confirm button text
+        confirmButtonText: "Continue",
+        text: "Please select an end date",
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      return;
+    }
+    //get current url
+    let current_url = new URL(window.location.href);
+    //get the search params from the current url
+    let search_params = current_url.searchParams;
+
+    //check if current_url has t_start_date and t_end_date and update the url
+    search_params.set("startDate", t_start_date);
+    search_params.set("endDate", t_end_date);
+
+    //set the search params back to the url
+    current_url.search = search_params.toString();
+
+    //block .t-transaction-container
+    $(".t-transaction-container").block({
+      message: `<i class="fa fa-spinner fa-spin"></i> Loading...`,
+      css: {
+        border: 0,
+        padding: 0,
+        backgroundColor: "transparent"
+      },
+      overlayCSS: {
+        background: "#fff",
+        opacity: 0.8,
+        cursor: "wait"
+      }
+    });
+
+    //navigate to the new url
+    window.location.href = current_url.toString();
+  });
+
+  /**
+   * On click t-transaction-header-left-arrow
+   */
+  $(".t-transaction-header-left-arrow").click(function (e) {
+    e.preventDefault();
+    //slide in t-transaction-header-left-option
+    $(".t-transaction-header-left-option").slideToggle();
+  });
 });
 
 /**
@@ -2521,6 +2607,53 @@ let removeScreenDistraction = () => {
     } else {
       child.remove();
     }
+  });
+};
+
+/**
+ * Filter Terminal Transaction
+ */
+let filterTransaction = (elem) => {
+  jQuery(document).ready(function ($) {
+    var initElem = $(elem);
+    //get current url
+    let current_url = new URL(window.location.href);
+    //get the menu
+    var menu = initElem.data("menu");
+    //switch
+    switch (menu) {
+      case "out":
+        //append flow = out
+        current_url.searchParams.set("flow", "out");
+        break;
+
+      case "in":
+        //append flow = in
+        current_url.searchParams.set("flow", "in");
+        break;
+
+      case "all":
+        //check if current_url has flow and remove it
+        current_url.searchParams.delete("flow");
+        break;
+    }
+    //block .t-transaction-container
+    $(".t-transaction-container").block({
+      message: `<i class="fa fa-spinner fa-spin"></i> Loading...`,
+      css: {
+        border: 0,
+        padding: 0,
+        backgroundColor: "transparent"
+      },
+      overlayCSS: {
+        background: "#fff",
+        opacity: 0.8,
+        cursor: "wait"
+      }
+    });
+
+    //navigate to the new url
+    window.location.href = current_url.toString();
   });
 };
 

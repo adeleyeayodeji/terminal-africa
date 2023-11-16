@@ -3,6 +3,41 @@
 defined('ABSPATH') or die('No script kiddies please!');
 $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
 $wallet_balance = getWalletBalance($terminal_africa_merchant_id);
+//terminal page
+$terminal_page = intval(terminal_param('terminal_page', 1));
+//startDate
+$startDate = terminal_param('startDate');
+//endDate
+$endDate = terminal_param('endDate');
+//flow
+$flow = terminal_param('flow');
+//next page
+$next_page = $terminal_page + 1;
+//prev page
+$prev_page = $terminal_page - 1;
+//check if next page is greater than 1
+if ($next_page < 1) {
+    $next_page = 1;
+}
+//check if prev page is greater than 1
+if ($prev_page < 1) {
+    $prev_page = 1;
+}
+//getTransactions
+$transactions = getTransactions($terminal_page, compact('startDate', 'endDate', 'flow'), true);
+//get current request url
+$current_url = terminal_current_url();
+//plugin url
+$plugin_url = admin_url($current_url);
+//append to prev
+$prev_url = add_query_arg('terminal_page', $prev_page, $plugin_url);
+//append to next
+$next_url = add_query_arg('terminal_page', $next_page, $plugin_url);
+//sanitize url
+$prev_url = esc_url($prev_url);
+//sanitize url
+$next_url = esc_url($next_url);
+
 $wallet_data = [];
 $other_data = false;
 //check if code is 200
@@ -18,6 +53,18 @@ if ($wallet_balance['code'] == 200) {
         'currency' => 'NGN'
     ];
 }
+
+//flow text
+$flow_text = 'All';
+switch ($flow) {
+    case 'in':
+        $flow_text = 'Flow In';
+        break;
+    case 'out':
+        $flow_text = 'Flow Out';
+        break;
+}
+
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-book", "Wallet"); ?>
@@ -97,14 +144,40 @@ if ($wallet_balance['code'] == 200) {
             <div class="t-transaction-header-left">
                 <div class="t-flex">
                     <p>All Transactions</p>
-                    <p class="t-transaction-header-left-arrow t-ml-2">All <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/arrow_down.svg'); ?>" alt=""></p>
+                    <p class="t-transaction-header-left-arrow t-ml-2"><?php echo esc_html($flow_text); ?> <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/arrow_down.svg'); ?>" alt=""></p>
+                </div>
+                <div class="t-transaction-header-left-option" style="display: none;">
+                    <ul>
+                        <li data-menu="out" onclick="filterTransaction(this)">
+                            Flow Out
+                        </li>
+                        <li data-menu="in" onclick="filterTransaction(this)">
+                            Flow In
+                        </li>
+                        <li data-menu="all" onclick="filterTransaction(this)">
+                            All
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="t-transaction-header-right">
-                <div class="t-search-placeholder">
+                <div class="t-transaction-header-right-t-flex">
+                    <div class="t-start-date">
+                        <label for="t_start_date">Start Date</label>
+                        <input type="date" name="t_start_date" id="t_start_date" value="<?php echo $startDate ? $startDate : date('Y-m-d'); ?>">
+                    </div>
+                    <div class="t-end-date t-ml-2">
+                        <label for="t_end_date">End Date</label>
+                        <input type="date" name="t_end_date" id="t_end_date" value="<?php echo $endDate ? $endDate : date('Y-m-d'); ?>">
+                    </div>
+                    <div class="t-filter-btn">
+                        <a href="javascript:void();" class="t-btn t-filter-transaction">Filter</a>
+                    </div>
+                </div>
+                <!-- <div class="t-search-placeholder">
                     <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/search.png'); ?>" alt="">
                     <input type="text" placeholder="Search">
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="t-transaction-body t-table-wallet">
@@ -112,54 +185,69 @@ if ($wallet_balance['code'] == 200) {
                 <thead>
                     <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Wallet Funding</th>
+                        <th scope="col">Description</th>
                         <th scope="col">Reference Number</th>
                         <th scope="col">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td data-label="Date">04/01/2016 7:23PM</td>
-                        <td data-label="Wallet Funding">Bank Transfer</td>
-                        <td data-label="Reference Number">9328388493493</td>
-                        <td data-label="Amount">₦25,000,456.00</td>
-                    </tr>
-                    <tr>
-                        <td data-label="Date">04/01/2016 7:23PM</td>
-                        <td data-label="Wallet Funding">Bank Transfer</td>
-                        <td data-label="Reference Number">9328388493493</td>
-                        <td data-label="Amount">₦25,000,456.00</td>
-                    </tr>
-                    <tr>
-                        <td data-label="Date">04/01/2016 7:23PM</td>
-                        <td data-label="Wallet Funding">Bank Transfer</td>
-                        <td data-label="Reference Number">9328388493493</td>
-                        <td data-label="Amount">₦25,000,456.00</td>
-                    </tr>
-                    <tr>
-                        <td data-label="Date">04/01/2016 7:23PM</td>
-                        <td data-label="Wallet Funding">Bank Transfer</td>
-                        <td data-label="Reference Number">9328388493493</td>
-                        <td data-label="Amount">₦25,000,456.00</td>
-                    </tr>
-                    <tr>
-                        <td data-label="Date">04/01/2016 7:23PM</td>
-                        <td data-label="Wallet Funding">Bank Transfer</td>
-                        <td data-label="Reference Number">9328388493493</td>
-                        <td data-label="Amount">₦25,000,456.00</td>
-                    </tr>
-                    <tr style="border-bottom: none !important;">
-                        <td colspan="4">
-                            <div class="t-flex t-m-1">
-                                <div class="t-prev-btn">
-                                    <a href="#" class="t-btn t-disabled">Previous</a>
+                    <?php
+                    //$transactions
+                    if ($transactions['code'] == 200 && isset($transactions['data']->transactions)) {
+                        //check if next page is active
+                        if (!$transactions['data']->pagination->hasNextPage) {
+                            $next_url = 'javascript:void();';
+                        }
+                        //check if prev page is active
+                        if (!$transactions['data']->pagination->hasPrevPage) {
+                            $prev_url = 'javascript:void();';
+                        }
+                        foreach ($transactions['data']->transactions as $transaction) :
+                            $transactionDate = $transaction->created_at;
+                            //format 05/03/2021 7:00:00PM
+                            $transactionDate = date('d/m/Y h:i:sA', strtotime($transactionDate));
+                    ?>
+                            <tr>
+                                <td data-label="Date">
+                                    <div class="t-flex-transaction">
+                                        <div class="t-transaction-icon">
+                                            <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_URL . '/assets/img/' . $transaction->flow . '.svg'); ?>" alt="">
+                                        </div>
+                                        <div>
+                                            <?php echo esc_html($transactionDate) ?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-label="Description">
+                                    <?php echo esc_html($transaction->description) ?>
+                                </td>
+                                <td data-label="Reference Number">
+                                    <?php echo esc_html($transaction->reference) ?>
+                                </td>
+                                <td data-label="Amount">
+                                    <?php echo $transaction->currency  . ' ' . number_format($transaction->amount); ?>
+                                </td>
+                            </tr>
+                        <?php
+                        endforeach;
+                        ?>
+                        <tr style="border-bottom: none !important;">
+                            <td colspan="4">
+                                <div class="t-flex t-m-1">
+                                    <div class="t-prev-btn">
+                                        <a href="<?php echo $prev_url; ?>" class="t-btn <?php echo !$transactions['data']->pagination->hasPrevPage ? 't-disabled' : ''; ?>">Previous</a>
+                                    </div>
+                                    <div class="t-next-btn">
+                                        <a href="<?php echo $next_url; ?>" class="t-btn <?php echo !$transactions['data']->pagination->hasNextPage ? 't-disabled' : ''; ?>">Next</a>
+                                    </div>
                                 </div>
-                                <div class="t-next-btn">
-                                    <a href="#" class="t-btn">Next</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    <?php
+                    } else {
+                        echo '<tr><td colspan="4" style="text-align:center;">No Transactions</td></tr>';
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>

@@ -1630,4 +1630,48 @@ trait Ajax
             ]);
         }
     }
+
+    /**
+     * Get Transactions
+     * 
+     * @since 1.11.1
+     */
+    public function terminal_africa_get_transactions()
+    {
+        try {
+            $nonce = sanitize_text_field($_GET['nonce']);
+            $page = sanitize_text_field($_GET['page']);
+
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
+            //get the addresses from the server
+            $transactions = getTransactions($page);
+            //check if addresses are gotten
+            if ($transactions['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Transactions gotten successfully',
+                    'data' => $transactions['data']
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $transactions['message'],
+                    'endpoint' => 'get_transactions'
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
 }
