@@ -140,7 +140,7 @@ switch ($flow) {
         </div>
     </div>
     <div class="t-transaction-container">
-        <div class="t-transaction-header t-flex">
+        <div class="t-transaction-header t-flex" style="display: none;">
             <div class="t-transaction-header-left">
                 <div class="t-flex">
                     <p>All Transactions</p>
