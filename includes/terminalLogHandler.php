@@ -214,7 +214,7 @@ class TerminalLogHandler
             $response = json_decode(wp_remote_retrieve_body($response));
 
             //check if plugin is already logged
-            if ($response->status && $response->message == "Plugin found") {
+            if (isset($response->status) && $response->status && $response->message == "Plugin found") {
                 wp_send_json([
                     'status' => true,
                     'message' => 'Plugin already logged'
