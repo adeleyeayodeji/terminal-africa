@@ -401,26 +401,36 @@ class WC_Terminal_Delivery
         }
         //if exist
         if ($merchant_address_id && $terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
-            $shipment_id = WC()->session->get('terminal_africa_shipment_id' . $guest_email);
-            //check if shipment_id is empty
-            if (empty($shipment_id)) {
-                //create shipment
-                $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id);
-                //check if shipment is created
-                if ($create_shipment['code'] == 200) {
-                    //wc session
-                    WC()->session->set('terminal_africa_shipment_id' . $guest_email, $create_shipment['data']->shipment_id);
-                    $shipment_id = $create_shipment['data']->shipment_id;
-                } else {
-                    //order error note
-                    $order = wc_get_order($order_id);
-                    $order->add_order_note(
-                        __('Terminal Africa Error: ' . $create_shipment['message'], 'terminal-africa-shipping')
-                    );
-                    //return
-                    return;
-                }
+
+            //create shipment
+            $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id);
+            //$shipment_id
+            $shipment_id = null;
+            //check if shipment is created
+            if ($create_shipment['code'] == 200) {
+                //wc session
+                WC()->session->set('terminal_africa_shipment_id' . $guest_email, $create_shipment['data']->shipment_id);
+                $shipment_id = $create_shipment['data']->shipment_id;
+            } else {
+                //order error note
+                $order = wc_get_order($order_id);
+                $order->add_order_note(
+                    __('Terminal Africa Error: ' . $create_shipment['message'], 'terminal-africa-shipping')
+                );
+                //return
+                return;
             }
+            //check if $shipment_id
+            if (!$shipment_id) {
+                //order error note
+                $order = wc_get_order($order_id);
+                $order->add_order_note(
+                    __('Terminal Africa Error: ' . $create_shipment['message'], 'terminal-africa-shipping')
+                );
+                //return
+                return;
+            }
+
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);
