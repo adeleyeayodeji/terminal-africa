@@ -96,7 +96,9 @@ switch ($flow) {
                 <div class="t-terminal-dashboard-back-link-block"><a class="t-terminal-dashboard-back-link" onclick="gotoTerminalPage(this, 't-wallet-home')">Wallet</a></div>
                 <div class="t-top-up-wallet-wrapper t-amount-input">
                     <h4 class="t-wallet-heading-text">Enter topup amount</h4>
-                    <div class="t-topup-amount-block"><input placeholder="₦0.00" class="t-top-up-amount-input" step=".01" data-max="0" min="0" type="number" value=""></div>
+                    <div class="t-topup-amount-block">
+                        <input placeholder="₦0.00" class="t-top-up-amount-input" id="t-top-up-amount-input" step=".01" data-max="0" min="0" type="text">
+                    </div>
                     <div>
                         <div class="t-balance-sub-text">Balance after topup - ₦0.00</div><select class="t-switch-wallet w-select">
                             <option value="NGN">Nigerian Naira (₦)</option>

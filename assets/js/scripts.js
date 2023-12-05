@@ -1395,50 +1395,60 @@ let gotoTerminalPage = (elem, page) => {
 
 //.t-top-up-amount-input keyup and change
 jQuery(document).ready(function ($) {
-  $(document).on("keyup change", ".t-top-up-amount-input", function () {
-    let amount = $(this).val();
-    //check if amount is empty
-    if (amount === "") {
-      //disable button
-      $(".t-top-up-amount-btn").attr("disabled", true);
-      //remove session storage
-      sessionStorage.removeItem("amount");
-      return;
+  $(document).on(
+    "keyup change keydown blur",
+    ".t-top-up-amount-input",
+    function () {
+      let amount = $(this).val();
+      //Strip all non-numeric characters from string
+      amount = amount.replace(/\D/g, "");
+      //check if amount is empty
+      if (amount === "") {
+        //disable button
+        $(".t-top-up-amount-btn").attr("disabled", true);
+        //remove session storage
+        sessionStorage.removeItem("amount");
+        return;
+      }
+      //enable button
+      $(".t-top-up-amount-btn").attr("disabled", false);
+      //session storage
+      sessionStorage.setItem("amount", "true");
+      //get old balance
+      let oldBalance = $(".t-NGN-balance");
+      let amount2 = amount;
+      //check if element exist
+      if (oldBalance.length) {
+        //get data balance
+        let dataBalance = oldBalance.data("balance");
+        //convert to number
+        let balance = Number(dataBalance);
+        //convert amount to number
+        amount = Number(amount);
+        //add amount to balance
+        amount = balance + amount;
+      }
+      //format to price format
+      let formattedAmount = new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN"
+      }).format(amount);
+      //format amount2
+      let formattedAmount2 = new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN"
+      }).format(amount2);
+      //set amount to display
+      $(".t-balance-sub-text:first").html(
+        `Balance after topup - ${formattedAmount}`
+      );
+      $(".t-top-up-amount").html(formattedAmount2);
+      //add comma to amount
+      var tempNumber = $(this).val().replace(/,/gi, "");
+      var commaSeparatedNumber = tempNumber.split(/(?=(?:\d{3})+$)/).join(",");
+      $(this).val(commaSeparatedNumber);
     }
-    //enable button
-    $(".t-top-up-amount-btn").attr("disabled", false);
-    //session storage
-    sessionStorage.setItem("amount", "true");
-    //get old balance
-    let oldBalance = $(".t-NGN-balance");
-    let amount2 = amount;
-    //check if element exist
-    if (oldBalance.length) {
-      //get data balance
-      let dataBalance = oldBalance.data("balance");
-      //convert to number
-      let balance = Number(dataBalance);
-      //convert amount to number
-      amount = Number(amount);
-      //add amount to balance
-      amount = balance + amount;
-    }
-    //format to price format
-    let formattedAmount = new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN"
-    }).format(amount);
-    //format amount2
-    let formattedAmount2 = new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN"
-    }).format(amount2);
-    //set amount to display
-    $(".t-balance-sub-text:first").html(
-      `Balance after topup - ${formattedAmount}`
-    );
-    $(".t-top-up-amount").html(formattedAmount2);
-  });
+  );
 });
 
 let confirmTerminalTransfer = (elem, e) => {
