@@ -729,6 +729,11 @@ trait Shipping
                 ];
             }
 
+            //site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
             $response = Requests::post(
                 self::$enpoint . 'shipments',
                 [
@@ -740,6 +745,9 @@ trait Shipping
                         'address_from' => $address_from,
                         'address_to' => $address_to,
                         'parcel' => $parcel_id,
+                        'metadata' => [
+                            'domain' => $domain,
+                        ],
                         'source' => 'wordpress'
                     ]
                 ),
