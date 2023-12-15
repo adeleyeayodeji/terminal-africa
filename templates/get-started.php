@@ -48,7 +48,13 @@ defined('ABSPATH') or die('No script kiddies please!');
                                 Speak to an expert
                             </h3>
                             <p>
-                                Schedule a free online call with a member of our team or send us an email. We're available to help with any issues. You can also get support using the live chat option.
+                                Schedule a free online call with a member of our team or send us an email.
+                            </p>
+                            <p>
+                                We're available to help with any issues.
+                            </p>
+                            <p>
+                                You can also get support using the live chat option.
                             </p>
                             <div class="t-get-started-support-actions-link">
                                 <p>
