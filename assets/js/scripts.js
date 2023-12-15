@@ -2668,3 +2668,36 @@ let filterTransaction = (elem) => {
 };
 
 removeScreenDistraction();
+
+/**
+ * Get all get-started-buttons and enable switch
+ */
+jQuery(document).ready(function ($) {
+  $(".get-started-button").each(function (index, element) {
+    $(this).click(function (e) {
+      e.preventDefault();
+      //remove all active .t-get-started-active
+      $(".get-started-button").removeClass("t-get-started-active");
+      //add active to this element
+      $(element).addClass("t-get-started-active");
+      //get data view
+      let dataView = $(element).data("view");
+      //first view class
+      var firstView = "get-started-shipping-section";
+      //second view class
+      var secondView = "get-started-support-section";
+      //check if dataView is firstView
+      if (dataView === firstView) {
+        //show firstView
+        $("." + firstView).show();
+        //hide secondView
+        $("." + secondView).hide();
+      } else {
+        //show secondView
+        $("." + secondView).show();
+        //hide firstView
+        $("." + firstView).hide();
+      }
+    });
+  });
+});
