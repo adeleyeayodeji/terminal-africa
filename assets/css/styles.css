@@ -794,8 +794,14 @@ img.t-dashboard-intro-icon {
 }
 
 .t-shipping {
-  padding-left: 28px;
-  padding-right: 30px;
+  background-color: rgb(255, 255, 255);
+  padding: 30px;
+  margin: 5px 25px;
+  border-radius: 20px;
+}
+
+.t-shipping table thead tr {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px 0px;
 }
 
 .t-space {
@@ -1540,17 +1546,25 @@ input:checked + .t-slider:before {
 }
 
 .t-terminal-dashboard-order-row {
-  margin-bottom: 20px;
-  background-color: rgb(255, 255, 255);
+  /* margin-bottom: 20px; */
+  /* background-color: rgb(255, 255, 255); */
   padding: 10px;
   height: 80px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px 0px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px 0px;
   cursor: pointer;
   transition: all 0.2s ease 0s;
 }
 
+.t-terminal-dashboard-order-row:last-child {
+  box-shadow: none;
+}
+
+.terminal-dashboard-orders-list-table-heading {
+  padding-bottom: 20px;
+}
+
 .t-terminal-dashboard-order-row:hover {
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px 0px;
+  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 4px 0px; */
 }
 
 .t-merchant-id-text {
@@ -1932,4 +1946,11 @@ Responsive for t-transaction-header-right-t-flex
 
 .get-started-button {
   cursor: pointer;
+}
+
+.t-status-list {
+  background: #f6f3ef;
+  padding: 8px 21px;
+  border-radius: 8px;
+  font-style: italic;
 }

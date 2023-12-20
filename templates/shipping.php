@@ -31,13 +31,14 @@ $next_url = esc_url($next_url);
     <?php terminal_header("fas fa-cart-plus", "Shipments"); ?>
     <div class="t-body">
         <div class="t-shipping">
-            <table width="100%" style="border-collapse: separate; border-spacing: 0px 20px; text-align: center;">
+            <table width="100%" style="border-collapse: separate; border-spacing: 0px 0px; text-align: center;">
                 <thead>
                     <tr>
-                        <th class="terminal-dashboard-orders-list-table-heading">SHIPMENT ID</th>
                         <th class="terminal-dashboard-orders-list-table-heading">CARRIER</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">SHIPMENT ID</th>
                         <th class="terminal-dashboard-orders-list-table-heading">ORDER ID</th>
-                        <th class="terminal-dashboard-orders-list-table-heading">ACTION</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">STATUS</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,61 +66,40 @@ $next_url = esc_url($next_url);
                     ?>
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
+                                    <div class="t-flex" style="justify-content: center;">
+                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:30px;margin-right: 30px;">
+                                        <p>
+                                            <span>
+                                                <?php echo esc_html($carrier); ?>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
                                     <div class="terminal-dashboard-order-link" style="margin-bottom: 0px; font-size: 16px; color: rgb(255, 153, 0); text-transform: capitalize;">
                                         <?php echo esc_html($shipment_id); ?>
-                                        <br>
-                                        <span style="font-size: 12px; color: rgb(153, 153, 153);"><?php echo esc_html($timeago); ?></span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <p>
-                                        <span>
-                                            <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:10px;">
-                                        </span>
-                                        <span>
-                                            <?php echo esc_html($carrier); ?>
-                                        </span>
-                                    </p>
-                                </td>
-                                <td>
-                                    <div class="terminal-dashboard-order-name">
-                                        <a href="<?php echo esc_url($shipping_url); ?>" style="color: rgb(255, 153, 0); text-decoration: none;">#<?php echo esc_html($order_id); ?></a>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="terminal-dashboard-order-name">
-                                        <a href="<?php echo esc_url($shipping_url); ?>" style="color: rgb(255, 153, 0); text-decoration: none;">Manage</a>
+                                        <a href="<?php echo esc_url($shipping_url); ?>" style="color: black; text-decoration: none;">#<?php echo esc_html($order_id); ?></a>
                                     </div>
+                                </td>
+                                <td>
+                                    <span class="t-status-list t-status-in-transit">
+                                        in transit
+                                    </span>
+                                </td>
+                                <td>
+                                    <img src="<?php echo TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/arrow-forward.svg';  ?>" alt="">
                                 </td>
                             </tr>
                         <?php endforeach;
-                        ?>
-                        <tr>
-                            <td colspan="4">
-                                <div class="t-flex">
-                                    <div class="t-prev-btn">
-                                        <a href="<?php echo $prev_url; ?>" class="t-btn <?php echo $terminal_page == 1 ? 't-disabled' : ''; ?>">Previous</a>
-                                    </div>
-                                    <div class="t-next-btn">
-                                        <a href="<?php echo $next_url; ?>" class="t-btn">Next</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php
                     else : ?>
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <div class="terminal-dashboard-order-name">
                                     <p style="color: rgb(255, 153, 0); text-decoration: none;">No Shipment</p>
-                                    <?php
-                                    //check if page is greater than 1
-                                    if ($prev_page > 1) :
-                                    ?>
-                                        <div class="t-prev-btn t-mt-3">
-                                            <a href="<?php echo $prev_url; ?>" class="t-btn">Previous</a>
-                                        </div>
-                                    <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -127,7 +107,14 @@ $next_url = esc_url($next_url);
                     ?>
                 </tbody>
             </table>
-
+        </div>
+        <div class="t-flex" style="margin: 40px 27px;">
+            <div class="t-prev-btn">
+                <a href="<?php echo $prev_url; ?>" class="t-btn <?php echo $terminal_page == 1 ? 't-disabled' : ''; ?>">Previous</a>
+            </div>
+            <div class="t-next-btn">
+                <a href="<?php echo $next_url; ?>" class="t-btn">Next</a>
+            </div>
         </div>
     </div>
 </div>
