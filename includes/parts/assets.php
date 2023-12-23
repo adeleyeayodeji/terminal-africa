@@ -79,6 +79,10 @@ trait Assets
             'currency' => get_woocommerce_currency(),
             'tracking_url' => TERMINAL_AFRICA_TRACKING_URL_LIVE,
             'terminal_africal_countries' => get_terminal_countries(),
+            'support_active_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/support-active.svg',
+            'support_inactive_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/support-inactive.svg',
+            'shipping_active_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon.svg',
+            'shipping_inactive_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon-inactive.svg',
         ));
     }
 

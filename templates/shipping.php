@@ -34,10 +34,10 @@ $next_url = esc_url($next_url);
             <table width="100%" style="border-collapse: separate; border-spacing: 0px 0px; text-align: center;">
                 <thead>
                     <tr>
-                        <th class="terminal-dashboard-orders-list-table-heading">CARRIER</th>
-                        <th class="terminal-dashboard-orders-list-table-heading">SHIPMENT ID</th>
-                        <th class="terminal-dashboard-orders-list-table-heading">ORDER ID</th>
-                        <th class="terminal-dashboard-orders-list-table-heading">STATUS</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">Carrier</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">Shipping ID</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">Order ID</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -67,7 +67,7 @@ $next_url = esc_url($next_url);
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
                                     <div class="t-flex" style="justify-content: center;">
-                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:30px;margin-right: 30px;">
+                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:50px;margin-right: 30px;">
                                         <p>
                                             <span>
                                                 <?php echo esc_html($carrier); ?>
@@ -76,7 +76,7 @@ $next_url = esc_url($next_url);
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="terminal-dashboard-order-link" style="margin-bottom: 0px; font-size: 16px; color: rgb(255, 153, 0); text-transform: capitalize;">
+                                    <div class="terminal-dashboard-order-link" style="margin-bottom: 0px; font-size: 16px; color: black; text-transform: capitalize;">
                                         <?php echo esc_html($shipment_id); ?>
                                     </div>
                                 </td>

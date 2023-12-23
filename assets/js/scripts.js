@@ -2692,11 +2692,31 @@ jQuery(document).ready(function ($) {
         $("." + firstView).show();
         //hide secondView
         $("." + secondView).hide();
+        //get the first index .get-started-button
+        let firstIndex = $(".get-started-button:first-child");
+        //update inner img with terminal_africa.shipping_active_img
+        firstIndex.find("img").attr("src", terminal_africa.shipping_active_img);
+        //second index .get-started-button
+        let secondIndex = $(".get-started-button:nth-child(2)");
+        //update inner img with terminal_africa.support_inactive_img
+        secondIndex
+          .find("img")
+          .attr("src", terminal_africa.support_inactive_img);
       } else {
         //show secondView
         $("." + secondView).show();
         //hide firstView
         $("." + firstView).hide();
+        //get the first index .get-started-button
+        let firstIndex = $(".get-started-button:first-child");
+        //update inner img with terminal_africa.shipping_inactive_img
+        firstIndex
+          .find("img")
+          .attr("src", terminal_africa.shipping_inactive_img);
+        //second index .get-started-button
+        let secondIndex = $(".get-started-button:nth-child(2)");
+        //update inner img with terminal_africa.support_active_img
+        secondIndex.find("img").attr("src", terminal_africa.support_active_img);
       }
     });
   });

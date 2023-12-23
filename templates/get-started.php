@@ -24,7 +24,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                         </div>
                         <div class="card-get-support get-started-button" data-view="get-started-support-section">
                             <div class="t-flex">
-                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-get-started.svg') ?>" alt="Get support" style="margin-right: 10px;">
+                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/support-inactive.svg') ?>" alt="Get support" style="margin-right: 10px;">
                                 <span>
                                     Get Support
                                 </span>
