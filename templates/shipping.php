@@ -82,12 +82,12 @@ $next_url = esc_url($next_url);
                                 </td>
                                 <td>
                                     <div class="terminal-dashboard-order-name">
-                                        <a href="<?php echo esc_url($shipping_url); ?>" style="color: black; text-decoration: none;">#<?php echo esc_html($order_id); ?></a>
+                                        <a href="<?php echo esc_url($shipping_url); ?>" style="color: black; text-decoration: none;font-size: 16px;">#<?php echo esc_html($order_id); ?></a>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="t-status-list t-status-in-transit">
-                                        in transit
+                                    <span class="t-status-list t-status-draft">
+                                        draft
                                     </span>
                                 </td>
                                 <td>

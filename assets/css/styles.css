@@ -1564,7 +1564,13 @@ input:checked + .t-slider:before {
 }
 
 .t-terminal-dashboard-order-row:hover {
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 2px 4px 0px;
+  box-shadow: rgba(0, 0, 0, -0.93) 0px 2px 4px 0px;
+  background: #fdeedd;
+}
+
+.t-terminal-dashboard-order-row:active,
+.t-terminal-dashboard-order-row:focus {
+  box-shadow: rgba(0, 0, 0, -0.93) 0px 2px 4px 0px;
   background: #fdeedd;
 }
 
@@ -1954,4 +1960,21 @@ Responsive for t-transaction-header-right-t-flex
   padding: 8px 21px;
   border-radius: 8px;
   font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .t-shipping table th:nth-child(4),
+  .t-shipping table td:nth-child(4) {
+    display: none;
+  }
+}
+
+.t-status-in-transit {
+  background-color: #c0a2e630;
+  color: #c0a2e6;
+}
+
+.t-status-draft {
+  color: inherit;
+  background: #f6f3ef;
 }
