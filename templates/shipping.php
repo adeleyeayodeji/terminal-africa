@@ -67,7 +67,7 @@ $next_url = esc_url($next_url);
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
                                     <div class="t-flex" style="justify-content: center;">
-                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height:50px;margin-right: 30px;">
+                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="    height: 50px;margin-right: 30px;width: 70px;object-fit: contain;">
                                         <p>
                                             <span>
                                                 <?php echo esc_html($carrier); ?>
