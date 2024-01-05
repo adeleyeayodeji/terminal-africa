@@ -63,14 +63,22 @@ $next_url = esc_url($next_url);
                             $shipping_url = add_query_arg($arg, $plugin_url);
                             //get Terminal_africa_carrierlogo
                             $carrirer_logo = get_post_meta($order_id, 'Terminal_africa_carrierlogo', true) ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo.svg';
+                            $words = explode(" ", $carrier);
+                            if (isset($words[0])) {
+                                // The string has a first word
+                                $firstWord = $words[0];
+                            } else {
+                                // The string does not have a first word
+                                $firstWord = $carrier;
+                            }
                     ?>
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
                                 <td>
                                     <div class="t-flex" style="justify-content: center;">
-                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="    height: 50px;margin-right: 30px;width: 70px;object-fit: contain;">
+                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height: 40px;margin-right: 10px;width: 60px;object-fit: contain;">
                                         <p>
                                             <span>
-                                                <?php echo esc_html($carrier); ?>
+                                                <?php echo esc_html($firstWord); ?>
                                             </span>
                                         </p>
                                     </div>
