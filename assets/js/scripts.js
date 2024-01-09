@@ -1816,7 +1816,7 @@ if (currentpageurl.includes("admin.php?page=terminal-africa")) {
       rate_id !== ""
     ) {
       //get shipment status
-      getShipmentStatus(shipment_id, order_id, rate_id);
+      // getShipmentStatus(shipment_id, order_id, rate_id);
       //refresh terminal rate
       refreshTerminalRate(rate_id);
     }

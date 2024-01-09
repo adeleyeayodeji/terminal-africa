@@ -1674,4 +1674,86 @@ trait Ajax
             ]);
         }
     }
+
+    /**
+     * Manage Shipment Page
+     * 
+     * @return void
+     */
+    public function manage_shipment_page()
+    {
+        try {
+            //get shipping address
+            $country = get_terminal_countries();
+            //sanitize
+            $shipping_id = sanitize_text_field($_GET['id']);
+            //sanitize
+            $order_id = sanitize_text_field($_GET['order_id']);
+            //get order
+            $order = wc_get_order($order_id);
+            //rate_id
+            $rate_id = sanitize_text_field($_GET['rate_id']);
+            //get rate data
+            $get_rate_data = getTerminalRateData($rate_id);
+            //order date
+            $order_date = $order->get_date_created();
+            //get order date
+            $order_date = $order_date->date('Y-m-d H:i:s');
+            //human readable date
+            $order_time = human_time_diff(strtotime($order_date), current_time('timestamp')) . ' ago';
+            //order status
+            $order_status = $order->get_status();
+            //$order_url
+            $order_url = admin_url('post.php?post=' . $order_id . '&action=edit');
+            //order shipping method
+            $order_shipping_method = $order->get_shipping_method();
+            //order shipping price
+            $order_shipping_price = $order->get_shipping_total();
+            //get the items
+            $items = $order->get_items();
+            //check if $get_rate_data is not empty
+            $saved_address = null;
+            $saved_others = null;
+            if ($get_rate_data['code'] == 200) {
+                $saved_address = $get_rate_data['data']->delivery_address;
+                $saved_others = $get_rate_data['data'];
+            }
+            $states = get_terminal_states($saved_address ? $saved_address->country : 'NG');
+            $states = $states['data'];
+
+            //get order currency
+            $order_currency = $order->get_currency();
+            //loop through shipping method
+            $shippingItems    = (array) $order->get_items('shipping');
+            //$shipping_cost
+            $shipping_cost = $saved_others->amount;
+            // Loop through shipping shippingItems
+            foreach ($shippingItems as $item) {
+                //get shipping method id
+                $shipping_method_id = $item->get_method_id();
+                //if shipping method id is terminal_delivery
+                if ($shipping_method_id == "terminal_delivery") {
+                    //get shipping cost
+                    $shipping_cost = $item->get_total();
+                    break;
+                }
+            }
+
+            //compact all data
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'country', 'states', 'order_currency', 'shipping_cost');
+
+            //return data
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Data gotten successfully',
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
 }

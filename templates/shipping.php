@@ -34,7 +34,8 @@ $next_url = esc_url($next_url);
             <table width="100%" style="border-collapse: separate; border-spacing: 0px 0px; text-align: center;">
                 <thead>
                     <tr>
-                        <th class="terminal-dashboard-orders-list-table-heading">Carrier</th>
+                        <th style="width: 60px;"></th>
+                        <th class="terminal-dashboard-orders-list-table-heading" style="width: 50px;">Carrier</th>
                         <th class="terminal-dashboard-orders-list-table-heading">Shipping ID</th>
                         <th class="terminal-dashboard-orders-list-table-heading">Order ID</th>
                         <th class="terminal-dashboard-orders-list-table-heading">Status</th>
@@ -73,9 +74,11 @@ $next_url = esc_url($next_url);
                             }
                     ?>
                             <tr class="t-terminal-dashboard-order-row" onclick="window.location.href='<?php echo esc_url($shipping_url); ?>'">
-                                <td>
+                                <td style="width: 60px;">
+                                    <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height: 40px;margin-right: 10px;width: 60px;object-fit: contain;">
+                                </td>
+                                <td style="width: 50px;">
                                     <div class="t-flex" style="justify-content: center;">
-                                        <img src="<?php echo esc_attr($carrirer_logo); ?>" alt="" style="height: 40px;margin-right: 10px;width: 60px;object-fit: contain;">
                                         <p>
                                             <span>
                                                 <?php echo esc_html($firstWord); ?>

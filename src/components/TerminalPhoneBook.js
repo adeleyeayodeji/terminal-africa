@@ -336,9 +336,12 @@ class TerminalPhoneBook extends Component {
             </div>
           </Modal>
         )}
-        <button className="t-phonebook" onClick={this.showModal}>
-          <i className="fa fa-address-book" ariaHidden="true"></i> Import
-          Address
+        <button className="t-manage-shipping-button" onClick={this.showModal}>
+          <img
+            src={terminal_africa.plugin_url + "/img/phone-book.svg"}
+            alt="Phone Book"
+          />
+          Import Address
         </button>
       </>
     );

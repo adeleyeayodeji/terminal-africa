@@ -1,8 +1,11 @@
 @import url(https://fonts.googleapis.com/css2?family=Lato:wght@100;200;300;400;500;600;700;800&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap);
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600&display=swap");
 /* import local Lato font */
 #wpbody {
   /* background: #f4f4f4; */
-  background: #f7f8f9;
+  /* background: #f7f8f9; */
+  background: #f6f3ef;
 }
 
 .main-logo-image {
@@ -593,6 +596,18 @@ a#t-sign-out:focus {
   margin-left: 10px;
 }
 
+.t-ml-3 {
+  margin-left: 15px;
+}
+
+.t-ml-4 {
+  margin-left: 20px;
+}
+
+.t-ml-5 {
+  margin-left: 30px;
+}
+
 .t-intro-list {
   width: 30%;
   max-width: 250px;
@@ -796,7 +811,8 @@ img.t-dashboard-intro-icon {
 .t-shipping {
   background-color: rgb(255, 255, 255);
   padding: 30px;
-  margin: 5px 25px;
+  /* margin: 5px 25px; */
+  margin: 5px 140px;
   border-radius: 20px;
 }
 
@@ -1964,7 +1980,9 @@ Responsive for t-transaction-header-right-t-flex
 
 @media (max-width: 600px) {
   .t-shipping table th:nth-child(4),
-  .t-shipping table td:nth-child(4) {
+  .t-shipping table td:nth-child(4),
+  .t-shipping table th:nth-child(5),
+  .t-shipping table td:nth-child(5) {
     display: none;
   }
 }
