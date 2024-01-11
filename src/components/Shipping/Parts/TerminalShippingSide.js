@@ -3,9 +3,9 @@ import React, { Fragment } from "react";
 export default function TerminalShippingSide() {
   return (
     <Fragment>
-      <div style={{ padding: "0px 20px" }}>
+      <div style={{ padding: "0px 30px" }}>
         <div className="t-shipping-side">
-          <div className="t-flex">
+          <div className="t-flex t-flex t-mb-2">
             <h3>Manage Order</h3>
             <button className="t-manage-shipping-button">
               Track{" "}

@@ -9,6 +9,7 @@ import {
   __experimentalItem as Item
 } from "@wordpress/components";
 
+import "./../scss/responsive2.scss";
 import "./../scss/terminal-phonebook.scss";
 import TerminalLoader from "./Loader";
 
