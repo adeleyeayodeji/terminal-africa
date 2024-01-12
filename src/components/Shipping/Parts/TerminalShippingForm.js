@@ -130,7 +130,7 @@ function TerminalShippingForm() {
                 type="text"
                 name="zipcode"
                 id="zipcode"
-                className="form-control"
+                className="form-control t-zip-new"
                 placeholder="Zip Code"
               />
             </div>

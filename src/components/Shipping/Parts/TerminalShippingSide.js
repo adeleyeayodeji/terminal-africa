@@ -33,6 +33,23 @@ export default function TerminalShippingSide() {
             </a>
           </div>
         </div>
+        <div className="t-shipping-side" style={{ marginTop: 40 }}>
+          <div className="t-flex t-flex t-mb-2">
+            <h3>Manage Shipping</h3>
+          </div>
+          <div className="t-flex">
+            <h4>Carrier</h4>
+            <p>DHL Express</p>
+          </div>
+          <div className="t-flex">
+            <h4>Tracking Number</h4>
+            <p>938737329293</p>
+          </div>
+          <div className="t-flex">
+            <h4>Shipping price</h4>
+            <p>₦ 2,556.00</p>
+          </div>
+        </div>
       </div>
     </Fragment>
   );

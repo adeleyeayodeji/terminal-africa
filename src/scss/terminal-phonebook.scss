@@ -171,7 +171,7 @@
     padding: 23px 16px;
     margin-top: 10px;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 15px;
   }
 
   input.form-control:focus {
@@ -185,7 +185,7 @@
   select.form-control {
     padding: 0px 16px;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 15px;
     height: 48px;
   }
 
@@ -203,6 +203,14 @@
     border-top-left-radius: 0px !important;
     //border bottom left radius 0px
     border-bottom-left-radius: 0px !important;
+  }
+
+  label {
+    font-size: 16px !important;
+  }
+
+  .t-zip-new {
+    margin: 0px !important;
   }
 
   .t-phone-new-select {
