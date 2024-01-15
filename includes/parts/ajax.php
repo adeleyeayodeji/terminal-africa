@@ -1680,11 +1680,16 @@ trait Ajax
      * 
      * @return void
      */
-    public function manage_shipment_page()
+    public function terminal_africa_get_shipping_api_data()
     {
         try {
-            //get shipping address
-            $country = get_terminal_countries();
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
             //sanitize
             $shipping_id = sanitize_text_field($_GET['id']);
             //sanitize
@@ -1740,7 +1745,7 @@ trait Ajax
             }
 
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'country', 'states', 'order_currency', 'shipping_cost');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost');
 
             //return data
             wp_send_json([

@@ -40,6 +40,39 @@ class TerminalLoader extends react__WEBPACK_IMPORTED_MODULE_2__.Component {
 
 /***/ }),
 
+/***/ "./src/components/Shipping/Parts/SippingStatus.js":
+/*!********************************************************!*\
+  !*** ./src/components/Shipping/Parts/SippingStatus.js ***!
+  \********************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ SippingStatus; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+class SippingStatus extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
+  render() {
+    const {
+      className,
+      title
+    } = this.props;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-status-list " + className,
+      style: {
+        width: "fit-content"
+      }
+    }, title);
+  }
+}
+
+/***/ }),
+
 /***/ "./src/components/Shipping/Parts/TerminalShippingForm.js":
 /*!***************************************************************!*\
   !*** ./src/components/Shipping/Parts/TerminalShippingForm.js ***!
@@ -53,145 +86,169 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 
 
-function TerminalShippingForm() {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "terminal-responsive t-shipping-form-new"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "row"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-6 col-md-6 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "first_name"
-  }, "First Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    className: "form-control",
-    name: "first_name",
-    id: "first_name",
-    placeholder: "First Name"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-6 col-md-6 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "last_name"
-  }, "Last Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    className: "form-control",
-    name: "last_name",
-    id: "last_name",
-    placeholder: "Last Name"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "address_line_1"
-  }, "Address line 1"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    className: "form-control",
-    name: "address_line_1",
-    id: "address_line_1",
-    placeholder: "Address line 1"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "address_line_2"
-  }, "Address line 2"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    className: "form-control",
-    name: "address_line_2",
-    id: "address_line_2",
-    placeholder: "Address line 2"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "email"
-  }, "Email address"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    className: "form-control",
-    name: "email",
-    id: "email",
-    placeholder: "Address line 2"
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-4 col-md-4 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "country"
-  }, "Country"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    className: "form-control terminal-country",
-    required: true,
-    name: "country",
-    id: "country"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: ""
-  }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-4 col-md-4 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "state"
-  }, "State"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    className: "form-control terminal-state",
-    required: true,
-    name: "state",
-    id: "state"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: ""
-  }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-4 col-md-4 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "lga"
-  }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    className: "form-control terminal-city",
-    required: true,
-    name: "lga",
-    id: "lga"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: ""
-  }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-6 col-md-6 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "phone"
-  }, "Phone Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "d-flex"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-100"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    name: "country_code",
-    id: "",
-    className: "form-control t-phone-new-select"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "234"
-  }, "234"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "w-100"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    placeholder: "Phone number",
-    className: "form-control t-phone-new"
-  }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "col-lg-6 col-md-6 col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "form-group"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-    htmlFor: "zipcode"
-  }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    name: "zipcode",
-    id: "zipcode",
-    className: "form-control t-zip-new",
-    placeholder: "Zip Code"
-  }))))));
+class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const {
+      saved_address,
+      rate_id
+    } = this.props;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+      method: "post",
+      id: "t-form-submit",
+      dataType: "customer"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "hidden",
+      name: "address_id",
+      value: saved_address?.address_id
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "hidden",
+      name: "rate_id",
+      value: rate_id
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-responsive t-shipping-form-new"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "first_name"
+    }, "First Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "first_name",
+      id: "first_name",
+      placeholder: "First Name",
+      value: saved_address?.first_name
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "last_name"
+    }, "Last Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "last_name",
+      id: "last_name",
+      placeholder: "Last Name",
+      value: saved_address?.last_name
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "address_line_1"
+    }, "Address line 1"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "address_line_1",
+      id: "address_line_1",
+      placeholder: "Address line 1"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "address_line_2"
+    }, "Address line 2"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "address_line_2",
+      id: "address_line_2",
+      placeholder: "Address line 2"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "email"
+    }, "Email address"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "email",
+      id: "email",
+      placeholder: "Address line 2"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-4 col-md-4 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "country"
+    }, "Country"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-country",
+      required: true,
+      name: "country",
+      id: "country"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-4 col-md-4 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "state"
+    }, "State"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-state",
+      required: true,
+      name: "state",
+      id: "state"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-4 col-md-4 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "lga"
+    }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-city",
+      required: true,
+      name: "lga",
+      id: "lga"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "phone"
+    }, "Phone Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "d-flex"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "w-100"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      name: "country_code",
+      id: "",
+      className: "form-control t-phone-new-select"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: "234"
+    }, "234"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "w-100"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      placeholder: "Phone number",
+      className: "form-control t-phone-new"
+    }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "zipcode"
+    }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      name: "zipcode",
+      id: "zipcode",
+      className: "form-control t-zip-new",
+      placeholder: "Zip Code"
+    })))))));
+  }
 }
 /* harmony default export */ __webpack_exports__["default"] = (TerminalShippingForm);
 
@@ -212,25 +269,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../TerminalPhoneBook */ "./src/components/TerminalPhoneBook.js");
+/* harmony import */ var _SippingStatus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SippingStatus */ "./src/components/Shipping/Parts/SippingStatus.js");
 
 
 
-function TerminalShippingHeader() {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-shipment-header t-flex"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-flex"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, "SH-16380611554"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: terminal_africa.plugin_url + "/img/copy-icon.svg",
-    alt: "Terminal Copy Icon"
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-status-list t-status-draft",
-    style: {
-      width: "fit-content"
-    }
-  }, "draft")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-flex"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
+
+class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
+  //constructor
+  constructor(props) {
+    super(props);
+    this.state = {
+      shippingStatus: {
+        title: "draft",
+        className: "t-status-draft"
+      }
+    };
+  }
+  render() {
+    const {
+      shippingData
+    } = this.props;
+    const {
+      shippingStatus
+    } = this.state;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipment-header t-flex"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-flex"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, shippingData?.shipping_id), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: terminal_africa.plugin_url + "/img/copy-icon.svg",
+      alt: "Terminal Copy Icon"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_SippingStatus__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      className: shippingStatus.className,
+      title: shippingStatus.title
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-flex"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
+  }
 }
 
 /***/ }),
@@ -297,7 +372,163 @@ function TerminalShippingSide() {
     className: "t-flex"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Tracking Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "938737329293")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-flex"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Shipping price"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "\u20A6 2,556.00")))));
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Shipping price"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "\u20A6 2,556.00")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      marginTop: 13
+    },
+    id: "t_carriers_location"
+  }))));
+}
+
+/***/ }),
+
+/***/ "./src/components/Shipping/ShippingSkeleton.js":
+/*!*****************************************************!*\
+  !*** ./src/components/Shipping/ShippingSkeleton.js ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ShippingSkeleton; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function ShippingSkeleton() {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-row",
+    style: {
+      marginLeft: "25px"
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "10px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "20px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "20px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-row"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-6"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "95%"
+    }
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-6"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "80%"
+    }
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "40px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-row"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-6"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "95%"
+    }
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-6"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "30px",
+      width: "80%"
+    }
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "90px",
+      width: "90%"
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      height: "10px"
+    }
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "terminal-skeleton",
+    style: {
+      height: "380px",
+      width: "90%"
+    }
+  })));
 }
 
 /***/ }),
@@ -316,21 +547,273 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Parts/TerminalShippingHeader */ "./src/components/Shipping/Parts/TerminalShippingHeader.js");
 /* harmony import */ var _Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Parts/TerminalShippingSide */ "./src/components/Shipping/Parts/TerminalShippingSide.js");
 /* harmony import */ var _Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Parts/TerminalShippingForm */ "./src/components/Shipping/Parts/TerminalShippingForm.js");
+/* harmony import */ var _ShippingSkeleton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ShippingSkeleton */ "./src/components/Shipping/ShippingSkeleton.js");
 
 
 
 
 
-function TerminalManageShipping() {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-row"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-ml-5"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__["default"], null))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__["default"], null))));
+
+class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      shippingData: {}
+    };
+  }
+
+  //did mount
+  componentDidMount() {
+    //get api data
+    this.getApiData();
+  }
+
+  //get url params
+  getUrlParams = key => {
+    var urlScheme = new URLSearchParams(window.location.search);
+    return urlScheme.get(key);
+  };
+
+  //api request
+  getApiData = () => {
+    //get url param id
+    const id = this.getUrlParams("id");
+    //get order_id
+    const order_id = this.getUrlParams("order_id");
+    //rate_id
+    const rate_id = this.getUrlParams("rate_id");
+
+    //get api data
+    jQuery(document).ready($ => {
+      $.ajax({
+        type: "GET",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "terminal_africa_get_shipping_api_data",
+          id,
+          order_id,
+          rate_id,
+          nonce: terminal_africa.nonce
+        },
+        dataType: "json",
+        beforeSend: () => {
+          //set is loading
+          this.setState({
+            isLoading: true
+          });
+        },
+        success: response => {
+          //check response code is 200
+          if (response.code === 200) {
+            //set is loading
+            this.setState({
+              isLoading: false
+            });
+            //log response
+            console.log(response);
+            //pass to shipping data
+            this.setState({
+              shippingData: response.data
+            });
+
+            //get shipping status
+            this.getShippingStatus();
+          } else {
+            //swal
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!: " + response.message,
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              //footer
+              footer: `
+                        <div>
+                            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                        </div>
+                        `
+            });
+          }
+        },
+        error: (xhr, status, error) => {
+          //swal
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!: " + xhr.responseText,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+          });
+        }
+      });
+    });
+  };
+
+  //get shipping status
+  getShippingStatus = () => {
+    jQuery(document).ready($ => {
+      const {
+        shipping_id,
+        order_id
+      } = this.state.shippingData;
+      //get rate_id
+      const rate_id = this.getUrlParams("rate_id");
+
+      //ajax
+      $.ajax({
+        type: "GET",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "get_terminal_shipment_status",
+          nonce: terminal_africa.nonce,
+          shipment_id: shipping_id,
+          order_id,
+          rate_id
+        },
+        dataType: "json",
+        beforeSend: () => {
+          // Swal loader
+          Swal.fire({
+            title: "Please wait...",
+            text: "We are fetching your shipment status",
+            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+          //disable all input #t-form-submit
+          $("#t-form-submit").find("input, button, select, textarea").attr("disabled", "disabled");
+          //add readonly to all input
+          $("#t-form-submit").find("input, button, select, textarea").attr("readonly", "readonly");
+        },
+        success: function (response) {
+          //close   Swal loader
+          Swal.close();
+
+          //check if response code is 200
+          if (response.code === 200) {
+            //check for cancelled shipment
+            let cancellation_request = response.shipment_info.cancellation_request;
+            // PENDING CANCELLATION
+            //update #terminal_shipment_status html
+            if (cancellation_request) {
+              $("#terminal_shipment_status").html("PENDING CANCELLATION");
+            } else {
+              $("#terminal_shipment_status").html(response.data);
+            }
+            //check if status is draft
+            if (response.data === "draft") {
+              //enable all input #t-form-submit
+              $("#t-form-submit").find("input, button, select, textarea").removeAttr("disabled");
+              //remove readonly to all input
+              $("#t-form-submit").find("input, button, select, textarea").removeAttr("readonly");
+            } else {
+              if (!cancellation_request) {
+                const {
+                  shipment_info: {
+                    extras: shipping_info = {},
+                    address_from = {},
+                    address_to = {}
+                  } = {}
+                } = response;
+                const {
+                  shipping_label_url,
+                  tracking_number,
+                  commercial_invoice_url,
+                  carrier_tracking_url
+                } = shipping_info;
+                const addressFromCountry = address_from.country;
+                const addressToCountry = address_to.country;
+                const shippingLabelTemplate = shipping_label_url ? `
+                  <p>
+                    <b>Shipping Label:</b> <a href="${shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
+                  </p>
+                ` : "";
+                const commercialInvoiceTemplate = addressFromCountry !== addressToCountry ? `
+                  <br>
+                  <p>
+                    <b>Commercial Invoice:</b> <a href="${commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
+                  </p>
+                  <p>
+                    <b>Carrier Tracking:</b> <a href="${carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
+                  </p>
+                ` : "";
+                const template = `
+                  <div class="t-space"></div>
+                  ${shippingLabelTemplate}
+                  <p>
+                    <b>Tracking Number:</b> <b>${tracking_number}</b>
+                  </p>
+                  <p>
+                    <b>Tracking Link:</b> <a href="${terminal_africa.tracking_url + shipment_id}" class="t-shipment-info-link" target="_blank">Track Shipment</a>
+                  </p>
+                  ${commercialInvoiceTemplate}
+                  <div class="t-space"></div>
+                `;
+                $("#t_carriers_location").before(template);
+              }
+            }
+            //load button
+            $("#t_carriers_location").html(response.button);
+          } else {
+            //Swal
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+              confirmButtonColor: "rgb(246 146 32)",
+              //confirm button text
+              confirmButtonText: "Continue",
+              footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+            }).then(() => {
+              //enable all input #t-form-submit
+              $("#t-form-submit").find("input, button, select, textarea").removeAttr("disabled");
+              //remove readonly to all input
+              $("#t-form-submit").find("input, button, select, textarea").removeAttr("readonly");
+            });
+          }
+        }
+      });
+    });
+  };
+  render() {
+    const {
+      isLoading,
+      shippingData
+    } = this.state;
+    const rate_id = this.getUrlParams("rate_id");
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-ml-5"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      shippingData: shippingData
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      saved_address: shippingData.saved_address,
+      rate_id: rate_id
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__["default"], null))));
+  }
 }
 /* harmony default export */ __webpack_exports__["default"] = (TerminalManageShipping);
 

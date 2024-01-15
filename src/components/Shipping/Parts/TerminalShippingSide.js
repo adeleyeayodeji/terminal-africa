@@ -49,6 +49,7 @@ export default function TerminalShippingSide() {
             <h4>Shipping price</h4>
             <p>₦ 2,556.00</p>
           </div>
+          <div style={{ marginTop: 13 }} id="t_carriers_location"></div>
         </div>
       </div>
     </Fragment>
