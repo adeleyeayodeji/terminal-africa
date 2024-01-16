@@ -1726,6 +1726,19 @@ trait Ajax
             $states = get_terminal_states($saved_address ? $saved_address->country : 'NG');
             $states = $states['data'];
 
+            //check if saved others is not empty
+            $saved_address_state = $saved_others ? $saved_others->delivery_address->state : 'Lagos';
+
+            //get the state isoCode from $states
+            $stateIso = array_filter($states, function ($state) use ($saved_address_state) {
+                return $state->name == $saved_address_state;
+            });
+            //shift the state isoCode
+            $stateIso = array_shift($stateIso);
+
+            //get cities
+            $cities = get_terminal_cities($saved_address ? $saved_address->country : 'NG', $stateIso->isoCode);
+
             //get order currency
             $order_currency = $order->get_currency();
             //loop through shipping method
@@ -1745,7 +1758,7 @@ trait Ajax
             }
 
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities');
 
             //return data
             wp_send_json([

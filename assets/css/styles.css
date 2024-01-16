@@ -1996,3 +1996,10 @@ Responsive for t-transaction-header-right-t-flex
   color: inherit;
   background: #f6f3ef;
 }
+
+.t-input-group {
+  margin-top: 10px !important;
+  border-radius: 0px !important;
+  background: white !important;
+  border-right: none !important;
+}

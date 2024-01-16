@@ -7,17 +7,11 @@ export default class TerminalShippingHeader extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      shippingStatus: {
-        title: "draft",
-        className: "t-status-draft"
-      }
-    };
+    this.state = {};
   }
 
   render() {
-    const { shippingData } = this.props;
-    const { shippingStatus } = this.state;
+    const { shippingData, shippingStatus } = this.props;
 
     return (
       <Fragment>

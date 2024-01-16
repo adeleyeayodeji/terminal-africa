@@ -9,7 +9,11 @@ class TerminalManageShipping extends React.Component {
     super(props);
     this.state = {
       isLoading: true,
-      shippingData: {}
+      shippingData: {},
+      shippingStatus: {
+        title: "--",
+        className: "t-status-draft"
+      }
     };
   }
 
@@ -56,8 +60,6 @@ class TerminalManageShipping extends React.Component {
           if (response.code === 200) {
             //set is loading
             this.setState({ isLoading: false });
-            //log response
-            console.log(response);
             //pass to shipping data
             this.setState({ shippingData: response.data });
 
@@ -135,21 +137,19 @@ class TerminalManageShipping extends React.Component {
         </div>
       `
           });
-          //disable all input #t-form-submit
-          $("#t-form-submit")
-            .find("input, button, select, textarea")
-            .attr("disabled", "disabled");
-          //add readonly to all input
-          $("#t-form-submit")
-            .find("input, button, select, textarea")
-            .attr("readonly", "readonly");
         },
-        success: function (response) {
+        success: (response) => {
           //close   Swal loader
           Swal.close();
-
           //check if response code is 200
           if (response.code === 200) {
+            //shippingStatus
+            this.setState({
+              shippingStatus: {
+                title: response.data,
+                className: "t-status-" + response.data
+              }
+            });
             //check for cancelled shipment
             let cancellation_request =
               response.shipment_info.cancellation_request;
@@ -160,45 +160,35 @@ class TerminalManageShipping extends React.Component {
             } else {
               $("#terminal_shipment_status").html(response.data);
             }
-            //check if status is draft
-            if (response.data === "draft") {
-              //enable all input #t-form-submit
-              $("#t-form-submit")
-                .find("input, button, select, textarea")
-                .removeAttr("disabled");
-              //remove readonly to all input
-              $("#t-form-submit")
-                .find("input, button, select, textarea")
-                .removeAttr("readonly");
-            } else {
-              if (!cancellation_request) {
-                const {
-                  shipment_info: {
-                    extras: shipping_info = {},
-                    address_from = {},
-                    address_to = {}
-                  } = {}
-                } = response;
-                const {
-                  shipping_label_url,
-                  tracking_number,
-                  commercial_invoice_url,
-                  carrier_tracking_url
-                } = shipping_info;
-                const addressFromCountry = address_from.country;
-                const addressToCountry = address_to.country;
+            //check for shipment canceled
+            if (!cancellation_request) {
+              const {
+                shipment_info: {
+                  extras: shipping_info = {},
+                  address_from = {},
+                  address_to = {}
+                } = {}
+              } = response;
+              const {
+                shipping_label_url,
+                tracking_number,
+                commercial_invoice_url,
+                carrier_tracking_url
+              } = shipping_info;
+              const addressFromCountry = address_from.country;
+              const addressToCountry = address_to.country;
 
-                const shippingLabelTemplate = shipping_label_url
-                  ? `
+              const shippingLabelTemplate = shipping_label_url
+                ? `
                   <p>
                     <b>Shipping Label:</b> <a href="${shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
                   </p>
                 `
-                  : "";
+                : "";
 
-                const commercialInvoiceTemplate =
-                  addressFromCountry !== addressToCountry
-                    ? `
+              const commercialInvoiceTemplate =
+                addressFromCountry !== addressToCountry
+                  ? `
                   <br>
                   <p>
                     <b>Commercial Invoice:</b> <a href="${commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
@@ -207,9 +197,9 @@ class TerminalManageShipping extends React.Component {
                     <b>Carrier Tracking:</b> <a href="${carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
                   </p>
                 `
-                    : "";
+                  : "";
 
-                const template = `
+              const template = `
                   <div class="t-space"></div>
                   ${shippingLabelTemplate}
                   <p>
@@ -217,16 +207,16 @@ class TerminalManageShipping extends React.Component {
                   </p>
                   <p>
                     <b>Tracking Link:</b> <a href="${
-                      terminal_africa.tracking_url + shipment_id
+                      terminal_africa.tracking_url + shipping_id
                     }" class="t-shipment-info-link" target="_blank">Track Shipment</a>
                   </p>
                   ${commercialInvoiceTemplate}
                   <div class="t-space"></div>
                 `;
 
-                $("#t_carriers_location").before(template);
-              }
+              $("#t_carriers_location").before(template);
             }
+
             //load button
             $("#t_carriers_location").html(response.button);
           } else {
@@ -243,15 +233,6 @@ class TerminalManageShipping extends React.Component {
                 <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
               </div>
             `
-            }).then(() => {
-              //enable all input #t-form-submit
-              $("#t-form-submit")
-                .find("input, button, select, textarea")
-                .removeAttr("disabled");
-              //remove readonly to all input
-              $("#t-form-submit")
-                .find("input, button, select, textarea")
-                .removeAttr("readonly");
             });
           }
         }
@@ -260,7 +241,7 @@ class TerminalManageShipping extends React.Component {
   };
 
   render() {
-    const { isLoading, shippingData } = this.state;
+    const { isLoading, shippingData, shippingStatus } = this.state;
     const rate_id = this.getUrlParams("rate_id");
 
     return (
@@ -271,10 +252,14 @@ class TerminalManageShipping extends React.Component {
           <div className="t-row">
             <div className="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">
               <div className="t-ml-5">
-                <TerminalShippingHeader shippingData={shippingData} />
+                <TerminalShippingHeader
+                  shippingData={shippingData}
+                  shippingStatus={shippingStatus}
+                />
                 <TerminalShippingForm
                   saved_address={shippingData.saved_address}
                   rate_id={rate_id}
+                  shippingData={shippingData}
                 />
               </div>
             </div>

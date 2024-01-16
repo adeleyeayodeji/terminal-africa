@@ -7,7 +7,7 @@ class TerminalShippingForm extends React.Component {
   }
 
   render() {
-    const { saved_address, rate_id } = this.props;
+    const { saved_address, rate_id, shippingData } = this.props;
 
     return (
       <Fragment>
@@ -55,6 +55,7 @@ class TerminalShippingForm extends React.Component {
                     name="address_line_1"
                     id="address_line_1"
                     placeholder="Address line 1"
+                    value={saved_address?.line1}
                   />
                 </div>
               </div>
@@ -67,6 +68,7 @@ class TerminalShippingForm extends React.Component {
                     name="address_line_2"
                     id="address_line_2"
                     placeholder="Address line 2"
+                    value={saved_address?.line2}
                   />
                 </div>
               </div>
@@ -79,6 +81,24 @@ class TerminalShippingForm extends React.Component {
                     name="email"
                     id="email"
                     placeholder="Address line 2"
+                    value={saved_address?.email}
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span
+                    className="input-group-text t-input-group"
+                    id="t-emal-input">
+                    <img
+                      src={terminal_africa.plugin_url + "/img/envelope.svg"}
+                      alt="t-email-icon"
+                    />
+                  </span>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Username"
+                    aria-label="Username"
+                    aria-describedby="t-emal-input"
                   />
                 </div>
               </div>
@@ -91,6 +111,21 @@ class TerminalShippingForm extends React.Component {
                     name="country"
                     id="country">
                     <option value="">Select</option>
+                    {terminal_africa?.terminal_africal_countries.map(
+                      (country, key) => (
+                        <option
+                          key={key}
+                          value={country.isoCode}
+                          data-flag={country.flag}
+                          selected={
+                            country.isoCode === saved_address?.country
+                              ? "selected"
+                              : ""
+                          }>
+                          {country.name}
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
               </div>
@@ -103,6 +138,17 @@ class TerminalShippingForm extends React.Component {
                     name="state"
                     id="state">
                     <option value="">Select</option>
+                    {shippingData?.states?.map((state, key) => (
+                      <option
+                        key={key}
+                        value={state.name}
+                        data-statecode={state.isoCode}
+                        selected={
+                          state.name === saved_address?.state ? "selected" : ""
+                        }>
+                        {state.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -115,6 +161,16 @@ class TerminalShippingForm extends React.Component {
                     name="lga"
                     id="lga">
                     <option value="">Select</option>
+                    {shippingData?.cities?.data?.map((city, key) => (
+                      <option
+                        key={key}
+                        value={city.name}
+                        selected={
+                          city.name === saved_address?.city ? "selected" : ""
+                        }>
+                        {city.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>

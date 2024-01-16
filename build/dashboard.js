@@ -94,7 +94,8 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
   render() {
     const {
       saved_address,
-      rate_id
+      rate_id,
+      shippingData
     } = this.props;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
       method: "post",
@@ -149,7 +150,8 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       className: "form-control",
       name: "address_line_1",
       id: "address_line_1",
-      placeholder: "Address line 1"
+      placeholder: "Address line 1",
+      value: saved_address?.line1
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -161,7 +163,8 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       className: "form-control",
       name: "address_line_2",
       id: "address_line_2",
-      placeholder: "Address line 2"
+      placeholder: "Address line 2",
+      value: saved_address?.line2
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -173,7 +176,22 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       className: "form-control",
       name: "email",
       id: "email",
-      placeholder: "Address line 2"
+      placeholder: "Address line 2",
+      value: saved_address?.email
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      class: "input-group mb-3"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "input-group-text t-input-group",
+      id: "t-emal-input"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: terminal_africa.plugin_url + "/img/envelope.svg",
+      alt: "t-email-icon"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "email",
+      className: "form-control",
+      placeholder: "Username",
+      "aria-label": "Username",
+      "aria-describedby": "t-emal-input"
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-4 col-md-4 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -187,7 +205,12 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       id: "country"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: ""
-    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, "Select"), terminal_africa?.terminal_africal_countries.map((country, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: country.isoCode,
+      "data-flag": country.flag,
+      selected: country.isoCode === saved_address?.country ? "selected" : ""
+    }, country.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-4 col-md-4 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
@@ -200,7 +223,12 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       id: "state"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: ""
-    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, "Select"), shippingData?.states?.map((state, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: state.name,
+      "data-statecode": state.isoCode,
+      selected: state.name === saved_address?.state ? "selected" : ""
+    }, state.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-4 col-md-4 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
@@ -213,7 +241,11 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       id: "lga"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: ""
-    }, "Select")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, "Select"), shippingData?.cities?.data?.map((city, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: city.name,
+      selected: city.name === saved_address?.city ? "selected" : ""
+    }, city.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
@@ -278,20 +310,13 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
   //constructor
   constructor(props) {
     super(props);
-    this.state = {
-      shippingStatus: {
-        title: "draft",
-        className: "t-status-draft"
-      }
-    };
+    this.state = {};
   }
   render() {
     const {
-      shippingData
-    } = this.props;
-    const {
+      shippingData,
       shippingStatus
-    } = this.state;
+    } = this.props;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipment-header t-flex"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -559,7 +584,11 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     super(props);
     this.state = {
       isLoading: true,
-      shippingData: {}
+      shippingData: {},
+      shippingStatus: {
+        title: "--",
+        className: "t-status-draft"
+      }
     };
   }
 
@@ -610,8 +639,6 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
             this.setState({
               isLoading: false
             });
-            //log response
-            console.log(response);
             //pass to shipping data
             this.setState({
               shippingData: response.data
@@ -694,17 +721,19 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
         </div>
       `
           });
-          //disable all input #t-form-submit
-          $("#t-form-submit").find("input, button, select, textarea").attr("disabled", "disabled");
-          //add readonly to all input
-          $("#t-form-submit").find("input, button, select, textarea").attr("readonly", "readonly");
         },
-        success: function (response) {
+        success: response => {
           //close   Swal loader
           Swal.close();
-
           //check if response code is 200
           if (response.code === 200) {
+            //shippingStatus
+            this.setState({
+              shippingStatus: {
+                title: response.data,
+                className: "t-status-" + response.data
+              }
+            });
             //check for cancelled shipment
             let cancellation_request = response.shipment_info.cancellation_request;
             // PENDING CANCELLATION
@@ -714,35 +743,29 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
             } else {
               $("#terminal_shipment_status").html(response.data);
             }
-            //check if status is draft
-            if (response.data === "draft") {
-              //enable all input #t-form-submit
-              $("#t-form-submit").find("input, button, select, textarea").removeAttr("disabled");
-              //remove readonly to all input
-              $("#t-form-submit").find("input, button, select, textarea").removeAttr("readonly");
-            } else {
-              if (!cancellation_request) {
-                const {
-                  shipment_info: {
-                    extras: shipping_info = {},
-                    address_from = {},
-                    address_to = {}
-                  } = {}
-                } = response;
-                const {
-                  shipping_label_url,
-                  tracking_number,
-                  commercial_invoice_url,
-                  carrier_tracking_url
-                } = shipping_info;
-                const addressFromCountry = address_from.country;
-                const addressToCountry = address_to.country;
-                const shippingLabelTemplate = shipping_label_url ? `
+            //check for shipment canceled
+            if (!cancellation_request) {
+              const {
+                shipment_info: {
+                  extras: shipping_info = {},
+                  address_from = {},
+                  address_to = {}
+                } = {}
+              } = response;
+              const {
+                shipping_label_url,
+                tracking_number,
+                commercial_invoice_url,
+                carrier_tracking_url
+              } = shipping_info;
+              const addressFromCountry = address_from.country;
+              const addressToCountry = address_to.country;
+              const shippingLabelTemplate = shipping_label_url ? `
                   <p>
                     <b>Shipping Label:</b> <a href="${shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
                   </p>
                 ` : "";
-                const commercialInvoiceTemplate = addressFromCountry !== addressToCountry ? `
+              const commercialInvoiceTemplate = addressFromCountry !== addressToCountry ? `
                   <br>
                   <p>
                     <b>Commercial Invoice:</b> <a href="${commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
@@ -751,21 +774,21 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
                     <b>Carrier Tracking:</b> <a href="${carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
                   </p>
                 ` : "";
-                const template = `
+              const template = `
                   <div class="t-space"></div>
                   ${shippingLabelTemplate}
                   <p>
                     <b>Tracking Number:</b> <b>${tracking_number}</b>
                   </p>
                   <p>
-                    <b>Tracking Link:</b> <a href="${terminal_africa.tracking_url + shipment_id}" class="t-shipment-info-link" target="_blank">Track Shipment</a>
+                    <b>Tracking Link:</b> <a href="${terminal_africa.tracking_url + shipping_id}" class="t-shipment-info-link" target="_blank">Track Shipment</a>
                   </p>
                   ${commercialInvoiceTemplate}
                   <div class="t-space"></div>
                 `;
-                $("#t_carriers_location").before(template);
-              }
+              $("#t_carriers_location").before(template);
             }
+
             //load button
             $("#t_carriers_location").html(response.button);
           } else {
@@ -782,11 +805,6 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
                 <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
               </div>
             `
-            }).then(() => {
-              //enable all input #t-form-submit
-              $("#t-form-submit").find("input, button, select, textarea").removeAttr("disabled");
-              //remove readonly to all input
-              $("#t-form-submit").find("input, button, select, textarea").removeAttr("readonly");
             });
           }
         }
@@ -796,7 +814,8 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
   render() {
     const {
       isLoading,
-      shippingData
+      shippingData,
+      shippingStatus
     } = this.state;
     const rate_id = this.getUrlParams("rate_id");
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -806,10 +825,12 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-ml-5"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      shippingData: shippingData
+      shippingData: shippingData,
+      shippingStatus: shippingStatus
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
       saved_address: shippingData.saved_address,
-      rate_id: rate_id
+      rate_id: rate_id,
+      shippingData: shippingData
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__["default"], null))));

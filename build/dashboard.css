@@ -9100,4 +9100,9 @@
   border-bottom-right-radius: 0px !important;
 }
 
+.t-status-delivered {
+  background: rgba(240, 249, 246, 0.6980392157);
+  color: #4bc45b;
+}
+
 /*# sourceMappingURL=dashboard.css.map*/
