@@ -9139,4 +9139,8 @@
   color: #fff;
 }
 
+.select2-selection.select2-selection--single {
+  background: transparent !important;
+}
+
 /*# sourceMappingURL=dashboard.css.map*/

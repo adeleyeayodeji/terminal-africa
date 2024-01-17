@@ -89,7 +89,9 @@ __webpack_require__.r(__webpack_exports__);
 class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      saved_address: {}
+    };
   }
 
   /**
@@ -98,11 +100,18 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
   componentDidMount() {}
 
   //did update
-  componentDidUpdate(prevProps, prevState) {
-    //listen for the update event of shippingData
-    if (this.props.shippingData) {
-      //trigger event from script.js
+  componentDidUpdate(prevProps) {
+    // Listen for the update event of shippingData
+    if (this.props.shippingData !== prevProps.shippingData && this.props.shippingData) {
+      // Trigger event from script.js
       this.loadSelect2();
+    }
+
+    // Update saved address
+    if (this.props.saved_address !== prevProps.saved_address && this.props.saved_address) {
+      this.setState({
+        saved_address: this.props.saved_address
+      });
     }
   }
 
@@ -226,7 +235,6 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       jQuery(document).ready(function ($) {
         //.t-form-submit
         $("#t-form-submit").submit(function (e) {
-          console.log("Am working");
           //prevent default
           e.preventDefault();
           //form
@@ -382,14 +390,16 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
   //render
   render() {
     const {
-      saved_address,
       rate_id,
       shippingData
     } = this.props;
+    const {
+      saved_address
+    } = this.state;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
       method: "post",
       id: "t-form-submit",
-      dataType: "customer"
+      "data-type": "customer"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "hidden",
       name: "address_id",
@@ -414,7 +424,13 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       name: "first_name",
       id: "first_name",
       placeholder: "First Name",
-      value: saved_address?.first_name
+      value: saved_address?.first_name,
+      onChange: e => this.setState({
+        saved_address: {
+          ...this.state.saved_address,
+          first_name: e.target.value
+        }
+      })
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -427,7 +443,15 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       name: "last_name",
       id: "last_name",
       placeholder: "Last Name",
-      value: saved_address?.last_name
+      value: saved_address?.last_name,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            last_name: e.target.value
+          }
+        });
+      }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -437,10 +461,18 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     }, "Address line 1"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
       className: "form-control",
-      name: "address_line_1",
+      name: "line_1",
       id: "address_line_1",
       placeholder: "Address line 1",
-      value: saved_address?.line1
+      value: saved_address?.line1,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            line1: e.target.value
+          }
+        });
+      }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -450,10 +482,18 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     }, "Address line 2"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
       className: "form-control",
-      name: "address_line_2",
+      name: "line_2",
       id: "address_line_2",
       placeholder: "Address line 2",
-      value: saved_address?.line2
+      value: saved_address?.line2,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            line2: e.target.value
+          }
+        });
+      }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -474,7 +514,15 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       name: "email",
       id: "email",
       placeholder: "Address line 2",
-      value: saved_address?.email
+      value: saved_address?.email,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            email: e.target.value
+          }
+        });
+      }
     })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-4 col-md-4 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -555,7 +603,15 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       className: "form-control t-phone-new",
       name: "phone",
       id: "phone",
-      value: saved_address?.phone
+      value: saved_address?.phone,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            phone: e.target.value
+          }
+        });
+      }
     }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -564,11 +620,19 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       htmlFor: "zipcode"
     }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
-      name: "zipcode",
+      name: "zip_code",
       id: "zipcode",
       className: "form-control t-zip-new",
       placeholder: "Zip Code",
-      value: saved_address?.zip
+      value: saved_address?.zip,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            zip: e.target.value
+          }
+        });
+      }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

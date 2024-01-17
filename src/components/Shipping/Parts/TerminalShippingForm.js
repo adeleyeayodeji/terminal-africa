@@ -3,7 +3,9 @@ import React, { Fragment } from "react";
 class TerminalShippingForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      saved_address: {}
+    };
   }
 
   /**
@@ -12,11 +14,24 @@ class TerminalShippingForm extends React.Component {
   componentDidMount() {}
 
   //did update
-  componentDidUpdate(prevProps, prevState) {
-    //listen for the update event of shippingData
-    if (this.props.shippingData) {
-      //trigger event from script.js
+  componentDidUpdate(prevProps) {
+    // Listen for the update event of shippingData
+    if (
+      this.props.shippingData !== prevProps.shippingData &&
+      this.props.shippingData
+    ) {
+      // Trigger event from script.js
       this.loadSelect2();
+    }
+
+    // Update saved address
+    if (
+      this.props.saved_address !== prevProps.saved_address &&
+      this.props.saved_address
+    ) {
+      this.setState({
+        saved_address: this.props.saved_address
+      });
     }
   }
 
@@ -149,7 +164,6 @@ class TerminalShippingForm extends React.Component {
       jQuery(document).ready(function ($) {
         //.t-form-submit
         $("#t-form-submit").submit(function (e) {
-          console.log("Am working");
           //prevent default
           e.preventDefault();
           //form
@@ -314,11 +328,12 @@ class TerminalShippingForm extends React.Component {
 
   //render
   render() {
-    const { saved_address, rate_id, shippingData } = this.props;
+    const { rate_id, shippingData } = this.props;
+    const { saved_address } = this.state;
 
     return (
       <Fragment>
-        <form method="post" id="t-form-submit" dataType="customer">
+        <form method="post" id="t-form-submit" data-type="customer">
           <input
             type="hidden"
             name="address_id"
@@ -337,6 +352,14 @@ class TerminalShippingForm extends React.Component {
                     id="first_name"
                     placeholder="First Name"
                     value={saved_address?.first_name}
+                    onChange={(e) =>
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          first_name: e.target.value
+                        }
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -350,6 +373,14 @@ class TerminalShippingForm extends React.Component {
                     id="last_name"
                     placeholder="Last Name"
                     value={saved_address?.last_name}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          last_name: e.target.value
+                        }
+                      });
+                    }}
                   />
                 </div>
               </div>
@@ -359,10 +390,18 @@ class TerminalShippingForm extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    name="address_line_1"
+                    name="line_1"
                     id="address_line_1"
                     placeholder="Address line 1"
                     value={saved_address?.line1}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          line1: e.target.value
+                        }
+                      });
+                    }}
                   />
                 </div>
               </div>
@@ -372,10 +411,18 @@ class TerminalShippingForm extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    name="address_line_2"
+                    name="line_2"
                     id="address_line_2"
                     placeholder="Address line 2"
                     value={saved_address?.line2}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          line2: e.target.value
+                        }
+                      });
+                    }}
                   />
                 </div>
               </div>
@@ -398,6 +445,14 @@ class TerminalShippingForm extends React.Component {
                       id="email"
                       placeholder="Address line 2"
                       value={saved_address?.email}
+                      onChange={(e) => {
+                        this.setState({
+                          saved_address: {
+                            ...this.state.saved_address,
+                            email: e.target.value
+                          }
+                        });
+                      }}
                     />
                   </div>
                 </div>
@@ -508,6 +563,14 @@ class TerminalShippingForm extends React.Component {
                         name="phone"
                         id="phone"
                         value={saved_address?.phone}
+                        onChange={(e) => {
+                          this.setState({
+                            saved_address: {
+                              ...this.state.saved_address,
+                              phone: e.target.value
+                            }
+                          });
+                        }}
                       />
                     </div>
                   </div>
@@ -518,11 +581,19 @@ class TerminalShippingForm extends React.Component {
                   <label htmlFor="zipcode">Zip Code</label>
                   <input
                     type="text"
-                    name="zipcode"
+                    name="zip_code"
                     id="zipcode"
                     className="form-control t-zip-new"
                     placeholder="Zip Code"
                     value={saved_address?.zip}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          zip: e.target.value
+                        }
+                      });
+                    }}
                   />
                 </div>
               </div>

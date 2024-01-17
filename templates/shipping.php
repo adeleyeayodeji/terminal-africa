@@ -38,7 +38,7 @@ $next_url = esc_url($next_url);
                         <th class="terminal-dashboard-orders-list-table-heading" style="width: 50px;">Carrier</th>
                         <th class="terminal-dashboard-orders-list-table-heading">Shipping ID</th>
                         <th class="terminal-dashboard-orders-list-table-heading">Order ID</th>
-                        <th class="terminal-dashboard-orders-list-table-heading">Status</th>
+                        <th class="terminal-dashboard-orders-list-table-heading">Order Date</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -97,8 +97,8 @@ $next_url = esc_url($next_url);
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="t-status-list t-status-draft">
-                                        draft
+                                    <span class="t-status-list">
+                                        <?php echo esc_html($timeago); ?>
                                     </span>
                                 </td>
                                 <td>
