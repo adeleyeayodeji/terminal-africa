@@ -9135,6 +9135,11 @@
   color: #4bc45b;
 }
 
+.t-status-confirmed {
+  background: rgba(240, 249, 246, 0.6980392157);
+  color: #4bc45b;
+}
+
 .t-btn:hover {
   color: #fff;
 }
