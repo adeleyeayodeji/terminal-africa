@@ -155,162 +155,6 @@ jQuery(document).ready(function ($) {
     });
   });
 
-  //.t-form-submit
-  $("#t-form-submit").submit(function (e) {
-    //prevent default
-    e.preventDefault();
-    //form
-    var form = $(this);
-    //get type
-    var type = form.data("type");
-    var actionData = "terminal_merchant_save_address";
-    //if type is customer
-    if (type == "customer") {
-      actionData = "terminal_customer_save_address";
-    }
-    var countryCode = form.find('select[name="country"]').val();
-    var phone = form.find('input[name="phone"]').val();
-    let tm_countries = terminal_africa.terminal_africal_countries;
-    //find country where isoCode is NG
-    let tm_country = tm_countries.find(
-      (country) => country.isoCode === countryCode
-    );
-    //phone code
-    let phonecode = tm_country.phonecode;
-    var plussign = encodeURIComponent("+");
-    //check if phonecode not include +
-    if (!phonecode.includes("+")) {
-      phonecode = "+" + phonecode;
-    }
-    if (phone) {
-      //check if phone has +
-      if (!phone.includes("+")) {
-        //append to phone
-        phone = phonecode + phone;
-      }
-    } else {
-      //append to phone
-      phone = "";
-    }
-    //replace + with encoded +
-    phone = phone.replace("+", plussign);
-    //get form serialized
-    let formSerialized = form.serialize();
-    //replace form input 'phone' with new phone number
-    formSerialized = formSerialized.replace(/phone=[^&]+/, "phone=" + phone);
-    //ajax
-    $.ajax({
-      type: "POST",
-      url: terminal_africa.ajax_url,
-      data:
-        formSerialized +
-        "&action=" +
-        actionData +
-        "&nonce=" +
-        terminal_africa.nonce,
-      dataType: "json",
-      beforeSend: function () {
-        // Swal loader
-        Swal.fire({
-          title: "Processing...",
-          text: "Please wait...",
-          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          allowEnterKey: false,
-          showConfirmButton: false,
-          footer: `
-            <div>
-              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-            </div>
-          `
-        });
-      },
-      success: function (response) {
-        //close loader
-        Swal.close();
-        //check response is 200
-        if (response.code == 200) {
-          //swal success
-          Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: response.message,
-            confirmButtonColor: "rgb(246 146 32)",
-            cancelButtonColor: "rgb(0 0 0)",
-            iconColor: "rgb(246 146 32)",
-            footer: `
-              <div>
-                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-              </div>
-            `
-          }).then((result) => {
-            if (result.value) {
-              //if type is customer
-              if (type == "customer") {
-                //Swal alert 'Customer address changed, please recalculate shipping'
-                Swal.fire({
-                  icon: "info",
-                  title: "Info",
-                  text: "Customer address changed, please recalculate shipping fee",
-                  confirmButtonColor: "rgb(246 146 32)",
-                  cancelButtonColor: "rgb(0 0 0)",
-                  iconColor: "rgb(246 146 32)",
-                  footer: `
-                    <div>
-                      <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-                    </div>
-                  `
-                }).then((result) => {
-                  if (result.value) {
-                    //trigger click #t-carrier-change-button
-                    $("#t-carrier-change-button").trigger("click");
-                  }
-                });
-              } else {
-                //reload page
-                location.reload();
-              }
-            }
-          });
-        } else {
-          //swal error
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: response.message,
-            confirmButtonColor: "rgb(246 146 32)",
-            cancelButtonColor: "rgb(0 0 0)",
-            //footer
-            footer: `
-              <div>
-                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-              </div>
-            `
-          });
-        }
-      },
-      error: function (xhr, status, error) {
-        //close loader
-        Swal.close();
-        //swal error
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!: " + xhr.responseText,
-          confirmButtonColor: "rgb(246 146 32)",
-          cancelButtonColor: "rgb(0 0 0)",
-          //footer
-          footer: `
-            <div>
-              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-            </div>
-          `
-        });
-      }
-    });
-  });
-
   //select2 template
   let formatState = (state) => {
     if (!state.id) {
@@ -322,19 +166,24 @@ jQuery(document).ready(function ($) {
     return $state;
   };
 
-  //init select2 .t-terminal-country
-  $(".t-terminal-country").select2({
-    placeholder: "Select country",
-    allowClear: true,
-    width: "100%",
-    //select class
-    dropdownCssClass: "t-form-control",
-    //dropdown parent
-    dropdownParent: $(".t-terminal-country").parent(),
-    //template
-    templateResult: formatState,
-    templateSelection: formatState
-  });
+  /**
+   * After country dom data loaded
+   */
+  let countriesDomData = () => {
+    //init select2 .t-terminal-country
+    $(".t-terminal-country").select2({
+      placeholder: "Select country",
+      allowClear: true,
+      width: "100%",
+      //select class
+      dropdownCssClass: "t-form-control",
+      //dropdown parent
+      dropdownParent: $(".t-terminal-country").parent(),
+      //template
+      templateResult: formatState,
+      templateSelection: formatState
+    });
+  };
 
   //init select2 .t-terminal-country
   $(".t-terminal-country-default-settings").select2({

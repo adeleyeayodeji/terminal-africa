@@ -13,7 +13,8 @@ class TerminalManageShipping extends React.Component {
       shippingStatus: {
         title: "--",
         className: "t-status-draft"
-      }
+      },
+      shippingTrackingNumber: "--"
     };
   }
 
@@ -178,6 +179,11 @@ class TerminalManageShipping extends React.Component {
               const addressFromCountry = address_from.country;
               const addressToCountry = address_to.country;
 
+              //set tracking number
+              this.setState({
+                shippingTrackingNumber: tracking_number
+              });
+
               const shippingLabelTemplate = shipping_label_url
                 ? `
                   <p>
@@ -202,9 +208,6 @@ class TerminalManageShipping extends React.Component {
               const template = `
                   <div class="t-space"></div>
                   ${shippingLabelTemplate}
-                  <p>
-                    <b>Tracking Number:</b> <b>${tracking_number}</b>
-                  </p>
                   <p>
                     <b>Tracking Link:</b> <a href="${
                       terminal_africa.tracking_url + shipping_id
@@ -241,8 +244,10 @@ class TerminalManageShipping extends React.Component {
   };
 
   render() {
-    const { isLoading, shippingData, shippingStatus } = this.state;
+    const { isLoading, shippingData, shippingStatus, shippingTrackingNumber } =
+      this.state;
     const rate_id = this.getUrlParams("rate_id");
+    const trackingLink = "";
 
     return (
       <Fragment>
@@ -264,7 +269,11 @@ class TerminalManageShipping extends React.Component {
               </div>
             </div>
             <div className="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12">
-              <TerminalShippingSide />
+              <TerminalShippingSide
+                shippingData={shippingData}
+                shippingTrackingNumber={shippingTrackingNumber}
+                trackingLink={trackingLink}
+              />
             </div>
           </div>
         )}

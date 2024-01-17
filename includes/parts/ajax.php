@@ -1757,8 +1757,12 @@ trait Ajax
                 }
             }
 
+            //get shipping price
+            $shipping_price =
+                $saved_others ? wc_price($shipping_cost, ['currency' => $order_currency]) : 0;
+
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price');
 
             //return data
             wp_send_json([

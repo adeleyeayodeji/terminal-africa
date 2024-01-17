@@ -9095,14 +9095,48 @@
 .t-shipping-form-new .t-zip-new {
   margin: 0px !important;
 }
+.t-shipping-form-new .select2-selection.select2-selection--single {
+  padding: 0px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  height: 48px;
+  border: 1px solid #ced4da;
+}
+.t-shipping-form-new .select2-container .select2-selection--single .select2-selection__rendered {
+  font-family: inherit;
+  font-weight: inherit;
+  word-spacing: 10px;
+}
 .t-shipping-form-new .t-phone-new-select {
   border-top-right-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
+}
+.t-shipping-form-new .t-phone-new-select-container {
+  width: 30% !important;
+  text-align: center;
+}
+.t-shipping-form-new .t-phone-new-select-container .select2-selection.select2-selection--single {
+  padding: 0px 3px;
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  font-size: 15px;
+  height: 48px;
+  border: 1px solid #ced4da;
+}
+.t-shipping-form-new .t-phone-new-select-container .select2-container .select2-selection--single .select2-selection__rendered {
+  font-family: inherit;
+  font-weight: inherit;
+  word-spacing: 3px;
 }
 
 .t-status-delivered {
   background: rgba(240, 249, 246, 0.6980392157);
   color: #4bc45b;
+}
+
+.t-btn:hover {
+  color: #fff;
 }
 
 /*# sourceMappingURL=dashboard.css.map*/
