@@ -9,8 +9,9 @@ import {
   __experimentalItem as Item
 } from "@wordpress/components";
 
-import "./../scss/responsive2.scss";
+import "./../scss/bootstrap5.scss";
 import "./../scss/terminal-phonebook.scss";
+import "./../scss/responsive.scss";
 import TerminalLoader from "./Loader";
 
 /**
@@ -255,6 +256,14 @@ class TerminalPhoneBook extends Component {
       // update select2 country
       const countrySelect = $tbody.find('select[name="country"]');
       countrySelect.val(address.country);
+      //check if t-phone-new-select exist
+      if ($(".t-phone-new-select").length) {
+        console.log(address);
+        //set address option where option data-isocode is address.country
+        $(".t-phone-new-select option[data-isocode=" + address.country + "]")
+          .prop("selected", true)
+          .trigger("change");
+      }
       //trigger event
       countrySelect.trigger("change");
     });

@@ -186,7 +186,7 @@ class TerminalManageShipping extends React.Component {
 
               const shippingLabelTemplate = shipping_label_url
                 ? `
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Shipping Label:</b> <a href="${shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
                   </p>
                 `
@@ -196,10 +196,10 @@ class TerminalManageShipping extends React.Component {
                 addressFromCountry !== addressToCountry
                   ? `
                   <br>
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Commercial Invoice:</b> <a href="${commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
                   </p>
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Carrier Tracking:</b> <a href="${carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
                   </p>
                 `
@@ -208,7 +208,7 @@ class TerminalManageShipping extends React.Component {
               const template = `
                   <div class="t-space"></div>
                   ${shippingLabelTemplate}
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Tracking Link:</b> <a href="${
                       terminal_africa.tracking_url + shipping_id
                     }" class="t-shipment-info-link" target="_blank">Track Shipment</a>
@@ -255,8 +255,8 @@ class TerminalManageShipping extends React.Component {
           <ShippingSkeleton />
         ) : (
           <div className="t-row">
-            <div className="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">
-              <div className="t-ml-5">
+            <div className="t-col-8 t-col-lg-8 t-col-md-12 t-col-sm-12">
+              <div className="t-ml-5 t-side-left">
                 <TerminalShippingHeader
                   shippingData={shippingData}
                   shippingStatus={shippingStatus}
@@ -268,7 +268,7 @@ class TerminalManageShipping extends React.Component {
                 />
               </div>
             </div>
-            <div className="t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12">
+            <div className="t-col-4 t-col-lg-4 t-col-md-12 t-col-sm-12">
               <TerminalShippingSide
                 shippingData={shippingData}
                 shippingTrackingNumber={shippingTrackingNumber}

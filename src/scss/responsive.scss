@@ -1,0 +1,77 @@
+#manage-terminal-shipping {
+  /* Extra small devices (phones, 600px and down) */
+  @media only screen and (max-width: 600px) {
+    .t-side-left {
+      margin: 30px;
+    }
+
+    .t-shipment-header {
+      display: block;
+    }
+
+    .t-button-phonebook {
+      justify-content: center;
+    }
+  }
+
+  /* Small devices (portrait tablets and large phones, 600px and up) */
+  @media only screen and (min-width: 600px) {
+    .t-side-left {
+      margin: 30px;
+    }
+
+    .t-shipment-header {
+      display: block;
+    }
+
+    .t-button-phonebook {
+      justify-content: center;
+    }
+  }
+
+  /* Medium devices (landscape tablets, 768px and up) */
+  @media only screen and (min-width: 768px) {
+    .t-side-left {
+      margin: 30px;
+    }
+
+    .t-shipment-header {
+      display: block;
+    }
+
+    .t-button-phonebook {
+      justify-content: center;
+    }
+  }
+
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+    .t-side-left {
+      margin: 30px;
+    }
+
+    .t-shipment-header {
+      display: flex;
+    }
+
+    .t-button-phonebook {
+      justify-content: end;
+    }
+  }
+
+  /* Extra large devices (large laptops and desktops, 1200px and up) */
+  @media only screen and (min-width: 1200px) {
+    .t-side-left {
+      margin: 0px;
+      margin-left: 30px;
+    }
+
+    .t-shipment-header {
+      display: flex;
+    }
+
+    .t-button-phonebook {
+      justify-content: end;
+    }
+  }
+}

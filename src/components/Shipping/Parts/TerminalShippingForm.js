@@ -22,6 +22,8 @@ class TerminalShippingForm extends React.Component {
     ) {
       // Trigger event from script.js
       this.loadSelect2();
+      //initFormSelectEvent
+      this.initFormSelectEvent();
     }
 
     // Update saved address
@@ -123,6 +125,335 @@ class TerminalShippingForm extends React.Component {
       console.log(error);
     }
   }
+
+  /**
+   * Init form select event
+   *
+   */
+  initFormSelectEvent = () => {
+    jQuery(document).ready(function ($) {
+      //event onchange
+      $(".t-terminal-country").change(function (e) {
+        //prevent default
+        e.preventDefault();
+        //get value
+        var country = $(this).val();
+        //check country
+        if (country) {
+          //ajax
+          $.ajax({
+            type: "GET",
+            url: terminal_africa.ajax_url,
+            data: {
+              action: "terminal_africa_get_states",
+              countryCode: country,
+              nonce: terminal_africa.nonce
+            },
+            dataType: "json",
+            beforeSend: function () {
+              // Swal loader
+              Swal.fire({
+                title: "Processing...",
+                text: "Please wait...",
+                imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false,
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            },
+            success: function (response) {
+              //close loader
+              Swal.close();
+              //check response is 200
+              if (response.code == 200) {
+                //destroy select2
+                $(".t-terminal-state").select2("destroy");
+                //remove all options
+                $(".t-terminal-state").find("option").remove();
+                //append options
+                $(".t-terminal-state").append(
+                  "<option value=''>Select State</option>"
+                );
+                //loop
+                $.each(response.states, function (key, value) {
+                  //append options
+                  $(".t-terminal-state").append(
+                    "<option value='" +
+                      value.name +
+                      "' data-statecode='" +
+                      value.isoCode +
+                      "'>" +
+                      value.name +
+                      "</option>"
+                  );
+                });
+                //init select2 .t-terminal-state
+                $(".t-terminal-state").select2({
+                  placeholder: "Select state",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-state").parent()
+                });
+              } else {
+                //destroy select2
+                $(".t-terminal-state").select2("destroy");
+                //remove all options
+                $(".t-terminal-state").find("option").remove();
+                //append options
+                $(".t-terminal-state").append(
+                  "<option value=''>Select State</option>"
+                );
+                //init select2 .t-terminal-state
+                $(".t-terminal-state").select2({
+                  placeholder: "Select state",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-state").parent()
+                });
+                //swal error
+                Swal.fire({
+                  icon: "error",
+
+                  title: "Oops...",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              //close loader
+              Swal.close();
+              //swal error
+              Swal.fire({
+                icon: "error",
+
+                title: "Oops...",
+                text: "Something went wrong!: " + xhr.responseText,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            }
+          });
+        }
+      });
+
+      //init select2 .t-terminal-state
+      $(".t-terminal-state").select2({
+        placeholder: "Select Sate",
+        allowClear: true,
+        width: "100%",
+        //select class
+        dropdownCssClass: "t-form-control",
+        //dropdown parent
+        dropdownParent: $(".t-terminal-state").parent()
+      });
+
+      //event onchange
+      $(".t-terminal-state").change(function (e) {
+        //prevent default
+        e.preventDefault();
+        //get value
+        var state = $(this).find("option:selected").data("statecode");
+        var country = $(".t-terminal-country").val();
+        //check if country is selected
+        if (!country) {
+          //swal error
+          Swal.fire({
+            icon: "error",
+
+            title: "Oops...",
+            text: "Please select country first!",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+          });
+          //return
+          return;
+        }
+        //check state
+        if (state && country) {
+          //ajax
+          $.ajax({
+            type: "GET",
+            url: terminal_africa.ajax_url,
+            data: {
+              action: "terminal_africa_get_cities",
+              stateCode: state,
+              countryCode: country,
+              nonce: terminal_africa.nonce
+            },
+            dataType: "json",
+            beforeSend: function () {
+              // Swal loader
+              Swal.fire({
+                title: "Processing...",
+                text: "Please wait...",
+                imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false,
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            },
+            success: function (response) {
+              //close loader
+              Swal.close();
+              //check response is 200
+              if (response.code == 200) {
+                //destroy select2
+                $(".t-terminal-city").select2("destroy");
+                //remove all options
+                $(".t-terminal-city").find("option").remove();
+                //append options
+                $(".t-terminal-city").append(
+                  "<option value=''>Select City</option>"
+                );
+                //loop
+                $.each(response.cities, function (key, value) {
+                  //append options
+                  $(".t-terminal-city").append(
+                    "<option value='" +
+                      value.name +
+                      "'>" +
+                      value.name +
+                      "</option>"
+                  );
+                });
+                //init select2 .t-terminal-city
+                $(".t-terminal-city").select2({
+                  placeholder: "Select city",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-city").parent()
+                });
+              } else {
+                //destroy select2
+                $(".t-terminal-city").select2("destroy");
+                //remove all options
+                $(".t-terminal-city").find("option").remove();
+                //append options
+                $(".t-terminal-city").append(
+                  "<option value=''>Select City</option>"
+                );
+                //init select2 .t-terminal-city
+                $(".t-terminal-city").select2({
+                  placeholder: "Select city",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-city").parent()
+                });
+                //swal error
+                Swal.fire({
+                  icon: "error",
+
+                  title: "Oops...",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              //close loader
+              Swal.close();
+              //swal error
+              Swal.fire({
+                icon: "error",
+
+                title: "Oops...",
+                text: "Something went wrong!: " + xhr.responseText,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            }
+          });
+        } else {
+          //destroy select2
+          $(".t-terminal-city").select2("destroy");
+          //remove all options
+          $(".t-terminal-city").find("option").remove();
+          //append options
+          $(".t-terminal-city").append("<option value=''>Select City</option>");
+          //init select2 .t-terminal-city
+          $(".t-terminal-city").select2({
+            placeholder: "Select city",
+            allowClear: true,
+            width: "100%",
+            //select class
+            dropdownCssClass: "t-form-control",
+            //dropdown parent
+            dropdownParent: $(".t-terminal-city").parent()
+          });
+          //log
+          console.log("Please select state first!", state, country);
+        }
+      });
+
+      //init select2 .t-terminal-city
+      $(".t-terminal-city").select2({
+        placeholder: "Select city",
+        allowClear: true,
+        width: "100%",
+        //select class
+        dropdownCssClass: "t-form-control",
+        //dropdown parent
+        dropdownParent: $(".t-terminal-city").parent()
+      });
+    });
+  };
 
   /**
    * clearAllForms
@@ -488,7 +819,7 @@ class TerminalShippingForm extends React.Component {
                 <div className="form-group">
                   <label htmlFor="state">State</label>
                   <select
-                    className="form-control terminal-state"
+                    className="form-control terminal-state t-terminal-state"
                     required
                     name="state"
                     id="state">
@@ -511,7 +842,7 @@ class TerminalShippingForm extends React.Component {
                 <div className="form-group">
                   <label htmlFor="lga">City</label>
                   <select
-                    className="form-control terminal-city"
+                    className="form-control terminal-city t-terminal-city"
                     required
                     name="lga"
                     id="lga">
@@ -544,6 +875,7 @@ class TerminalShippingForm extends React.Component {
                               key={key}
                               value={country.phonecode}
                               data-flag={country.flag}
+                              data-isocode={country.isoCode}
                               selected={
                                 country.isoCode === saved_address?.country
                                   ? "selected"

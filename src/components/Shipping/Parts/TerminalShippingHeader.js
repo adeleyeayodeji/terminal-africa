@@ -10,6 +10,26 @@ export default class TerminalShippingHeader extends Component {
     this.state = {};
   }
 
+  /**
+   * Copy shipping id to clipboard
+   *
+   * @returns void
+   */
+  copyShippingIdToClipboard = () => {
+    //copy to clipboard
+    navigator.clipboard.writeText(this.props?.shippingData?.shipping_id);
+    //izitoast
+    iziToast.show({
+      title: "Copied",
+      message: "Shipping ID copied to clipboard",
+      theme: "dark",
+      position: "topRight",
+      progressBarColor: "rgb(246 146 32)",
+      transitionIn: "flipInX",
+      transitionOut: "flipOutX"
+    });
+  };
+
   render() {
     const { shippingData, shippingStatus } = this.props;
 
@@ -17,7 +37,11 @@ export default class TerminalShippingHeader extends Component {
       <Fragment>
         <div className="t-shipment-header t-flex">
           <div>
-            <div className="t-flex">
+            <div
+              onClick={this.copyShippingIdToClipboard}
+              className="t-flex"
+              style={{ cursor: "pointer" }}
+              data-shipping-id={shippingData?.shipping_id}>
               <h1>{shippingData?.shipping_id}</h1>
               <img
                 src={terminal_africa.plugin_url + "/img/copy-icon.svg"}
@@ -29,7 +53,7 @@ export default class TerminalShippingHeader extends Component {
               title={shippingStatus.title}
             />
           </div>
-          <div className="t-flex">
+          <div className="t-flex t-button-phonebook">
             <TerminalPhoneBook />
           </div>
         </div>

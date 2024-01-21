@@ -95,7 +95,7 @@ export default class TerminalShippingSide extends Component {
               <h3>Manage Shipping</h3>
             </div>
             <div className="t-flex">
-              <h4>Carrier</h4>
+              <h4 style={{ marginRight: "25%" }}>Carrier</h4>
               <div className="t-flex">
                 <img
                   src={shippingData?.saved_others?.carrier_logo}

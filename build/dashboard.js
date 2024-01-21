@@ -105,6 +105,8 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     if (this.props.shippingData !== prevProps.shippingData && this.props.shippingData) {
       // Trigger event from script.js
       this.loadSelect2();
+      //initFormSelectEvent
+      this.initFormSelectEvent();
     }
 
     // Update saved address
@@ -198,6 +200,308 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       console.log(error);
     }
   }
+
+  /**
+   * Init form select event
+   *
+   */
+  initFormSelectEvent = () => {
+    jQuery(document).ready(function ($) {
+      //event onchange
+      $(".t-terminal-country").change(function (e) {
+        //prevent default
+        e.preventDefault();
+        //get value
+        var country = $(this).val();
+        //check country
+        if (country) {
+          //ajax
+          $.ajax({
+            type: "GET",
+            url: terminal_africa.ajax_url,
+            data: {
+              action: "terminal_africa_get_states",
+              countryCode: country,
+              nonce: terminal_africa.nonce
+            },
+            dataType: "json",
+            beforeSend: function () {
+              // Swal loader
+              Swal.fire({
+                title: "Processing...",
+                text: "Please wait...",
+                imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false,
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            },
+            success: function (response) {
+              //close loader
+              Swal.close();
+              //check response is 200
+              if (response.code == 200) {
+                //destroy select2
+                $(".t-terminal-state").select2("destroy");
+                //remove all options
+                $(".t-terminal-state").find("option").remove();
+                //append options
+                $(".t-terminal-state").append("<option value=''>Select State</option>");
+                //loop
+                $.each(response.states, function (key, value) {
+                  //append options
+                  $(".t-terminal-state").append("<option value='" + value.name + "' data-statecode='" + value.isoCode + "'>" + value.name + "</option>");
+                });
+                //init select2 .t-terminal-state
+                $(".t-terminal-state").select2({
+                  placeholder: "Select state",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-state").parent()
+                });
+              } else {
+                //destroy select2
+                $(".t-terminal-state").select2("destroy");
+                //remove all options
+                $(".t-terminal-state").find("option").remove();
+                //append options
+                $(".t-terminal-state").append("<option value=''>Select State</option>");
+                //init select2 .t-terminal-state
+                $(".t-terminal-state").select2({
+                  placeholder: "Select state",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-state").parent()
+                });
+                //swal error
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              //close loader
+              Swal.close();
+              //swal error
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!: " + xhr.responseText,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            }
+          });
+        }
+      });
+
+      //init select2 .t-terminal-state
+      $(".t-terminal-state").select2({
+        placeholder: "Select Sate",
+        allowClear: true,
+        width: "100%",
+        //select class
+        dropdownCssClass: "t-form-control",
+        //dropdown parent
+        dropdownParent: $(".t-terminal-state").parent()
+      });
+
+      //event onchange
+      $(".t-terminal-state").change(function (e) {
+        //prevent default
+        e.preventDefault();
+        //get value
+        var state = $(this).find("option:selected").data("statecode");
+        var country = $(".t-terminal-country").val();
+        //check if country is selected
+        if (!country) {
+          //swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please select country first!",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+          });
+          //return
+          return;
+        }
+        //check state
+        if (state && country) {
+          //ajax
+          $.ajax({
+            type: "GET",
+            url: terminal_africa.ajax_url,
+            data: {
+              action: "terminal_africa_get_cities",
+              stateCode: state,
+              countryCode: country,
+              nonce: terminal_africa.nonce
+            },
+            dataType: "json",
+            beforeSend: function () {
+              // Swal loader
+              Swal.fire({
+                title: "Processing...",
+                text: "Please wait...",
+                imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false,
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            },
+            success: function (response) {
+              //close loader
+              Swal.close();
+              //check response is 200
+              if (response.code == 200) {
+                //destroy select2
+                $(".t-terminal-city").select2("destroy");
+                //remove all options
+                $(".t-terminal-city").find("option").remove();
+                //append options
+                $(".t-terminal-city").append("<option value=''>Select City</option>");
+                //loop
+                $.each(response.cities, function (key, value) {
+                  //append options
+                  $(".t-terminal-city").append("<option value='" + value.name + "'>" + value.name + "</option>");
+                });
+                //init select2 .t-terminal-city
+                $(".t-terminal-city").select2({
+                  placeholder: "Select city",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-city").parent()
+                });
+              } else {
+                //destroy select2
+                $(".t-terminal-city").select2("destroy");
+                //remove all options
+                $(".t-terminal-city").find("option").remove();
+                //append options
+                $(".t-terminal-city").append("<option value=''>Select City</option>");
+                //init select2 .t-terminal-city
+                $(".t-terminal-city").select2({
+                  placeholder: "Select city",
+                  allowClear: true,
+                  width: "100%",
+                  //select class
+                  dropdownCssClass: "t-form-control",
+                  //dropdown parent
+                  dropdownParent: $(".t-terminal-city").parent()
+                });
+                //swal error
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              //close loader
+              Swal.close();
+              //swal error
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!: " + xhr.responseText,
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+              });
+            }
+          });
+        } else {
+          //destroy select2
+          $(".t-terminal-city").select2("destroy");
+          //remove all options
+          $(".t-terminal-city").find("option").remove();
+          //append options
+          $(".t-terminal-city").append("<option value=''>Select City</option>");
+          //init select2 .t-terminal-city
+          $(".t-terminal-city").select2({
+            placeholder: "Select city",
+            allowClear: true,
+            width: "100%",
+            //select class
+            dropdownCssClass: "t-form-control",
+            //dropdown parent
+            dropdownParent: $(".t-terminal-city").parent()
+          });
+          //log
+          console.log("Please select state first!", state, country);
+        }
+      });
+
+      //init select2 .t-terminal-city
+      $(".t-terminal-city").select2({
+        placeholder: "Select city",
+        allowClear: true,
+        width: "100%",
+        //select class
+        dropdownCssClass: "t-form-control",
+        //dropdown parent
+        dropdownParent: $(".t-terminal-city").parent()
+      });
+    });
+  };
 
   /**
    * clearAllForms
@@ -548,7 +852,7 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
       htmlFor: "state"
     }, "State"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-state",
+      className: "form-control terminal-state t-terminal-state",
       required: true,
       name: "state",
       id: "state"
@@ -566,7 +870,7 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
       htmlFor: "lga"
     }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-city",
+      className: "form-control terminal-city t-terminal-city",
       required: true,
       name: "lga",
       id: "lga"
@@ -594,6 +898,7 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       key: key,
       value: country.phonecode,
       "data-flag": country.flag,
+      "data-isocode": country.isoCode,
       selected: country.isoCode === saved_address?.country ? "selected" : ""
     }, country.phonecode)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "w-100"
@@ -701,6 +1006,26 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
     super(props);
     this.state = {};
   }
+
+  /**
+   * Copy shipping id to clipboard
+   *
+   * @returns void
+   */
+  copyShippingIdToClipboard = () => {
+    //copy to clipboard
+    navigator.clipboard.writeText(this.props?.shippingData?.shipping_id);
+    //izitoast
+    iziToast.show({
+      title: "Copied",
+      message: "Shipping ID copied to clipboard",
+      theme: "dark",
+      position: "topRight",
+      progressBarColor: "rgb(246 146 32)",
+      transitionIn: "flipInX",
+      transitionOut: "flipOutX"
+    });
+  };
   render() {
     const {
       shippingData,
@@ -709,7 +1034,12 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipment-header t-flex"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
+      onClick: this.copyShippingIdToClipboard,
+      className: "t-flex",
+      style: {
+        cursor: "pointer"
+      },
+      "data-shipping-id": shippingData?.shipping_id
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h1", null, shippingData?.shipping_id), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
       src: terminal_africa.plugin_url + "/img/copy-icon.svg",
       alt: "Terminal Copy Icon"
@@ -717,7 +1047,7 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
       className: shippingStatus.className,
       title: shippingStatus.title
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
+      className: "t-flex t-button-phonebook"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
   }
 }
@@ -839,7 +1169,11 @@ class TerminalShippingSide extends react__WEBPACK_IMPORTED_MODULE_1__.Component 
       className: "t-flex t-flex t-mb-2"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Manage Shipping")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Carrier"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+      style: {
+        marginRight: "25%"
+      }
+    }, "Carrier"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
       src: shippingData?.saved_others?.carrier_logo,
@@ -1230,23 +1564,23 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
                 shippingTrackingNumber: tracking_number
               });
               const shippingLabelTemplate = shipping_label_url ? `
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Shipping Label:</b> <a href="${shipping_label_url}" class="t-shipment-info-link" target="_blank">View Label</a>
                   </p>
                 ` : "";
               const commercialInvoiceTemplate = addressFromCountry !== addressToCountry ? `
                   <br>
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Commercial Invoice:</b> <a href="${commercial_invoice_url}" class="t-shipment-info-link" target="_blank">View Invoice</a>
                   </p>
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Carrier Tracking:</b> <a href="${carrier_tracking_url}" class="t-shipment-info-link" target="_blank">View Tracking</a>
                   </p>
                 ` : "";
               const template = `
                   <div class="t-space"></div>
                   ${shippingLabelTemplate}
-                  <p>
+                  <p class="t-shipping-p-left">
                     <b>Tracking Link:</b> <a href="${terminal_africa.tracking_url + shipping_id}" class="t-shipment-info-link" target="_blank">Track Shipment</a>
                   </p>
                   ${commercialInvoiceTemplate}
@@ -1289,9 +1623,9 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-row"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12"
+      className: "t-col-8 t-col-lg-8 t-col-md-12 t-col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-ml-5"
+      className: "t-ml-5 t-side-left"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
       shippingData: shippingData,
       shippingStatus: shippingStatus
@@ -1300,7 +1634,7 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
       rate_id: rate_id,
       shippingData: shippingData
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-col-4 t-col-lg-4 t-col-md-4 t-col-sm-12"
+      className: "t-col-4 t-col-lg-4 t-col-md-12 t-col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__["default"], {
       shippingData: shippingData,
       shippingTrackingNumber: shippingTrackingNumber,
@@ -1325,9 +1659,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _scss_responsive2_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../scss/responsive2.scss */ "./src/scss/responsive2.scss");
+/* harmony import */ var _scss_bootstrap5_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../scss/bootstrap5.scss */ "./src/scss/bootstrap5.scss");
 /* harmony import */ var _scss_terminal_phonebook_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../scss/terminal-phonebook.scss */ "./src/scss/terminal-phonebook.scss");
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Loader */ "./src/components/Loader.js");
+/* harmony import */ var _scss_responsive_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../scss/responsive.scss */ "./src/scss/responsive.scss");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Loader */ "./src/components/Loader.js");
+
 
 
 
@@ -1576,6 +1912,12 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       // update select2 country
       const countrySelect = $tbody.find('select[name="country"]');
       countrySelect.val(address.country);
+      //check if t-phone-new-select exist
+      if ($(".t-phone-new-select").length) {
+        console.log(address);
+        //set address option where option data-isocode is address.country
+        $(".t-phone-new-select option[data-isocode=" + address.country + "]").prop("selected", true).trigger("change");
+      }
       //trigger event
       countrySelect.trigger("change");
     });
@@ -1618,7 +1960,7 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       style: {
         maxHeight: 500
       }
-    }, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalItemGroup, null, addressBook.map((item, index) => {
+    }, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalItemGroup, null, addressBook.map((item, index) => {
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalItem, {
         key: index,
         className: "t-phonebook-item",
@@ -1635,7 +1977,7 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       }, item.line1)));
     })), scrolledToBottom && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-phonebook-scrolled-to-bottom-message"
-    }, isLoadingNew ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, "You've reached the end of the list."))))))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    }, isLoadingNew ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, "You've reached the end of the list."))))))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       className: "t-manage-shipping-button",
       onClick: this.showModal
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
@@ -1648,10 +1990,22 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
 
 /***/ }),
 
-/***/ "./src/scss/responsive2.scss":
-/*!***********************************!*\
-  !*** ./src/scss/responsive2.scss ***!
-  \***********************************/
+/***/ "./src/scss/bootstrap5.scss":
+/*!**********************************!*\
+  !*** ./src/scss/bootstrap5.scss ***!
+  \**********************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./src/scss/responsive.scss":
+/*!**********************************!*\
+  !*** ./src/scss/responsive.scss ***!
+  \**********************************/
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
