@@ -10,7 +10,15 @@
     }
 
     .t-button-phonebook {
-      justify-content: center;
+      display: none;
+    }
+
+    .t-button-phonebook-mobile-inner {
+      display: block;
+    }
+
+    .t-shipment-header h1 {
+      font-size: 20px;
     }
   }
 
@@ -25,7 +33,15 @@
     }
 
     .t-button-phonebook {
-      justify-content: center;
+      display: none;
+    }
+
+    .t-button-phonebook-mobile-inner {
+      display: block;
+    }
+
+    .t-shipment-header h1 {
+      font-size: 25px;
     }
   }
 
@@ -40,7 +56,15 @@
     }
 
     .t-button-phonebook {
-      justify-content: center;
+      display: none;
+    }
+
+    .t-button-phonebook-mobile-inner {
+      display: block;
+    }
+
+    .t-shipment-header h1 {
+      font-size: 31px;
     }
   }
 
@@ -57,6 +81,14 @@
     .t-button-phonebook {
       justify-content: end;
     }
+
+    .t-button-phonebook-mobile-inner {
+      display: none;
+    }
+
+    .t-shipment-header h1 {
+      font-size: 31px;
+    }
   }
 
   /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -72,6 +104,14 @@
 
     .t-button-phonebook {
       justify-content: end;
+    }
+
+    .t-button-phonebook-mobile-inner {
+      display: none;
+    }
+
+    .t-shipment-header h1 {
+      font-size: 31px;
     }
   }
 }

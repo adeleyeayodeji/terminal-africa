@@ -48,10 +48,15 @@ export default class TerminalShippingHeader extends Component {
                 alt="Terminal Copy Icon"
               />
             </div>
-            <SippingStatus
-              className={shippingStatus.className}
-              title={shippingStatus.title}
-            />
+            <div className="t-flex t-button-phonebook-mobile">
+              <SippingStatus
+                className={shippingStatus.className}
+                title={shippingStatus.title}
+              />
+              <div className="t-button-phonebook-mobile-inner">
+                <TerminalPhoneBook />
+              </div>
+            </div>
           </div>
           <div className="t-flex t-button-phonebook">
             <TerminalPhoneBook />
