@@ -659,20 +659,35 @@ class TerminalShippingForm extends React.Component {
 
   //render
   render() {
-    const { rate_id, shippingData } = this.props;
+    const { rate_id, shippingData, action_type } = this.props;
     const { saved_address } = this.state;
 
     return (
       <Fragment>
-        <form method="post" id="t-form-submit" data-type="customer">
+        <form
+          method="post"
+          id="t-form-submit"
+          data-type={action_type}
+          data-address-id={saved_address?.address_id}>
           <input
             type="hidden"
             name="address_id"
             value={saved_address?.address_id}
           />
-          <input type="hidden" name="rate_id" value={rate_id} />
+
+          {rate_id ? (
+            <input type="hidden" name="rate_id" value={rate_id} />
+          ) : (
+            ""
+          )}
+
           <div className="terminal-responsive t-shipping-form-new">
             <div className="row">
+              {this.props.children ? (
+                <div className="col-12">{this.props.children}</div>
+              ) : (
+                ""
+              )}
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="form-group">
                   <label htmlFor="first_name">First Name</label>

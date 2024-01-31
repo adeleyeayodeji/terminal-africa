@@ -192,6 +192,8 @@ class TerminalAfricaShippingPlugin
             add_action('wp_ajax_nopriv_terminal_africa_get_transactions', array($this, 'terminal_africa_get_transactions'));
             //ajax terminal_africa_get_shipping_api_data
             add_action('wp_ajax_terminal_africa_get_shipping_api_data', array($this, 'terminal_africa_get_shipping_api_data'));
+            //ajax terminal_africa_get_merchant_address_data
+            add_action('wp_ajax_terminal_africa_get_merchant_address_data', array($this, 'terminal_africa_get_merchant_address_data'));
             //initAPI
             $this->initAPI();
         } catch (\Exception $e) {

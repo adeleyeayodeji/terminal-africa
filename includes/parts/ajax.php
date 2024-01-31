@@ -1778,4 +1778,58 @@ trait Ajax
             ]);
         }
     }
+
+    /**
+     * Get Merchant Address Data
+     * 
+     */
+    public function terminal_africa_get_merchant_address_data()
+    {
+        try {
+            //get nonce
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
+            //get saved address
+            $saved_address = get_option('terminal_africa_merchant_address', false);
+            $saved_address_state = "LA";
+            //get merchant address id
+            $merchant_address_id = get_option('terminal_africa_merchant_address_id', '');
+
+            $states = get_terminal_states($saved_address ? $saved_address->country : 'NG');
+            $states = $states['data'];
+
+            //check if saved others is not empty
+            $saved_address_state = $saved_address ? $saved_address->state : 'Lagos';
+
+            //get the state isoCode from $states
+            $stateIso = array_filter($states, function ($state) use ($saved_address_state) {
+                return $state->name == $saved_address_state;
+            });
+            //shift the state isoCode
+            $stateIso = array_shift($stateIso);
+
+            //get cities
+            $cities = get_terminal_cities($saved_address ? $saved_address->country : 'NG', $stateIso->isoCode);
+
+            //shippingData
+            $shippingData = compact('states', 'cities');
+            //return 
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Data gotten successfully',
+                'data' => compact('saved_address', 'merchant_address_id', 'shippingData')
+            ]);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
 }

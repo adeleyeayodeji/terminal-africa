@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700;800&display=swap");
+
 //reduce the div scroll width
 .t-scroll-area-div::-webkit-scrollbar {
   width: 5px !important;
@@ -277,4 +279,36 @@
 
 .select2-selection.select2-selection--single {
   background: transparent !important;
+}
+
+#terminal-merchant-address {
+  margin: 0 auto;
+  width: 90%;
+
+  .t-merchant-page-header {
+    background: #ffffff;
+    box-shadow: 1px 0px 6px -5px black;
+    border-radius: 20px;
+    padding: 10px 41px;
+
+    h2 {
+      font-family: "EB Garamond", serif;
+      font-size: 32px;
+      font-weight: 600;
+    }
+  }
+
+  .t-merchant-form {
+    background: #ffffff;
+    box-shadow: 1px 0px 6px -5px black;
+    border-radius: 20px;
+    padding: 10px 41px;
+    margin-top: 20px;
+  }
+
+  .t-note {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
 }

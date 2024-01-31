@@ -265,6 +265,7 @@ class TerminalManageShipping extends React.Component {
                   saved_address={shippingData.saved_address}
                   rate_id={rate_id}
                   shippingData={shippingData}
+                  action_type="customer"
                 />
               </div>
             </div>
