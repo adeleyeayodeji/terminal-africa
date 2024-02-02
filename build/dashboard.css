@@ -9253,6 +9253,7 @@
   }
   #manage-terminal-shipping .t-button-phonebook {
     justify-content: end;
+    display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
     display: none;
@@ -9271,6 +9272,7 @@
   }
   #manage-terminal-shipping .t-button-phonebook {
     justify-content: end;
+    display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
     display: none;
