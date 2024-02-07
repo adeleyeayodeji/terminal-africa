@@ -210,6 +210,13 @@ a.t-btn {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* hover button */
+.t-form-group button[type="submit"]:hover,
+.t-form-group button[type="button"]:hover {
+  background-color: #f60;
 }
 
 .t-form-control {
@@ -1417,8 +1424,8 @@ img.t-dashboard-intro-icon {
 .t-switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 38px;
+  height: 24px;
 }
 
 .t-switch input {
@@ -1441,24 +1448,24 @@ img.t-dashboard-intro-icon {
 .t-slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 14px;
+  width: 14px;
+  left: 5px;
+  bottom: 5px;
   background-color: white;
   transition: 0.4s;
 }
 
 input:checked + .t-slider {
-  background-color: #f90;
+  background-color: #3dc13c;
 }
 
 input:focus + .t-slider {
-  box-shadow: 0 0 1px #f90;
+  box-shadow: 0 0 1px #3dc13c;
 }
 
 input:checked + .t-slider:before {
-  transform: translateX(26px);
+  transform: translateX(15px);
 }
 
 /* Rounded sliders */
@@ -2002,4 +2009,49 @@ Responsive for t-transaction-header-right-t-flex
   border-radius: 0px !important;
   background: white !important;
   border-right: none !important;
+}
+
+.t-mt-1 {
+  margin-top: 10px;
+}
+
+.t-auth-header {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.t-auth-text {
+  font-weight: 400;
+  font-size: 16px;
+  border: none;
+}
+
+.t-content-auth {
+  max-width: 500px;
+  width: 100%;
+}
+
+.t-content-auth .t-form-area {
+  width: 100%;
+  padding-top: 30px;
+}
+
+.t-single-auth {
+  width: 100%;
+  max-width: 47%;
+}
+
+.t-auth-bg {
+  height: 100vh;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.t-form-area .main-logo-image {
+  height: 45px;
+  margin: 10px 0;
 }

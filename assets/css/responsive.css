@@ -496,6 +496,10 @@
   .t-display-information {
     max-height: 100%;
   }
+
+  .t-content-auth .t-form-area {
+    width: 100%;
+  }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
@@ -505,6 +509,10 @@
   }
   .t-display-information {
     max-height: 100%;
+  }
+
+  .t-content-auth .t-form-area {
+    width: 100%;
   }
 }
 /* Medium devices (landscape tablets, 768px and up) */
@@ -516,6 +524,10 @@
   .t-display-information {
     max-height: 100%;
   }
+
+  .t-content-auth .t-form-area {
+    width: 100%;
+  }
 }
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
@@ -526,6 +538,10 @@
   .t-display-information {
     max-height: 600px;
   }
+
+  .t-content-auth .t-form-area {
+    width: 100%;
+  }
 }
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
@@ -535,6 +551,10 @@
   }
   .t-display-information {
     max-height: 600px;
+  }
+
+  .t-content-auth .t-form-area {
+    width: 100%;
   }
 }
 

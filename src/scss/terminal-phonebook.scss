@@ -312,3 +312,94 @@
     margin-bottom: 40px;
   }
 }
+
+//t-carrier-new
+.t-carrier-new {
+  margin: 0 auto;
+  width: 90%;
+
+  .t-carriers-title-tag {
+    background: #ffffff;
+    padding: 10px 40px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+
+    h3 {
+      font-family: "EB Garamond", serif;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px !important;
+      color: #808080;
+    }
+  }
+
+  .terminal-carrier-card {
+    background: #ffffff;
+    padding: 10px 40px;
+    border-radius: 8px;
+  }
+
+  .t-carrier-toggle-all {
+    margin-bottom: 5px;
+
+    h3 {
+      margin-bottom: 0px;
+    }
+
+    p {
+      font-size: 14px !important;
+      color: #808080;
+    }
+  }
+
+  .t-space-no-border {
+    height: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+  }
+
+  .t-carrier-logo-block {
+    height: 32px;
+    width: 32px;
+  }
+
+  .t-carrier-name {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
+  .t-carrier-embed {
+    justify-content: end;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .t-carrier-list {
+    .t-row {
+      justify-content: space-between;
+    }
+  }
+
+  .t-carrier-region-listing-block {
+    border-bottom: none;
+    width: 280px;
+    max-width: 280px;
+  }
+
+  .t-coming-soon-flex {
+    justify-content: end;
+    width: 100%;
+  }
+
+  @media only screen and (max-width: 850px) {
+    .t-carrier-region-listing-block {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}

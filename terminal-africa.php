@@ -33,6 +33,10 @@ define('TERMINAL_AFRICA_TEST_API_ENDPOINT', 'https://sandbox.terminal.africa/v1/
 define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 //tracking url
 define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipments/track/');
+//single auth url
+define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
+//plugin wp admin url
+define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
 
 /**
  * WooCommerce Terminal Delivery Loader.

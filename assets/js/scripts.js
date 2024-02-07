@@ -2569,4 +2569,61 @@ jQuery(document).ready(function ($) {
       }
     });
   });
+
+  /**
+   * Terminal Single Authentication
+   *
+   * @param {string} elem
+   */
+  $(".t-single-auth").click(function (e) {
+    e.preventDefault();
+    //url to visit
+    let url = $(this).data("url");
+    //check if url is empty
+    if (url === "" || url === undefined || url === null) {
+      //throw error
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        confirmButtonColor: "rgb(246 146 32)",
+        //confirm button text
+        confirmButtonText: "Close",
+        text: "Authentication url is empty",
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      //return
+      return;
+    }
+    //get domain url and site name
+    let domain = $(this).data("domain");
+    //encode base64 domain
+    domain = btoa(domain);
+    let site_name = $(this).data("site-name");
+    //append domain and site name to url
+    url = url + "?domain=" + domain + "&site_name=" + site_name;
+    //redirect to url
+    window.open(url, "_self");
+  });
+
+  /**
+   * Onload event handler for Oauth
+   *
+   */
+  let terminalOauth = () => {
+    //check if current url has terminal_token
+    let current_url = new URL(window.location.href);
+    //terminal token
+    let terminal_token = current_url.searchParams.get("terminal_token");
+    //decode the terminal_token
+    let decodedString = atob(terminal_token);
+    //log
+    console.log(decodedString);
+  };
+
+  //load
+  // terminalOauth();
 });
