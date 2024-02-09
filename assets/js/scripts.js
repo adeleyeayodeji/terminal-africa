@@ -2611,19 +2611,162 @@ jQuery(document).ready(function ($) {
 
   /**
    * Onload event handler for Oauth
-   *
+   *  1. Check if current url has terminal_token
+   *  2. Check if terminal token is empty
+   *  3. Check if terminal token is valid
+   *  @param {void}
    */
   let terminalOauth = () => {
     //check if current url has terminal_token
     let current_url = new URL(window.location.href);
     //terminal token
     let terminal_token = current_url.searchParams.get("terminal_token");
+    //check if terminal token is empty
+    if (
+      terminal_token === "" ||
+      terminal_token === null ||
+      terminal_token === undefined
+    ) {
+      return;
+    }
     //decode the terminal_token
     let decodedString = atob(terminal_token);
-    //log
-    console.log(decodedString);
+    //split the decoded string by :
+    let splitString = decodedString.split(":");
+    //check if splitString is empty
+    if (splitString.length < 2) {
+      //swal
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        confirmButtonColor: "rgb(246 146 32)",
+        //confirm button text
+        confirmButtonText: "Close",
+        text: "Invalid authentication token",
+        footer: `
+          <div>
+            <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+          </div>
+        `
+      });
+      return;
+    }
+    //get pk
+    let pk = splitString[0];
+    //get sk
+    let sk = splitString[1];
+    //authenticate
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_auth",
+        public_key: pk,
+        secret_key: sk,
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Authenticating...",
+          text: "Please wait...",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+            <div>
+              <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+            </div>
+          `
+        });
+      },
+      success: function (response) {
+        //close loader
+        Swal.close();
+        //check response is 200
+        if (response.code == 200) {
+          //swal success
+          Swal.fire({
+            icon: "success",
+            type: "success",
+            title: "Success!",
+            text: "Terminal Africa has been successfully authenticated",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            iconColor: "rgb(246 146 32)",
+            footer: `
+                  <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                  </div>
+                `
+          }).then((result) => {
+            if (result.value) {
+              //check if terminal_africa.getting_started_url is none
+              if (terminal_africa.getting_started_url == "none") {
+                //do nothing
+              } else {
+                //show loading
+                Swal.fire({
+                  title: "Redirecting...",
+                  text: "Please wait...",
+                  imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  allowEnterKey: false,
+                  showConfirmButton: false,
+                  footer: `
+                      <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                      </div>
+                    `
+                });
+                //redirect to getting started page
+                window.location.href = terminal_africa.getting_started_url;
+              }
+            }
+          });
+        } else {
+          //swal error
+          Swal.fire({
+            icon: "error",
+
+            title: "Oops...",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                  <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                  </div>
+                `
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        //close loader
+        Swal.close();
+        //swal error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!: " + xhr.responseText,
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          //footer
+          footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+        });
+      }
+    });
   };
 
   //load
-  // terminalOauth();
+  terminalOauth();
 });
