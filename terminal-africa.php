@@ -34,7 +34,9 @@ define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 //tracking url
 define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipments/track/');
 //single auth url
-define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
+// define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
+//single staging url
+define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://terminal-app-v2-staging.herokuapp.com/auth/authorize/wordpress/');
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
 

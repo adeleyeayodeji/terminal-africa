@@ -499,6 +499,7 @@
 
   .t-content-auth .t-form-area {
     width: 100%;
+    max-width: 70%;
   }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
