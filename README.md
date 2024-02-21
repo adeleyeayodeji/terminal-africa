@@ -1,12 +1,12 @@
 === Terminal Africa ===
 Contributors: terminalafrica, biggidroid
-Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping, terminalafrica
+Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping, terminalafrica, ecommerce, shipping, shipping plugin, shipping method, shipping rates, shipping label, shipping label generator, shipping label plugin, shipping label woocommerce
 Author URI: http://www.terminal.africa
 Author: Terminal
 Requires at least: 6.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 1.11.5
+Stable tag: 1.11.6
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -82,6 +82,10 @@ You can get the API key from your Terminal Africa account. You can create an acc
 8. Select shipping method
 
 == Changelog ==
+
+= 1.11.6 =
+
+- Added update
 
 = 1.11.5 =
 

@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.11.5
+ * Version:     1.11.6
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -34,9 +34,7 @@ define('TERMINAL_AFRICA_TEXT_DOMAIN', 'terminal-africa');
 //tracking url
 define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipments/track/');
 //single auth url
-// define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
-//single staging url
-define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://terminal-app-v2-staging.herokuapp.com/auth/authorize/wordpress/');
+define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
 

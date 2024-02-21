@@ -140,6 +140,13 @@ class TerminalShippingForm extends React.Component {
         var country = $(this).val();
         //check country
         if (country) {
+          //check if t-phone-new-select exist
+          if ($(".t-phone-new-select").length) {
+            //set address option where option data-isocode is address.country
+            $(".t-phone-new-select option[data-isocode=" + country + "]")
+              .prop("selected", true)
+              .trigger("change");
+          }
           //ajax
           $.ajax({
             type: "GET",

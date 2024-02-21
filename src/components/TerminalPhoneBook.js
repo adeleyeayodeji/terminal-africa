@@ -258,7 +258,6 @@ class TerminalPhoneBook extends Component {
       countrySelect.val(address.country);
       //check if t-phone-new-select exist
       if ($(".t-phone-new-select").length) {
-        console.log(address);
         //set address option where option data-isocode is address.country
         $(".t-phone-new-select option[data-isocode=" + address.country + "]")
           .prop("selected", true)
