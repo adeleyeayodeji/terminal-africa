@@ -109,6 +109,18 @@ function terminalsetValue2_terminalShipping(elem) {
       //do nothing
       return;
     }
+    //update global variables
+    window.terminal_billing_postcode = shipping_postcode;
+    //terminal_shipping_postcode
+    window.terminal_shipping_postcode = shipping_postcode;
+    //terminal_shipping_state
+    window.terminal_shipping_state = state;
+    //terminal_shipping_city
+    window.terminal_shipping_city = lga;
+    //terminal_billing_city
+    window.terminal_billing_city = lga;
+    //terminal_billing_state
+    window.terminal_billing_state = state;
     //reset carrier data
     termianlDataParcel.clearCarrierData();
     //ajax

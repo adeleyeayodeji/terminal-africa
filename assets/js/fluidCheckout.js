@@ -1063,6 +1063,18 @@ class FluidCheckoutTerminal {
     let stateText = this.$(
       "select[name='shipping_state'] option:selected"
     ).text();
+    //update global variables
+    window.terminal_billing_postcode = billing_postcode;
+    //terminal_shipping_postcode
+    window.terminal_shipping_postcode = billing_postcode;
+    //terminal_shipping_state
+    window.terminal_shipping_state = state;
+    //terminal_shipping_city
+    window.terminal_shipping_city = lga;
+    //terminal_billing_city
+    window.terminal_billing_city = lga;
+    //terminal_billing_state
+    window.terminal_billing_state = state;
     //ajax
     this.$.ajax({
       type: "POST",
