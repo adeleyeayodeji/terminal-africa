@@ -193,6 +193,15 @@ trait Assets
         wp_enqueue_script('terminal-africa-checkout-for-shipping-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/checkout-for-shipping.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
         //add terminaldata-for-shipping
         wp_enqueue_script('terminal-africa-terminaldata-for-shipping-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-for-shipping.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+        //wc checkout block notice
+        $wc_checkout_block_notice = '';
+        if (current_user_can('administrator')) {
+            $wc_checkout_block_notice =  sprintf(
+                '<a href="%s" class="button wc-forward">%s</a>',
+                esc_url(admin_url('post.php?post=' . wc_get_page_id('checkout') . '&action=edit')),
+                esc_html__('Switch to classic checkout', 'text-domain')
+            );
+        }
         //localize scripts
         wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -206,6 +215,7 @@ trait Assets
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
             'multicurrency' => self::wooMulticurrency(),
+            'edit_checkout_page_link' => $wc_checkout_block_notice
         ));
     }
 

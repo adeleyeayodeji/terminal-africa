@@ -2,6 +2,44 @@
 /// This is for the core woocommerce plugin and the native checkout page and woocommerce checkout plugin 'Cartflow'.
 ////////////////////////////////////////////////////////////
 
+//global variables
+window.terminal_objects = {
+  woocommerce_block_checkout: false
+};
+
+/**
+ * WooCommerce Block Element Checkout
+ * Check if woocommerce checkout block element is enabled
+ *
+ */
+let woocommerceBlockElementCheckout = () => {
+  try {
+    //check if checkout page has .wp-block-woocommerce-checkout
+    if (jQuery(".wp-block-woocommerce-checkout").length > 0) {
+      //update terminal object
+      terminal_objects.woocommerce_block_checkout = true;
+      //block .wp-block-woocommerce-checkout with message
+      setTimeout(() => {
+        jQuery(".wp-block-woocommerce-checkout").before(`
+        <div class="alignwide">
+           <div class="woocommerce-error" role="alert">
+              <strong>Terminal Africa:</strong> Please switch to classic checkout for Terminal Africa to work.
+              
+              ${terminal_africa.edit_checkout_page_link}
+            </div>
+        </div>
+        `);
+      }, 1000);
+    } else {
+      //update terminal object
+      terminal_objects.woocommerce_block_checkout = false;
+    }
+  } catch (error) {}
+};
+
+//init on page load
+woocommerceBlockElementCheckout();
+
 /**
  * updateCoreWoocommerceElements
  * @param {*} state

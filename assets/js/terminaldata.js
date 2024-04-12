@@ -98,27 +98,32 @@ jQuery(document).ready(function ($) {
 
     //terminal postcode key focus out
     let terminalPostCode = document.getElementById("billing_postcode");
-    terminalPostCode.addEventListener("focusout", () => {
-      var postcode = $("#billing_postcode").val();
-      //save to session
-      //check if select name terminal_custom_shipping_lga2 exist
-      if ($("select[name='terminal_custom_shipping_lga2']").length) {
-        //check if postcode is not empty
-        if (postcode != "") {
-          //check if postcode is not equal to session
-          if (sessionStorage.getItem("terminal_postcode") != postcode) {
-            //check if select[name='terminal_custom_shipping_lga2 is not empty
-            if ($("select[name='terminal_custom_shipping_lga2']").val() != "") {
-              //trigger event change
-              $("select[name='terminal_custom_shipping_lga2']").trigger(
-                "change"
-              );
-              sessionStorage.setItem("terminal_postcode", postcode);
+    //check element exist
+    if (terminalPostCode) {
+      terminalPostCode.addEventListener("focusout", () => {
+        var postcode = $("#billing_postcode").val();
+        //save to session
+        //check if select name terminal_custom_shipping_lga2 exist
+        if ($("select[name='terminal_custom_shipping_lga2']").length) {
+          //check if postcode is not empty
+          if (postcode != "") {
+            //check if postcode is not equal to session
+            if (sessionStorage.getItem("terminal_postcode") != postcode) {
+              //check if select[name='terminal_custom_shipping_lga2 is not empty
+              if (
+                $("select[name='terminal_custom_shipping_lga2']").val() != ""
+              ) {
+                //trigger event change
+                $("select[name='terminal_custom_shipping_lga2']").trigger(
+                  "change"
+                );
+                sessionStorage.setItem("terminal_postcode", postcode);
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
   }
 });
 

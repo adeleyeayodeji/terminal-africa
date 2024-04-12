@@ -17,36 +17,39 @@ jQuery(document).ready(function ($) {
 
     //terminal postcode key focus out
     let terminalPostCode = document.getElementById("shipping_postcode");
-    terminalPostCode.addEventListener("focusout", () => {
-      var postcode = $("#shipping_postcode").val();
-      //save to session
-      //check if select name terminal_custom_shipping_lga2_terminalShipping exist
-      if (
-        $("select[name='terminal_custom_shipping_lga2_terminalShipping']")
-          .length
-      ) {
-        //check if postcode is not empty
-        if (postcode != "") {
-          //check if postcode is not equal to session
-          if (
-            sessionStorage.getItem("terminal_postcode_shipping") != postcode
-          ) {
-            //check if select[name='terminal_custom_shipping_lga2_terminalShipping is not empty
+    //check if element exists
+    if (terminalPostCode) {
+      terminalPostCode.addEventListener("focusout", () => {
+        var postcode = $("#shipping_postcode").val();
+        //save to session
+        //check if select name terminal_custom_shipping_lga2_terminalShipping exist
+        if (
+          $("select[name='terminal_custom_shipping_lga2_terminalShipping']")
+            .length
+        ) {
+          //check if postcode is not empty
+          if (postcode != "") {
+            //check if postcode is not equal to session
             if (
-              $(
-                "select[name='terminal_custom_shipping_lga2_terminalShipping']"
-              ).val() != ""
+              sessionStorage.getItem("terminal_postcode_shipping") != postcode
             ) {
-              //trigger event change
-              $(
-                "select[name='terminal_custom_shipping_lga2_terminalShipping']"
-              ).trigger("change");
-              sessionStorage.setItem("terminal_postcode_shipping", postcode);
+              //check if select[name='terminal_custom_shipping_lga2_terminalShipping is not empty
+              if (
+                $(
+                  "select[name='terminal_custom_shipping_lga2_terminalShipping']"
+                ).val() != ""
+              ) {
+                //trigger event change
+                $(
+                  "select[name='terminal_custom_shipping_lga2_terminalShipping']"
+                ).trigger("change");
+                sessionStorage.setItem("terminal_postcode_shipping", postcode);
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
   }
 });
 
