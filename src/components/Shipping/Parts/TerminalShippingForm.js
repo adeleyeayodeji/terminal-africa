@@ -796,7 +796,7 @@ class TerminalShippingForm extends React.Component {
                       className="form-control"
                       name="email"
                       id="email"
-                      placeholder="Address line 2"
+                      placeholder="Email address"
                       value={saved_address?.email}
                       onChange={(e) => {
                         this.setState({

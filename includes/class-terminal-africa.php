@@ -53,7 +53,7 @@ class TerminalAfricaShippingPlugin
             self::$skkey = null;
             self::$enpoint = null;
             //set the value
-            self::$endpoint = null;
+            self::$endpoint = TERMINAL_AFRICA_API_ENDPOINT;
             self::$plugin_mode = null;
         }
     }
