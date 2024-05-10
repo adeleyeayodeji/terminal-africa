@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 6.0
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 1.11.7
+Stable tag: 1.11.8
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -83,11 +83,15 @@ You can get the API key from your Terminal Africa account. You can create an acc
 
 == Changelog ==
 
+= 1.11.8 =
+
+- Added update to the checkout page
+
 = 1.11.7 =
 
 - Added update for woocommerce 8.7.0+
 
-  = 1.11.6 =
+= 1.11.6 =
 
 - Added update
 
