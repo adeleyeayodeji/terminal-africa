@@ -499,6 +499,17 @@ trait TerminalRESTAPI
         try {
             //get the order
             $order = wc_get_order($order_id);
+            //check if the order is set
+            if (!$order) {
+                //response
+                $response = [
+                    "status" => 404,
+                    "message" => "Order not found",
+                    "data" => [],
+                ];
+                //return
+                return new WP_REST_Response($response, 404);
+            }
             //get the order data
             $order_data = $order->get_data();
             //get the order date
