@@ -2531,41 +2531,56 @@ jQuery(document).ready(function ($) {
       $(element).addClass("t-get-started-active");
       //get data view
       let dataView = $(element).data("view");
-      //first view class
-      var firstView = "get-started-shipping-section";
-      //second view class
-      var secondView = "get-started-support-section";
-      //check if dataView is firstView
-      if (dataView === firstView) {
-        //show firstView
-        $("." + firstView).show();
-        //hide secondView
-        $("." + secondView).hide();
-        //get the first index .get-started-button
-        let firstIndex = $(".get-started-button:first-child");
-        //update inner img with terminal_africa.shipping_active_img
-        firstIndex.find("img").attr("src", terminal_africa.shipping_active_img);
-        //second index .get-started-button
-        let secondIndex = $(".get-started-button:nth-child(2)");
-        //update inner img with terminal_africa.support_inactive_img
-        secondIndex
-          .find("img")
-          .attr("src", terminal_africa.support_inactive_img);
-      } else {
-        //show secondView
-        $("." + secondView).show();
-        //hide firstView
-        $("." + firstView).hide();
-        //get the first index .get-started-button
-        let firstIndex = $(".get-started-button:first-child");
-        //update inner img with terminal_africa.shipping_inactive_img
-        firstIndex
-          .find("img")
-          .attr("src", terminal_africa.shipping_inactive_img);
-        //second index .get-started-button
-        let secondIndex = $(".get-started-button:nth-child(2)");
-        //update inner img with terminal_africa.support_active_img
-        secondIndex.find("img").attr("src", terminal_africa.support_active_img);
+      //hide all views
+      $(".get-started-custom-view").hide();
+      //switch
+      switch (dataView) {
+        case "get-started-payment-section":
+          //show initial
+          $(".get-started-payment-section").show();
+          //get the first index .get-started-button
+          let firstI = $(".get-started-button:first-child");
+          //update inner img with terminal_africa.shipping_active_img
+          firstI.find("img").attr("src", terminal_africa.shipping_inactive_img);
+          //second index .get-started-button
+          let secondI = $(".get-started-button:nth-child(3)");
+          //update inner img with terminal_africa.support_inactive_img
+          secondI.find("img").attr("src", terminal_africa.support_inactive_img);
+          break;
+
+        case "get-started-shipping-section":
+          //show initial
+          $(".get-started-shipping-section").show();
+          //get the first index .get-started-button
+          let firstIndex = $(".get-started-button:first-child");
+          //update inner img with terminal_africa.shipping_active_img
+          firstIndex
+            .find("img")
+            .attr("src", terminal_africa.shipping_active_img);
+          //second index .get-started-button
+          let secondIndex = $(".get-started-button:nth-child(3)");
+          //update inner img with terminal_africa.support_inactive_img
+          secondIndex
+            .find("img")
+            .attr("src", terminal_africa.support_inactive_img);
+          break;
+
+        case "get-started-support-section":
+          //show secondView
+          $(".get-started-support-section").show();
+          //get the first index .get-started-button
+          let firstIndex2 = $(".get-started-button:first-child");
+          //update inner img with terminal_africa.shipping_inactive_img
+          firstIndex2
+            .find("img")
+            .attr("src", terminal_africa.shipping_inactive_img);
+          //second index .get-started-button
+          let secondIndex2 = $(".get-started-button:nth-child(3)");
+          //update inner img with terminal_africa.support_active_img
+          secondIndex2
+            .find("img")
+            .attr("src", terminal_africa.support_active_img);
+          break;
       }
     });
   });

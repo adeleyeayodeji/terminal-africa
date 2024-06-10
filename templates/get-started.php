@@ -22,6 +22,14 @@ defined('ABSPATH') or die('No script kiddies please!');
                                 </span>
                             </div>
                         </div>
+                        <div class="card-payment-gateway get-started-button" data-view="get-started-payment-section">
+                            <div class="t-flex">
+                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/bankimage.png') ?>" alt="Get support" style="margin-right: 10px;">
+                                <span>
+                                    Payment Gateway
+                                </span>
+                            </div>
+                        </div>
                         <div class="card-get-support get-started-button" data-view="get-started-support-section">
                             <div class="t-flex">
                                 <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/support-inactive.svg') ?>" alt="Get support" style="margin-right: 10px;">
@@ -31,7 +39,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                             </div>
                         </div>
                     </div>
-                    <div class="get-started-shipping-section">
+                    <div class="get-started-shipping-section get-started-custom-view">
                         <div class="get-started-shipping-content-area">
                             <h3>
                                 Learn how to ship on Terminal Africa
@@ -42,7 +50,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                         </div>
                         <div class="t-w-embed-youtubevideo" style="padding-top: 56.1702%;margin-top: 60px;"><iframe src="https://www.youtube.com/embed/BNYJYoeJjmc?rel=0&amp;amp;controls=1&amp;amp;autoplay=0&amp;amp;mute=0&amp;amp;start=0" frameborder="0" allow="autoplay; encrypted-media" style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; pointer-events: auto;border-radius: 20px;"></iframe></div>
                     </div>
-                    <div class="get-started-support-section" style="display: none;">
+                    <div class="get-started-support-section get-started-custom-view" style="display: none;">
                         <div class="get-started-support-content-area">
                             <h3>
                                 Speak to an expert
@@ -64,6 +72,19 @@ defined('ABSPATH') or die('No script kiddies please!');
                                     <a href="mailto:support@terminal.africa" class="t-support-actions-link">Send an email</a>
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                    <div class="get-started-payment-section get-started-custom-view" style="display: none;">
+                        <div class="get-started-payment-content-area">
+                            <h3>
+                                Payment Gateway
+                            </h3>
+                            <p>
+                                Collect payment from your customers using our payment gateway.
+                            </p>
+                            <p>
+                                We support multiple payment methods including card payments, mobile money, and bank transfers.
+                            </p>
                         </div>
                     </div>
                 </div>
