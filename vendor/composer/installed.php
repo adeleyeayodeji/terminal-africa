@@ -280,5 +280,14 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
+        'yoast/phpunit-polyfills' => array(
+            'pretty_version' => '1.1.1',
+            'version' => '1.1.1.0',
+            'reference' => 'a0f7d708794a738f328d7b6c94380fd1d6c40446',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../yoast/phpunit-polyfills',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
     ),
 );
