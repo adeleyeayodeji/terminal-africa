@@ -30,13 +30,13 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
-			<property name="prefixes" type="array" value="my-plugin"/>
+			<property name="prefixes" type="array" value="terminal-africa"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<!-- Value: replace the text domain used. -->
-			<property name="text_domain" type="array" value="my-plugin"/>
+			<property name="text_domain" type="array" value="terminal-africa"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WhiteSpace.ControlStructureSpacing">
@@ -44,4 +44,10 @@
 			<property name="blank_line_check" value="true"/>
 		</properties>
 	</rule>
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
+	<rule ref="WordPress.WhiteSpace.PrecisionAlignment"/>
+	<rule ref="WordPress.WhiteSpace.ScopeIndent"/>
+	<rule ref="WordPress.WhiteSpace.VariableAnalysis"/>
+	<rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+	<rule ref="WordPress.WhiteSpace.FunctionSpacing"/>
 </ruleset>
