@@ -23,14 +23,19 @@ trait Assets
             'loader' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/loader.gif',
             'plugin_url' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL
         ));
+
         //check if cuurent url has terminal
         if (strpos($_SERVER['REQUEST_URI'], 'terminal') === false) {
             return;
         }
 
-        //check if url match section=terminal_delivery
-        if (isset($_GET['section']) && $_GET['section'] == 'terminal_delivery' && isset($_GET['page']) && $_GET['page'] == 'wc-settings') {
-            //ignore for wc core page
+        // Get the section and page from the query parameters
+        $section = isset($_GET['section']) ? $_GET['section'] : null;
+        $page = isset($_GET['page']) ? $_GET['page'] : null;
+
+        // Check if the page is 'wc-settings' and the section is either 'terminal_delivery' or 'terminal_africa_payment'
+        if ($page === 'wc-settings' && in_array($section, ['terminal_delivery', 'terminal_africa_payment'])) {
+            // Ignore for wc core page
             return;
         }
 

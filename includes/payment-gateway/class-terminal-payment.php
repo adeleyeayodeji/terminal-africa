@@ -14,7 +14,7 @@ add_action("plugins_loaded", "terminal_africa_payment_method_init", 999);
 function terminal_africa_payment_method_init()
 {
     //Init  class
-    require_once dirname(__FILE__) . '/includes/class-wc-gateway-terminal_africa_payment.php';
+    require_once dirname(__FILE__) . '/includes/class-wc-gateway-terminal.php';
 
     //Notice user
     add_action('admin_notices', 'wc_terminal_africa_payment_testmode_notice');
@@ -67,7 +67,7 @@ function terminal_africa_payment_gateway_block_support()
     }
 
     // here we're including our "gateway block support class"
-    require_once __DIR__ . '/includes/class-wc-gateway-terminal_africa_payment-blocks-support.php';
+    require_once __DIR__ . '/includes/class-wc-gateway-terminal-blocks-support.php';
 
     // registering our block support class
     add_action(

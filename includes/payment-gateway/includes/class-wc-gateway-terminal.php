@@ -26,7 +26,7 @@ if (class_exists("WC_Payment_Gateway")) {
             // $this->icon = apply_filters("woocommerce_terminal_africa_payment_icon", plugins_url( 'assets/images/terminal_africa_payment.png', WC_TERMINAL_PAYMENT_MAIN_FILE ));
             $this->has_fields = true;
             $this->method_title = __("Terminal Payment", "wc-terminal_africa_payment-payment-gateway");
-            $this->method_description = sprintf(__('Terminal provide merchants with the tools and services needed to accept online payments from local and international customers using Mastercard, Visa, Verve Cards <a href="%1$s" target="_blank">Get your API keys</a>.', 'wc-terminal_africa_payment-payment-gateway'), 'https://app.terminal_africa_payment.com/developer');
+            $this->method_description = sprintf(__('Terminal provide merchants with the tools and services needed to accept online payments from local and international customers using Mastercard, Visa, Verve Cards <a href="%1$s" target="_blank">Learn more</a>.', 'wc-terminal_africa_payment-payment-gateway'), 'https://www.terminal.africa/integrations?utm_source=web');
             $this->supports = array(
                 'products',
                 'tokenization',
@@ -90,7 +90,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         "title" => __("Title", "wc-terminal_africa_payment-payment-gateway"),
                         "type" => "text",
                         "description" => __("This controls the payment method title which the user sees during checkout.", "wc-terminal_africa_payment-payment-gateway"),
-                        "default" => __("Terminal Payment", "wc-terminal_africa_payment-payment-gateway"),
+                        "default" => __("Terminal Africa Payment", "wc-terminal_africa_payment-payment-gateway"),
                         "desc_tip" => true,
                         //read only
                         "custom_attributes" => array(
@@ -185,107 +185,7 @@ if (class_exists("WC_Payment_Gateway")) {
         public function terminal_africa_payment_verify_payment()
         {
 
-            //If transactions_refrence is not set
-            // if (isset($_GET["transactions_refrence"]) && $_GET["transactions_refrence"] != "undefined" && $_GET["transactions_refrence"] != "") {
-            //     //DO More
-            //     if (isset($_GET['terminal_africa_payment_id']) && urldecode($_GET['terminal_africa_payment_id'])) {
-            //         $order_id = sanitize_text_field(urldecode($_GET['terminal_africa_payment_id']));
-            //         $transactions_refrence = sanitize_text_field($_GET['transactions_refrence']);
-
-            //         if (!$order_id) {
-            //             $order_id = sanitize_text_field(urldecode($_GET['terminal_africa_payment_id']));
-            //         }
-            //         //Get Order
-            //         $order = wc_get_order($order_id);
-            //         //Then make http request for transaction verification
-            //         $terminal_africa_payment_url = $this->apiURL . 'v1/auth/login';
-
-            //         $headers = array(
-            //             'Authorization' => 'Basic ' . base64_encode($this->public_key . ":" . $this->secret_key),
-            //         );
-
-            //         $args = array(
-            //             'headers' => $headers,
-            //             'timeout' => 60,
-            //         );
-            //         //Query
-            //         $request = wp_remote_post($terminal_africa_payment_url, $args);
-            //         //Log
-            //         if (!is_wp_error($request) && 200 === wp_remote_retrieve_response_code($request)) {
-            //             //Access More Resources
-            //             $terminal_africa_payment_response = json_decode(wp_remote_retrieve_body($request));
-            //             $complex_token =  $terminal_africa_payment_response->responseBody->accessToken;
-            //             //Verify Payment
-            //             $terminal_africa_payment_url_v = $this->apiURL . 'v2/transactions/' . urlencode($transactions_refrence);
-            //             $headers_v = array(
-            //                 'Authorization' => 'Bearer ' . $complex_token,
-            //             );
-
-            //             $args_v = array(
-            //                 'headers' => $headers_v,
-            //                 'timeout' => 60,
-            //             );
-            //             //Query
-            //             $request_v = wp_remote_get($terminal_africa_payment_url_v, $args_v);
-            //             //log 
-            //             if (!is_wp_error($request_v) && 200 === wp_remote_retrieve_response_code($request_v)) {
-            //                 $terminal_africa_payment_response_v = json_decode(wp_remote_retrieve_body($request_v));
-            //                 if ($terminal_africa_payment_response_v->responseBody->paymentStatus === "PAID") {
-            //                     //CLear Order
-            //                     $order->payment_complete($transactions_refrence);
-            //                     // $order->update_status( 'completed' );
-
-            //                     // Retrieve the admin setting for order status after payment
-            //                     $order_status_after_payment = $this->get_option('order_status_after_payment');
-
-            //                     // Update order status based on the setting
-            //                     if ($order_status_after_payment == 'completed') {
-            //                         $order->update_status('completed', __('Payment received, your order is now complete.', 'wc-terminal_africa_payment-payment-gateway'));
-            //                     } else {
-            //                         $order->update_status('processing', __('Payment received, your order is currently being processed.', 'wc-terminal_africa_payment-payment-gateway'));
-            //                     }
-
-
-            //                     $order->add_order_note('Payment was successful on Terminal');
-            //                     $order->add_order_note(sprintf(__('Payment via Terminal successful (Transaction Reference: %s)', 'wc-terminal_africa_payment-payment-gateway'), $transactions_refrence));
-            //                     //Customer Note
-            //                     $customer_note  = 'Thank you for your order.<br>';
-            //                     $customer_note .= 'Your payment was successful, we are now <strong>processing</strong> your order.';
-
-            //                     $order->add_order_note($customer_note, 1);
-
-            //                     wc_add_notice($customer_note, 'notice');
-            //                     //CLear Cart
-            //                     WC()->cart->empty_cart();
-            //                 };
-            //             } else {
-            //                 //If error
-            //                 $order->update_status('Failed');
-
-            //                 update_post_meta($order_id, '_transaction_id', $transactions_refrence);
-
-            //                 $notice      = sprintf(__('Thank you for shopping with us.%1$sYour payment is currently having issues with verification and .%1$sYour order is currently on-hold.%2$sKindly contact us for more information regarding your order and payment status.', 'wc-terminal_africa_payment-payment-gateway'), '<br />', '<br />');
-            //                 $notice_type = 'notice';
-
-            //                 // Add Customer Order Note
-            //                 $order->add_order_note($notice, 1);
-
-            //                 // Add Admin Order Note
-            //                 $admin_order_note = sprintf(__('<strong>Look into this order</strong>%1$sThis order is currently on hold.%2$sReason: Payment can not be verified.%3$swhile the <strong>Terminal Transaction Reference:</strong> %4$s', 'wc-terminal_africa_payment-payment-gateway'), '<br />', '<br />', '<br />', $transactions_refrence);
-            //                 $order->add_order_note($admin_order_note);
-
-            //                 function_exists('wc_reduce_stock_levels') ? wc_reduce_stock_levels($order_id) : $order->reduce_order_stock();
-
-            //                 wc_add_notice($notice, $notice_type);
-
-            //                 exit;
-            //             }
-            //         }
-            //         //Quit and redirect
-            //         wp_redirect($this->get_return_url($order));
-            //         exit;
-            //     }
-            // }
+            //payment verification here
 
             wp_redirect(wc_get_page_permalink('cart'));
 

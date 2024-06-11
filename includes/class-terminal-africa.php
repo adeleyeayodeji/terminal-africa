@@ -196,9 +196,27 @@ class TerminalAfricaShippingPlugin
             add_action('wp_ajax_terminal_africa_get_merchant_address_data', array($this, 'terminal_africa_get_merchant_address_data'));
             //initAPI
             $this->initAPI();
+            //initPaymentGateway
+            $this->initPaymentGateway();
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
+    }
+
+    /**
+     * Init Payment Gateway
+     * 
+     * Terminal provide merchants with the tools and services needed to accept online payments from local and international customers using Mastercard, Visa, Verve Cards
+     * @link https://www.terminal.africa/integrations?utm_source=web
+     * @since 1.11.10
+     * @author Adeleye Ayodeji
+     * 
+     * @return void
+     */
+    public function initPaymentGateway()
+    {
+        //init payment gateway
+        require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/payment-gateway/class-terminal-payment.php';
     }
 
     /**
