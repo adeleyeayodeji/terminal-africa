@@ -158,7 +158,7 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public function get_icon()
         {
-            $url = WC_HTTPS::force_https_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/assets/img/logo-footer.png');
+            $url = WC_HTTPS::force_https_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png');
             $icon = '<img src="' . $url . '" alt="Terminal Payment Options" style="height: 20px;" />';
 
             return apply_filters('woocommerce_gateway_icon', $icon, $this->id);
@@ -174,7 +174,7 @@ if (class_exists("WC_Payment_Gateway")) {
 
             $order = wc_get_order($order_id);
 
-            echo '<div id="yes-add">' . __('Thank you for your order, please click the button below to pay with Terminal.', 'wc-terminal_africa_payment-payment-gateway') . '</div>';
+            echo '<div id="yes-add">' . __('Thank you for your order, please click the button below to pay with Terminal Africa Payment Gateway.', 'wc-terminal_africa_payment-payment-gateway') . '</div>';
 
             echo '<div id="terminal_africa_payment_form"><form id="order_review" method="post" action="' . WC()->api_request_url('WC_Terminal_Payment_Gateway') . '"></form><button class="button alt" id="wc-terminal_africa_payment-payment-gateway-button">' . __('Pay Now', 'wc-terminal_africa_payment-payment-gateway') . '</button>';
         }
