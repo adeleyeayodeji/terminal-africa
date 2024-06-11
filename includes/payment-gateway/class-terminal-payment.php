@@ -17,10 +17,7 @@ function terminal_africa_payment_method_init()
     require_once dirname(__FILE__) . '/includes/class-wc-gateway-terminal_africa_payment.php';
 
     //Notice user
-    add_action('admin_notices', 'ade_wc_terminal_africa_payment_testmode_notice');
-
-    //Admin URL
-    add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ade_woo_terminal_africa_payment_plugin_action_links');
+    add_action('admin_notices', 'wc_terminal_africa_payment_testmode_notice');
 
     add_filter("woocommerce_payment_gateways", "terminal_africa_payment_method_init_payment_gateway");
 }
@@ -35,7 +32,7 @@ function terminal_africa_payment_method_init_payment_gateway($gateways)
 /**
  * Display the test mode notice.
  **/
-function ade_wc_terminal_africa_payment_testmode_notice()
+function wc_terminal_africa_payment_testmode_notice()
 {
 
     $terminal_africa_payment_settings = get_option('woocommerce_terminal_africa_payment_settings');
@@ -50,27 +47,6 @@ function ade_wc_terminal_africa_payment_testmode_notice()
         )) . '</p>
     </div>';
     }
-}
-
-/**
- * Add Settings link to the plugin entry in the plugins menu.
- *
- * @param array $links Plugin action links.
- *
- * @return array
- **/
-function ade_woo_terminal_africa_payment_plugin_action_links($links)
-{
-
-    $settings_link = array(
-        'settings' => '<a href="' . admin_url('admin.php?page=wc-settings&tab=checkout&section=terminal_africa_payment') . '"
-        title="' . __('View Terminal WooCommerce Settings', 'wc-terminal_africa_payment-payment-gateway') . '">' . __(
-            'Settings',
-            'wc-terminal_africa_payment-payment-gateway'
-        ) . '</a>',
-    );
-
-    return array_merge($settings_link, $links);
 }
 
 add_action(

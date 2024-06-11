@@ -64,7 +64,7 @@ final class WC_Terminal_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 		wp_localize_script('wc-terminal_africa_payment-blocks-integration', 'wcTerminalBlockData', array(
 			'ajaxUrl' => admin_url('admin-ajax.php'),
 			'nonce' => wp_create_nonce('wc-terminal_africa_payment-blocks-integration'),
-			'logo_url' => WC_TERMINAL_PAYMENT_URL . '/assets/images/terminal_africa_payment.png',
+			'logo_url' => WC_TERMINAL_PAYMENT_URL . '/assets/images/logo.png',
 		));
 
 		return array('wc-terminal_africa_payment-blocks-integration');
