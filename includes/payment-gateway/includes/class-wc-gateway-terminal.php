@@ -1,5 +1,8 @@
 <?php
 //avoid direct access
+
+use WpOrg\Requests\Requests;
+
 if (!defined('ABSPATH')) exit("No direct script access allowed"); // Exit if accessed directly
 
 if (class_exists("WC_Payment_Gateway")) {
@@ -52,10 +55,8 @@ if (class_exists("WC_Payment_Gateway")) {
 
             $this->testmode    = $this->get_option('testmode') === 'yes' ? true : false;
 
-            $this->apiURL = $this->testmode ? "https://sandbox.terminal_africa_payment.com/api/" : "https://api.terminal_africa_payment.com/api/";
+            $this->apiURL = $this->testmode ? "https://sandboxpay.terminal.africa/v1/payment" : "https://sandboxpay.terminal.africa/v1/payment";
 
-            // $this->public_key = $this->testmode ? $this->test_public_key : $this->live_public_key;
-            // $this->secret_key = $this->testmode ? $this->test_secret_key : $this->live_secret_key;
             // Hooks
             add_action('wp_enqueue_scripts', array($this, 'payment_scripts'));
             add_action('woocommerce_available_payment_gateways', array($this, 'add_gateway_to_checkout'));
@@ -69,6 +70,10 @@ if (class_exists("WC_Payment_Gateway")) {
                     'process_admin_options',
                 )
             );
+            //add ajax terminal_africa_payment_init
+            add_action('wp_ajax_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
+            // no priv
+            add_action('wp_ajax_nopriv_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
             // Check if the gateway can be used.
             if (!$this->is_valid_for_use()) {
                 $this->enabled = false;
@@ -120,6 +125,161 @@ if (class_exists("WC_Payment_Gateway")) {
             );
 
             $this->form_fields = $form_fields;
+        }
+
+        /**
+         * terminal_africa_payment_init
+         * 
+         */
+        public function terminal_africa_payment_init()
+        {
+            try {
+                //verify nonce
+                if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wc_terminal_africa_payment_nonce')) {
+                    throw new \Exception('Unauthorized request detected');
+                }
+
+                //get order id
+                $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : null;
+
+                //get the order
+                $order = wc_get_order($order_id);
+
+                //check if order is valid
+                if (!$order) {
+                    throw new \Exception('Invalid order, please try again');
+                }
+
+                //check if order is already paid 
+                if ($order->is_paid()) {
+                    throw new \Exception('Order has already been paid for');
+                }
+
+                //get settings
+                $terminal_africa_settings = get_option('terminal_africa_settings');
+
+                //checkout success url
+                $success_url = $this->get_return_url($order);
+
+                //checkout cancel url
+                $cancel_url = $order->get_cancel_order_url();
+
+                //cart url
+                $cart_url = wc_get_cart_url();
+
+                //checkout webhook url
+                $webhook_url = WC()->api_request_url('WC_Terminal_Payment_Gateway');
+
+                //$order_items
+                $order_items = $order->get_items();
+
+                $data_items = [];
+                //loop through cart items
+                foreach ($order_items as $item) {
+                    //get $product_id
+                    $product_id = $item->get_id();
+                    //get product image
+                    $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'single-post-thumbnail');
+                    $data_items[] = [
+                        "name" => $item->get_name(),
+                        "quantity" => intval($item->get_quantity()) ?: 1,
+                        "value" => $item->get_total(),
+                        "description" => "{$item->get_quantity()} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
+                        "type" => "parcel",
+                        "currency" => get_woocommerce_currency(),
+                        "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
+                        'image' => $product_image
+                    ];
+                }
+
+                //check if session is started
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
+
+                //get selected carrier logo
+                $carrier_logo = isset($_SESSION['terminal_africa_carrierlogo']) ? $_SESSION['terminal_africa_carrierlogo'] : null;
+                //get terminal_africa_carriername
+                $carrier_name = isset($_SESSION['terminal_africa_carriername']) ? $_SESSION['terminal_africa_carriername'] : null;
+
+                //get site title
+                $site_title = get_bloginfo('name');
+
+                //site logo url
+                $site_logo = get_site_icon_url();
+
+                //default url
+                $default_logo_url = WC_HTTPS::force_https_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png');
+
+                //site url
+                $site_url = site_url();
+                $domain = parse_url($site_url, PHP_URL_HOST);
+
+                //get terminal user details
+                $payment_payload = array(
+                    "amount" => $order->get_total(),
+                    "currency" => $order->get_currency(),
+                    "customer" => array(
+                        "first_name" => $order->get_billing_first_name(),
+                        "last_name" => $order->get_billing_last_name(),
+                        "email" => $order->get_billing_email(),
+                        "phone" => $order->get_billing_phone(),
+                    ),
+                    "line_items" => $data_items,
+                    "metadata" => array(
+                        "domain" => $domain,
+                        "order_id" => $order_id,
+                        "user_id" => $terminal_africa_settings['user_id'],
+                        "company" => array(
+                            "name" => $site_title,
+                            "logo" => $site_logo ? $site_logo : $default_logo_url,
+                            "support_email" => $terminal_africa_settings['others']->user->email
+                        )
+                    ),
+                    "shipping" => array(
+                        "amount" => $order->get_shipping_total(),
+                        "carrier_logo" => $carrier_logo,
+                        "carrier_name" => $carrier_name
+                    ),
+                    "return_url" => $cart_url,
+                    "success_url" => $success_url,
+                    "complete_url" => site_url(),
+                    "webhook_url" => $webhook_url,
+                );
+
+                //create json 
+                $request_data = json_encode($payment_payload);
+
+                //create hash from request data
+                $hashKey = hash_hmac('sha512', $request_data, $terminal_africa_settings['secret_key']);
+
+                $url = 'https://sandboxpay.terminal.africa/v1/payments';
+
+                $headers = array(
+                    'Content-Type' => 'application/json',
+                    'X-Terminal-Signature' => $hashKey,
+                    'X-Terminal-User' => $terminal_africa_settings['user_id']
+                );
+
+                //request
+                $request = Requests::post($url, $headers, $request_data, array('timeout' => 60));
+
+                //check if request was successful
+                if (!$request->success) {
+                    throw new \Exception('Something went wrong: ' . $request->body);
+                }
+
+                //parse body
+                $body = json_decode($request->body);
+
+                file_put_contents(__DIR__ . '/terminal_africa_payment_text.log', print_r($body, true));
+            } catch (\Exception $e) {
+                logTerminalError($e, 'terminal_africa_payment_init');
+                //wp json error
+                wp_send_json_error([
+                    'message' => $e->getMessage()
+                ]);
+            }
         }
 
         /**
@@ -176,7 +336,7 @@ if (class_exists("WC_Payment_Gateway")) {
 
             echo '<div id="yes-add">' . __('Thank you for your order, please click the button below to pay with Terminal Africa Payment Gateway.', 'wc-terminal_africa_payment-payment-gateway') . '</div>';
 
-            echo '<div id="terminal_africa_payment_form"><form id="order_review" method="post" action="' . WC()->api_request_url('WC_Terminal_Payment_Gateway') . '"></form><button class="button alt" id="wc-terminal_africa_payment-payment-gateway-button">' . __('Pay Now', 'wc-terminal_africa_payment-payment-gateway') . '</button>';
+            echo '<div id="terminal_africa_payment_form"><form id="order_review" method="post" action="' . WC()->api_request_url('WC_Terminal_Payment_Gateway') . '" class="terminal_africa_payment_form_class"></form><button class="button alt" id="wc-terminal_africa_payment-payment-gateway-button">' . __('Pay Now', 'wc-terminal_africa_payment-payment-gateway') . '</button>';
         }
 
         /**
@@ -186,8 +346,8 @@ if (class_exists("WC_Payment_Gateway")) {
         {
 
             //payment verification here
-
-            wp_redirect(wc_get_page_permalink('cart'));
+            file_put_contents(__DIR__ . '/terminal_africa_payment.log', print_r($_POST, true), FILE_APPEND);
+            // wp_redirect(wc_get_page_permalink('cart'));
 
             exit;
         }
@@ -214,15 +374,6 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public function is_valid_for_use()
         {
-
-            // if (!in_array(get_woocommerce_currency(), apply_filters('woocommerce_terminal_africa_payment_supported_currencies', array('NGN', 'USD', 'ZAR', 'GHS')))) {
-
-            //     $msg = sprintf(__('Terminal does not support your store currency. Kindly set it to either NGN (&#8358), GHS (&#x20b5;), USD (&#36;) or ZAR (R) <a href="%s">here</a>', 'wc-terminal_africa_payment-payment-gateway'), admin_url('admin.php?page=wc-settings&tab=general'));
-
-            //     WC_Admin_Settings::add_error($msg);
-
-            //     return false;
-            // }
 
             return true;
         }
@@ -282,7 +433,6 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public function payment_scripts()
         {
-
             if (!is_checkout_pay_page()) {
                 return;
             }
@@ -303,45 +453,16 @@ if (class_exists("WC_Payment_Gateway")) {
                 return;
             }
 
-            wp_enqueue_script('jquery');
+            wp_enqueue_script('wc_terminal_africa_payment', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminal_africa_payment.js', array('jquery'), WC_TERMINAL_PAYMENT_VERSION, true);
 
-            wp_enqueue_script('terminal_africa_payment', 'https://sdk.terminal_africa_payment.com/plugin/terminal_africa_payment.js', array('jquery'), WC_TERMINAL_PAYMENT_VERSION, false);
-
-            wp_enqueue_script('wc_terminal_africa_payment', plugins_url('assets/js/terminal_africa_payment.js', WC_TERMINAL_PAYMENT_MAIN_FILE), array('jquery', 'terminal_africa_payment'), WC_TERMINAL_PAYMENT_VERSION, false);
-
-            // $terminal_africa_payment_params = array(
-            //     'key' => $this->public_key,
-            //     'contractCode' => $this->contractCode,
-            //     'testmode' => $this->testmode,
-            //     'api_verify_url' => $api_verify_url
-            // );
-
-            // if (is_checkout_pay_page() && get_query_var('order-pay')) {
-
-            //     $email         = method_exists($order, 'get_billing_email') ? $order->get_billing_email() : $order->billing_email;
-            //     $amount        = $order->get_total();
-            //     $txnref        = $order_id . '_' . time();
-            //     $the_order_id  = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
-            //     $the_order_key = method_exists($order, 'get_order_key') ? $order->get_order_key() : $order->order_key;
-            //     $currency      = method_exists($order, 'get_currency') ? $order->get_currency() : $order->order_currency;
-
-            //     if ($the_order_id == $order_id && $the_order_key == $order_key) {
-
-            //         $terminal_africa_payment_params['email']        = $email;
-            //         $terminal_africa_payment_params['amount']       = $amount;
-            //         $terminal_africa_payment_params['txnref']       = $txnref;
-            //         $terminal_africa_payment_params['currency']     = $currency;
-            //         $terminal_africa_payment_params['bank_channel'] = 'true';
-            //         $terminal_africa_payment_params['card_channel'] = 'true';
-            //         $terminal_africa_payment_params['first_name'] = $order->get_billing_first_name();
-            //         $terminal_africa_payment_params['last_name'] = $order->get_billing_last_name();
-            //         $terminal_africa_payment_params['phone'] = $order->get_billing_phone();
-            //         $terminal_africa_payment_params['card_channel'] = 'true';
-            //     }
-            //     update_post_meta($order_id, '_terminal_africa_payment_txn_ref', $txnref);
-            // }
-
-            // wp_localize_script('wc_terminal_africa_payment', 'wc_terminal_africa_payment_params', $terminal_africa_payment_params);
+            wp_localize_script('wc_terminal_africa_payment', 'wc_terminal_africa_payment_params', array(
+                'order_id' => $order_id,
+                'order_key' => $order_key,
+                'api_verify_url' => $api_verify_url,
+                'ajax_url' => WC()->ajax_url(),
+                'nonce' => wp_create_nonce('wc_terminal_africa_payment_nonce'),
+                'redirect_url' => $this->get_return_url($order),
+            ));
         }
 
         /**

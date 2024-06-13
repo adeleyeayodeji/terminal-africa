@@ -685,6 +685,18 @@ trait Ajax
             WC()->session->set('terminal_africa_rateid', $rateid);
             WC()->session->set('terminal_africa_pickuptime', $pickuptime);
             WC()->session->set('terminal_africa_carrierlogo', $carrierlogo);
+            //save backup data to php session
+            //check if session is started
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['terminal_africa_carriername'] = $carriername;
+            $_SESSION['terminal_africa_amount'] = $amount;
+            $_SESSION['terminal_africa_duration'] = $duration;
+            $_SESSION['terminal_africa_guest_email'] = $email;
+            $_SESSION['terminal_africa_rateid'] = $rateid;
+            $_SESSION['terminal_africa_pickuptime'] = $pickuptime;
+            $_SESSION['terminal_africa_carrierlogo'] = $carrierlogo;
             //return
             wp_send_json([
                 'code' => 200,

@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 define('TERMINAL_AFRICA_VERSION', time());
 define('TERMINAL_AFRICA_PLUGIN_FILE', __FILE__);
 define('TERMINAL_AFRICA_PLUGIN_BASENAME', plugin_basename(__FILE__));
-define('TERMINAL_AFRICA_PLUGIN_DIR', untrailingslashit(dirname(__FILE__)));
+define('TERMINAL_AFRICA_PLUGIN_DIR', __DIR__);
 //TERMINAL_AFRICA_PLUGIN_PATH
 define('TERMINAL_AFRICA_PLUGIN_PATH', untrailingslashit(plugin_dir_path(__FILE__)));
 define('TERMINAL_AFRICA_PLUGIN_URL', untrailingslashit(plugins_url(basename(plugin_dir_path(__FILE__)), basename(__FILE__))));
@@ -37,6 +37,8 @@ define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipmen
 define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
+
+file_put_contents(__DIR__ . '/log.txt', json_encode(get_option('terminal_africa_settings')));
 
 /**
  * WooCommerce Terminal Delivery Loader.
@@ -134,14 +136,14 @@ class WC_Terminal_Delivery_Loader
 
         // Include the main Terminal Africa class.
         if (!class_exists('TerminalAfricaShippingPlugin')) {
-            include_once dirname(__FILE__) . '/includes/parts/menus.php';
-            include_once dirname(__FILE__) . '/includes/parts/ajax.php';
-            include_once dirname(__FILE__) . '/includes/parts/assets.php';
-            include_once dirname(__FILE__) . '/includes/parts/activation.php';
-            include_once dirname(__FILE__) . '/includes/parts/api.php';
-            include_once dirname(__FILE__) . '/includes/parts/shipping-address.php';
-            include_once dirname(__FILE__) . '/includes/class-terminal-africa.php';
-            include_once dirname(__FILE__) . '/includes/Helpers/helper.php';
+            include_once __DIR__ . '/includes/parts/menus.php';
+            include_once __DIR__ . '/includes/parts/ajax.php';
+            include_once __DIR__ . '/includes/parts/assets.php';
+            include_once __DIR__ . '/includes/parts/activation.php';
+            include_once __DIR__ . '/includes/parts/api.php';
+            include_once __DIR__ . '/includes/parts/shipping-address.php';
+            include_once __DIR__ . '/includes/class-terminal-africa.php';
+            include_once __DIR__ . '/includes/Helpers/helper.php';
 
             //include terminal log handler
             require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/terminalLogHandler.php';
