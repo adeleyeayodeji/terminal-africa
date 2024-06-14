@@ -39,8 +39,22 @@ jQuery(document).ready(function ($) {
             });
           },
           success: function (response) {
-            if (response.status === "success") {
-              window.location.href = response.redirect_url;
+            if (response.success) {
+              //block ui
+              $.blockUI({
+                message: "<p>Redirecting to payment page</p>",
+                css: {
+                  border: "none",
+                  padding: "15px",
+                  backgroundColor: "#000",
+                  "-webkit-border-radius": "10px",
+                  "-moz-border-radius": "10px",
+                  opacity: 0.5,
+                  color: "#fff"
+                }
+              });
+              //redirect to payment page
+              window.location.href = response.data.redirect_url;
             } else {
               //unblock ui
               $.unblockUI();

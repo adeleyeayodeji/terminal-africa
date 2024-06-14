@@ -382,6 +382,20 @@ if (!function_exists('getTransactions')) {
 }
 
 /**
+ * terminalFormatPhoneNumber
+ * @param $phone
+ * @param $countryCode
+ * 
+ * @return string
+ */
+if (!function_exists('terminalFormatPhoneNumber')) {
+    function terminalFormatPhoneNumber($phone, $countryCode = 'NG')
+    {
+        return TerminalAfricaShippingPlugin::formatPhoneNumber($phone, $countryCode);
+    }
+}
+
+/**
  * $allowed_order_statuses
  */
 $GLOBALS['terminal_allowed_order_statuses'] = TerminalAfricaShippingPlugin::$allowed_order_statuses;

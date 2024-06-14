@@ -434,6 +434,47 @@ trait Assets
         }
     }
 
+    /**
+     * formatPhoneNumber
+     * @param string $phone
+     * @param string $countryCode
+     * 
+     * @return string
+     */
+    public static function formatPhoneNumber($phone, $countryCode = 'NG')
+    {
+        //find country where isoCode
+        $tm_countries = get_terminal_countries();
+        //check if country code is not empty
+        $tm_country = array_filter($tm_countries, function ($country) use ($countryCode) {
+            return $country->isoCode === $countryCode;
+        });
+        //get first element
+        $tm_country = reset($tm_country);
+
+        // Phone code
+        $phonecode = $tm_country->phonecode;
+
+        // Check if phonecode does not include +
+        if (strpos($phonecode, "+") === false) {
+            $phonecode = "+" . $phonecode;
+        }
+
+        // Remove + and space and special characters from phone
+        // $phone = preg_replace('/[-+() ]/', '', $phone);
+
+        if ($phone) {
+            if (strpos($phone, "+") === false) {
+                // Append to phone
+                $phone = $phonecode . $phone;
+            }
+        } else {
+            $phone = "";
+        }
+
+        return $phone;
+    }
+
     //wp head checkout
     public static function wp_head_checkout()
     {

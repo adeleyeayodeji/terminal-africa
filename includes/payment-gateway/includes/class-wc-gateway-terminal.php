@@ -175,9 +175,9 @@ if (class_exists("WC_Payment_Gateway")) {
 
                 $data_items = [];
                 //loop through cart items
-                foreach ($order_items as $item) {
-                    //get $product_id
-                    $product_id = $item->get_id();
+                foreach ($order_items as $product_id => $item) {
+                    //convert to int $product_id
+                    $product_id = intval($product_id);
                     //get product image
                     $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'single-post-thumbnail');
                     $data_items[] = [
@@ -188,7 +188,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         "type" => "parcel",
                         "currency" => get_woocommerce_currency(),
                         "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
-                        'image' => $product_image
+                        'image' => $product_image ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
                     ];
                 }
 
@@ -215,6 +215,15 @@ if (class_exists("WC_Payment_Gateway")) {
                 $site_url = site_url();
                 $domain = parse_url($site_url, PHP_URL_HOST);
 
+                //get order country code
+                $order_country_code = $order->get_billing_country();
+
+                //add country code to phone number
+                $phoneNumber = terminalFormatPhoneNumber(
+                    $order->get_billing_phone(),
+                    $order_country_code
+                );
+
                 //get terminal user details
                 $payment_payload = array(
                     "amount" => $order->get_total(),
@@ -223,7 +232,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         "first_name" => $order->get_billing_first_name(),
                         "last_name" => $order->get_billing_last_name(),
                         "email" => $order->get_billing_email(),
-                        "phone" => $order->get_billing_phone(),
+                        "phone" => $phoneNumber,
                     ),
                     "line_items" => $data_items,
                     "metadata" => array(
@@ -248,7 +257,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 );
 
                 //create json 
-                $request_data = json_encode($payment_payload);
+                $request_data = json_encode($payment_payload, JSON_UNESCAPED_SLASHES);
 
                 //create hash from request data
                 $hashKey = hash_hmac('sha512', $request_data, $terminal_africa_settings['secret_key']);
@@ -272,7 +281,16 @@ if (class_exists("WC_Payment_Gateway")) {
                 //parse body
                 $body = json_decode($request->body);
 
-                file_put_contents(__DIR__ . '/terminal_africa_payment_text.log', print_r($body, true));
+                //check if status is success
+                if ($body->status) {
+                    //redirect to payment url
+                    wp_send_json_success([
+                        'message' => 'Payment initiated successfully',
+                        'redirect_url' => $body->data->payment_url
+                    ]);
+                } else {
+                    throw new \Exception('Payment initiation failed: ' . $body->message);
+                }
             } catch (\Exception $e) {
                 logTerminalError($e, 'terminal_africa_payment_init');
                 //wp json error
