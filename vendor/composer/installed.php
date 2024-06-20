@@ -272,9 +272,9 @@
             'dev_requirement' => true,
         ),
         'wp-phpunit/wp-phpunit' => array(
-            'pretty_version' => '5.9.9',
-            'version' => '5.9.9.0',
-            'reference' => 'f9b5b3a44d3677c7d4803074d81ad3cd12b0eeea',
+            'pretty_version' => '6.5.4',
+            'version' => '6.5.4.0',
+            'reference' => 'ef2cb44c0d991ac0c3a7a3ed0d2d1cf3fe8d8f2f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wp-phpunit/wp-phpunit',
             'aliases' => array(),
