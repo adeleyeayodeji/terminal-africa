@@ -2539,28 +2539,28 @@ jQuery(document).ready(function ($) {
           //show initial
           $(".get-started-payment-section").show();
           //get the first index .get-started-button
-          let firstI = $(".get-started-button:first-child");
+          let firstI = $(".get-started-button:nth-child(2)");
           //update inner img with terminal_africa.shipping_active_img
           firstI.find("img").attr("src", terminal_africa.shipping_inactive_img);
           //second index .get-started-button
-          let secondI = $(".get-started-button:nth-child(3)");
+          let thirdI = $(".get-started-button:nth-child(3)");
           //update inner img with terminal_africa.support_inactive_img
-          secondI.find("img").attr("src", terminal_africa.support_inactive_img);
+          thirdI.find("img").attr("src", terminal_africa.support_inactive_img);
           break;
 
         case "get-started-shipping-section":
           //show initial
           $(".get-started-shipping-section").show();
           //get the first index .get-started-button
-          let firstIndex = $(".get-started-button:first-child");
+          let firstIndex = $(".get-started-button:nth-child(2)");
           //update inner img with terminal_africa.shipping_active_img
           firstIndex
             .find("img")
             .attr("src", terminal_africa.shipping_active_img);
           //second index .get-started-button
-          let secondIndex = $(".get-started-button:nth-child(3)");
+          let thirdIndex = $(".get-started-button:nth-child(3)");
           //update inner img with terminal_africa.support_inactive_img
-          secondIndex
+          thirdIndex
             .find("img")
             .attr("src", terminal_africa.support_inactive_img);
           break;
@@ -2569,15 +2569,15 @@ jQuery(document).ready(function ($) {
           //show secondView
           $(".get-started-support-section").show();
           //get the first index .get-started-button
-          let firstIndex2 = $(".get-started-button:first-child");
+          let firstIndex2 = $(".get-started-button:nth-child(2)");
           //update inner img with terminal_africa.shipping_inactive_img
           firstIndex2
             .find("img")
             .attr("src", terminal_africa.shipping_inactive_img);
           //second index .get-started-button
-          let secondIndex2 = $(".get-started-button:nth-child(3)");
+          let thirdIndex2 = $(".get-started-button:nth-child(3)");
           //update inner img with terminal_africa.support_active_img
-          secondIndex2
+          thirdIndex2
             .find("img")
             .attr("src", terminal_africa.support_active_img);
           break;

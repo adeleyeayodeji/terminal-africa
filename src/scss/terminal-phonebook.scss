@@ -403,3 +403,74 @@
     }
   }
 }
+
+/**
+* Payment Gateway Admin Styles
+*
+*/
+.get-started-payment-section {
+  .get-started-payment-content-area {
+    &--header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 3rem 0;
+
+      img {
+        width: 100%;
+        max-width: 50rem;
+      }
+    }
+
+    &--body {
+      h3 {
+        font-size: 30px;
+        color: #f7941f;
+        line-height: normal;
+        margin-top: 50px;
+        margin: 0;
+      }
+
+      h4 {
+        font-size: 16px;
+        line-height: normal;
+        font-weight: 400;
+        margin: 10px 0px;
+      }
+
+      p {
+        font-size: 17px;
+        font-family: Lato, sans-serif;
+      }
+
+      .ptext {
+        font-size: 16px;
+      }
+
+      ul {
+        list-style-type: disc;
+        padding: 8px;
+        margin: 5px 11px;
+      }
+
+      b {
+        font-weight: 550;
+      }
+    }
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media screen and (max-width: 768px) {
+  .t-flex-dynamic {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+
+    .get-started-button {
+      margin-right: 0;
+      margin-left: 0;
+    }
+  }
+}

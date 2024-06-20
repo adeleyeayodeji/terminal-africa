@@ -13,20 +13,20 @@ defined('ABSPATH') or die('No script kiddies please!');
                             <h3 class="t-address-card-header-text t-pl-0">Check out these tips to get started</h3>
                         </div>
                     </div>
-                    <div class="t-flex">
-                        <div class="card-shipping get-started-button t-get-started-active" data-view="get-started-shipping-section">
+                    <div class="t-flex t-flex-dynamic">
+                        <div class="card-payment-gateway get-started-button t-get-started-active" data-view="get-started-payment-section">
+                            <div class="t-flex">
+                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/payment.svg') ?>" alt="Get support" style="margin-right: 10px;">
+                                <span>
+                                    Payment Gateway
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-shipping get-started-button" data-view="get-started-shipping-section">
                             <div class="t-flex">
                                 <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon.svg') ?>" alt="How shipping works" style="margin-right: 10px;">
                                 <span>
                                     Shipping
-                                </span>
-                            </div>
-                        </div>
-                        <div class="card-payment-gateway get-started-button" data-view="get-started-payment-section">
-                            <div class="t-flex">
-                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/bankimage.png') ?>" alt="Get support" style="margin-right: 10px;">
-                                <span>
-                                    Payment Gateway
                                 </span>
                             </div>
                         </div>
@@ -39,7 +39,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                             </div>
                         </div>
                     </div>
-                    <div class="get-started-shipping-section get-started-custom-view">
+                    <div class="get-started-shipping-section get-started-custom-view" style="display: none;">
                         <div class="get-started-shipping-content-area">
                             <h3>
                                 Learn how to ship on Terminal Africa
@@ -74,17 +74,58 @@ defined('ABSPATH') or die('No script kiddies please!');
                             </div>
                         </div>
                     </div>
-                    <div class="get-started-payment-section get-started-custom-view" style="display: none;">
+                    <div class="get-started-payment-section get-started-custom-view">
                         <div class="get-started-payment-content-area">
-                            <h3>
-                                Payment Gateway
-                            </h3>
-                            <p>
-                                Collect payment from your customers using our payment gateway.
-                            </p>
-                            <p>
-                                We support multiple payment methods including card payments, mobile money, and bank transfers.
-                            </p>
+                            <div class="get-started-payment-content-area--header">
+                                <img src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/payment_header.svg') ?>" alt="Terminal Africa Payment">
+                            </div>
+                            <div class="get-started-payment-content-area--body">
+                                <h3>
+                                    Access Payments Globally
+                                </h3>
+                                <p>
+                                    At Terminal Africa, we revolutionize logistics and financial transactions. With our trusted logistics services and new global payment options, we ensure your business runs smoothly.
+                                </p>
+                                <h4>
+                                    New Payment Solutions:
+                                </h4>
+                                <ul>
+                                    <li>
+                                        <span>PayPal</span>
+                                    </li>
+                                    <li>
+                                        <span>Stripe</span>
+                                    </li>
+                                    <li>
+                                        <span>Flutterwave</span>
+                                    </li>
+                                    <li>
+                                        <span>Paystack</span>
+                                    </li>
+                                    <li>
+                                        <span>Apple pay</span>
+                                    </li>
+                                    <li>
+                                        <span>Google pay</span>
+                                    </li>
+                                </ul>
+                                <h4>
+                                    Why Choose Us?
+                                </h4>
+                                <p class="ptext">
+                                    <b>- Integrated Solutions:</b> Logistics and payments under one roof. <br>
+                                    <b>- Global Expertise:</b> Experienced in international trade and finance. <br>
+                                    <b>- Trusted Partnerships:</b> Leading payment platforms for the best options. <br>
+                                    <b>- Commitment to Excellence:</b> Exceeding expectations with every shipment and transaction.
+                                </p>
+
+                                <p>
+                                    Click on the button below to gain access to our various payment options and streamline your operations and expand your global reach
+                                </p>
+                            </div>
+                            <div class="t-get-started-support-actions-link get-started-payment-content-area--footer">
+                                <a href="javascript:;" class="t-support-actions-link">Request access</a>
+                            </div>
                         </div>
                     </div>
                 </div>
