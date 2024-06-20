@@ -38,8 +38,6 @@ define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/aut
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
 
-file_put_contents(__DIR__ . '/log.txt', json_encode(get_option('terminal_africa_settings')));
-
 /**
  * WooCommerce Terminal Delivery Loader.
  * 

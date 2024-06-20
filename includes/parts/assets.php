@@ -332,8 +332,6 @@ trait Assets
             $var = [$data["currency_rate"][$key], $data["currency_rate_fee"][$key]];
             $rate[$value] = $var;
         }
-        //log
-        // file_put_contents(__DIR__ . '/log.txt', json_encode($rate[get_woocommerce_currency()]));
         return $rate[get_woocommerce_currency()];
     }
 
