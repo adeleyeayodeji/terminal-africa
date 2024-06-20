@@ -9265,7 +9265,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 3rem 0;
+  margin: 5rem 0;
 }
 .get-started-payment-section .get-started-payment-content-area--header img {
   width: 100%;
@@ -9287,6 +9287,7 @@
 .get-started-payment-section .get-started-payment-content-area--body p {
   font-size: 17px;
   font-family: Lato, sans-serif;
+  line-height: 33px;
 }
 .get-started-payment-section .get-started-payment-content-area--body .ptext {
   font-size: 16px;
@@ -9298,6 +9299,10 @@
 }
 .get-started-payment-section .get-started-payment-content-area--body b {
   font-weight: 550;
+}
+.get-started-payment-section .get-started-payment-content-area--footer a {
+  background-image: none;
+  padding-left: 40px;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */

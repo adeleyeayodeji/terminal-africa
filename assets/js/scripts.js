@@ -2270,6 +2270,96 @@ jQuery(document).ready(function ($) {
     });
   });
 
+  /**
+   * enable_terminal_payment_gateway
+   *
+   */
+  $("input[name=enable_terminal_payment_gateway]").on("change", function (e) {
+    e.preventDefault();
+    //check if checked
+    let checked = $(this).is(":checked");
+    //get parent
+    let parent = $(this).closest(".t-flex");
+    //send to server
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "update_user_terminal_payment_gateway",
+        nonce: terminal_africa.nonce,
+        status: checked
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //block element
+        $(parent).block({
+          message: "<i class='fa fa-spinner fa-spin'></i>",
+          overlayCSS: {
+            background: "#fff",
+            opacity: 0.8,
+            cursor: "wait"
+          },
+          css: {
+            border: 0,
+            padding: 0,
+            backgroundColor: "transparent"
+          }
+        });
+
+        //izitoast
+        iziToast.show({
+          theme: "dark",
+          title: "Saving payment gateway",
+          position: "topRight",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown",
+          timeout: false
+        });
+      },
+      success: function (response) {
+        //close block
+        $(parent).unblock();
+        //close izitoast
+        iziToast.destroy();
+        if (response.code == 200) {
+          //izitoast
+          iziToast.success({
+            title: "Success",
+            message: response.message,
+            position: "topRight",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        } else {
+          //izitoast
+          iziToast.error({
+            theme: "dark",
+            title: "Error",
+            message: response.message,
+            position: "topCenter",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        //close block
+        $(parent).unblock();
+        //close izitoast
+        iziToast.destroy();
+        //izitoast
+        iziToast.error({
+          theme: "dark",
+          title: "Error",
+          message: "Something went wrong!: " + xhr.responseText,
+          position: "topCenter",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown"
+        });
+      }
+    });
+  });
+
   //terminal_default_currency_code
   $("select[name=terminal_default_currency_code]").change(function (e) {
     e.preventDefault();

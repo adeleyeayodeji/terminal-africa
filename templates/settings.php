@@ -9,7 +9,9 @@ $saved_currency = get_option("terminal_default_currency_code", ['isoCode' => 'NG
 $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '');
 //create link 'admin.php?page=wc-settings&tab=shipping'
 $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
-
+//terminal_africa_settings
+$terminal_africa_settings = get_option('terminal_africa_settings', []);
+error_log("terminal_africa_settings: " . print_r($terminal_africa_settings['others']->user, true));
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-cog", "Settings"); ?>
@@ -22,7 +24,32 @@ $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
                             <h3 class="t-address-card-header-text t-pl-0">Terminal Africa Settings</h3>
                         </div>
                         <div class="t-merchant-id">
-                            <h3 class="t-address-card-header-text t-pl-0">Merchant ID: <span class="t-merchant-id-text"><?php echo esc_html(get_option('terminal_africa_merchant_id')); ?></span></h3>
+                            <h3 class="t-address-card-header-text t-pl-0">
+                                Merchant ID:
+                                <span class="t-merchant-id-text"><?php echo esc_html(get_option('terminal_africa_merchant_id')); ?></span>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div class="t-settings-first">
+                            <p class="t-settings-page-card-title">
+                                Enable Terminal Payment Gateway
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                When enabled, your customers can pay with Terminal Africa Payment Gateway.
+                            </p>
+                        </div>
+                        <div>
+                            <a href="#">
+                                Learn More
+                            </a>
+                            <div class="t-carrier-embed w-embed">
+                                <label class="t-switch t-carrier-switch">
+                                    <input type="checkbox" class="t-carrier-checkbox" name="enable_terminal_payment_gateway" id="enable_terminal_payment_gateway" <?php echo get_option('update_user_terminal_payment_gateway') == 'true' ? 'checked' : ''; ?>>
+                                    <span class="t-slider round"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
