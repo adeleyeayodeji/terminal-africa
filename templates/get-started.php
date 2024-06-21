@@ -138,7 +138,7 @@ if (isset($terminal_africa_settings['others']->user->payment_gateway_status)) {
                                 ?>
                                     <div class="terminal-payment-gateway-status-log">
                                         <p>
-                                            Your payment gateway is
+                                            Terminal Africa Payment Gateway Status:
                                         </p>
                                         <span class="t-settings-badge t-settings-badge-<?php echo $payment_gateway_status; ?>"><?php echo $payment_gateway_status; ?></span>
                                     </div>
