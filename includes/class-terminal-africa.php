@@ -21,6 +21,13 @@ class TerminalAfricaShippingPlugin
 {
     //skkey
     public static $skkey;
+
+    //public_key
+    public static $public_key;
+
+    //user_id
+    public static $user_id;
+
     /**
      * ~Deprecated~ property - please use <s>$endpoint</s> instead.
      * @since 1.10.19
@@ -44,13 +51,21 @@ class TerminalAfricaShippingPlugin
         if ($settings = get_option("terminal_africa_settings")) {
             //set skkey
             self::$skkey = $settings["secret_key"];
+            //set public_key
+            self::$public_key = $settings["public_key"];
+            //set user_id
+            self::$user_id = $settings["user_id"];
+            //set endpoint
             $validate_keys = $this->checkKeys($settings["public_key"], $settings["secret_key"]);
             self::$enpoint = $validate_keys['endpoint'];
             //set the value
             self::$endpoint = $validate_keys['endpoint'];
             self::$plugin_mode = $validate_keys['mode'];
         } else {
+            //set the value to null
             self::$skkey = null;
+            self::$public_key = null;
+            self::$user_id = null;
             self::$enpoint = null;
             //set the value
             self::$endpoint = TERMINAL_AFRICA_API_ENDPOINT;

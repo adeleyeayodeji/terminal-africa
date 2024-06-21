@@ -11,7 +11,9 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
 $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
 //terminal_africa_settings
 $terminal_africa_settings = get_option('terminal_africa_settings', []);
-error_log("terminal_africa_settings: " . print_r($terminal_africa_settings['others']->user, true));
+// error_log("terminal_africa_settings: " . print_r($terminal_africa_settings['others']->user, true));
+//payment_signup_link
+$payment_signup_link = admin_url('admin.php?page=terminal-africa-get-started');
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-cog", "Settings"); ?>
@@ -41,14 +43,14 @@ error_log("terminal_africa_settings: " . print_r($terminal_africa_settings['othe
                             </p>
                         </div>
                         <div>
-                            <a href="#">
-                                Learn More
-                            </a>
                             <div class="t-carrier-embed w-embed">
-                                <label class="t-switch t-carrier-switch">
+                                <a href="<?php echo esc_url($payment_signup_link); ?>">
+                                    Learn More
+                                </a>
+                                <!-- <label class="t-switch t-carrier-switch">
                                     <input type="checkbox" class="t-carrier-checkbox" name="enable_terminal_payment_gateway" id="enable_terminal_payment_gateway" <?php echo get_option('update_user_terminal_payment_gateway') == 'true' ? 'checked' : ''; ?>>
                                     <span class="t-slider round"></span>
-                                </label>
+                                </label> -->
                             </div>
                         </div>
                     </div>

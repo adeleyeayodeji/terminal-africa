@@ -124,7 +124,7 @@ defined('ABSPATH') or die('No script kiddies please!');
                                 </p>
                             </div>
                             <div class="t-get-started-support-actions-link get-started-payment-content-area--footer">
-                                <a href="javascript:;" class="t-support-actions-link">Request access</a>
+                                <a href="javascript:;" class="t-support-actions-link terminal-africa-payment-request">Request access</a>
                             </div>
                         </div>
                     </div>

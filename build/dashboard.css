@@ -9261,6 +9261,11 @@
 * Payment Gateway Admin Styles
 *
 */
+.get-started-payment-section .get-started-payment-content-area {
+  width: 100%;
+  max-width: 913px;
+  margin: 0 auto;
+}
 .get-started-payment-section .get-started-payment-content-area--header {
   display: flex;
   justify-content: center;

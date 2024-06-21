@@ -115,6 +115,59 @@ trait Ajax
         add_action('wp_ajax_terminal_africa_get_merchant_address_data', array($this, 'terminal_africa_get_merchant_address_data'));
         //update_user_terminal_payment_gateway
         add_action('wp_ajax_update_user_terminal_payment_gateway', [$this, 'update_user_terminal_payment_gateway']);
+        //ajax request_terminal_africa_payment_access
+        add_action('wp_ajax_request_terminal_africa_payment_access', array($this, 'request_terminal_africa_payment_access'));
+        //ajax update_user_settings
+        add_action('wp_ajax_update_terminal_user_settings', array($this, 'update_terminal_user_settings'));
+    }
+
+    /**
+     * request_terminal_africa_payment_access
+     * 
+     */
+    public function request_terminal_africa_payment_access()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //request payment access
+            $response = Requests::post(TERMINAL_AFRICA_PAYMENT_REQUEST_URL, [
+                'Authorization' => 'Bearer ' . self::$skkey
+            ]);
+
+            //get body 
+            $body = json_decode($response->body);
+
+            //check if response is 200
+            if ($response->status_code == 200) {
+                //log response
+                // error_log("Payment access request sent successfully: " . print_r($body, true));
+                //send response
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Payment access request sent successfully'
+                ]);
+            } else {
+                //log response
+                // error_log("Payment access request failed: " . print_r($body, true));
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Payment access request failed'
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, 'users/payment/opt-in');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     //terminal_africa_auth
@@ -186,6 +239,63 @@ trait Ajax
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong. Please try again"
+            ]);
+        }
+    }
+
+    /**
+     * Update user settings from server
+     * 
+     */
+    public function update_terminal_user_settings()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //send request
+            $response = Requests::get(self::$enpoint . "users/secrete", [
+                'Authorization' => 'Bearer ' . self::$skkey
+            ]);
+
+            //check if response is 200
+            $body = json_decode($response->body);
+            if ($response->status_code == 200) {
+                //save keys
+                $settings = array(
+                    'public_key' => self::$public_key,
+                    'secret_key' => self::$skkey,
+                    'user_id' => $body->data->user->user_id,
+                    'others' => $body->data
+                );
+                // Save settings
+                update_option('terminal_africa_settings', $settings);
+
+                //send message
+                wp_send_json(
+                    [
+                        'code' => 200,
+                        // 'data' => $settings,
+                        'message' => 'Settings updated successfully'
+                    ]
+                );
+            } else {
+                //send error message
+                wp_send_json([
+                    'code' => 400,
+                    'message' => "Something went wrong: " . $body->message
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, 'users/settings');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
             ]);
         }
     }

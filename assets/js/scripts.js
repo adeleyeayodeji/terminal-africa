@@ -2360,6 +2360,73 @@ jQuery(document).ready(function ($) {
     });
   });
 
+  /**
+   * terminal-africa-payment-request
+   *
+   */
+  $(".terminal-africa-payment-request").click(function (e) {
+    e.preventDefault();
+    //get the button
+    let button = $(this);
+    //get the parent
+    let parent = button.parent();
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "request_terminal_africa_payment_access",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //block element
+        $(parent).block({
+          message: "<i class='fa fa-spinner fa-spin'></i>",
+          overlayCSS: {
+            background: "#fff",
+            opacity: 0.8,
+            cursor: "wait"
+          },
+          css: {
+            border: 0,
+            padding: 0,
+            backgroundColor: "transparent"
+          }
+        });
+      },
+      success: function (response) {
+        //unblock element
+        $(parent).unblock();
+        //izitoast success if response code is 200
+        if (response.code == 200) {
+          iziToast.info({
+            title: "Success",
+            message: response.message,
+            position: "bottomRight"
+          });
+        } else {
+          //izitoast
+          iziToast.error({
+            title: "Error",
+            message: response.message,
+            position: "bottomRight"
+          });
+        }
+      },
+      error: function (error) {
+        //unblock element
+        $(parent).unblock();
+        //izitoast
+        iziToast.error({
+          title: "Error",
+          message: "Something went wrong!: " + error.responseText,
+          position: "bottomRight"
+        });
+      }
+    });
+  });
+
   //terminal_default_currency_code
   $("select[name=terminal_default_currency_code]").change(function (e) {
     e.preventDefault();
@@ -2874,4 +2941,36 @@ jQuery(document).ready(function ($) {
 
   //load
   terminalOauth();
+
+  /**
+   * Update user settings
+   * @return {void}
+   */
+  let updateUserSettings = () => {
+    //send ajax request
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "update_terminal_user_settings",
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      success: function (response) {
+        // console.log(response);
+      },
+      error: function (xhr, status, error) {
+        console.log(error);
+      }
+    });
+  };
+
+  /**
+   * Check current page is matching terminal-africa-settings
+   * @return {void}
+   */
+  if ($(".t-settings-page").length > 0) {
+    //update user settings
+    updateUserSettings();
+  }
 });
