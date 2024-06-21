@@ -516,118 +516,122 @@ jQuery(document).ready(function ($) {
     dropdownParent: $(".t-terminal-city").parent()
   });
 
-  //t-sign-out
-  $("#t-sign-out").on("click", function (e) {
-    //prevent default
-    e.preventDefault();
-    //swal confirm
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to sign out?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "rgb(246 146 32)",
-      cancelButtonColor: "rgb(0 0 0)",
-      confirmButtonText: "Yes, sign out!",
-      cancelButtonText: "No, cancel!",
-      //footer
-      footer: `
+  /**
+   * each .t-sign-out
+   *
+   */
+  $(".t-sign-out").each(function (index, element) {
+    $(this).on("click", function (e) {
+      e.preventDefault();
+      //swal confirm
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You want to sign out?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "rgb(246 146 32)",
+        cancelButtonColor: "rgb(0 0 0)",
+        confirmButtonText: "Yes, sign out!",
+        cancelButtonText: "No, cancel!",
+        //footer
+        footer: `
         <div>
           <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
         </div>
       `
-    }).then((result) => {
-      //check result
-      if (result.value) {
-        //clear terminal_delivery_html
-        localStorage.removeItem("terminal_delivery_html");
-        //ajax
-        $.ajax({
-          type: "GET",
-          url: terminal_africa.ajax_url,
-          data: {
-            action: "terminal_africa_sign_out",
-            nonce: terminal_africa.nonce
-          },
-          dataType: "json",
-          beforeSend: function () {
-            // Swal loader
-            Swal.fire({
-              title: "Signing out...",
-              text: "Please wait...",
-              imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              allowEnterKey: false,
-              showConfirmButton: false,
-              footer: `
+      }).then((result) => {
+        //check result
+        if (result.value) {
+          //clear terminal_delivery_html
+          localStorage.removeItem("terminal_delivery_html");
+          //ajax
+          $.ajax({
+            type: "GET",
+            url: terminal_africa.ajax_url,
+            data: {
+              action: "terminal_africa_sign_out",
+              nonce: terminal_africa.nonce
+            },
+            dataType: "json",
+            beforeSend: function () {
+              // Swal loader
+              Swal.fire({
+                title: "Signing out...",
+                text: "Please wait...",
+                imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+                showConfirmButton: false,
+                footer: `
             <div>
               <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
             </div>
           `
-            });
-          },
-          success: function (response) {
-            //close loader
-            Swal.close();
-            //check response is 200
-            if (response.code == 200) {
-              //swal
-              Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: response.message,
-                confirmButtonColor: "rgb(246 146 32)",
-                cancelButtonColor: "rgb(0 0 0)",
-                //footer
-                footer: `
+              });
+            },
+            success: function (response) {
+              //close loader
+              Swal.close();
+              //check response is 200
+              if (response.code == 200) {
+                //swal
+                Swal.fire({
+                  icon: "success",
+                  title: "Success",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
               <div>
                 <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
               </div>
             `
-              }).then(function () {
-                //reload
-                window.location.href = response.redirect_url;
-              });
-            } else {
+                }).then(function () {
+                  //reload
+                  window.location.href = response.redirect_url;
+                });
+              } else {
+                //swal error
+                Swal.fire({
+                  icon: "error",
+
+                  title: "Oops...",
+                  text: response.message,
+                  confirmButtonColor: "rgb(246 146 32)",
+                  cancelButtonColor: "rgb(0 0 0)",
+                  //footer
+                  footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              //close loader
+              Swal.close();
               //swal error
               Swal.fire({
                 icon: "error",
 
                 title: "Oops...",
-                text: response.message,
+                text: "Something went wrong!: " + xhr.responseText,
                 confirmButtonColor: "rgb(246 146 32)",
                 cancelButtonColor: "rgb(0 0 0)",
                 //footer
                 footer: `
-              <div>
-                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-              </div>
-            `
-              });
-            }
-          },
-          error: function (xhr, status, error) {
-            //close loader
-            Swal.close();
-            //swal error
-            Swal.fire({
-              icon: "error",
-
-              title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
-              confirmButtonColor: "rgb(246 146 32)",
-              cancelButtonColor: "rgb(0 0 0)",
-              //footer
-              footer: `
             <div>
               <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
             </div>
           `
-            });
-          }
-        });
-      }
+              });
+            }
+          });
+        }
+      });
     });
   });
 

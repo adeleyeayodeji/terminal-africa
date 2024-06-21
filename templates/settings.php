@@ -204,6 +204,22 @@ if ($woocommerce_terminal_africa_payment_settings) {
                             <input type="number" class="t-form-control" name="terminal_custom_price_mark_up" placeholder="e.g 10 for 10%" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>" style="height: 49px;">
                         </div>
                     </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div class="t-settings-first">
+                            <p class="t-settings-page-card-title">
+                                Switch API Mode
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                Switch between the test and live API keys.
+                            </p>
+                        </div>
+                        <div style="margin-right: 30px;width: 170px;">
+                            <a href="javascript:;" class="t-switch-api-keys t-sign-out">
+                                Switch API Mode
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
