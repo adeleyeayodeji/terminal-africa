@@ -266,6 +266,9 @@ if (class_exists("WC_Payment_Gateway")) {
                     'X-Terminal-User' => $terminal_africa_settings['user_id']
                 );
 
+                //set the api to https://sandboxpay.terminal.africa/v1/payments
+                $this->apiURL = 'https://sandboxpay.terminal.africa/v1/payments';
+
                 //request
                 $request = Requests::post($this->apiURL, $headers, $request_data, array('timeout' => 60));
 

@@ -15,6 +15,8 @@ trait Activation
     {
         //activate payment gateway
         $this->activate_payment_gateway_init();
+        //check user is on checkout
+        add_action('wp', [$this, 'check_user_on_checkout_init']);
     }
 
     //activate
@@ -168,6 +170,54 @@ trait Activation
             logTerminalError($e);
             //log error 
             error_log("Error activating payment gateway: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Check user is on checkout
+     * 
+     */
+    public function check_user_on_checkout_init()
+    {
+        try {
+            //check terminal user payment status
+            if (self::$user_payment_status != "active") {
+                //return false if user payment status is not active
+                return false;
+            }
+            //get user payment status woocommerce_terminal_africa_payment_settings
+            $woocommerce_terminal_africa_payment_settings = get_option("woocommerce_terminal_africa_payment_settings");
+            //set $woo_payment_gateway_status
+            $woo_payment_gateway_status = "no";
+            //check if isset woocommerce_terminal_africa_payment_settings
+            if ($woocommerce_terminal_africa_payment_settings) {
+                //check if isset enabled
+                if (isset($woocommerce_terminal_africa_payment_settings['enabled'])) {
+                    $woo_payment_gateway_status = $woocommerce_terminal_africa_payment_settings['enabled'];
+                }
+            }
+            //check if enabled is no, do nothing
+            if ($woo_payment_gateway_status == "no") {
+                //return
+                return;
+            }
+            //unset all payment gateway except terminal_africa_payment
+            //get all payment gateway
+            $payment_gateways = WC()->payment_gateways->payment_gateways;
+            //loop through payment gateway
+            foreach ($payment_gateways as $key => $gateway) {
+                // //check if payment gateway key is not match Terminal
+                if ($gateway->id != 'terminal_africa_payment') {
+                    //unset payment gateway
+                    unset($payment_gateways[$key]);
+                }
+            }
+            //update payment gateway
+            WC()->payment_gateways->payment_gateways = $payment_gateways;
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //log error 
+            error_log("Error checking user on checkout: " . $e->getMessage());
         }
     }
 }
