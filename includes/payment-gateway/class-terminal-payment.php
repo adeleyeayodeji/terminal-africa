@@ -42,8 +42,8 @@ function wc_terminal_africa_payment_testmode_notice()
         echo '<div class="error">
         <p>' . sprintf(__('Terminal Payment test mode is still enabled, Click <strong><a
                     href="%s">here</a></strong> to
-            disable it when you want to start accepting live payment on your site.', 'wc-terminal_africa_payment-payment-gateway'), esc_url(
-            admin_url('admin.php?page=wc-settings&tab=checkout&section=terminal_africa_payment')
+            switch to live mode when you want to start accepting live payment on your site.', 'wc-terminal_africa_payment-payment-gateway'), esc_url(
+            admin_url('admin.php?page=terminal-africa-settings#highlight_payment')
         )) . '</p>
     </div>';
     }

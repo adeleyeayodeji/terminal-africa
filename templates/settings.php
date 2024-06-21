@@ -205,7 +205,7 @@ if ($woocommerce_terminal_africa_payment_settings) {
                         </div>
                     </div>
 
-                    <div class="t-flex t-settings-page-card t-mb-4">
+                    <div class="t-flex t-settings-page-card t-mb-4" id="highlight_payment">
                         <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
                                 Switch API Mode
