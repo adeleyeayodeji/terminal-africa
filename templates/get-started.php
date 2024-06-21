@@ -1,6 +1,14 @@
 <?php
 //security
 defined('ABSPATH') or die('No script kiddies please!');
+//terminal_africa_settings
+$terminal_africa_settings = get_option('terminal_africa_settings', []);
+//payment status
+$payment_gateway_status = "inactive";
+//check if isset payment_gateway_status
+if (isset($terminal_africa_settings['others']->user->payment_gateway_status)) {
+    $payment_gateway_status = $terminal_africa_settings['others']->user->payment_gateway_status;
+}
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-globe", "Get Started"); ?>
@@ -124,7 +132,18 @@ defined('ABSPATH') or die('No script kiddies please!');
                                 </p>
                             </div>
                             <div class="t-get-started-support-actions-link get-started-payment-content-area--footer">
-                                <a href="javascript:;" class="t-support-actions-link terminal-africa-payment-request">Request access</a>
+                                <?php if ($payment_gateway_status == "inactive") { ?>
+                                    <a href="javascript:;" class="t-support-actions-link terminal-africa-payment-request">Request access</a>
+                                <?php } else {
+                                ?>
+                                    <div class="terminal-payment-gateway-status-log">
+                                        <p>
+                                            Your payment gateway is
+                                        </p>
+                                        <span class="t-settings-badge t-settings-badge-<?php echo $payment_gateway_status; ?>"><?php echo $payment_gateway_status; ?></span>
+                                    </div>
+                                <?php
+                                } ?>
                             </div>
                         </div>
                     </div>

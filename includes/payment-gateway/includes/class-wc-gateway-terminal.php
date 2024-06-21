@@ -53,9 +53,15 @@ if (class_exists("WC_Payment_Gateway")) {
             $this->description = $this->get_option('description');
             $this->enabled     = $this->get_option('enabled');
 
-            $this->testmode    = $this->get_option('testmode') === 'yes' ? true : false;
+            //TerminalAfricaShippingPlugin
+            $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+            //get endpoint
+            $endpoint = $terminal_africa_shipping_plugin::$endpoint;
 
-            $this->apiURL = $this->testmode ? "https://sandboxpay.terminal.africa/v1/payment" : "https://sandboxpay.terminal.africa/v1/payment";
+            $this->testmode = $terminal_africa_shipping_plugin::$plugin_mode === 'test' ? true : false;
+
+            //apiURL
+            $this->apiURL = $endpoint . 'payments';
 
             // Hooks
             add_action('wp_enqueue_scripts', array($this, 'payment_scripts'));
@@ -83,7 +89,7 @@ if (class_exists("WC_Payment_Gateway")) {
         public function init_form_fields()
         {
             $form_fields = apply_filters(
-                "woo_ade_pay_fields",
+                "woo_terminal_africa_payment_fields",
                 array(
                     "enabled" => array(
                         "title" => __("Enable/Disable", "wc-terminal_africa_payment-payment-gateway"),
@@ -112,14 +118,6 @@ if (class_exists("WC_Payment_Gateway")) {
                         "custom_attributes" => array(
                             "readonly" => "readonly"
                         )
-                    ),
-                    'testmode'                         => array(
-                        'title'       => __('Test mode', 'wc-terminal_africa_payment-payment-gateway'),
-                        'label'       => __('Enable Test Mode', 'wc-terminal_africa_payment-payment-gateway'),
-                        'type'        => 'checkbox',
-                        'description' => __('Test mode enables you to test payments before going live. <br />Once the LIVE MODE is enabled on your Terminal account uncheck this.', 'wc-terminal_africa_payment-payment-gateway'),
-                        'default'     => 'yes',
-                        'desc_tip'    => true,
                     )
                 )
             );
@@ -262,8 +260,6 @@ if (class_exists("WC_Payment_Gateway")) {
                 //create hash from request data
                 $hashKey = hash_hmac('sha512', $request_data, $terminal_africa_settings['secret_key']);
 
-                $url = 'https://sandboxpay.terminal.africa/v1/payments';
-
                 $headers = array(
                     'Content-Type' => 'application/json',
                     'X-Terminal-Signature' => $hashKey,
@@ -271,7 +267,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 );
 
                 //request
-                $request = Requests::post($url, $headers, $request_data, array('timeout' => 60));
+                $request = Requests::post($this->apiURL, $headers, $request_data, array('timeout' => 60));
 
                 //check if request was successful
                 if (!$request->success) {
@@ -364,7 +360,7 @@ if (class_exists("WC_Payment_Gateway")) {
         {
 
             //payment verification here
-            file_put_contents(__DIR__ . '/terminal_africa_payment.log', print_r($_POST, true), FILE_APPEND);
+            error_log("Payment verification here: " . print_r($_POST, true));
             // wp_redirect(wc_get_page_permalink('cart'));
 
             exit;

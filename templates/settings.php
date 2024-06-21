@@ -11,9 +11,25 @@ $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '')
 $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
 //terminal_africa_settings
 $terminal_africa_settings = get_option('terminal_africa_settings', []);
-// error_log("terminal_africa_settings: " . print_r($terminal_africa_settings['others']->user, true));
+//payment status
+$payment_gateway_status = "inactive";
+//check if isset payment_gateway_status
+if (isset($terminal_africa_settings['others']->user->payment_gateway_status)) {
+    $payment_gateway_status = $terminal_africa_settings['others']->user->payment_gateway_status;
+}
 //payment_signup_link
 $payment_signup_link = admin_url('admin.php?page=terminal-africa-get-started');
+//get user payment status woocommerce_terminal_africa_payment_settings
+$woocommerce_terminal_africa_payment_settings = get_option("woocommerce_terminal_africa_payment_settings");
+//set $woo_payment_gateway_status
+$woo_payment_gateway_status = "no";
+//check if isset woocommerce_terminal_africa_payment_settings
+if ($woocommerce_terminal_africa_payment_settings) {
+    //check if isset enabled
+    if (isset($woocommerce_terminal_africa_payment_settings['enabled'])) {
+        $woo_payment_gateway_status = $woocommerce_terminal_africa_payment_settings['enabled'];
+    }
+}
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-cog", "Settings"); ?>
@@ -44,13 +60,35 @@ $payment_signup_link = admin_url('admin.php?page=terminal-africa-get-started');
                         </div>
                         <div>
                             <div class="t-carrier-embed w-embed">
-                                <a href="<?php echo esc_url($payment_signup_link); ?>">
-                                    Learn More
-                                </a>
-                                <!-- <label class="t-switch t-carrier-switch">
-                                    <input type="checkbox" class="t-carrier-checkbox" name="enable_terminal_payment_gateway" id="enable_terminal_payment_gateway" <?php echo get_option('update_user_terminal_payment_gateway') == 'true' ? 'checked' : ''; ?>>
-                                    <span class="t-slider round"></span>
-                                </label> -->
+                                <?php
+                                //check payment status
+                                switch ($payment_gateway_status) {
+                                    case 'inactive':
+                                ?>
+                                        <a href="<?php echo esc_url($payment_signup_link); ?>">
+                                            Learn More
+                                        </a>
+                                    <?php
+                                        break;
+
+                                    case 'active':
+                                    ?>
+                                        <label class="t-switch t-carrier-switch">
+                                            <input type="checkbox" class="t-carrier-checkbox" name="enable_terminal_payment_gateway" id="enable_terminal_payment_gateway" <?php echo $woo_payment_gateway_status == 'yes' ? 'checked' : ''; ?>>
+                                            <span class="t-slider round"></span>
+                                        </label>
+                                <?php
+                                        break;
+
+                                    case 'disabled':
+                                        echo "<span class='t-settings-badge t-settings-badge-disabled'>disabled</span>";
+                                        break;
+
+                                    case 'pending':
+                                        echo "<span class='t-settings-badge t-settings-badge-pending'>pending</span>";
+                                        break;
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

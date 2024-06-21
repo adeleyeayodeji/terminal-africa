@@ -286,6 +286,17 @@ trait TerminalRESTAPI
                 'permission_callback' => [$this, 'api_permission']
             ]
         );
+
+        //update user settings
+        register_rest_route(
+            'terminal-africa/v1',
+            '/update-user-settings',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_user_settings'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
     }
 
     /**
@@ -330,8 +341,8 @@ trait TerminalRESTAPI
                 return true;
             }
         }
-        //return false
-        return false;
+        //return custom error
+        return new \WP_Error('invalid_token', 'Invalid user token', ['status' => 401]);
     }
 
     /**
@@ -804,6 +815,61 @@ trait TerminalRESTAPI
             $response = [
                 "status" => 500,
                 "message" => "Error deactivating plugin",
+                "data" => $e->getMessage(),
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
+    }
+
+    /**
+     * Update user settings
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function update_user_settings(WP_REST_Request $request)
+    {
+        try {
+            $instance = TerminalAfricaShippingPlugin::instance();
+            //send request
+            $response = Requests::get($instance::$enpoint . "users/secrete", [
+                'Authorization' => 'Bearer ' . $instance::$skkey
+            ]);
+
+            //check if response is 200
+            $body = json_decode($response->body);
+            if ($response->status_code == 200) {
+                //save keys
+                $settings = array(
+                    'public_key' => $instance::$public_key,
+                    'secret_key' => $instance::$skkey,
+                    'user_id' => $body->data->user->user_id,
+                    'others' => $body->data
+                );
+
+                // Save settings
+                update_option('terminal_africa_settings', $settings);
+
+                //send message
+                return new WP_REST_Response(
+                    [
+                        'code' => 200,
+                        'message' => 'User settings updated successfully'
+                    ],
+                    200
+                );
+            }
+
+            //send error message
+            return new WP_REST_Response([
+                'code' => 400,
+                'message' => "Something went wrong: " . $body->message
+            ], 400);
+        } catch (\Exception $e) {
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error updating user settings",
                 "data" => $e->getMessage(),
             ];
             //return

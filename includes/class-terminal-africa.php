@@ -28,6 +28,12 @@ class TerminalAfricaShippingPlugin
     //user_id
     public static $user_id;
 
+    //user payment status
+    public static $user_payment_status;
+
+    //instance
+    public static $instance;
+
     /**
      * ~Deprecated~ property - please use <s>$endpoint</s> instead.
      * @since 1.10.19
@@ -55,6 +61,17 @@ class TerminalAfricaShippingPlugin
             self::$public_key = $settings["public_key"];
             //set user_id
             self::$user_id = $settings["user_id"];
+
+            //payment status
+            $payment_gateway_status = "inactive";
+            //check if isset payment_gateway_status
+            if (isset($settings['others']->user->payment_gateway_status)) {
+                $payment_gateway_status = $settings['others']->user->payment_gateway_status;
+            }
+
+            //set user_payment_status
+            self::$user_payment_status = $payment_gateway_status;
+
             //set endpoint
             $validate_keys = $this->checkKeys($settings["public_key"], $settings["secret_key"]);
             self::$enpoint = $validate_keys['endpoint'];
@@ -66,11 +83,25 @@ class TerminalAfricaShippingPlugin
             self::$skkey = null;
             self::$public_key = null;
             self::$user_id = null;
-            self::$enpoint = null;
+            self::$user_payment_status = "inactive";
+            self::$enpoint = TERMINAL_AFRICA_API_ENDPOINT;
             //set the value
             self::$endpoint = TERMINAL_AFRICA_API_ENDPOINT;
-            self::$plugin_mode = null;
+            self::$plugin_mode = 'test';
         }
+    }
+
+    /**
+     * instance
+     * 
+     */
+    public static function instance()
+    {
+        //check if instance is set
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     /**
@@ -116,6 +147,8 @@ class TerminalAfricaShippingPlugin
             $this->init_ajax();
             //initAPI
             $this->initAPI();
+            //activate terminal
+            $this->activate_terminal_init();
             //initPaymentGateway
             $this->initPaymentGateway();
         } catch (\Exception $e) {
@@ -135,8 +168,11 @@ class TerminalAfricaShippingPlugin
      */
     public function initPaymentGateway()
     {
-        //init payment gateway
-        require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/payment-gateway/class-terminal-payment.php';
+        //check if user_payment_status is active
+        if (self::$user_payment_status == "active") {
+            //init payment gateway
+            require_once TERMINAL_AFRICA_PLUGIN_PATH . '/includes/payment-gateway/class-terminal-payment.php';
+        }
     }
 
     /**

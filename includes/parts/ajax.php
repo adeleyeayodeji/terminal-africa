@@ -137,7 +137,7 @@ trait Ajax
             }
 
             //request payment access
-            $response = Requests::post(TERMINAL_AFRICA_PAYMENT_REQUEST_URL, [
+            $response = Requests::post(self::$endpoint . "users/payment/opt-in", [
                 'Authorization' => 'Bearer ' . self::$skkey
             ]);
 
@@ -146,16 +146,12 @@ trait Ajax
 
             //check if response is 200
             if ($response->status_code == 200) {
-                //log response
-                // error_log("Payment access request sent successfully: " . print_r($body, true));
                 //send response
                 wp_send_json([
                     'code' => 200,
                     'message' => 'Payment access request sent successfully'
                 ]);
             } else {
-                //log response
-                // error_log("Payment access request failed: " . print_r($body, true));
                 wp_send_json([
                     'code' => 400,
                     'message' => 'Payment access request failed'
@@ -280,7 +276,6 @@ trait Ajax
                 wp_send_json(
                     [
                         'code' => 200,
-                        // 'data' => $settings,
                         'message' => 'Settings updated successfully'
                     ]
                 );
@@ -317,12 +312,29 @@ trait Ajax
 
             //get status
             $status = sanitize_text_field($_POST['status']);
-            //update option
-            update_option('update_user_terminal_payment_gateway', $status);
-            //return
+            //get woocommerce_terminal_africa_payment_settings
+            $woocommerce_terminal_africa_payment_settings = get_option("woocommerce_terminal_africa_payment_settings");
+            //check we have woocommerce_terminal_africa_payment_settings
+            if ($woocommerce_terminal_africa_payment_settings) {
+                //check if we have enabled
+                if (isset($woocommerce_terminal_africa_payment_settings['enabled'])) {
+                    //update enabled
+                    $woocommerce_terminal_africa_payment_settings['enabled'] = $status == 'true' ? 'yes' : 'no';
+                    //update woocommerce_terminal_africa_payment_settings
+                    update_option("woocommerce_terminal_africa_payment_settings", $woocommerce_terminal_africa_payment_settings);
+
+                    //return
+                    wp_send_json([
+                        'code' => 200,
+                        'message' => 'Payment gateway updated successfully'
+                    ]);
+                }
+            }
+
+            //return error
             wp_send_json([
-                'code' => 200,
-                'message' => 'Payment gateway updated successfully'
+                'code' => 400,
+                'message' => 'Payment gateway not found'
             ]);
         } catch (\Exception $e) {
             logTerminalError($e);

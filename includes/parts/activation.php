@@ -7,6 +7,16 @@ defined('ABSPATH') or die('No script kiddies please!');
 
 trait Activation
 {
+    /**
+     * Activate init
+     * 
+     */
+    public function activate_terminal_init()
+    {
+        //activate payment gateway
+        $this->activate_payment_gateway_init();
+    }
+
     //activate
     public static function activate()
     {
@@ -125,6 +135,39 @@ trait Activation
             logTerminalError($e);
             //log error 
             error_log($e->getMessage());
+        }
+    }
+
+    /**
+     * Activate payment gateway
+     * 
+     */
+    public function activate_payment_gateway_init()
+    {
+        try {
+            //terminal_africa_settings
+            $terminal_africa_settings = get_option('terminal_africa_settings', []);
+            //payment status
+            $payment_gateway_status = "inactive";
+            //check if isset payment_gateway_status
+            if (isset($terminal_africa_settings['others']->user->payment_gateway_status)) {
+                $payment_gateway_status = $terminal_africa_settings['others']->user->payment_gateway_status;
+            }
+            //check if update_user_terminal_payment_gateway is set
+            if (get_option('update_user_terminal_payment_gateway')) {
+                //return
+                return;
+            }
+            //check if payment_gateway_status is active then update payment_gateway_status to active
+            if ($payment_gateway_status == "active") {
+                update_option('update_user_terminal_payment_gateway', 'true');
+            } else {
+                update_option('update_user_terminal_payment_gateway', 'false');
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //log error 
+            error_log("Error activating payment gateway: " . $e->getMessage());
         }
     }
 }
