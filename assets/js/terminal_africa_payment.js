@@ -7,10 +7,69 @@ jQuery(document).ready(function ($) {
     init: function () {
       this.payment_form();
       this.auto_load();
+      //payment status
+      this.payment_status();
+    },
+    //payment status
+    payment_status: function () {
+      //check if elem exist .terminal-africa-payment-status
+      const terminalAfricaPaymentStatus = $(".terminal-africa-payment-status");
+
+      //check if elem does not exist
+      if (!terminalAfricaPaymentStatus) return;
+
+      //send request to get payment status
+      $.ajax({
+        type: "POST",
+        url: wc_terminal_africa_payment_params.ajax_url,
+        data: {
+          action: "terminal_africa_payment_status",
+          order_id: wc_terminal_africa_payment_params.order_id,
+          nonce: wc_terminal_africa_payment_params.nonce
+        },
+        dataType: "json",
+        beforeSend: function () {
+          //block ui
+          terminalAfricaPaymentStatus.block({
+            message: "",
+            css: {
+              border: "none",
+              padding: "15px",
+              backgroundColor: "#000",
+              color: "#fff"
+            },
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.5
+            }
+          });
+        },
+        success: function (response) {
+          //unblock ui
+          terminalAfricaPaymentStatus.unblock();
+          //update the dom
+          terminalAfricaPaymentStatus.innerHTML = response.data.status;
+        },
+        error: function (xhr, status, error) {
+          //unblock ui
+          terminalAfricaPaymentStatus.unblock();
+          //update the dom
+          terminalAfricaPaymentStatus.innerHTML =
+            "Something went wrong: " + xhr.responseText;
+        }
+      });
     },
     //button event
     payment_form: function () {
-      $(".terminal_africa_payment_form_class").on("submit", function (e) {
+      //check if elem exist .terminal_africa_payment_form_class
+      const terminalAfricaPaymentForm = $(
+        ".terminal_africa_payment_form_class"
+      );
+
+      //check if elem does not exist
+      if (!terminalAfricaPaymentForm) return;
+
+      $(terminalAfricaPaymentForm).on("submit", function (e) {
         e.preventDefault();
         //get the form element
         var form = $(this);
@@ -97,7 +156,15 @@ jQuery(document).ready(function ($) {
     },
     //trigger on page load
     auto_load: function () {
-      $(".terminal_africa_payment_form_class").submit();
+      //check if elem exist .terminal_africa_payment_form_class
+      const terminalAfricaPaymentForm = $(
+        ".terminal_africa_payment_form_class"
+      );
+
+      //check if elem does not exist
+      if (!terminalAfricaPaymentForm) return;
+
+      $(terminalAfricaPaymentForm).submit();
     }
   };
 

@@ -354,22 +354,26 @@ trait Ajax
             if (strpos($pk, 'test') !== false || strpos($sk, 'test') !== false) {
                 return [
                     'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                    'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
                     'mode' => 'test'
                 ];
             } else if (strpos($pk, 'live') !== false || strpos($sk, 'live') !== false) {
                 return [
                     'endpoint' => TERMINAL_AFRICA_API_ENDPOINT,
+                    'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_API_ENDPOINT,
                     'mode' => 'live'
                 ];
             }
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
                 'mode' => 'test'
             ];
         } catch (\Exception $e) {
             logTerminalError($e);
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
                 'mode' => 'test'
             ];
         }

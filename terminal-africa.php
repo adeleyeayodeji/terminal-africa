@@ -37,6 +37,9 @@ define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipmen
 define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
+//Terminal Africa Payment API
+define('TERMINAL_AFRICA_PAYMENT_API_ENDPOINT', 'https://pay.terminal.africa/v1/payments/');
+define('TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT', 'https://sandboxpay.terminal.africa/v1/payments/');
 
 /**
  * WooCommerce Terminal Delivery Loader.

@@ -1,4 +1,14 @@
 <?php
+//security
+defined('ABSPATH') or die('No script kiddies please!');
+
+/**
+ * Terminal Africa
+ * @package TerminalAfrica
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Terminal Africa
+ */
 
 use TerminalAfrica\Includes\Parts\Menus;
 use TerminalAfrica\Includes\Parts\Ajax;
@@ -7,8 +17,6 @@ use TerminalAfrica\Includes\Parts\Activation;
 use TerminalAfrica\Includes\Parts\Assets;
 use TerminalAfrica\Includes\Parts\TerminalRESTAPI;
 
-//security
-defined('ABSPATH') or die('No script kiddies please!');
 //class
 /**
  * TerminalAfricaShippingPlugin
@@ -19,19 +27,39 @@ defined('ABSPATH') or die('No script kiddies please!');
  */
 class TerminalAfricaShippingPlugin
 {
-    //skkey
+    /**
+     * Secret Key
+     * @since 1.11.10
+     * @var string
+     */
     public static $skkey;
 
-    //public_key
+    /**
+     * Public Key
+     * @since 1.11.10
+     * @var string
+     */
     public static $public_key;
 
-    //user_id
+    /**
+     * User ID
+     * @since 1.11.10
+     * @var string
+     */
     public static $user_id;
 
-    //user payment status
+    /**
+     * User Payment Status
+     * @since 1.11.10
+     * @var string
+     */
     public static $user_payment_status;
 
-    //instance
+    /**
+     * Instance
+     * @since 1.11.10
+     * @var object
+     */
     public static $instance;
 
     /**
@@ -39,6 +67,14 @@ class TerminalAfricaShippingPlugin
      * @since 1.10.19
      */
     public static $enpoint;
+
+    /**
+     * Payment Endpoint
+     * @since 1.10.19
+     * @var string
+     */
+    public static $payment_endpoint;
+
     /**
      * Get Terminal Endpoint
      * @since 1.10.19
@@ -50,6 +86,8 @@ class TerminalAfricaShippingPlugin
 
     /**
      * Constructor
+     * @since 1.11.10
+     * @return void
      */
     public function __construct()
     {
@@ -78,6 +116,8 @@ class TerminalAfricaShippingPlugin
             //set the value
             self::$endpoint = $validate_keys['endpoint'];
             self::$plugin_mode = $validate_keys['mode'];
+            //set payment endpoint
+            self::$payment_endpoint = $validate_keys['payment_endpoint'];
         } else {
             //set the value to null
             self::$skkey = null;
@@ -88,12 +128,15 @@ class TerminalAfricaShippingPlugin
             //set the value
             self::$endpoint = TERMINAL_AFRICA_API_ENDPOINT;
             self::$plugin_mode = 'test';
+            //set payment endpoint
+            self::$payment_endpoint = TERMINAL_AFRICA_PAYMENT_API_ENDPOINT;
         }
     }
 
     /**
      * instance
-     * 
+     * @since 1.11.10
+     * @return object|TerminalAfricaShippingPlugin
      */
     public static function instance()
     {
@@ -107,6 +150,7 @@ class TerminalAfricaShippingPlugin
     /**
      * Init the plugin
      * @since 1.0.0
+     * @return void
      */
     public function init()
     {
@@ -422,11 +466,22 @@ class TerminalAfricaShippingPlugin
         }
     }
 
-    //remove_wc_session_on_cart_action
+    /**
+     * Remove WC Session on Cart Action
+     * @param $cart_item_key
+     * @param $product_id
+     * @param $quantity
+     * @param $variation_id
+     * @param $variation
+     * @param $cart_item_data
+     * @since 1.11.10
+     * @return void
+     */
     public function remove_wc_session_on_cart_action($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data)
     {
-        //check if func exist
+        //check if WC is available
         if (function_exists('WC')) {
+            //get all sessions
             $sessions = WC()->session->get_session_data();
             //loop through sessions
             foreach ($sessions as $key => $value) {
@@ -440,6 +495,11 @@ class TerminalAfricaShippingPlugin
     }
 }
 
-//init
+/**
+ * Init Terminal Africa
+ * @since 1.0.0
+ * @return void
+ */
 $TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+//init
 $TerminalAfricaShippingPlugin->init();

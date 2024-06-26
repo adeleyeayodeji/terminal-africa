@@ -994,3 +994,55 @@ jQuery(document).ready(function ($) {
 
 //remove old local storage terminal_delivery_html
 localStorage.removeItem("terminal_delivery_html");
+
+jQuery(document).ready(function ($) {
+  //check if elem exist .terminal-africa-payment-status
+  const terminalAfricaPaymentStatus = $(".terminal-africa-payment-status");
+
+  //check if elem does not exist
+  if (!terminalAfricaPaymentStatus) return;
+
+  //get order id
+  var order_id = $(".terminal-africa-payment-status").data("order-id");
+
+  //send request to get payment status
+  $.ajax({
+    type: "POST",
+    url: terminal_africa.ajax_url,
+    data: {
+      action: "terminal_africa_payment_status",
+      order_id,
+      nonce: terminal_africa.nonce
+    },
+    dataType: "json",
+    beforeSend: function () {
+      //block ui
+      terminalAfricaPaymentStatus.block({
+        message: "",
+        css: {
+          border: "none",
+          padding: "15px",
+          backgroundColor: "#000",
+          color: "#fff"
+        },
+        overlayCSS: {
+          background: "#fff",
+          opacity: 0.5
+        }
+      });
+    },
+    success: function (response) {
+      //unblock ui
+      terminalAfricaPaymentStatus.unblock();
+      //update the dom
+      terminalAfricaPaymentStatus.innerHTML = response.data.status;
+    },
+    error: function (xhr, status, error) {
+      //unblock ui
+      terminalAfricaPaymentStatus.unblock();
+      //update the dom
+      terminalAfricaPaymentStatus.innerHTML =
+        "Something went wrong: " + xhr.responseText;
+    }
+  });
+});

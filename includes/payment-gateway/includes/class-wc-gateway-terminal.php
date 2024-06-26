@@ -1,6 +1,7 @@
 <?php
 //avoid direct access
 
+use SmartyStreets\PhpSdk\Request;
 use WpOrg\Requests\Requests;
 
 if (!defined('ABSPATH')) exit("No direct script access allowed"); // Exit if accessed directly
@@ -61,14 +62,15 @@ if (class_exists("WC_Payment_Gateway")) {
             $this->testmode = $terminal_africa_shipping_plugin::$plugin_mode === 'test' ? true : false;
 
             //apiURL
-            $this->apiURL = $endpoint . 'payments';
+            $this->apiURL = $terminal_africa_shipping_plugin::$payment_endpoint;
 
             // Hooks
             add_action('wp_enqueue_scripts', array($this, 'payment_scripts'));
             add_action('woocommerce_available_payment_gateways', array($this, 'add_gateway_to_checkout'));
             add_action('admin_enqueue_scripts', array($this, 'admin_scripts'));
             add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
-            add_action('woocommerce_api_wc_terminal_africa_payment_payment_gateway', array($this, 'terminal_africa_payment_verify_payment'));
+            //register webhook api init
+            add_action('rest_api_init', array($this, 'register_api_init'));
             add_action(
                 'woocommerce_update_options_payment_gateways_' . $this->id,
                 array(
@@ -76,6 +78,13 @@ if (class_exists("WC_Payment_Gateway")) {
                     'process_admin_options',
                 )
             );
+
+            //ajax terminal_africa_payment_status
+            add_action('wp_ajax_terminal_africa_payment_status', array($this, 'terminal_africa_payment_status'));
+
+            //woocommerce_thankyou
+            add_action('woocommerce_thankyou_' . $this->id, array($this, 'terminal_africa_payment_thankyou'));
+
             //add ajax terminal_africa_payment_init
             add_action('wp_ajax_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
             // no priv
@@ -123,6 +132,135 @@ if (class_exists("WC_Payment_Gateway")) {
             );
 
             $this->form_fields = $form_fields;
+        }
+
+        /**
+         * terminal_africa_payment_thankyou
+         * 
+         * @param int $order_id
+         * @return void
+         */
+        public function terminal_africa_payment_thankyou($order_id)
+        {
+            try {
+                //get the payment_id from url
+                $payment_id = isset($_GET['payment_id']) ? sanitize_text_field($_GET['payment_id']) : null;
+
+                //check if payment_id is empty
+                if (empty($payment_id)) {
+                    //return to order received page
+                    return;
+                }
+
+                //get order
+                $order = wc_get_order($order_id);
+
+                //update order meta
+                $order->update_meta_data('terminal_africa_payment_id', $payment_id);
+                //save order
+                $order->save();
+
+                //get template for status
+                wc_get_template(
+                    'thank-you-page.php',
+                    array(
+                        'order' => $order
+                    ),
+                    'terminal-africa/',
+                    WC_TERMINAL_PAYMENT_TEMPLATE
+                );
+            } catch (\Exception $e) {
+                //log error
+                error_log($e->getMessage());
+                //log
+                logTerminalError($e, "terminal_africa_payment_thankyou");
+            }
+        }
+
+        /**
+         * terminal_africa_payment_status
+         * 
+         * @return void
+         */
+        public function terminal_africa_payment_status()
+        {
+            try {
+                //very nonce
+                if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                    throw new \Exception('Unauthorized request detected');
+                }
+
+                //get order id
+                $order_id = isset($_POST['order_id']) ? sanitize_text_field($_POST['order_id']) : null;
+
+                //get the order
+                $order = wc_get_order($order_id);
+
+                //check if order is valid
+                if (!$order) {
+                    throw new \Exception('Invalid order, please try again');
+                }
+
+                //get instance
+                $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+
+                //get terminal_africa_settings
+                $skkey = $terminal_africa_shipping_plugin::$skkey;
+                //user id
+                $user_id = $terminal_africa_shipping_plugin::$user_id;
+
+                //get payment id
+                $payment_id = $order->get_meta('terminal_africa_payment_id');
+
+                //generate hash key
+                $hashKey = $this->generate_header_hash($payment_id, $skkey);
+
+                //get payment status from terminal africa
+                $request = Requests::get(
+                    $this->apiURL . $payment_id,
+                    array(
+                        'Content-Type' => 'application/json',
+                        'X-Terminal-Signature' => $hashKey,
+                        'X-Terminal-User' => $user_id
+                    ),
+                    array(
+                        'timeout' => 60
+                    )
+                );
+
+                //check if response is successful
+                if (!$request->success) {
+                    throw new \Exception('Something went wrong: ' . $request->body);
+                }
+
+                //get response
+                $response = wp_remote_retrieve_body($request);
+
+                //log
+                error_log($response);
+            } catch (\Exception $e) {
+                //log error
+                error_log($e->getMessage());
+                //log
+                logTerminalError($e, "terminal_africa_payment_status");
+            }
+        }
+
+        /**
+         * register_api_init
+         * 
+         */
+        public function register_api_init()
+        {
+            //route
+            register_rest_route(
+                'terminal_africa_payment/v1',
+                '/terminal_africa_payment_verify_payment',
+                array(
+                    'methods' => WP_REST_Server::ALLMETHODS,
+                    'callback' => array($this, 'terminal_africa_payment_verify_payment'),
+                )
+            );
         }
 
         /**
@@ -258,16 +396,13 @@ if (class_exists("WC_Payment_Gateway")) {
                 $request_data = json_encode($payment_payload, JSON_UNESCAPED_SLASHES);
 
                 //create hash from request data
-                $hashKey = hash_hmac('sha512', $request_data, $terminal_africa_settings['secret_key']);
+                $hashKey = $this->generate_header_hash($request_data, $terminal_africa_settings['secret_key']);
 
                 $headers = array(
                     'Content-Type' => 'application/json',
                     'X-Terminal-Signature' => $hashKey,
                     'X-Terminal-User' => $terminal_africa_settings['user_id']
                 );
-
-                //set the api to https://sandboxpay.terminal.africa/v1/payments
-                $this->apiURL = 'https://sandboxpay.terminal.africa/v1/payments';
 
                 //request
                 $request = Requests::post($this->apiURL, $headers, $request_data, array('timeout' => 60));
@@ -297,6 +432,27 @@ if (class_exists("WC_Payment_Gateway")) {
                     'message' => $e->getMessage()
                 ]);
             }
+        }
+
+        /**
+         * Header Hash Generator
+         * 
+         * @param $request_data
+         * @param $secret_key
+         * @return string
+         */
+        public function generate_header_hash($request_data, $secret_key)
+        {
+            return hash_hmac('sha512', $request_data, $secret_key);
+        }
+
+        /**
+         * order_received_page
+         * 
+         */
+        public function order_received_page($order_id)
+        {
+            echo '<div id="terminal_africa_payment_order_received">' . __('Thank you for your order, please click the button below to pay with Terminal Africa Payment Gateway.', 'wc-terminal_africa_payment-payment-gateway') . '</div>';
         }
 
         /**
@@ -348,25 +504,139 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public function receipt_page($order_id)
         {
-
             $order = wc_get_order($order_id);
 
             echo '<div id="yes-add">' . __('Thank you for your order, please click the button below to pay with Terminal Africa Payment Gateway.', 'wc-terminal_africa_payment-payment-gateway') . '</div>';
 
-            echo '<div id="terminal_africa_payment_form"><form id="order_review" method="post" action="' . WC()->api_request_url('WC_Terminal_Payment_Gateway') . '" class="terminal_africa_payment_form_class"></form><button class="button alt" id="wc-terminal_africa_payment-payment-gateway-button">' . __('Pay Now', 'wc-terminal_africa_payment-payment-gateway') . '</button>';
+            echo '<div id="terminal_africa_payment_form"><form id="order_review" method="post" class="terminal_africa_payment_form_class"></form><button class="button alt" id="wc-terminal_africa_payment-payment-gateway-button">' . __('Pay Now', 'wc-terminal_africa_payment-payment-gateway') . '</button>';
         }
 
         /**
          * Verify Terminal payment.
          */
-        public function terminal_africa_payment_verify_payment()
+        public function terminal_africa_payment_verify_payment(WP_REST_Request $request)
         {
+            //MARK: WEBHOOK 
+            try {
+                //get header
+                $headerSignature = $request->get_header("X-Terminal-Signature");
 
-            //payment verification here
-            error_log("Payment verification here: " . print_r($_POST, true));
-            // wp_redirect(wc_get_page_permalink('cart'));
+                //get all params
+                $params = $request->get_params();
 
-            exit;
+                //TerminalAfricaShippingPlugin
+                $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+
+                //generate hash from request
+                $hashKey = $this->generate_header_hash(
+                    json_encode($params, JSON_UNESCAPED_SLASHES),
+                    $terminal_africa_shipping_plugin::$skkey
+                );
+
+                //verify hashkey
+                if ($hashKey !== $headerSignature) {
+                    throw new \Exception('Invalid hash key, please try again');
+                }
+
+                //confirm event 
+                if (!isset($params['event'])) {
+                    throw new \Exception('Invalid event data, please try again');
+                }
+
+                //get the order
+                $order = wc_get_order($params['data']['metadata']['order_id']);
+
+                //check if order is valid
+                if (!$order) {
+                    throw new \Exception('Invalid order, please try again');
+                }
+
+                //check status
+                switch ($params['event']) {
+                    case 'charge.success':
+                        //set wc note
+                        $order->add_order_note('Payment successful with Terminal Africa Payment Gateway - ' . $params['data']['platform']);
+                        //add platform_reference to order note
+                        $order->add_order_note('Platform Reference: ' . $params['data']['platform_reference']);
+                        //add payment_id to order note
+                        $order->add_order_note('Payment ID: ' . $params['data']['payment_id']);
+
+                        //save to order meta
+                        $order->update_meta_data('terminal_africa_payment_id', $params['data']['payment_id']);
+
+                        //save to order meta platform
+                        $order->update_meta_data('terminal_africa_payment_platform', $params['data']['platform']);
+
+                        //save to order meta platform_reference
+                        $order->update_meta_data('terminal_africa_payment_platform_reference', $params['data']['platform_reference']);
+
+                        //save order
+                        $order->save();
+
+                        //update order status
+                        $order->update_status('completed');
+
+                        break;
+
+                    case 'charge.failed':
+                        //set wc note
+                        $order->add_order_note('Payment failed with Terminal Africa Payment Gateway - ' . $params['data']['platform']);
+
+                        //save to order meta
+                        $order->update_meta_data('terminal_africa_payment_id', $params['data']['payment_id']);
+
+                        //save order
+                        $order->save();
+
+                        //update order status
+                        $order->update_status('failed');
+
+                        break;
+
+                    case 'charge.refunded':
+                        //set wc note
+                        $order->add_order_note('Payment refunded with Terminal Africa Payment Gateway - ' . $params['data']['platform']);
+
+                        //save to order meta
+                        $order->update_meta_data('terminal_africa_payment_id', $params['data']['payment_id']);
+
+                        //save order
+                        $order->save();
+
+                        //update order status
+                        $order->update_status('refunded');
+
+                        break;
+
+                    case 'charge.cancelled':
+                        //set wc note
+                        $order->add_order_note('Payment cancelled with Terminal Africa Payment Gateway - ' . $params['data']['platform']);
+
+                        //save to order meta
+                        $order->update_meta_data('terminal_africa_payment_id', $params['data']['payment_id']);
+
+                        //save order
+                        $order->save();
+
+                        //update order status
+                        $order->update_status('cancelled');
+
+                        break;
+                }
+
+                //return success
+                return wp_send_json_success([
+                    'status' => 'success',
+                    'message' => 'Payment successful'
+                ]);
+            } catch (\Exception $e) {
+                logTerminalError($e, 'terminal_africa_payment_verify_payment');
+                //wp json error
+                wp_send_json_error([
+                    'status' => 'error',
+                    'message' => "Error: " . $e->getMessage()
+                ]);
+            }
         }
 
         /**
@@ -447,6 +717,8 @@ if (class_exists("WC_Payment_Gateway")) {
 
         /**
          * Outputs scripts used for terminal_africa_payment payment.
+         * 
+         * @return void
          */
         public function payment_scripts()
         {

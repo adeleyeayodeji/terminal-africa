@@ -7,6 +7,8 @@ if (!in_array("woocommerce/woocommerce.php", apply_filters("active_plugins", get
 define("WC_TERMINAL_PAYMENT_VERSION", time());
 define('WC_TERMINAL_PAYMENT_MAIN_FILE', __FILE__);
 define('WC_TERMINAL_PAYMENT_URL', untrailingslashit(plugins_url('/', __FILE__)));
+//templates dir
+define("WC_TERMINAL_PAYMENT_TEMPLATE", __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR);
 
 add_action("plugins_loaded", "terminal_africa_payment_method_init", 999);
 
