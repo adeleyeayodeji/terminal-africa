@@ -1035,14 +1035,15 @@ jQuery(document).ready(function ($) {
       //unblock ui
       terminalAfricaPaymentStatus.unblock();
       //update the dom
-      terminalAfricaPaymentStatus.innerHTML = response.data.status;
+      terminalAfricaPaymentStatus.text(response.data.status);
     },
     error: function (xhr, status, error) {
       //unblock ui
       terminalAfricaPaymentStatus.unblock();
       //update the dom
-      terminalAfricaPaymentStatus.innerHTML =
-        "Something went wrong: " + xhr.responseText;
+      terminalAfricaPaymentStatus.text(
+        "Something went wrong: " + xhr.responseText
+      );
     }
   });
 });

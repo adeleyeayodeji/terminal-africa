@@ -148,7 +148,7 @@ if (class_exists("WC_Payment_Gateway")) {
 
                 //check if payment_id is empty
                 if (empty($payment_id)) {
-                    //return to order received page
+                    //return 
                     return;
                 }
 
@@ -212,16 +212,12 @@ if (class_exists("WC_Payment_Gateway")) {
                 //get payment id
                 $payment_id = $order->get_meta('terminal_africa_payment_id');
 
-                //generate hash key
-                $hashKey = $this->generate_header_hash($payment_id, $skkey);
-
                 //get payment status from terminal africa
                 $request = Requests::get(
                     $this->apiURL . $payment_id,
                     array(
                         'Content-Type' => 'application/json',
-                        'X-Terminal-Signature' => $hashKey,
-                        'X-Terminal-User' => $user_id
+                        'Authorization' => 'Bearer ' . $skkey
                     ),
                     array(
                         'timeout' => 60
@@ -234,15 +230,25 @@ if (class_exists("WC_Payment_Gateway")) {
                 }
 
                 //get response
-                $response = wp_remote_retrieve_body($request);
+                $response = json_decode($request->body);
 
-                //log
-                error_log($response);
+                //get status
+                $status = $response->data->status;
+
+                //return status
+                wp_send_json_success([
+                    'status' => ucfirst($status)
+                ]);
             } catch (\Exception $e) {
                 //log error
                 error_log($e->getMessage());
                 //log
                 logTerminalError($e, "terminal_africa_payment_status");
+                //return error
+                wp_send_json_error([
+                    'status' => 'pending',
+                    'message' => $e->getMessage()
+                ]);
             }
         }
 
@@ -303,8 +309,8 @@ if (class_exists("WC_Payment_Gateway")) {
                 //cart url
                 $cart_url = wc_get_cart_url();
 
-                //checkout webhook url
-                $webhook_url = WC()->api_request_url('WC_Terminal_Payment_Gateway');
+                //checkout webhook url terminal_africa_payment_verify_payment
+                $webhook_url = rest_url('terminal_africa_payment/v1/terminal_africa_payment_verify_payment');
 
                 //$order_items
                 $order_items = $order->get_items();
