@@ -1005,6 +1005,12 @@ jQuery(document).ready(function ($) {
   //get order id
   var order_id = $(".terminal-africa-payment-status").data("order-id");
 
+  //check the id is not empty
+  if (order_id == "" || order_id == null || order_id == undefined) {
+    //do nothing
+    return;
+  }
+
   //send request to get payment status
   $.ajax({
     type: "POST",
