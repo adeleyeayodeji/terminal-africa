@@ -89,6 +89,10 @@ if (class_exists("WC_Payment_Gateway")) {
             add_action('wp_ajax_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
             // no priv
             add_action('wp_ajax_nopriv_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
+
+            //add terminal gateway notice
+            add_action('admin_notices', array($this, 'terminal_africa_payment_notice'));
+
             // Check if the gateway can be used.
             if (!$this->is_valid_for_use()) {
                 $this->enabled = false;
@@ -132,6 +136,73 @@ if (class_exists("WC_Payment_Gateway")) {
             );
 
             $this->form_fields = $form_fields;
+        }
+
+        /**
+         * terminal_africa_payment_notice
+         * 
+         * @return void
+         */
+        public function terminal_africa_payment_notice()
+        {
+            //check if user is admin
+            if (!current_user_can('manage_options')) {
+                return;
+            }
+
+            //learn more url
+            $learn_more_url = admin_url('admin.php?page=terminal-africa-get-started');
+
+            ob_start();
+?>
+            <style>
+                .terminal-custom-notice-wp {
+                    padding: 0 !important;
+                }
+
+                .terminal-custom-notice-wp.notice-info {
+                    border-left-color: #f69220 !important;
+                }
+
+                .terminal-notice {
+                    display: flex !important;
+                }
+
+                .terminal-notice-logo {
+                    background-color: #ff9c2c3d !important;
+                    padding: 15px 10px !important;
+                }
+
+                .terminal-notice-logo img {
+                    width: 25px !important;
+                    height: 25px !important;
+                    object-fit: contain !important;
+                    object-position: center !important;
+                }
+
+                .terminal-notice-content {
+                    margin-left: 20px !important;
+                }
+            </style>
+            <div class="terminal-custom-notice-wp notice notice-info is-dismissible">
+                <div class="terminal-notice">
+                    <div class="terminal-notice-logo">
+                        <img src="<?php echo TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png'; ?>" alt="Terminal Africa Logo">
+                    </div>
+                    <div class="terminal-notice-content">
+                        <h3 style="margin: 10px 0;">You Can Now Accept Payments with Terminal Africa!</h3>
+                        <p>
+                            Terminal Africa is the easiest way to accept payments on your WooCommerce store. With our Terminal Africa Payment Gateway, you can accept payments from Mastercard, Visa, Verve Cards and more.
+                        </p>
+                        <p>
+                            <a href="<?php echo esc_url($learn_more_url); ?>">Learn More</a>
+                        </p>
+                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                    </div>
+                </div>
+            </div>
+<?php
+            echo ob_get_clean();
         }
 
         /**

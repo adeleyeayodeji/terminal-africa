@@ -36,11 +36,12 @@ function terminal_africa_payment_method_init_payment_gateway($gateways)
  **/
 function wc_terminal_africa_payment_testmode_notice()
 {
-
-    $terminal_africa_payment_settings = get_option('woocommerce_terminal_africa_payment_settings');
-    $test_mode = isset($terminal_africa_payment_settings['testmode']) ? $terminal_africa_payment_settings['testmode'] : '';
-
-    if ('yes' === $test_mode) {
+    //get current plugin mode
+    $payment_mode = TerminalAfricaShippingPlugin::instance();
+    //update plugin_mode
+    $plugin_mode = $payment_mode->plugin_mode;
+    //check if plugin_mode is test
+    if ('test' === $plugin_mode) {
         echo '<div class="error">
         <p>' . sprintf(__('Terminal Payment test mode is still enabled, Click <strong><a
                     href="%s">here</a></strong> to

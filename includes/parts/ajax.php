@@ -329,6 +329,21 @@ trait Ajax
                         'message' => 'Payment gateway updated successfully'
                     ]);
                 }
+            } else {
+                //create woocommerce_terminal_africa_payment_settings
+                $woocommerce_terminal_africa_payment_settings = array(
+                    'enabled' => $status == 'true' ? 'yes' : 'no',
+                    'title' => 'Terminal Africa Payment',
+                    'description' => 'Accept payments seamlessly via card, account transfers, etc. using Terminal payment gateway.',
+                    'testmode' => 'yes'
+                );
+                //update woocommerce_terminal_africa_payment_settings
+                update_option("woocommerce_terminal_africa_payment_settings", $woocommerce_terminal_africa_payment_settings);
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Payment gateway updated successfully'
+                ]);
             }
 
             //return error

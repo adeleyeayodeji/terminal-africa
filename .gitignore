@@ -2,3 +2,10 @@
 node_modules
 *.DS_Store
 *log*
+/wordpress/
+/vendor/
+.idea/
+composer.lock
+.phpunit.result.cache
+package-lock.json
+.circleci/
