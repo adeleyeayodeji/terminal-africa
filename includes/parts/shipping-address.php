@@ -1053,6 +1053,7 @@ trait Shipping
             if (session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
+
             //check if data is in session
             if (isset($_SESSION['wallet_balance']) && !$force) {
                 return [
@@ -1062,6 +1063,7 @@ trait Shipping
                     'from' => 'session',
                 ];
             }
+
             if (!self::$skkey) {
                 return [
                     'code' => 404,

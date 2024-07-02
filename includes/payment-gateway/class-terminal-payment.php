@@ -39,7 +39,7 @@ function wc_terminal_africa_payment_testmode_notice()
     //get current plugin mode
     $payment_mode = TerminalAfricaShippingPlugin::instance();
     //update plugin_mode
-    $plugin_mode = $payment_mode->plugin_mode;
+    $plugin_mode = $payment_mode::$plugin_mode;
     //check if plugin_mode is test
     if ('test' === $plugin_mode) {
         echo '<div class="error">
