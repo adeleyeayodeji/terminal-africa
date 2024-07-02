@@ -2977,4 +2977,72 @@ jQuery(document).ready(function ($) {
     //update user settings
     updateUserSettings();
   }
+
+  /**
+   * t-switch-wallet
+   *
+   */
+  $(".t-switch-wallet").on("change", function () {
+    //get selected value
+    let selectedValue = $(this).val();
+    //update currency
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "update_terminal_wallet_currency",
+        nonce: terminal_africa.nonce,
+        currency: selectedValue
+      },
+      dataType: "json",
+      beforeSend: function () {
+        // Swal loader
+        Swal.fire({
+          title: "Please wait...",
+          text: "Switching wallet",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //check if responce code is 200
+        if (response.code == 200) {
+          //reload page
+          location.reload();
+        } else {
+          //Swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: response.message,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        //close loader
+        Swal.close();
+        //show error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!: " + xhr.responseText
+        });
+      }
+    });
+  });
 });

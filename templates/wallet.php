@@ -65,6 +65,13 @@ switch ($flow) {
         break;
 }
 
+//check if wallet currency session is available
+if (isset($_SESSION['terminal_africa_wallet_currency'])) {
+    $default_currency = $_SESSION['terminal_africa_wallet_currency'];
+} else {
+    $default_currency = 'NGN';
+}
+
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-book", "Wallet"); ?>
@@ -76,7 +83,15 @@ switch ($flow) {
                     foreach ($wallet_data as $balance) :
                     ?>
                         <div class="terminal-balance-block t-<?php echo esc_html($balance['currency']); ?>-balance" data-balance="<?php echo esc_html($balance['balance']); ?>">
-                            <h1 class="t-wallet-balance-title"><?php echo esc_html($balance['currency']); ?> Balance</h1>
+                            <div class="terminal-wallet-currency-switch">
+                                <h1 class="t-wallet-balance-title"><?php echo esc_html($balance['currency']); ?> Balance</h1>
+                                <div>
+                                    <select class="t-switch-wallet w-select">
+                                        <option value="NGN" <?php echo selected("NGN", $default_currency); ?>>NGN (₦)</option>
+                                        <option value="USD" <?php echo selected("USD", $default_currency); ?>>USD ($)</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="t-balance-figure"><?php echo $balance['currency'] == "NGN" ? '₦' : '$'; ?><?php echo esc_html($balance['balance']); ?></div>
                             <div class="t-balance-footer-text">Total available including pending transactions</div>
                         </div>

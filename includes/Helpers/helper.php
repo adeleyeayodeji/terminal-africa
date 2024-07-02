@@ -134,9 +134,9 @@ if (!function_exists('applyTerminalRate')) {
 //getWalletBalance
 if (!function_exists('getWalletBalance')) {
     //get wallet balance
-    function getWalletBalance($user_id, $force = false)
+    function getWalletBalance($user_id, $force = false, $currency = 'NGN')
     {
-        return TerminalAfricaShippingPlugin::getWalletBalance($user_id, $force);
+        return TerminalAfricaShippingPlugin::getWalletBalance($user_id, $force, $currency);
     }
 }
 

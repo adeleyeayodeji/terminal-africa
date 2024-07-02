@@ -2074,3 +2074,29 @@ Responsive for t-transaction-header-right-t-flex
   height: 45px;
   margin: 10px 0;
 }
+
+.terminal-wallet-currency-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.terminal-wallet-currency-switch select {
+  margin-top: 0px;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 0 0 1px #f7941f;
+  color: #2d2f2e;
+  width: 100%;
+  max-width: 200px;
+}
+
+.terminal-wallet-currency-switch select:focus {
+  margin-top: 0px;
+  font-size: 20px;
+  border: none;
+  box-shadow: 0 0 0 1px #f7941f;
+  color: #2d2f2e;
+  width: 100%;
+  max-width: 200px;
+}

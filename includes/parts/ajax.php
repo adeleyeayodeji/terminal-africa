@@ -119,6 +119,61 @@ trait Ajax
         add_action('wp_ajax_request_terminal_africa_payment_access', array($this, 'request_terminal_africa_payment_access'));
         //ajax update_user_settings
         add_action('wp_ajax_update_terminal_user_settings', array($this, 'update_terminal_user_settings'));
+        //ajax update_terminal_wallet_currency
+        add_action('wp_ajax_update_terminal_wallet_currency', array($this, 'update_terminal_wallet_currency'));
+    }
+
+    /**
+     * update_terminal_wallet_currency
+     * 
+     */
+    public function update_terminal_wallet_currency()
+    {
+        try {
+            //very nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //check if session has started
+            if (session_status() !== PHP_SESSION_ACTIVE) {
+                session_start();
+            }
+
+            $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
+
+            //get currency
+            $currency = sanitize_text_field($_POST['currency']);
+
+            //save session terminal_africa_wallet_currency
+            $_SESSION['terminal_africa_wallet_currency'] = $currency;
+
+            //get user wallet
+            $walletData = getWalletBalance($terminal_africa_merchant_id, true, $currency);
+
+            //check if response code is 200
+            if ($walletData['code'] == 200) {
+                //save session terminal_africa_wallet_id
+                $_SESSION['terminal_africa_wallet_id'] = $walletData['data']->id;
+                //update transactions
+                getTransactions(1, [], true);
+            }
+
+            //send response
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Wallet currency updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            logTerminalError($e, 'update_terminal_wallet_currency');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     /**

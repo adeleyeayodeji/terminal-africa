@@ -1046,7 +1046,7 @@ trait Shipping
     }
 
     //getWalletBalance
-    public static function getWalletBalance($user_id, $force = false)
+    public static function getWalletBalance($user_id, $force = false, $currency = 'NGN')
     {
         try {
             //if session is not started start it
@@ -1075,13 +1075,24 @@ trait Shipping
             $query = [
                 'user_id' => $user_id
             ];
+
+            //check if wallet currency session is available
+            if (isset($_SESSION['terminal_africa_wallet_currency'])) {
+                $query['currency'] = $_SESSION['terminal_africa_wallet_currency'];
+            } else {
+                $query['currency'] = $currency;
+            }
+
             //query builder
             $query = http_build_query($query);
+
             //get cities
             $response = Requests::get(self::$enpoint . 'users/wallet?' . $query, [
                 'Authorization' => 'Bearer ' . self::$skkey,
             ]);
+
             $body = json_decode($response->body);
+
             //check if response is ok
             if ($response->status_code == 200) {
                 //return countries
@@ -1973,7 +1984,12 @@ trait Shipping
                 ];
             }
 
-            $userWalletId = $userData['others']->user->wallet;
+            //check if wallet id session is available
+            if (isset($_SESSION['terminal_africa_wallet_id'])) {
+                $userWalletId = $_SESSION['terminal_africa_wallet_id'];
+            } else {
+                $userWalletId = $userData['others']->user->wallet;
+            }
 
             $dataQuery =
                 [
