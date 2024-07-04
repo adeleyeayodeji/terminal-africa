@@ -26,7 +26,7 @@ trait Shipping
             //get countries
             $response  = Requests::get(self::$enpoint . 'countries', [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             //check if response is ok
             if ($response->status_code == 200) {
                 //return countries
@@ -71,7 +71,7 @@ trait Shipping
             $response = Requests::get(self::$enpoint . 'states?country_code=' . $countryCode, [
                 'Authorization' => 'Bearer ' . self::$skkey,
                 'Content-Type' => 'application/json'
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -143,7 +143,7 @@ trait Shipping
             //get cities
             $response = Requests::get(self::$enpoint . 'cities?' . $query, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -256,7 +256,7 @@ trait Shipping
             //get address
             $response  = Requests::get(self::$enpoint . 'addresses/' . $address_id, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -332,7 +332,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode($addressFields),
                 //time out 60 seconds
                 ['timeout' => 60]
@@ -432,7 +432,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode($addressFields), //time out 60 seconds
                 ['timeout' => 60]
             );
@@ -524,7 +524,7 @@ trait Shipping
             //get address
             $response  = Requests::get(self::$enpoint . 'addresses?' . $query, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -574,7 +574,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     $body
                 ),
@@ -629,7 +629,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     $body
                 ),
@@ -683,7 +683,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 //time out 60 seconds
                 ['timeout' => 60]
             );
@@ -739,7 +739,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         'address_from' => $address_from,
@@ -851,7 +851,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 //time out 60 seconds
                 ['timeout' => 60]
             );
@@ -929,7 +929,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 //time out 60 seconds
                 ['timeout' => 60]
             );
@@ -1089,7 +1089,7 @@ trait Shipping
             //get cities
             $response = Requests::get(self::$enpoint . 'users/wallet?' . $query, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
 
             $body = json_decode($response->body);
 
@@ -1157,7 +1157,7 @@ trait Shipping
             //get cities
             $response = Requests::get(self::$enpoint . 'carriers?' . $query, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -1218,7 +1218,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         'carriers' => $newconverted
@@ -1274,7 +1274,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     $carriers
                 ),
@@ -1339,7 +1339,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         'carriers' => $newconverted
@@ -1396,7 +1396,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     $carriers
                 ),
@@ -1460,7 +1460,7 @@ trait Shipping
             //get cities
             $response = Requests::get(self::$enpoint . 'packaging', [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -1539,7 +1539,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         "height" => 1,
@@ -1610,7 +1610,7 @@ trait Shipping
             //get cities
             $response = Requests::get(self::$enpoint . 'packaging/' . $packaging_id, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -1674,7 +1674,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         "shipment_id" => $shipment_id,
@@ -1734,7 +1734,7 @@ trait Shipping
             //get shipment status
             $response = Requests::get(self::$enpoint . 'shipments/' . $shipment_id, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -1794,7 +1794,7 @@ trait Shipping
             //get shipment status
             $response = Requests::get(self::$enpoint . 'users/carriers?type=' . $type, [
                 'Authorization' => 'Bearer ' . self::$skkey,
-            ]);
+            ] + self::$request_header);
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
@@ -1845,7 +1845,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         "shipment_id" => $shipment_id
@@ -1909,7 +1909,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 json_encode(
                     [
                         "currency" => $currency_code
@@ -2031,7 +2031,7 @@ trait Shipping
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
-                ],
+                ] + self::$request_header,
                 //time out 60 seconds
                 ['timeout' => 60]
             );

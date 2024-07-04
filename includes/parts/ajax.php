@@ -5,6 +5,7 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
+use Exception;
 use WpOrg\Requests\Requests;
 use TerminalLogHandler;
 
@@ -121,6 +122,45 @@ trait Ajax
         add_action('wp_ajax_update_terminal_user_settings', array($this, 'update_terminal_user_settings'));
         //ajax update_terminal_wallet_currency
         add_action('wp_ajax_update_terminal_wallet_currency', array($this, 'update_terminal_wallet_currency'));
+        //ajax terminal_africa_close_notice
+        add_action('wp_ajax_terminal_africa_close_notice', array($this, 'terminal_africa_close_notice'));
+    }
+
+    /**
+     * terminal_africa_close_notice
+     * 
+     */
+    public function terminal_africa_close_notice()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get terminal_africa_notice_closed
+            $terminal_africa_notice_closed = get_option('terminal_africa_notice_closed', date('Y-m-d'));
+
+            //add 3 days to terminal_africa_notice_closed
+            $terminal_africa_notice_closed = date('Y-m-d', strtotime($terminal_africa_notice_closed . ' + 3 days'));
+            //update terminal_africa_notice_closed
+            update_option('terminal_africa_notice_closed', $terminal_africa_notice_closed);
+
+            //send response
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Notice closed successfully'
+            ]);
+        } catch (Exception $e) {
+            logTerminalError($e, 'terminal_africa_close_notice');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -177,8 +217,9 @@ trait Ajax
     }
 
     /**
-     * request_terminal_africa_payment_access
+     * Request payment access
      * 
+     * @return void
      */
     public function request_terminal_africa_payment_access()
     {
@@ -191,10 +232,26 @@ trait Ajax
                 ]);
             }
 
+            //get user data
+            $userData = self::getUserData();
+            //site url
+            $site_url = site_url();
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
             //request payment access
-            $response = Requests::post(self::$endpoint . "users/payment/opt-in", [
-                'Authorization' => 'Bearer ' . self::$skkey
-            ]);
+            $response = Requests::post(
+                self::$endpoint . "users/payment/opt-in",
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey
+                ] + self::$request_header,
+                json_encode(
+                    [
+                        'site_email' => get_bloginfo('admin_email'),
+                        'domain' => $domain,
+                        'platform' => 'wordpress'
+                    ] + $userData
+                )
+            );
 
             //get body 
             $body = json_decode($response->body);
@@ -312,7 +369,7 @@ trait Ajax
             //send request
             $response = Requests::get(self::$enpoint . "users/secrete", [
                 'Authorization' => 'Bearer ' . self::$skkey
-            ]);
+            ] + self::$request_header);
 
             //check if response is 200
             $body = json_decode($response->body);

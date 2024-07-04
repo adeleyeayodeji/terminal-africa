@@ -245,7 +245,7 @@ if (isset($_SESSION['terminal_africa_wallet_currency'])) {
                                     <?php echo esc_html($transaction->reference) ?>
                                 </td>
                                 <td data-label="Amount">
-                                    <?php echo $transaction->currency  . ' ' . number_format($transaction->amount); ?>
+                                    <?php echo $transaction->currency  . ' ' . number_format($transaction->amount, 2); ?>
                                 </td>
                             </tr>
                         <?php

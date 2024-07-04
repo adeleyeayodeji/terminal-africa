@@ -13,6 +13,11 @@ use \WpOrg\Requests\Requests;
 class TerminalLogHandler
 {
     /**
+     * @var TerminalLogHandler
+     */
+    protected static $_instance = null;
+
+    /**
      * TerminalLogHandler constructor.
      * @since version 1.10.3
      * @package TerminalAfrica
@@ -23,6 +28,21 @@ class TerminalLogHandler
         add_action('wp_ajax_check_if_terminal_plugin_already_logged', array(self::class, 'checkIfPluginAlreadyLogged'));
         add_action('wp_ajax_nopriv_check_if_terminal_plugin_already_logged', array(self::class, 'checkIfPluginAlreadyLogged'));
     }
+
+    /**
+     * Instance
+     * @since version 1.12.0
+     * @package TerminalAfrica
+     * @return TerminalLogHandler
+     */
+    public static function instance()
+    {
+        if (self::$_instance === null) {
+            self::$_instance = new TerminalLogHandler();
+        }
+        return self::$_instance;
+    }
+
     /**
      * terminalActivatorHandler
      * @since version 1.10.1
@@ -78,6 +98,8 @@ class TerminalLogHandler
         try {
             //get user data
             $userData = self::getUserData();
+            //get instance of TerminalAfricaShippingPlugin
+            $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
             //site url
             $site_url = site_url();
             $domain = parse_url($site_url, PHP_URL_HOST);
@@ -85,7 +107,7 @@ class TerminalLogHandler
             $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . $path, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                ],
+                ] + $terminal_africa_shipping_plugin::$request_header,
                 'body' => json_encode([
                     'email' => get_bloginfo('admin_email'),
                     'domain' => $domain,
@@ -183,6 +205,8 @@ class TerminalLogHandler
     {
         try {
             $userData = self::getUserData();
+            //get instance of TerminalAfricaShippingPlugin
+            $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
             //site url
             $site_url = site_url();
             //get the domain
@@ -191,7 +215,7 @@ class TerminalLogHandler
             $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . 'plugin/find', [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                ],
+                ] + $terminal_africa_shipping_plugin::$request_header,
                 'body' => json_encode([
                     'domain' => $domain,
                     'platform' => 'wordpress'
@@ -248,4 +272,4 @@ class TerminalLogHandler
 }
 
 //init
-new TerminalLogHandler();
+TerminalLogHandler::instance();

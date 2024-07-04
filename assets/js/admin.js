@@ -74,4 +74,27 @@ jQuery(document).ready(function ($) {
       }
     });
   });
+
+  /**
+   * Close notice
+   * .terminal-notice-dismiss
+   * @return {void}
+   */
+  $(".terminal-notice-dismiss").click(function (e) {
+    e.preventDefault();
+    console.log("Am here");
+    //remove the parent
+    $(".terminal-custom-notice-wp").fadeOut(500, function () {
+      $(this).remove();
+      //send ajax request
+      $.ajax({
+        type: "POST",
+        url: terminal_africa_admin.ajax_url,
+        data: {
+          action: "terminal_africa_close_notice",
+          nonce: terminal_africa_admin.nonce
+        }
+      });
+    });
+  });
 });

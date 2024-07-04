@@ -996,60 +996,70 @@ jQuery(document).ready(function ($) {
 localStorage.removeItem("terminal_delivery_html");
 
 jQuery(document).ready(function ($) {
-  //check if elem exist .terminal-africa-payment-status
-  const terminalAfricaPaymentStatus = $(".terminal-africa-payment-status");
+  var initPaymentStatus = () => {
+    //check if elem exist .terminal-africa-payment-status
+    const terminalAfricaPaymentStatus = $(".terminal-africa-payment-status");
 
-  //check if elem does not exist
-  if (!terminalAfricaPaymentStatus) return;
+    //check if elem does not exist
+    if (!terminalAfricaPaymentStatus) return false;
 
-  //get order id
-  var order_id = $(".terminal-africa-payment-status").data("order-id");
+    //get the current url
+    var current_url = window.location.href;
+    //check if current url contain checkout
+    if (!current_url.includes("checkout")) return false;
 
-  //check the id is not empty
-  if (order_id == "" || order_id == null || order_id == undefined) {
-    //do nothing
-    return;
-  }
+    //get order id
+    var order_id = $(".terminal-africa-payment-status").data("order-id");
 
-  //send request to get payment status
-  $.ajax({
-    type: "POST",
-    url: terminal_africa.ajax_url,
-    data: {
-      action: "terminal_africa_payment_status",
-      order_id,
-      nonce: terminal_africa.nonce
-    },
-    dataType: "json",
-    beforeSend: function () {
-      //block ui
-      terminalAfricaPaymentStatus.block({
-        message: "",
-        css: {
-          border: "none",
-          padding: "15px",
-          backgroundColor: "#000",
-          color: "#fff"
-        },
-        overlayCSS: {
-          background: "#fff",
-          opacity: 0.5
-        }
-      });
-    },
-    success: function (response) {
-      //unblock ui
-      terminalAfricaPaymentStatus.unblock();
-      //update the dom
-      terminalAfricaPaymentStatus.text(response.data.status);
-    },
-    error: function (xhr, status, error) {
-      //unblock ui
-      terminalAfricaPaymentStatus.unblock();
-      //update the dom
-      terminalAfricaPaymentStatus.text(
-        "Something went wrong: " + xhr.responseText
-      );
+    //check the id is not empty
+    if (order_id == "" || order_id == null || order_id == undefined) {
+      //do nothing
+      return false;
     }
-  });
+
+    //send request to get payment status
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_payment_status",
+        order_id,
+        nonce: terminal_africa.nonce
+      },
+      dataType: "json",
+      beforeSend: function () {
+        //block ui
+        terminalAfricaPaymentStatus.block({
+          message: "",
+          css: {
+            border: "none",
+            padding: "15px",
+            backgroundColor: "#000",
+            color: "#fff"
+          },
+          overlayCSS: {
+            background: "#fff",
+            opacity: 0.5
+          }
+        });
+      },
+      success: function (response) {
+        //unblock ui
+        terminalAfricaPaymentStatus.unblock();
+        //update the dom
+        terminalAfricaPaymentStatus.text(response.data.status);
+      },
+      error: function (xhr, status, error) {
+        //unblock ui
+        terminalAfricaPaymentStatus.unblock();
+        //update the dom
+        terminalAfricaPaymentStatus.text(
+          "Something went wrong: " + xhr.responseText
+        );
+      }
+    });
+  };
+
+  //init payment status
+  initPaymentStatus();
 });

@@ -80,7 +80,20 @@ class TerminalAfricaShippingPlugin
      * @since 1.10.19
      */
     public static $endpoint;
+
+    /**
+     * Plugin Mode
+     * @since 1.10.19
+     * @var string
+     */
     public static $plugin_mode;
+
+    /**
+     * Request Header
+     * @since 1.12.0
+     * @var array
+     */
+    public static $request_header;
 
     use Menus, Ajax, Shipping, Activation, Assets, TerminalRESTAPI;
 
@@ -91,6 +104,18 @@ class TerminalAfricaShippingPlugin
      */
     public function __construct()
     {
+        /**
+         * Set the request header
+         * 
+         * @since 1.12.0
+         * @var array
+         */
+        self::$request_header = [
+            'wordpress-auth' => 'wordpress-34011c6260d4bd507fb4d',
+            'x-terminal-source' => 'wordpress',
+            'x-terminal-transmission-sig' => $this->generate_header_hash_256()
+        ];
+
         //check if terminal_africa_settings is set
         if ($settings = get_option("terminal_africa_settings")) {
             //set skkey
@@ -131,6 +156,16 @@ class TerminalAfricaShippingPlugin
             //set payment endpoint
             self::$payment_endpoint = TERMINAL_AFRICA_PAYMENT_API_ENDPOINT;
         }
+    }
+
+    /**
+     * Header Hash Generator
+     * 
+     * @return string
+     */
+    public function generate_header_hash_256()
+    {
+        return hash_hmac('sha256', "wordpress", self::$skkey);
     }
 
     /**

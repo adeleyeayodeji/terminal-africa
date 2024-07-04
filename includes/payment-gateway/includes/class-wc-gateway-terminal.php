@@ -150,6 +150,18 @@ if (class_exists("WC_Payment_Gateway")) {
                 return;
             }
 
+            //get terminal_africa_notice_closed
+            $terminal_africa_notice_closed = get_option('terminal_africa_notice_closed');
+            //check if terminal_africa_notice_closed is empty
+            if (!empty($terminal_africa_notice_closed)) {
+                //convert to date
+                $terminal_africa_notice_closed = date('Y-m-d', strtotime($terminal_africa_notice_closed));
+                //check if terminal_africa_notice_closed is less than today
+                if ($terminal_africa_notice_closed > date('Y-m-d')) {
+                    return;
+                }
+            }
+
             //learn more url
             $learn_more_url = admin_url('admin.php?page=terminal-africa-get-started');
 
@@ -197,7 +209,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         <p>
                             <a href="<?php echo esc_url($learn_more_url); ?>">Learn More</a>
                         </p>
-                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+                        <button type="button" class="notice-dismiss terminal-notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                     </div>
                 </div>
             </div>
@@ -289,7 +301,7 @@ if (class_exists("WC_Payment_Gateway")) {
                     array(
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . $skkey
-                    ),
+                    ) + $terminal_africa_shipping_plugin::$request_header,
                     array(
                         'timeout' => 60
                     )
@@ -475,11 +487,14 @@ if (class_exists("WC_Payment_Gateway")) {
                 //create hash from request data
                 $hashKey = $this->generate_header_hash($request_data, $terminal_africa_settings['secret_key']);
 
+                //get instance of TerminalAfricaShippingPlugin
+                $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+
                 $headers = array(
                     'Content-Type' => 'application/json',
                     'X-Terminal-Signature' => $hashKey,
                     'X-Terminal-User' => $terminal_africa_settings['user_id']
-                );
+                ) + $terminal_africa_shipping_plugin::$request_header;
 
                 //request
                 $request = Requests::post($this->apiURL, $headers, $request_data, array('timeout' => 60));
