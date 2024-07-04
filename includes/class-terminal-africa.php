@@ -523,6 +523,6 @@ class TerminalAfricaShippingPlugin
  * @since 1.0.0
  * @return void
  */
-$TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+$TerminalAfricaShippingPlugin = TerminalAfricaShippingPlugin::instance();
 //init
 $TerminalAfricaShippingPlugin->init();
