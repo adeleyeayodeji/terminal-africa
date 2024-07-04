@@ -111,8 +111,7 @@ class TerminalAfricaShippingPlugin
          * @var array
          */
         self::$request_header = [
-            'x-terminal-source' => 'wordpress',
-            'x-terminal-transmission-sig' => $this->generate_header_hash_256()
+            'x-terminal-source' => 'wordpress'
         ];
 
         //check if terminal_africa_settings is set
@@ -155,16 +154,6 @@ class TerminalAfricaShippingPlugin
             //set payment endpoint
             self::$payment_endpoint = TERMINAL_AFRICA_PAYMENT_API_ENDPOINT;
         }
-    }
-
-    /**
-     * Header Hash Generator
-     * 
-     * @return string
-     */
-    public function generate_header_hash_256()
-    {
-        return hash_hmac('sha256', time(), self::$skkey);
     }
 
     /**
