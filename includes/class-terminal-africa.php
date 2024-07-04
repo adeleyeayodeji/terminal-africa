@@ -111,7 +111,6 @@ class TerminalAfricaShippingPlugin
          * @var array
          */
         self::$request_header = [
-            'wordpress-auth' => 'wordpress-34011c6260d4bd507fb4d',
             'x-terminal-source' => 'wordpress',
             'x-terminal-transmission-sig' => $this->generate_header_hash_256()
         ];
@@ -165,7 +164,7 @@ class TerminalAfricaShippingPlugin
      */
     public function generate_header_hash_256()
     {
-        return hash_hmac('sha256', "wordpress", self::$skkey);
+        return hash_hmac('sha256', time(), self::$skkey);
     }
 
     /**
