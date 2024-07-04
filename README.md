@@ -1,6 +1,6 @@
 === Terminal Africa ===
 Contributors: terminalafrica, biggidroid
-Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping, terminalafrica, ecommerce, shipping, shipping plugin, shipping method, shipping rates, shipping label, shipping label generator, shipping label plugin, shipping label woocommerce
+Tags: terminal, woocommerce shipping, shipping method, africa shipping, nigeria shipping
 Author URI: http://www.terminal.africa
 Author: Terminal
 Requires at least: 6.0
@@ -11,11 +11,11 @@ License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
 
-== Description ==
 Terminal Africa Shipping Method Plugin for WooCommerce
 
-== About us ==
-Terminal Africa is a software company that provides logistics solutions for Africans and African businesses.
+== Description ==
+
+[Terminal Africa](http://www.terminal.africa) is a software company that provides logistics solutions for Africans and African businesses.
 
 Serving over 130 countries, including Nigeria, with 15+ courier partners such as DHL, FedEx, Aramex, UPS, GIGL, and Kwik, we have completed over 200,000 successful deliveries both locally and internationally, with over 5000 active shipping customers and growing, on our database.
 
