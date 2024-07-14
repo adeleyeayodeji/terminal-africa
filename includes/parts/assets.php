@@ -29,6 +29,11 @@ trait Assets
             return;
         }
 
+        //ignore for terminal-africa-hub
+        if (strpos($_SERVER['REQUEST_URI'], 'terminal-africa-hub') !== false) {
+            return;
+        }
+
         // Get the section and page from the query parameters
         $section = isset($_GET['section']) ? $_GET['section'] : null;
         $page = isset($_GET['page']) ? $_GET['page'] : null;
