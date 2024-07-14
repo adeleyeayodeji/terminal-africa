@@ -121,7 +121,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
         if (class_exists('TerminalAfricaShippingPlugin')) {
-            $TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+            $TerminalAfricaShippingPlugin = \TerminalAfricaShippingPlugin::instance();
             if ($TerminalAfricaShippingPlugin::$plugin_mode) {
                 $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
             }

@@ -215,7 +215,7 @@ class WC_Terminal_Delivery
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
         if (class_exists('TerminalAfricaShippingPlugin')) {
-            $TerminalAfricaShippingPlugin = new \TerminalAfricaShippingPlugin();
+            $TerminalAfricaShippingPlugin = \TerminalAfricaShippingPlugin::instance();
             if ($TerminalAfricaShippingPlugin::$plugin_mode) {
                 $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
             }
@@ -394,7 +394,7 @@ class WC_Terminal_Delivery
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
         if (class_exists('TerminalAfricaShippingPlugin')) {
-            $TerminalAfricaShippingPlugin = new TerminalAfricaShippingPlugin();
+            $TerminalAfricaShippingPlugin = \TerminalAfricaShippingPlugin::instance();
             if ($TerminalAfricaShippingPlugin::$plugin_mode) {
                 $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
             }
@@ -866,7 +866,7 @@ class WC_Terminal_Delivery
      */
     public function load_shipping_method()
     {
-        $this->shipping_method = new WC_Terminal_Delivery_Shipping_Method;
+        new WC_Terminal_Delivery_Shipping_Method;
     }
 
     /**

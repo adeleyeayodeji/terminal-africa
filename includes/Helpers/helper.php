@@ -2,12 +2,28 @@
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
+/**
+ * terminal_africa_shipping_plugin() instance
+ * @since 1.12.0
+ * 
+ */
+if (!function_exists('terminal_africa_shipping_plugin')) {
+    /**
+     * create terminal_africa_shipping_plugin
+     * @return object|TerminalAfricaShippingPlugin
+     */
+    function terminal_africa_shipping_plugin()
+    {
+        return TerminalAfricaShippingPlugin::instance();
+    }
+}
+
 //check if get_terminal_countries function exist
 if (!function_exists('get_terminal_countries')) {
     //get terminal country
     function get_terminal_countries()
     {
-        return TerminalAfricaShippingPlugin::get_countries();
+        return terminal_africa_shipping_plugin()::get_countries();
     }
 }
 
@@ -16,7 +32,7 @@ if (!function_exists('get_terminal_states')) {
     //get terminal states
     function get_terminal_states($countryCode = "NGA")
     {
-        return TerminalAfricaShippingPlugin::get_states($countryCode);
+        return terminal_africa_shipping_plugin()::get_states($countryCode);
     }
 }
 
@@ -25,7 +41,7 @@ if (!function_exists('get_terminal_cities')) {
     //get terminal cities
     function get_terminal_cities($countryCode = "NG", $state_code = "LA")
     {
-        return TerminalAfricaShippingPlugin::get_cities($countryCode, $state_code);
+        return terminal_africa_shipping_plugin()::get_cities($countryCode, $state_code);
     }
 }
 
@@ -34,7 +50,7 @@ if (!function_exists('createTerminalAddress')) {
     //create terminal address
     function createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
     {
-        return TerminalAfricaShippingPlugin::createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+        return terminal_africa_shipping_plugin()::createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
     }
 }
 
@@ -43,7 +59,7 @@ if (!function_exists('updateTerminalAddress')) {
     //update terminal address
     function updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
     {
-        return TerminalAfricaShippingPlugin::updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+        return terminal_africa_shipping_plugin()::updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
     }
 }
 
@@ -52,7 +68,7 @@ if (!function_exists('terminal_header')) {
     //terminal header
     function terminal_header($title, $icon)
     {
-        echo TerminalAfricaShippingPlugin::header($title, $icon);
+        echo terminal_africa_shipping_plugin()::header($title, $icon);
     }
 }
 
@@ -61,7 +77,7 @@ if (!function_exists('createTerminalParcel')) {
     //create terminal parcel
     function createTerminalParcel($body)
     {
-        return TerminalAfricaShippingPlugin::createParcel($body);
+        return terminal_africa_shipping_plugin()::createParcel($body);
     }
 }
 
@@ -70,7 +86,7 @@ if (!function_exists('updateTerminalParcel')) {
     //create terminal parcel
     function updateTerminalParcel($parcel_id, $body)
     {
-        return TerminalAfricaShippingPlugin::updateParcel($parcel_id, $body);
+        return terminal_africa_shipping_plugin()::updateParcel($parcel_id, $body);
     }
 }
 
@@ -82,7 +98,7 @@ if (!function_exists('getTerminalParcel')) {
     //get parcel
     function getTerminalParcel($parcel_id)
     {
-        return TerminalAfricaShippingPlugin::getParcel($parcel_id);
+        return terminal_africa_shipping_plugin()::getParcel($parcel_id);
     }
 }
 
@@ -91,7 +107,7 @@ if (!function_exists('createTerminalShipment')) {
     //create terminal shipment
     function createTerminalShipment($address_from, $address_to, $parcel_id)
     {
-        return TerminalAfricaShippingPlugin::createShipment($address_from, $address_to, $parcel_id);
+        return terminal_africa_shipping_plugin()::createShipment($address_from, $address_to, $parcel_id);
     }
 }
 
@@ -100,7 +116,7 @@ if (!function_exists('getTerminalRates')) {
     //get terminal rates
     function getTerminalRates($shipment_id)
     {
-        return TerminalAfricaShippingPlugin::getTerminalRates($shipment_id);
+        return terminal_africa_shipping_plugin()::getTerminalRates($shipment_id);
     }
 }
 
@@ -109,7 +125,7 @@ if (!function_exists('getTerminalRatesvbyAddressId')) {
     //get terminal rates
     function getTerminalRatesvbyAddressId($merchant_address_id, $customer_address_id, $parcel)
     {
-        return TerminalAfricaShippingPlugin::getTerminalRates(null, $merchant_address_id, $customer_address_id, $parcel);
+        return terminal_africa_shipping_plugin()::getTerminalRates(null, $merchant_address_id, $customer_address_id, $parcel);
     }
 }
 
@@ -118,7 +134,7 @@ if (!function_exists('getTerminalRateData')) {
     //get terminal rate data
     function getTerminalRateData($rate_id, $force = false)
     {
-        return TerminalAfricaShippingPlugin::getTerminalRateData($rate_id, $force);
+        return terminal_africa_shipping_plugin()::getTerminalRateData($rate_id, $force);
     }
 }
 
@@ -127,7 +143,7 @@ if (!function_exists('applyTerminalRate')) {
     //apply terminal rate
     function applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo)
     {
-        return TerminalAfricaShippingPlugin::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo);
+        return terminal_africa_shipping_plugin()::applyTerminalRate($order_id, $rateid, $pickup, $duration, $amount, $carrier_name, $carrierlogo);
     }
 }
 
@@ -136,7 +152,7 @@ if (!function_exists('getWalletBalance')) {
     //get wallet balance
     function getWalletBalance($user_id, $force = false, $currency = 'NGN')
     {
-        return TerminalAfricaShippingPlugin::getWalletBalance($user_id, $force, $currency);
+        return terminal_africa_shipping_plugin()::getWalletBalance($user_id, $force, $currency);
     }
 }
 
@@ -145,7 +161,7 @@ if (!function_exists('getTerminalCarriers')) {
     //get terminal carriers
     function getTerminalCarriers($type, $force = false)
     {
-        return TerminalAfricaShippingPlugin::getTerminalCarriers($type, $force);
+        return terminal_africa_shipping_plugin()::getTerminalCarriers($type, $force);
     }
 }
 
@@ -154,7 +170,7 @@ if (!function_exists('enableMultipleCarriers')) {
     //enable multiple carriers
     function enableMultipleCarriers($carriers)
     {
-        return TerminalAfricaShippingPlugin::enableMultipleCarriers($carriers);
+        return terminal_africa_shipping_plugin()::enableMultipleCarriers($carriers);
     }
 }
 
@@ -163,7 +179,7 @@ if (!function_exists('disableMultipleCarriers')) {
     //disable multiple carriers
     function disableMultipleCarriers($carriers)
     {
-        return TerminalAfricaShippingPlugin::disableMultipleCarriers($carriers);
+        return terminal_africa_shipping_plugin()::disableMultipleCarriers($carriers);
     }
 }
 
@@ -172,7 +188,7 @@ if (!function_exists('getTerminalPackagingData')) {
     //get terminal packaging data
     function getTerminalPackagingData($force = false)
     {
-        return TerminalAfricaShippingPlugin::getTerminalPackagingData($force);
+        return terminal_africa_shipping_plugin()::getTerminalPackagingData($force);
     }
 }
 
@@ -181,7 +197,7 @@ if (!function_exists('arrangePickupAndDelivery')) {
     //arrange pickup and delivery
     function arrangePickupAndDelivery($shipment_id, $rate_id)
     {
-        return TerminalAfricaShippingPlugin::arrangePickupAndDelivery($shipment_id, $rate_id);
+        return terminal_africa_shipping_plugin()::arrangePickupAndDelivery($shipment_id, $rate_id);
     }
 }
 
@@ -190,7 +206,7 @@ if (!function_exists('getTerminalShipmentStatus')) {
     //get terminal shipment status
     function getTerminalShipmentStatus($shipment_id)
     {
-        return TerminalAfricaShippingPlugin::getTerminalShipmentStatus($shipment_id);
+        return terminal_africa_shipping_plugin()::getTerminalShipmentStatus($shipment_id);
     }
 }
 
@@ -199,7 +215,7 @@ if (!function_exists('getUserCarriers')) {
     //get user carriers
     function getUserCarriers($type, $force = false)
     {
-        return TerminalAfricaShippingPlugin::getUserCarriers($type, $force);
+        return terminal_africa_shipping_plugin()::getUserCarriers($type, $force);
     }
 }
 
@@ -208,7 +224,7 @@ if (!function_exists('enableSingleCarriers')) {
     //enable single carriers
     function enableSingleCarriers($carrier)
     {
-        return TerminalAfricaShippingPlugin::enableSingleCarriers($carrier);
+        return terminal_africa_shipping_plugin()::enableSingleCarriers($carrier);
     }
 }
 
@@ -217,7 +233,7 @@ if (!function_exists('disableSingleCarriers')) {
     //disable single carriers
     function disableSingleCarriers($carrier)
     {
-        return TerminalAfricaShippingPlugin::disableSingleCarriers($carrier);
+        return terminal_africa_shipping_plugin()::disableSingleCarriers($carrier);
     }
 }
 
@@ -226,11 +242,11 @@ if (!function_exists('cancelTerminalShipment')) {
     //cancel terminal shipment
     function cancelTerminalShipment($shipment_id)
     {
-        return TerminalAfricaShippingPlugin::cancelTerminalShipment($shipment_id);
+        return terminal_africa_shipping_plugin()::cancelTerminalShipment($shipment_id);
     }
 }
 
-//TerminalAfricaShippingPlugin::$plugin_mode
+//terminal_africa_shipping_plugin()::$plugin_mode
 if (!function_exists('getTerminalPluginMode')) {
     //get plugin mode
     /**
@@ -238,12 +254,11 @@ if (!function_exists('getTerminalPluginMode')) {
      */
     function getTerminalPluginMode()
     {
-        $signal = new TerminalAfricaShippingPlugin;
-        return $signal::$plugin_mode;
+        return terminal_africa_shipping_plugin()::$plugin_mode;
     }
 }
 
-//TerminalAfricaShippingPlugin::verifyDefaultPackaging
+//terminal_africa_shipping_plugin()::verifyDefaultPackaging
 if (!function_exists('verifyDefaultPackaging')) {
     //verify default packaging
     /**
@@ -252,11 +267,11 @@ if (!function_exists('verifyDefaultPackaging')) {
      */
     function verifyDefaultPackaging($packaging_id)
     {
-        return TerminalAfricaShippingPlugin::verifyDefaultPackaging($packaging_id);
+        return terminal_africa_shipping_plugin()::verifyDefaultPackaging($packaging_id);
     }
 }
 
-//TerminalAfrica\Includes\Parts\Assets::check_checkout_product_for_shipping_support
+//terminal_africa_shipping_plugin()::check_checkout_product_for_shipping_support
 if (!function_exists('terminal_check_checkout_product_for_shipping_support')) {
     //check checkout product for shipping support
     /**
@@ -265,7 +280,7 @@ if (!function_exists('terminal_check_checkout_product_for_shipping_support')) {
      */
     function terminal_check_checkout_product_for_shipping_support()
     {
-        return TerminalAfrica\Includes\Parts\Assets::check_checkout_product_for_shipping_support();
+        return terminal_africa_shipping_plugin()::check_checkout_product_for_shipping_support();
     }
 }
 
@@ -278,7 +293,7 @@ if (!function_exists('updateDefaultCurrencyCode')) {
      */
     function updateDefaultCurrencyCode($currency_code)
     {
-        return TerminalAfricaShippingPlugin::updateDefaultCurrencyCode($currency_code);
+        return terminal_africa_shipping_plugin()::updateDefaultCurrencyCode($currency_code);
     }
 }
 
@@ -323,7 +338,7 @@ if (!function_exists('getTerminalTemplatePart')) {
      */
     function getTerminalTemplatePart($part, $args = [])
     {
-        return TerminalAfricaShippingPlugin::getTerminalPart($part, $args);
+        return terminal_africa_shipping_plugin()::getTerminalPart($part, $args);
     }
 }
 
@@ -336,7 +351,7 @@ if (!function_exists('getTerminalAddressById')) {
      */
     function getTerminalAddressById($address_id)
     {
-        return TerminalAfricaShippingPlugin::getAddressById($address_id);
+        return terminal_africa_shipping_plugin()::getAddressById($address_id);
     }
 }
 
@@ -363,7 +378,7 @@ if (!function_exists('terminalAfricaAddresses')) {
      */
     function terminalAfricaAddresses($perpage = 25, $page = 1, $search = '')
     {
-        return TerminalAfricaShippingPlugin::getAddresses($perpage, $page, $search);
+        return terminal_africa_shipping_plugin()::getAddresses($perpage, $page, $search);
     }
 }
 
@@ -377,7 +392,7 @@ if (!function_exists('getTransactions')) {
      */
     function getTransactions($page = 1, $filter = [], $force = false)
     {
-        return TerminalAfricaShippingPlugin::getTransactions($page, $filter, $force);
+        return terminal_africa_shipping_plugin()::getTransactions($page, $filter, $force);
     }
 }
 
@@ -391,11 +406,11 @@ if (!function_exists('getTransactions')) {
 if (!function_exists('terminalFormatPhoneNumber')) {
     function terminalFormatPhoneNumber($phone, $countryCode = 'NG')
     {
-        return TerminalAfricaShippingPlugin::formatPhoneNumber($phone, $countryCode);
+        return terminal_africa_shipping_plugin()::formatPhoneNumber($phone, $countryCode);
     }
 }
 
 /**
  * $allowed_order_statuses
  */
-$GLOBALS['terminal_allowed_order_statuses'] = TerminalAfricaShippingPlugin::$allowed_order_statuses;
+$GLOBALS['terminal_allowed_order_statuses'] = terminal_africa_shipping_plugin()::$allowed_order_statuses;

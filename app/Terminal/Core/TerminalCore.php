@@ -27,7 +27,7 @@ class TerminalCore
             $mode = 'test';
             //check if class exist TerminalAfricaShippingPlugin
             if (class_exists('TerminalAfricaShippingPlugin')) {
-                $TerminalAfricaShippingPlugin = new \TerminalAfricaShippingPlugin();
+                $TerminalAfricaShippingPlugin = \TerminalAfricaShippingPlugin::instance();
                 if ($TerminalAfricaShippingPlugin::$plugin_mode) {
                     $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
                 }

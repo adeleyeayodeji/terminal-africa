@@ -95,16 +95,17 @@ class TerminalLogHandler
      */
     public static function terminalLoggerHandler($path = 'plugin')
     {
+        //get instance of TerminalAfricaShippingPlugin
+        $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+
         try {
             //get user data
             $userData = self::getUserData();
-            //get instance of TerminalAfricaShippingPlugin
-            $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
             //site url
             $site_url = site_url();
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
-            $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . $path, [
+            $response = wp_remote_post($terminal_africa_shipping_plugin::$endpoint . $path, [
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ] + $terminal_africa_shipping_plugin::$request_header,
@@ -131,7 +132,7 @@ class TerminalLogHandler
             if (function_exists('logTerminalError')) {
                 try {
                     //log error
-                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . $path);
+                    logTerminalError($e, $terminal_africa_shipping_plugin::$endpoint . $path);
                 } catch (\Exception $th) {
                     //throw $th;
                 }
@@ -178,7 +179,7 @@ class TerminalLogHandler
             if (function_exists('logTerminalError')) {
                 try {
                     //log error
-                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                    logTerminalError($e, terminal_africa_shipping_plugin()::$endpoint . 'plugin/find');
                 } catch (\Exception $th) {
                     //throw $th;
                 }
@@ -203,16 +204,17 @@ class TerminalLogHandler
      */
     public static function checkIfPluginAlreadyLogged()
     {
+        //get instance of TerminalAfricaShippingPlugin
+        $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
+
         try {
             $userData = self::getUserData();
-            //get instance of TerminalAfricaShippingPlugin
-            $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
             //site url
             $site_url = site_url();
             //get the domain
             $domain = parse_url($site_url, PHP_URL_HOST);
             //log activation of terminal
-            $response = wp_remote_post(TerminalAfricaShippingPlugin::$endpoint . 'plugin/find', [
+            $response = wp_remote_post($terminal_africa_shipping_plugin::$endpoint . 'plugin/find', [
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ] + $terminal_africa_shipping_plugin::$request_header,
@@ -256,7 +258,7 @@ class TerminalLogHandler
             if (function_exists('logTerminalError')) {
                 try {
                     //log error
-                    logTerminalError($e, TerminalAfricaShippingPlugin::$endpoint . 'plugin/find');
+                    logTerminalError($e, $terminal_africa_shipping_plugin::$endpoint . 'plugin/find');
                 } catch (\Exception $e) {
                     //throw $th;
                 }
