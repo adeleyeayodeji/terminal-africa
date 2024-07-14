@@ -16,7 +16,7 @@ trait Activation
         //activate payment gateway
         $this->activate_payment_gateway_init();
         //check user is on checkout
-        add_action('wp', [$this, 'check_user_on_checkout_init']);
+        add_action('wp', [$this, 'check_user_on_checkout_init'], PHP_INT_MAX);
     }
 
     //activate
@@ -181,7 +181,7 @@ trait Activation
     {
         try {
             //check terminal user payment status
-            if (self::$user_payment_status != "active") {
+            if (terminal_africa_shipping_plugin()::$user_payment_status != "active") {
                 //return false if user payment status is not active
                 return false;
             }
@@ -208,8 +208,8 @@ trait Activation
             foreach ($payment_gateways as $key => $gateway) {
                 // //check if payment gateway key is not match Terminal
                 if ($gateway->id != 'terminal_africa_payment') {
-                    //unset payment gateway
-                    unset($payment_gateways[$key]);
+                    //update enabled to no
+                    $payment_gateways[$key]->enabled = 'no';
                 }
             }
             //update payment gateway

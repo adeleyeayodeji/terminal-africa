@@ -18,8 +18,22 @@ trait Shipping
             if (!self::$skkey) {
                 return [];
             }
+
+            //check if session has started
+            if (!session_id()) {
+                session_start();
+            }
+
+            //check if session has terminal_africa_countries_cache_data
+            if (isset($_SESSION['terminal_africa_countries_cache_data'])) {
+                //return countries
+                return $_SESSION['terminal_africa_countries_cache_data'];
+            }
+
             //check if terminal_africa_countries is set
             if ($data = get_option('terminal_africa_countries')) {
+                //save data to session
+                $_SESSION['terminal_africa_countries_cache_data'] = $data;
                 //return countries
                 return $data;
             }
@@ -32,6 +46,8 @@ trait Shipping
                 //return countries
                 $body = json_decode($response->body);
                 $data = $body->data;
+                //save data to session
+                $_SESSION['terminal_africa_countries_cache_data'] = $data;
                 //save raw data
                 update_option('terminal_africa_countries', $data);
                 //return data
@@ -58,8 +74,26 @@ trait Shipping
                     'data' => [],
                 ];
             }
+
+            //check if session has started
+            if (!session_id()) {
+                session_start();
+            }
+
+            //check if session is set
+            if (isset($_SESSION['terminal_africa_state_cache_data'][$countryCode])) {
+                //return from cache
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $_SESSION['terminal_africa_state_cache_data'][$countryCode]
+                ];
+            }
+
             //check if terminal_africa_states.$countryCode is set
             if ($data = get_option('terminal_africa_states' . $countryCode)) {
+                //save data to session
+                $_SESSION['terminal_africa_state_cache_data'][$countryCode] = $data;
                 //return countries
                 return [
                     'code' => 200,
@@ -77,6 +111,8 @@ trait Shipping
             if ($response->status_code == 200) {
                 //return countries
                 $data = $body->data;
+                //save data to session
+                $_SESSION['terminal_africa_state_cache_data'][$countryCode] = $data;
                 //save raw data
                 update_option('terminal_africa_states' . $countryCode, $data);
                 //return data
@@ -1686,7 +1722,7 @@ trait Shipping
             );
             $body = json_decode($response->body);
             //check if response is ok
-            if ($response->status_code == 200) {
+            if ($response->status_code == 200 && $body->status) {
                 //return countries
                 $data = $body->data;
                 //return data

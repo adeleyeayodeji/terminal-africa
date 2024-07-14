@@ -1273,46 +1273,25 @@ trait Ajax
                     'message' => 'Rate ID or shipment ID is empty, please refresh the page and try again'
                 ]);
             }
-            //check user balance
-            $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
-            $wallet_balance = getWalletBalance($terminal_africa_merchant_id, true);
-            //check if wallet balance is gotten
-            if ($wallet_balance['code'] == 200) {
-                //check if wallet balance is enough
-                if ($wallet_balance['data']->amount < 100) {
-                    //return error
-                    wp_send_json([
-                        'code' => 400,
-                        'message' => 'Your wallet balance is not enough to arrange delivery, please fund your wallet and try again'
-                    ]);
-                } else {
-                    //arrange delivery
-                    $delivery = arrangePickupAndDelivery($shipment_id, $rateid);
-                    //check if delivery is arranged
-                    if ($delivery['code'] == 200) {
-                        //add order meta
-                        update_post_meta($order_id, 'terminal_africa_delivery_arranged', "yes");
-                        //return
-                        wp_send_json([
-                            'code' => 200,
-                            'message' => 'Delivery arranged successfully',
-                            'data' => $delivery['data']
-                        ]);
-                    } else {
-                        //return error
-                        wp_send_json([
-                            'code' => 401,
-                            'message' => $delivery['message'],
-                            'endpoint' => 'arrange_delivery'
-                        ]);
-                    }
-                }
+
+            //arrange delivery
+            $delivery = arrangePickupAndDelivery($shipment_id, $rateid);
+            //check if delivery is arranged
+            if ($delivery['code'] == 200) {
+                //add order meta
+                update_post_meta($order_id, 'terminal_africa_delivery_arranged', "yes");
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Delivery arranged successfully',
+                    'data' => $delivery['data']
+                ]);
             } else {
                 //return error
                 wp_send_json([
                     'code' => 401,
-                    'message' => $wallet_balance['message'],
-                    'endpoint' => 'get_wallet_balance'
+                    'message' => $delivery['message'],
+                    'endpoint' => 'arrange_delivery'
                 ]);
             }
         } catch (\Exception $e) {

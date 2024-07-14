@@ -85,7 +85,7 @@ final class WC_Terminal_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 			'title'             => $this->get_setting('title'),
 			'description'       => $this->get_setting('description'),
 			'supports'          => array_filter($gateway->supports, array($gateway, 'supports')),
-			'allow_saved_cards' => $gateway->saved_cards && is_user_logged_in(),
+			'allow_saved_cards' => false,
 			'logo_urls'         => array($payment_gateways['terminal_africa_payment']->get_logo_url()),
 		);
 	}
