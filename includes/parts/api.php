@@ -136,8 +136,6 @@ trait TerminalRESTAPI
                 //return true
                 return true;
             } else {
-                //error log to debug
-                error_log("Terminal Africa Shipping Plugin: " . $response->body);
                 //logTerminalErrorData
                 logTerminalErrorData($response->body, self::$enpoint . 'users/notifications/push' . "?" . http_build_query($data_query));
                 return false;

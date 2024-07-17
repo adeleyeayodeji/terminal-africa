@@ -399,13 +399,18 @@ if (class_exists("WC_Payment_Gateway")) {
                 $order_items = $order->get_items();
 
                 $data_items = [];
+
                 //loop through cart items
                 foreach ($order_items as $product_id => $item) {
                     //convert to int $product_id
-                    $product_id = intval($product_id);
+                    $product_id = $item->get_product_id();
+
                     //get product image
-                    $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product_id), 'single-post-thumbnail');
+                    $product_image = get_the_post_thumbnail_url($product_id);
+
+                    //pass the data
                     $data_items[] = [
+                        "product_id" => $product_id,
                         "name" => $item->get_name(),
                         "quantity" => intval($item->get_quantity()) ?: 1,
                         "value" => $item->get_total(),
@@ -413,7 +418,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         "type" => "parcel",
                         "currency" => get_woocommerce_currency(),
                         "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
-                        'image' => $product_image ?: TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
+                        'image' => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
                     ];
                 }
 
