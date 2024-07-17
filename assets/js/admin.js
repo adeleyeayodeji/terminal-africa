@@ -82,19 +82,18 @@ jQuery(document).ready(function ($) {
    */
   $(".terminal-notice-dismiss").click(function (e) {
     e.preventDefault();
-    console.log("Am here");
+    //send ajax request
+    $.ajax({
+      type: "POST",
+      url: terminal_africa_admin.ajax_url,
+      data: {
+        action: "terminal_africa_close_notice",
+        nonce: terminal_africa_admin.nonce
+      }
+    });
     //remove the parent
     $(".terminal-custom-notice-wp").fadeOut(500, function () {
       $(this).remove();
-      //send ajax request
-      $.ajax({
-        type: "POST",
-        url: terminal_africa_admin.ajax_url,
-        data: {
-          action: "terminal_africa_close_notice",
-          nonce: terminal_africa_admin.nonce
-        }
-      });
     });
   });
 });
