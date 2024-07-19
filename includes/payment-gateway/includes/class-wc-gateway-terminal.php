@@ -270,7 +270,10 @@ if (class_exists("WC_Payment_Gateway")) {
             try {
                 //very nonce
                 if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
-                    throw new \Exception('Unauthorized request detected');
+                    wp_send_json_error([
+                        'status' => 'pending',
+                        'message' => 'Unauthorized request detected'
+                    ]);
                 }
 
                 //get order id
@@ -454,6 +457,9 @@ if (class_exists("WC_Payment_Gateway")) {
                     $order_country_code
                 );
 
+                //get post meta Terminal_africa_shipment_id
+                $shipment_id = $order->get_meta('Terminal_africa_shipment_id');
+
                 //get terminal user details
                 $payment_payload = array(
                     "amount" => $order->get_total(),
@@ -484,6 +490,7 @@ if (class_exists("WC_Payment_Gateway")) {
                     "success_url" => $success_url,
                     "complete_url" => site_url(),
                     "webhook_url" => $webhook_url,
+                    "shipment_id" => $shipment_id
                 );
 
                 //create json 

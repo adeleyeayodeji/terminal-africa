@@ -754,7 +754,7 @@ trait Shipping
     }
 
     //createShipment
-    public static function createShipment($address_from, $address_to, $parcel_id)
+    public static function createShipment($address_from, $address_to, $parcel_id, $order_id)
     {
         try {
             if (!self::$skkey) {
@@ -783,6 +783,7 @@ trait Shipping
                         'parcel' => $parcel_id,
                         'metadata' => [
                             'domain' => $domain,
+                            'order_id' => $order_id
                         ],
                         'source' => 'wordpress'
                     ]

@@ -1,5 +1,7 @@
 <?php
 
+use App\Terminal\Core\TerminalSession;
+
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
@@ -381,15 +383,20 @@ class WC_Terminal_Delivery
         $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
         $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
         $guest_email = WC()->session->get('terminal_africa_guest_email');
+        //guest email hashed
+        $guest_email_hashed = md5($guest_email);
+        //terminal_africa_rateid
         $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
         $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
         $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
         $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+        //terminal session
+        $terminalSession = TerminalSession::instance();
         //check if address id is set
-        $guest_address_id = WC()->session->get('terminal_africa_guest_address_id' . $guest_email);
+        $guest_address_id = $terminalSession->get('terminal_africa_guest_address_id' . $guest_email_hashed);
         //check if not empty $parcel_id 
-        $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+        $parcel_id = $terminalSession->get('terminal_africa_parcel_id');
         //check if mode is live or test
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
@@ -403,7 +410,7 @@ class WC_Terminal_Delivery
         if ($merchant_address_id && $terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
 
             //create shipment
-            $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id);
+            $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id, $order_id);
             //$shipment_id
             $shipment_id = null;
             //check if shipment is created
@@ -499,16 +506,16 @@ class WC_Terminal_Delivery
             WC()->session->__unset('terminal_africa_guest_email');
             WC()->session->__unset('terminal_africa_rateid');
             WC()->session->__unset('terminal_africa_pickuptime');
-            WC()->session->__unset('terminal_africa_shipment_id' . $guest_email);
+            WC()->session->__unset('terminal_africa_shipment_id' . $guest_email_hashed);
             WC()->session->__unset('terminal_africa_carrierlogo');
             //delete terminal_africa_parcel_id
-            $terminal_africa_parcel_id = WC()->session->get('terminal_africa_parcel_id');
+            $terminal_africa_parcel_id = $terminalSession->get('terminal_africa_parcel_id');
             if ($terminal_africa_parcel_id) {
-                WC()->session->__unset('terminal_africa_parcel_id');
+                $terminalSession->unset('terminal_africa_parcel_id');
             }
-            $address_id = WC()->session->get('terminal_africa_guest_address_id' . $guest_email);
+            $address_id = $terminalSession->get('terminal_africa_guest_address_id' . $guest_email_hashed);
             if ($address_id) {
-                WC()->session->__unset('terminal_africa_guest_address_id' . $guest_email);
+                $terminalSession->unset('terminal_africa_guest_address_id' . $guest_email_hashed);
             }
         } else {
             return;

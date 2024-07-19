@@ -105,9 +105,9 @@ if (!function_exists('getTerminalParcel')) {
 //createTerminalShipment
 if (!function_exists('createTerminalShipment')) {
     //create terminal shipment
-    function createTerminalShipment($address_from, $address_to, $parcel_id)
+    function createTerminalShipment($address_from, $address_to, $parcel_id, $order_id)
     {
-        return terminal_africa_shipping_plugin()::createShipment($address_from, $address_to, $parcel_id);
+        return terminal_africa_shipping_plugin()::createShipment($address_from, $address_to, $parcel_id, $order_id);
     }
 }
 

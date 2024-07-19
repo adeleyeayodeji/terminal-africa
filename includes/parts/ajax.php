@@ -5,6 +5,7 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
+use App\Terminal\Core\TerminalSession;
 use Exception;
 use WpOrg\Requests\Requests;
 use TerminalLogHandler;
@@ -880,8 +881,10 @@ trait Ajax
                 'items' => $data_items,
                 'description' => 'Order from ' . get_bloginfo('name'),
             ];
+            //terminal session
+            $terminalSession = TerminalSession::instance();
             //check if terminal_africa_parcel_id is set
-            $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+            $parcel_id = $terminalSession->get('terminal_africa_parcel_id');
             if (!empty($parcel_id)) {
                 //update parcel
                 $response = updateTerminalParcel($parcel_id, $parcel);
@@ -906,7 +909,7 @@ trait Ajax
             //check if response is 200
             if ($response['code'] == 200) {
                 //save parcel wc session
-                WC()->session->set('terminal_africa_parcel_id', $response['data']->parcel_id);
+                $terminalSession->set('terminal_africa_parcel_id', $response['data']->parcel_id);
                 //packaging wc session
                 WC()->session->set('terminal_africa_packaging_id', $response['data']->packaging);
                 //return
@@ -954,6 +957,8 @@ trait Ajax
             // $phone = preg_replace('/[^0-9\+]/', '', $phone);
             // $zip_code = preg_replace('/[^0-9]/', '', $zip_code);
             $email = sanitize_text_field($_POST['email']);
+            //guest_email_hashed
+            $guest_email_hashed = md5($email);
             //check if line_1 is greater than 45 characters
             $line_2 = "";
             if (strlen($line_1) > 45) {
@@ -962,11 +967,13 @@ trait Ajax
                 //remove the 45 character
                 $line_1 = substr($line_1, 0, 45);
             }
+            //terminal session
+            $terminalSession = TerminalSession::instance();
             //check if merchant_address_id is set
             $merchant_address_id = get_option('terminal_africa_merchant_address_id');
             if (!empty($merchant_address_id)) {
                 //check if not empty $parcel_id 
-                $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+                $parcel_id = $terminalSession->get('terminal_africa_parcel_id');
                 if (empty($parcel_id)) {
                     //wc notice
                     wc_add_notice('Terminal Parcel is empty, please refresh the page and try again', 'error');
@@ -976,15 +983,16 @@ trait Ajax
                         'message' => 'Terminal Parcel is empty, please refresh the page and try again'
                     ]);
                 }
+                $terminalSession = TerminalSession::instance();
                 //check if address id is set
-                $address_id = WC()->session->get('terminal_africa_guest_address_id' . $email);
+                $address_id = $terminalSession->get('terminal_africa_guest_address_id' . $guest_email_hashed);
                 if (empty($address_id)) {
                     //create address
                     $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
                     //check if address is created
                     if ($create_address['code'] == 200) {
                         //save address id wc session
-                        WC()->session->set('terminal_africa_guest_address_id' . $email, $create_address['data']->address_id);
+                        $terminalSession->set('terminal_africa_guest_address_id' . $guest_email_hashed, $create_address['data']->address_id);
                         $address_id = $create_address['data']->address_id;
                     } else {
                         wp_send_json([
@@ -999,7 +1007,7 @@ trait Ajax
                     //check if address is updated
                     if ($update_address['code'] == 200) {
                         //save address id wc session
-                        WC()->session->set('terminal_africa_guest_address_id' . $email, $update_address['data']->address_id);
+                        $terminalSession->set('terminal_africa_guest_address_id' . $guest_email_hashed, $update_address['data']->address_id);
                         $address_id = $update_address['data']->address_id;
                     } else {
                         wp_send_json([

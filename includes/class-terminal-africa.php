@@ -10,6 +10,7 @@ defined('ABSPATH') or die('No script kiddies please!');
  * @author Terminal Africa
  */
 
+use App\Terminal\Core\TerminalSession;
 use TerminalAfrica\Includes\Parts\Menus;
 use TerminalAfrica\Includes\Parts\Ajax;
 use TerminalAfrica\Includes\Parts\Shipping;
@@ -456,8 +457,10 @@ class TerminalAfricaShippingPlugin
                 'items' => $data_items,
                 'description' => 'Order from ' . get_bloginfo('name'),
             ];
+            //terminal session
+            $terminalSession = TerminalSession::instance();
             //check if terminal_africa_parcel_id is set
-            $parcel_id = WC()->session->get('terminal_africa_parcel_id');
+            $parcel_id = $terminalSession->get('terminal_africa_parcel_id');
             if (!empty($parcel_id)) {
                 //update parcel
                 $response = updateTerminalParcel($parcel_id, $parcel);
@@ -475,7 +478,7 @@ class TerminalAfricaShippingPlugin
             //check if response is 200
             if ($response['code'] == 200) {
                 //save parcel wc session
-                WC()->session->set('terminal_africa_parcel_id', $response['data']->parcel_id);
+                $terminalSession->set('terminal_africa_parcel_id', $response['data']->parcel_id);
                 //packaging wc session
                 WC()->session->set('terminal_africa_packaging_id', $response['data']->packaging);
                 //do nothing
