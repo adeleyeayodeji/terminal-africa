@@ -6,7 +6,7 @@
  * Author:      Terminal
  * Author URI:  http://www.terminal.africa
  * Description: Terminal Africa Shipping Method Plugin for WooCommerce
- * Version:     1.12.7
+ * Version:     1.12.8
  * License:     GPL-2.0+
  * License URL: http://www.gnu.org/licenses/gpl-2.0.txt
  * text-domain: terminal-africa
@@ -37,7 +37,7 @@ define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipmen
 //single auth url
 define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
 //plugin wp admin url
-define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa-carriers'));
+define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa'));
 //Terminal Africa Payment API
 define('TERMINAL_AFRICA_PAYMENT_API_ENDPOINT', 'https://pay.terminal.africa/v1/payments/');
 define('TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT', 'https://sandboxpay.terminal.africa/v1/payments/');

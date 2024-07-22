@@ -533,13 +533,16 @@ trait Shipping
                 session_start();
             }
 
+            //get plugin mode
+            $plugin_mode = self::$plugin_mode;
+
             //check if terminal_africa_addresses is set
-            if (isset($_SESSION['terminal_africa_addresses'][$page . $perPage . $search])) {
+            if (isset($_SESSION['terminal_africa_addresses'][$plugin_mode][$page . $perPage . $search])) {
                 //return countries
                 return [
                     'code' => 200,
                     'message' => 'success',
-                    'data' => sanitize_array($_SESSION['terminal_africa_addresses'][$page . $perPage . $search]),
+                    'data' => sanitize_array($_SESSION['terminal_africa_addresses'][$plugin_mode][$page . $perPage . $search]),
                 ];
             }
 
@@ -567,7 +570,7 @@ trait Shipping
                 //return address data
                 $data = $body->data;
                 //set session
-                $_SESSION['terminal_africa_addresses'][$page . $perPage . $search] = $data;
+                $_SESSION['terminal_africa_addresses'][$plugin_mode][$page . $perPage . $search] = $data;
                 //return data
                 return [
                     'code' => 200,
@@ -1091,13 +1094,16 @@ trait Shipping
                 session_start();
             }
 
+            //get plugin mode
+            $plugin_mode = self::$plugin_mode;
+
             //check if data is in session
-            if (isset($_SESSION['wallet_balance']) && !$force) {
+            if (isset($_SESSION['wallet_balance'][$plugin_mode]) && !$force) {
                 return [
                     'code' => 200,
                     'message' => 'success',
-                    'data' => sanitize_array($_SESSION['wallet_balance']),
-                    'from' => 'session',
+                    'data' => sanitize_array($_SESSION['wallet_balance'][$plugin_mode]),
+                    'from' => 'session'
                 ];
             }
 
@@ -1135,7 +1141,7 @@ trait Shipping
                 //return countries
                 $data = $body->data;
                 //save to session
-                $_SESSION['wallet_balance'] = $data;
+                $_SESSION['wallet_balance'][$plugin_mode] = $data;
                 //return data
                 return [
                     'code' => 200,
@@ -2035,6 +2041,9 @@ trait Shipping
                     "wallet" => $userWalletId
                 ];
 
+            //get plugin mode
+            $plugin_mode = self::$plugin_mode;
+
             //append if filter is set and value not empty
             if (!empty($filter)) {
                 //loop through filter
@@ -2054,11 +2063,11 @@ trait Shipping
             $dataHash = md5(json_encode($dataQuery));
 
             //check if session is set
-            if (isset($_SESSION['terminal_africa_transactions'][$dataHash]) && !$force) {
+            if (isset($_SESSION['terminal_africa_transactions'][$plugin_mode][$dataHash]) && !$force) {
                 return [
                     'code' => 200,
                     'message' => 'success',
-                    'data' => sanitize_array($_SESSION['terminal_africa_transactions'][$dataHash]),
+                    'data' => sanitize_array($_SESSION['terminal_africa_transactions'][$plugin_mode][$dataHash]),
                     'from' => 'session',
                 ];
             }
@@ -2078,7 +2087,7 @@ trait Shipping
                 //return countries
                 $data = $body->data;
                 //save to session
-                $_SESSION['terminal_africa_transactions'][$dataHash] = $data;
+                $_SESSION['terminal_africa_transactions'][$plugin_mode][$dataHash] = $data;
                 //return data
                 return [
                     'code' => 200,
