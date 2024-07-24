@@ -2,6 +2,8 @@
 
 namespace TerminalAfrica\Includes\Parts;
 
+use TerminalLogHandler;
+
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
@@ -72,6 +74,8 @@ trait Activation
     public static function deactivate()
     {
         try {
+            //remove plugin from active
+            TerminalLogHandler::terminalDeactionHandler();
             //delete terminal_africa_merchant_id
             delete_option('terminal_africa_merchant_id');
             //delete terminal_africa_settings
