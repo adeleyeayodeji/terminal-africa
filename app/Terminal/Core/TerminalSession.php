@@ -40,6 +40,10 @@ class TerminalSession
      */
     public function get($key)
     {
+        //check if session is available
+        if (!session_id()) {
+            session_start();
+        }
         return isset($_SESSION['terminal_africa_plugin'][$key]) ? $_SESSION['terminal_africa_plugin'][$key] : null;
     }
 
@@ -50,7 +54,14 @@ class TerminalSession
      */
     public function unset($key)
     {
-        unset($_SESSION['terminal_africa_plugin'][$key]);
+        //check if session is available
+        if (!session_id()) {
+            session_start();
+        }
+        //check if we have the session
+        if (isset($_SESSION['terminal_africa_plugin'][$key])) {
+            unset($_SESSION['terminal_africa_plugin'][$key]);
+        }
     }
 
     /**
@@ -59,7 +70,15 @@ class TerminalSession
      */
     public function destroy()
     {
-        unset($_SESSION['terminal_africa_plugin']);
+        //check if session is available
+        if (!session_id()) {
+            session_start();
+        }
+
+        //check if we have the session
+        if (isset($_SESSION['terminal_africa_plugin'])) {
+            unset($_SESSION['terminal_africa_plugin']);
+        }
     }
 
     /**

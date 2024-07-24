@@ -508,6 +508,8 @@ class WC_Terminal_Delivery
             WC()->session->__unset('terminal_africa_pickuptime');
             WC()->session->__unset('terminal_africa_shipment_id' . $guest_email_hashed);
             WC()->session->__unset('terminal_africa_carrierlogo');
+            //delete session
+            $terminalSession->destroy();
             //delete terminal_africa_parcel_id
             $terminal_africa_parcel_id = $terminalSession->get('terminal_africa_parcel_id');
             if ($terminal_africa_parcel_id) {
@@ -517,6 +519,8 @@ class WC_Terminal_Delivery
             if ($address_id) {
                 $terminalSession->unset('terminal_africa_guest_address_id' . $guest_email_hashed);
             }
+            //clear session cache
+            $terminalSession->destroy();
         } else {
             return;
         }

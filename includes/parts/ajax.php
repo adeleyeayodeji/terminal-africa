@@ -900,7 +900,7 @@ trait Ajax
                     wp_send_json([
                         'code' => 401,
                         'type' => 'percel',
-                        'message' => $response['message']
+                        'message' => $response['message'] . " or clear your browser cache and try again"
                     ]);
                 }
             }
@@ -920,7 +920,7 @@ trait Ajax
             } else {
                 wp_send_json([
                     'code' => 401,
-                    'message' => $response['message']
+                    'message' => $response['message'] . " or clear your browser cache and try again"
                 ]);
             }
         } catch (\Exception $e) {
