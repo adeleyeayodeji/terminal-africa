@@ -421,7 +421,7 @@ trait Assets
             //check if product is virtual or downloadable
             if ($product->is_virtual() || $product->is_downloadable()) {
                 //append
-                $status_array[] = "false";
+                $status_array[] = "true"; //enable for all
             } else {
                 //append
                 $status_array[] = "true";
