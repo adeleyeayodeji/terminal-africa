@@ -45,6 +45,72 @@ trait TerminalRESTAPI
         add_action('woocommerce_checkout_order_processed', [$this, 'new_order_fcm_notification'], 10, 1);
         //wc status change
         add_action('woocommerce_order_status_changed', [$this, 'order_status_changed'], 10, 3);
+        //woocommerce_product_data_tabs
+        add_filter('woocommerce_product_data_tabs', [$this, 'woocommerce_product_data_tabs'], 10, 1);
+        //woocommerce_product_data_panels
+        add_action('woocommerce_product_data_panels', [$this, 'woocommerce_product_data_panels'], 10, 1);
+        //woocommerce_process_product_meta
+        add_action('woocommerce_process_product_meta', [$this, 'woocommerce_process_product_meta'], 10, 1);
+    }
+
+    /**
+     * woocommerce_product_data_tabs
+     * @param $tabs
+     * @return mixed
+     */
+    public function woocommerce_product_data_tabs($tabs)
+    {
+        //add Terminal HS code tab
+        $tabs['terminal-hscode-tab'] = [
+            'label' => __('Terminal HS code', 'terminal-africa'),
+            'target' => 'wrapper_terminal_hscode',
+            //simple and variable product
+            'class' => ['show_if_simple', 'show_if_variable'],
+        ];
+        return $tabs;
+    }
+
+    /**
+     * woocommerce_product_data_panels
+     * @param $post_id
+     */
+    public function woocommerce_product_data_panels($post_id)
+    {
+?>
+        <div id="wrapper_terminal_hscode" class="panel woocommerce_options_panel">
+            <?php
+            //add terminal hscode field
+            woocommerce_wp_text_input([
+                'id' => 'terminal_hscode',
+                'label' => __('Terminal HS code', 'terminal-africa'),
+                'placeholder' => __('Enter the Product HS code', 'terminal-africa'),
+                'desc_tip'      => true,
+                'description' => __('Enter the Product HS code', 'terminal-africa'),
+                'icon' => 'fa fa-barcode',
+            ]);
+            ?>
+        </div>
+<?php
+    }
+
+    /**
+     * woocommerce_process_product_meta
+     * @param $post_id
+     */
+    public function woocommerce_process_product_meta($post_id)
+    {
+        //check if post id is set
+        if (!isset($post_id)) {
+            return;
+        }
+
+        //check if terminal hscode is set
+        if (isset($_POST['terminal_hscode'])) {
+            //sanitize the hscode
+            $hscode = sanitize_text_field($_POST['terminal_hscode']);
+            //save hscode to post meta
+            update_post_meta($post_id, 'terminal_hscode', $hscode);
+        }
     }
 
     /**
@@ -295,6 +361,32 @@ trait TerminalRESTAPI
                 'permission_callback' => [$this, 'api_permission']
             ]
         );
+
+        /**
+         * Pull products from terminal africa
+         */
+        register_rest_route(
+            'terminal-africa/v1',
+            '/pull-products',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'pull_products'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
+
+        /**
+         * Update product
+         */
+        register_rest_route(
+            'terminal-africa/v1',
+            '/update-product',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_product'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
     }
 
     /**
@@ -341,6 +433,167 @@ trait TerminalRESTAPI
         }
         //return custom error
         return new \WP_Error('invalid_token', 'Invalid user token', ['status' => 401]);
+    }
+
+    /**
+     * Pull products from terminal africa
+     */
+    public function pull_products(WP_REST_Request $request)
+    {
+        try {
+            //get the limit and page
+            $limit = $request->get_param('limit');
+            $page = $request->get_param('page');
+            //args
+            $args = [
+                'limit' => $limit ?: 10,
+                'page' => $page ?: 1,
+                'status' => 'publish',
+                'orderby' => 'date', //or 'title'
+                'order' => 'DESC', //or 'ASC'
+            ];
+            //search
+            $search = $request->get_param('s');
+            if (!empty($search)) {
+                $args['s'] = $search;
+            }
+            //orderby
+            $orderby = $request->get_param('orderby');
+            if (!empty($orderby)) {
+                $args['orderby'] = $orderby;
+            }
+            //order
+            $order = $request->get_param('order');
+            if (!empty($order)) {
+                $args['order'] = $order;
+            }
+            //id
+            $id = $request->get_param('id');
+            if (!empty($id)) {
+                $args['id'] = $id;
+            }
+
+            //get is_empty_hscode
+            $is_empty_hscode = $request->get_param('is_empty_hscode');
+            if (!empty($is_empty_hscode)) {
+                // Add the condition for empty hscode
+                $args['meta_query'][] = [
+                    [
+                        'relation' => 'AND',
+                        [
+                            'key' => 'terminal_hscode',
+                            'value' => '',
+                            'compare' => '=',
+                        ]
+                    ]
+                ];
+            }
+            //get all products
+            $products = wc_get_products($args);
+            //loop through
+            $products_list = [];
+            foreach ($products as $product) {
+                $product = $product->get_data();
+                //product id
+                $product_id = $product['id'];
+                //get product image
+                $product_image = get_the_post_thumbnail_url($product_id);
+                //terminal_hscode
+                $terminal_hscode = get_post_meta($product_id, 'terminal_hscode', true);
+                //pass data
+                $products_list[] = (object)[
+                    "product_id" => $product['id'],
+                    "name" => $product['name'],
+                    "description" => $product['description'],
+                    "original_price" => $product['price'],
+                    "sale_price" => $product['sale_price'],
+                    "thumbnail" => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
+                    "weight" =>
+                    (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
+                    "length" => $product['length'],
+                    "width" => $product['width'],
+                    "height" => $product['height'],
+                    "hscode" => $terminal_hscode
+                ];
+            }
+            //response
+            $response = [
+                "status" => 200,
+                "meta" => [
+                    "page" => $page ?: 1,
+                    "limit" => $limit ?: 10,
+                    "total" => count($products)
+                ],
+                "message" => "Products fetched successfully",
+                "data" => $products_list,
+            ];
+            //return
+            return new WP_REST_Response($response, 200);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error loading products: " . $e->getMessage(),
+                "data" => [],
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
+    }
+
+    /**
+     * Update product
+     */
+    public function update_product(WP_REST_Request $request)
+    {
+        try {
+            //get the product id
+            $product_id = $request->get_param('product_id');
+            //get the product
+            $product = wc_get_product($product_id);
+
+            //check if the product is set
+            if (!$product) {
+                //response
+                $response = [
+                    "status" => 404,
+                    "message" => "Product not found",
+                    "data" => [],
+                ];
+                //return
+                return new WP_REST_Response($response, 404);
+            }
+
+            //get the hscode
+            $hscode = $request->get_param('hscode');
+            //sanitize hscode
+            $hscode = sanitize_text_field($hscode);
+            //update the product hscode
+            update_post_meta($product_id, 'terminal_hscode', $hscode);
+
+            //response
+            $response = [
+                "status" => 200,
+                "message" => "Product updated successfully",
+                "data" => [
+                    "product" => $product_id,
+                    "hscode" => $hscode
+                ]
+            ];
+            //return
+            return new WP_REST_Response($response, 200);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error updating product: " . $e->getMessage(),
+                "data" => [],
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
     }
 
     /**
