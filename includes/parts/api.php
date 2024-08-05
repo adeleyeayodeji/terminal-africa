@@ -387,6 +387,19 @@ trait TerminalRESTAPI
                 'permission_callback' => [$this, 'api_permission']
             ]
         );
+
+        /**
+         * Update bulk products
+         */
+        register_rest_route(
+            'terminal-africa/v1',
+            '/update-bulk-products',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_bulk_products'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
     }
 
     /**
@@ -467,10 +480,11 @@ trait TerminalRESTAPI
             if (!empty($order)) {
                 $args['order'] = $order;
             }
-            //id
-            $id = $request->get_param('id');
-            if (!empty($id)) {
-                $args['id'] = $id;
+
+            //product_id
+            $product_id = $request->get_param('product_id');
+            if (!empty($product_id)) {
+                $args['product_id'] = $product_id;
             }
 
             //get is_empty_hscode
@@ -589,6 +603,74 @@ trait TerminalRESTAPI
             $response = [
                 "status" => 500,
                 "message" => "Error updating product: " . $e->getMessage(),
+                "data" => [],
+            ];
+            //return
+            return new WP_REST_Response($response, 500);
+        }
+    }
+
+    /**
+     * Update bulk products
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function update_bulk_products(WP_REST_Request $request)
+    {
+        try {
+            //get the products
+            $products = $request->get_params();
+            //check if products is an array
+            if (!is_array($products)) {
+                //response
+                $response = [
+                    "status" => 400,
+                    "message" => "Products is not an array",
+                    "data" => [],
+                ];
+                //return
+                return new WP_REST_Response($response, 400);
+            }
+
+            //check is not emtpy
+            if (empty($products)) {
+                //respond
+                $response = [
+                    "status" => 400,
+                    "message" => "Products data is required",
+                    "data" => [],
+                ];
+                //return
+                return new WP_REST_Response($response, 400);
+            }
+
+            //sanitize array
+            $formatted_products = sanitize_array($products);
+
+            //loop through the products
+            foreach ($formatted_products as $product) {
+                //get the product id
+                $product_id = (int)$product['product_id'];
+                //get the hscode
+                $hscode = $product['hscode'];
+                //update the product hscode
+                update_post_meta($product_id, 'terminal_hscode', $hscode);
+            }
+
+            //response
+            $response = [
+                "status" => 200,
+                "message" => "Products updated successfully",
+                "data" => $formatted_products,
+            ];
+            //return
+            return new WP_REST_Response($response, 200);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //response
+            $response = [
+                "status" => 500,
+                "message" => "Error updating products: " . $e->getMessage(),
                 "data" => [],
             ];
             //return

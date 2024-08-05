@@ -352,7 +352,8 @@ trait Shipping
             //check the address fields and remove empty fields
             foreach ($addressFields as $key => $value) {
                 if (empty($value)) {
-                    unset($addressFields[$key]);
+                    //set --
+                    $addressFields[$key] = '--';
                 }
                 //check key phone and count the number
                 if ($key == 'phone') {
@@ -451,7 +452,8 @@ trait Shipping
             //check the address fields and remove empty fields
             foreach ($addressFields as $key => $value) {
                 if (empty($value)) {
-                    unset($addressFields[$key]);
+                    //set --
+                    $addressFields[$key] = '--';
                 }
                 //check key phone and count the number
                 if ($key == 'phone') {
@@ -773,6 +775,9 @@ trait Shipping
             //get the domain
             $domain = parse_url($site_url, PHP_URL_HOST);
 
+            //get order rate_id meta
+            $plugin_rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
+
             $response = Requests::post(
                 self::$enpoint . 'shipments',
                 [
@@ -786,7 +791,8 @@ trait Shipping
                         'parcel' => $parcel_id,
                         'metadata' => [
                             'domain' => $domain,
-                            'order_id' => $order_id
+                            'order_id' => $order_id,
+                            'plugin_rate_id' => $plugin_rate_id
                         ],
                         'source' => 'wordpress'
                     ]

@@ -851,6 +851,16 @@ trait Ajax
             $data_items = [];
             //loop through cart items
             foreach ($cart_item as $item) {
+                //$product_id
+                $product_id = $item->get_product_id();
+
+                //get product hs code
+                $terminal_hscode = get_post_meta($product_id, 'terminal_hscode', true);
+
+                //get product image
+                $product_image = get_the_post_thumbnail_url($product_id);
+
+                //data items
                 $data_items[] = [
                     'name' => $item['data']->get_name(),
                     'quantity' => !empty($item['quantity']) ? intval($item['quantity']) : 1,
@@ -859,6 +869,9 @@ trait Ajax
                     'type' => 'parcel',
                     'currency' => get_woocommerce_currency(),
                     'weight' => !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : 0.1,
+                    'hs_code' => $terminal_hscode,
+                    'image' => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
+                    'plugin_product_id' => $product_id
                 ];
             }
             //check if terminal_default_packaging_id is set
@@ -1017,6 +1030,7 @@ trait Ajax
                         ]);
                     }
                 }
+
                 $address_from = $merchant_address_id;
                 $address_to = $address_id;
                 $parcel = $parcel_id;

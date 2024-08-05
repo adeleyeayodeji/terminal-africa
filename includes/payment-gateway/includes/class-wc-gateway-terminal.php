@@ -405,8 +405,11 @@ if (class_exists("WC_Payment_Gateway")) {
 
                 //loop through cart items
                 foreach ($order_items as $product_id => $item) {
-                    //convert to int $product_id
+                    //$product_id
                     $product_id = $item->get_product_id();
+
+                    //get product hs code
+                    $terminal_hscode = get_post_meta($product_id, 'terminal_hscode', true);
 
                     //get product image
                     $product_image = get_the_post_thumbnail_url($product_id);
@@ -414,6 +417,7 @@ if (class_exists("WC_Payment_Gateway")) {
                     //pass the data
                     $data_items[] = [
                         "product_id" => $product_id,
+                        'plugin_product_id' => $product_id,
                         "name" => $item->get_name(),
                         "quantity" => intval($item->get_quantity()) ?: 1,
                         "value" => $item->get_total(),
@@ -422,6 +426,7 @@ if (class_exists("WC_Payment_Gateway")) {
                         "currency" => get_woocommerce_currency(),
                         "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
                         'image' => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
+                        'hs_code' => $terminal_hscode
                     ];
                 }
 
