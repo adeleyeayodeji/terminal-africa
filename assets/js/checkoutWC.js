@@ -120,7 +120,6 @@ let terminalCheckoutWC = {
               ${state_options}
           </select>
       `);
-
       //check if billing_postcode_field is after #billing_phone_field
       if (
         $("#billing_postcode_field").prev().attr("id") != "billing_phone_field"
@@ -977,6 +976,7 @@ let terminalCheckoutWC = {
       window.terminal_billing_city = lga;
       //terminal_billing_state
       window.terminal_billing_state = state;
+
       //ajax
       $.ajax({
         type: "POST",
