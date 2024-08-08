@@ -233,8 +233,9 @@ trait Ajax
                 ]);
             }
 
+            $logInstance = TerminalLogHandler::instance();
             //get user data
-            $userData = self::getUserData();
+            $userData = $logInstance->getUserData();
             //site url
             $site_url = site_url();
             $domain = parse_url($site_url, PHP_URL_HOST);
@@ -267,7 +268,7 @@ trait Ajax
             } else {
                 wp_send_json([
                     'code' => 400,
-                    'message' => 'Payment access request failed'
+                    'message' => 'Payment access request failed: ' . $body->message
                 ]);
             }
         } catch (\Exception $e) {
@@ -887,12 +888,22 @@ trait Ajax
             }
             //get new packaging id
             $packaging_id = $verifyDefaultPackaging['packaging_id'];
+
+            //site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
             //arrange parcel
             $parcel = [
                 'packaging' => $packaging_id,
                 'weight_unit' => 'kg',
                 'items' => $data_items,
                 'description' => 'Order from ' . get_bloginfo('name'),
+                'metadata' => [
+                    'domain' => $domain,
+                    'source' => 'wordpress'
+                ],
             ];
             //terminal session
             $terminalSession = TerminalSession::instance();
