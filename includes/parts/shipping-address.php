@@ -5,9 +5,20 @@ namespace TerminalAfrica\Includes\Parts;
 //security
 defined('ABSPATH') or die('No script kiddies please!');
 
-use phpDocumentor\Reflection\Types\Integer;
 use \WpOrg\Requests\Requests;
 
+/**
+ * Shipping Engine Module
+ * 
+ * @package TerminalAfrica\Includes\Parts
+ * @version 1.0.0
+ * @author Terminal Africa <support@terminal.africa>
+ * @since 1.0.0
+ * @category Shipping
+ * @license GPL-2.0+
+ * @copyright 2024 Terminal Africa
+ * @link https://terminal.africa
+ */
 trait Shipping
 {
     //get countries
@@ -355,13 +366,13 @@ trait Shipping
                     //set --
                     $addressFields[$key] = '--';
                 }
-                //check key phone and count the number
-                if ($key == 'phone') {
-                    //count the value and remove is length is less 6
-                    if (strlen($value) < 6) {
-                        unset($addressFields[$key]);
-                    }
-                }
+                // //check key phone and count the number
+                // if ($key == 'phone') {
+                //     //count the value and remove is length is less 6
+                //     if (strlen($value) < 6) {
+                //         unset($addressFields[$key]);
+                //     }
+                // }
             }
 
             $response = Requests::post(
@@ -456,12 +467,12 @@ trait Shipping
                     $addressFields[$key] = '--';
                 }
                 //check key phone and count the number
-                if ($key == 'phone') {
-                    //count the value and remove is length is less 6
-                    if (strlen($value) < 6) {
-                        unset($addressFields[$key]);
-                    }
-                }
+                // if ($key == 'phone') {
+                //     //count the value and remove is length is less 6
+                //     if (strlen($value) < 6) {
+                //         unset($addressFields[$key]);
+                //     }
+                // }
             }
 
             //request 

@@ -853,7 +853,7 @@ trait Ajax
             //loop through cart items
             foreach ($cart_item as $item) {
                 //$product_id
-                $product_id = $item->get_product_id();
+                $product_id = $item['product_id'];
 
                 //get product hs code
                 $terminal_hscode = get_post_meta($product_id, 'terminal_hscode', true);
@@ -948,7 +948,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_save_cart_item');
             wp_send_json([
                 'code' => 400,
                 'message' => "Something went wrong: " . $e->getMessage()
@@ -1076,7 +1076,7 @@ trait Ajax
                 'message' => 'Terminal Merchant address not set'
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_process_terminal_rates');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage()
@@ -1177,7 +1177,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_get_rate_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1218,7 +1218,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_process_terminal_rates_customer');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1274,7 +1274,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_apply_terminal_rates_customer');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1328,7 +1328,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_arrange_terminal_delivery');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1369,7 +1369,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'refresh_terminal_wallet');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1410,7 +1410,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'refresh_terminal_rate_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1467,7 +1467,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'save_terminal_carrier_settings');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1514,7 +1514,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'refresh_terminal_carriers_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1553,7 +1553,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'get_terminal_packaging');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1622,7 +1622,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'get_terminal_shipment_status');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1723,7 +1723,7 @@ trait Ajax
                 'message' => 'Something went wrong, please try again',
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'update_user_carrier_terminal');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1761,7 +1761,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'cancel_terminal_shipment');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1802,7 +1802,7 @@ trait Ajax
                 'message' => 'Custom price mark up saved successfully',
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'save_terminal_custom_price_mark_up');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1848,7 +1848,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'save_terminal_default_currency_code');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1884,7 +1884,7 @@ trait Ajax
                 'message' => 'Carriers data reset successfully',
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_reset_carriers_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1915,7 +1915,7 @@ trait Ajax
                 'message' => 'Shipment timeline updated successfully',
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'update_user_carrier_shipment_timeline_terminal');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1962,7 +1962,7 @@ trait Ajax
                 'shipment_rate' => $status
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'update_user_carrier_shipment_rate_terminal');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -1993,7 +1993,7 @@ trait Ajax
                 'message' => 'Shipment insurance updated successfully',
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'update_user_carrier_shipment_insurance_terminal');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -2040,7 +2040,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_get_address_book');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -2084,7 +2084,7 @@ trait Ajax
                 ]);
             }
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_get_transactions');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -2188,7 +2188,7 @@ trait Ajax
                 'data' => $data
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_get_shipping_api_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
@@ -2242,7 +2242,7 @@ trait Ajax
                 'data' => compact('saved_address', 'merchant_address_id', 'shippingData')
             ]);
         } catch (\Exception $e) {
-            logTerminalError($e);
+            logTerminalError($e, 'terminal_africa_get_merchant_address_data');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),

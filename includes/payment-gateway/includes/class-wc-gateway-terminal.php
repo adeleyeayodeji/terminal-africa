@@ -501,15 +501,12 @@ if (class_exists("WC_Payment_Gateway")) {
                 //create json 
                 $request_data = json_encode($payment_payload, JSON_UNESCAPED_SLASHES);
 
-                //create hash from request data
-                $hashKey = $this->generate_header_hash($request_data, $terminal_africa_settings['secret_key']);
-
                 //get instance of TerminalAfricaShippingPlugin
                 $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
 
                 $headers = array(
                     'Content-Type' => 'application/json',
-                    'X-Terminal-Signature' => $hashKey,
+                    'Authorization' => 'Bearer ' . $terminal_africa_shipping_plugin::$skkey,
                     'X-Terminal-User' => $terminal_africa_settings['user_id']
                 ) + $terminal_africa_shipping_plugin::$request_header;
 
