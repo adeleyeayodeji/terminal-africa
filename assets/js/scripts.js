@@ -1027,6 +1027,8 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
         }
       },
       error: function (xhr, status, error) {
+        //close loader
+        Swal.close();
         //swal error
         Swal.fire({
           icon: "error",
@@ -1045,7 +1047,259 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
   });
 };
 
-//arrangeTerminalDelivery
+/**
+ * Validate Terminal Shipment
+ * @param {string} rateid
+ */
+let validateTerminalShipment = (rateid, order_id, shipment_id) => {
+  jQuery(document).ready(function ($) {
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "terminal_africa_validate_terminal_shipment",
+        nonce: terminal_africa.nonce,
+        rateid: rateid,
+        order_id,
+        shipment_id
+      },
+      dataType: "json",
+      beforeSend: function () {
+        Swal.fire({
+          title: "Please wait...",
+          text: "Validating Terminal Shipment",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //close loader
+        Swal.close();
+        //check response code is 200
+        switch (response.code) {
+          case 200:
+            //show dropoff location pop up as html swal
+            Swal.fire({
+              title: "Dropoff Location Required",
+              html: `
+                <div>
+                  <p>Please select a dropoff location for your shipment.</p>
+                  <select id="dropoff-location" class="swal2-input">
+                    <option value="location1">Location 1</option>
+                    <option value="location2">Location 2</option>
+                    <option value="location3">Location 3</option>
+                  </select>
+                </div>
+              `,
+              confirmButtonText: "Submit",
+              showLoaderOnConfirm: true,
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              allowEnterKey: false,
+              showConfirmButton: true,
+              showCancelButton: true,
+              cancelButtonText: "Cancel",
+              preConfirm: () => {
+                const dropoffLocation =
+                  Swal.getPopup().querySelector("#dropoff-location").value;
+                if (!dropoffLocation) {
+                  Swal.showValidationMessage(
+                    `Please select a dropoff location`
+                  );
+                }
+                return { dropoffLocation: dropoffLocation };
+              }
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Handle the selected dropoff location
+                console.log(
+                  "Selected dropoff location:",
+                  result.value.dropoffLocation
+                );
+              }
+            });
+            break;
+          case 402:
+            //arrange delivery now
+            arrangeTerminalDeliveryNow(rateid, order_id, shipment_id);
+            break;
+          case 400:
+            //swal error
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.message,
+              footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+            });
+            break;
+        }
+      },
+      error: function (xhr, status, error) {
+        //close loader
+        Swal.close();
+        //swal error
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!: " + xhr.responseText,
+          confirmButtonColor: "rgb(246 146 32)",
+          cancelButtonColor: "rgb(0 0 0)",
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      }
+    });
+  });
+};
+
+/**
+ * Arrange Terminal Delivery Now
+ * @param {string} rateid
+ * @param {string} order_id
+ * @param {string} shipment_id
+ */
+let arrangeTerminalDeliveryNow = (rateid, order_id, shipment_id) => {
+  try {
+    jQuery(document).ready(function ($) {
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "terminal_africa_arrange_terminal_delivery",
+          nonce: terminal_africa.nonce,
+          order_id: order_id,
+          rateid: rateid,
+          shipment_id: shipment_id
+        },
+        beforeSend: function () {
+          // Swal loader
+          Swal.fire({
+            title: "Please wait...",
+            text: "Arranging Delivery",
+            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            showConfirmButton: false,
+            footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+          });
+        },
+        dataType: "json",
+        success: function (response) {
+          //Swal close
+          Swal.close();
+          //check response is 200
+          if (response.code == 200) {
+            //swal success
+            Swal.fire({
+              icon: "success",
+              title: "Success",
+              confirmButtonColor: "rgb(246 146 32)",
+              cancelButtonColor: "rgb(0 0 0)",
+              text: response.message,
+              footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+            }).then(() => {
+              //reload page
+              window.location.reload();
+            });
+          } else {
+            if (response.code === 400) {
+              //swal error
+              Swal.fire({
+                icon: "error",
+                title: "Insufficient funds",
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //confirm button
+                confirmButtonText: "Add funds",
+                showCancelButton: true,
+                cancelButtonText: "Cancel, I'll do it later",
+                text: response.message,
+                footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+              }).then((result) => {
+                if (result.value) {
+                  //redirect to add funds page
+                  window.location.href = terminal_africa.wallet_url;
+                  return;
+                }
+              });
+            } else {
+              //swal error
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                text: response.message,
+                confirmButtonText: "Try again",
+                footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+              });
+            }
+          }
+        },
+        error: function (xhr, status, error) {
+          //close loader
+          Swal.close();
+          //swal error
+          Swal.fire({
+            icon: "error",
+
+            title: "Oops...",
+            text: "Something went wrong!: " + xhr.responseText,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                <div>
+                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+              `
+          });
+        }
+      });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * Arrange Terminal Delivery
+ * @param {object} elem
+ * @param {object} e
+ */
 let arrangeTerminalDelivery = (elem, e) => {
   e.preventDefault();
   jQuery(document).ready(function ($) {
@@ -1063,119 +1317,8 @@ let arrangeTerminalDelivery = (elem, e) => {
       confirmButtonText: "Yes, arrange it!"
     }).then((result) => {
       if (result.value) {
-        //ajax
-        $.ajax({
-          type: "POST",
-          url: terminal_africa.ajax_url,
-          data: {
-            action: "terminal_africa_arrange_terminal_delivery",
-            nonce: terminal_africa.nonce,
-            order_id: order_id,
-            rateid: rateid,
-            shipment_id: shipment_id
-          },
-          beforeSend: function () {
-            // Swal loader
-            Swal.fire({
-              title: "Please wait...",
-              text: "Arranging Delivery",
-              imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              allowEnterKey: false,
-              showConfirmButton: false,
-              footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
-            });
-          },
-          dataType: "json",
-          success: function (response) {
-            //Swal close
-            Swal.close();
-            //check response is 200
-            if (response.code == 200) {
-              //swal success
-              Swal.fire({
-                icon: "success",
-                title: "Success",
-                confirmButtonColor: "rgb(246 146 32)",
-                cancelButtonColor: "rgb(0 0 0)",
-                text: response.message,
-                footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
-              }).then(() => {
-                //reload page
-                window.location.reload();
-              });
-            } else {
-              if (response.code === 400) {
-                //swal error
-                Swal.fire({
-                  icon: "error",
-                  title: "Insufficient funds",
-                  confirmButtonColor: "rgb(246 146 32)",
-                  cancelButtonColor: "rgb(0 0 0)",
-                  //confirm button
-                  confirmButtonText: "Add funds",
-                  showCancelButton: true,
-                  cancelButtonText: "Cancel, I'll do it later",
-                  text: response.message,
-                  footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
-                }).then((result) => {
-                  if (result.value) {
-                    //redirect to add funds page
-                    window.location.href = terminal_africa.wallet_url;
-                    return;
-                  }
-                });
-              } else {
-                //swal error
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  confirmButtonColor: "rgb(246 146 32)",
-                  cancelButtonColor: "rgb(0 0 0)",
-                  text: response.message,
-                  confirmButtonText: "Try again",
-                  footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
-                });
-              }
-            }
-          },
-          error: function (xhr, status, error) {
-            //close loader
-            Swal.close();
-            //swal error
-            Swal.fire({
-              icon: "error",
-
-              title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
-              confirmButtonColor: "rgb(246 146 32)",
-              cancelButtonColor: "rgb(0 0 0)",
-              //footer
-              footer: `
-                <div>
-                  <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-                </div>
-              `
-            });
-          }
-        });
+        //validate terminal shipment
+        validateTerminalShipment(rateid, order_id, shipment_id);
       }
     });
   });

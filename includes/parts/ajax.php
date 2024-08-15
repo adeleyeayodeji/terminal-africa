@@ -125,6 +125,66 @@ trait Ajax
         add_action('wp_ajax_update_terminal_wallet_currency', array($this, 'update_terminal_wallet_currency'));
         //ajax terminal_africa_close_notice
         add_action('wp_ajax_terminal_africa_close_notice', array($this, 'terminal_africa_close_notice'));
+        //add ajax terminal_africa_validate_terminal_shipment
+        add_action('wp_ajax_terminal_africa_validate_terminal_shipment', array($this, 'terminal_africa_validate_terminal_shipment'));
+    }
+
+    /**
+     * terminal_africa_validate_terminal_shipment
+     * 
+     */
+    public function terminal_africa_validate_terminal_shipment()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_GET['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get rateid
+            $rateid = sanitize_text_field($_GET['rateid']);
+            //get order_id
+            $order_id = sanitize_text_field($_GET['order_id']);
+            //get shipment_id
+            $shipment_id = sanitize_text_field($_GET['shipment_id']);
+
+            //validate rate 
+            $validateRate = validateTerminalRate($rateid, $order_id, $shipment_id);
+
+            //check if response code is 200
+            if ($validateRate['code'] == 200) {
+                //send response
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Terminal shipment validated successfully'
+                ]);
+            }
+
+            //check if response code is 402
+            if ($validateRate['code'] == 402) {
+                //send response
+                wp_send_json([
+                    'code' => 402,
+                    'message' => $validateRate['message'],
+                    'data' => $validateRate['data']
+                ]);
+            }
+
+            //send response
+            wp_send_json([
+                'code' => 400,
+                'message' => 'Terminal shipment validation failed: ' . $validateRate['message']
+            ]);
+        } catch (Exception $e) {
+            logTerminalError($e, 'terminal_africa_validate_terminal_shipment');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     /**

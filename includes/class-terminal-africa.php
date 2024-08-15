@@ -215,10 +215,10 @@ class TerminalAfricaShippingPlugin
             $this->init_ajax();
             //initAPI
             $this->initAPI();
-            //activate terminal
-            $this->activate_terminal_init();
             //initPaymentGateway
             $this->initPaymentGateway();
+            //activate terminal
+            $this->activate_terminal_init();
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }

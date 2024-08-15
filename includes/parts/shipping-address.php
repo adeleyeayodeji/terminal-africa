@@ -21,6 +21,117 @@ use \WpOrg\Requests\Requests;
  */
 trait Shipping
 {
+    /**
+     * Validate Terminal Rate
+     * @param string $rateid
+     * @param string $order_id
+     * @param string $shipment_id
+     * @return mixed
+     * @link https://api.terminal.africa/v1/rates/:rate_id
+     */
+    public static function validateTerminalRate($rateid, $order_id, $shipment_id)
+    {
+        try {
+            //get rate 
+            $response = Requests::get(self::$enpoint . 'rates/' . $rateid, [
+                'Authorization' => 'Bearer ' . self::$skkey,
+            ] + self::$request_header);
+            //decode body
+            $body = json_decode($response->body);
+
+            //get order
+            $order = wc_get_order($order_id);
+
+            //get country
+            $country = $order->get_billing_country();
+            //get state
+            $state = $order->get_billing_state();
+            //get address_id
+            $merchant_address_id = get_option('terminal_africa_merchant_address_id');
+            //get carrier_reference from rate response
+            $carrier_reference = $body->data->carrier_reference;
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //check if data has dropoff_required and is true
+                if (isset($body->data->dropoff_required) && $body->data->dropoff_required) {
+                    //get dropoff locations https://api.terminal.africa/v1/locations/drop-off
+                    $dropoff_query_params = [
+                        "country" => $country,
+                        "state" => $state,
+                        "address_id" => $merchant_address_id,
+                        "carrier" => $carrier_reference,
+                    ];
+                    //get dropoff locations
+                    $dropoff_locations = self::get_dropoff_locations($dropoff_query_params);
+                    //return dropoff_locations
+                    return $dropoff_locations;
+                } else {
+                    //return dropoff_locations
+                    return [
+                        'code' => 402,
+                        'message' => 'no dropoff required',
+                        'data' => [],
+                    ];
+                }
+            }
+            //logTerminalErrorData
+            logTerminalErrorData($response->body, self::$enpoint . 'rates/' . $rateid);
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        } catch (\Exception $e) {
+            logTerminalError($e, 'validateTerminalRate');
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
+    /*
+    * Get Dropoff Locations
+    * @param array $query_params
+    * @return array
+    */
+    public static function get_dropoff_locations($query_params)
+    {
+        try {
+            //get dropoff locations
+            $response = Requests::get(self::$enpoint . 'carriers/locations/drop-off?' . http_build_query($query_params), [
+                'Authorization' => 'Bearer ' . self::$skkey,
+            ] + self::$request_header);
+            //decode body
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                error_log("body: " . print_r($body, true));
+                //return dropoff locations
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $body->data,
+                ];
+            }
+            //logTerminalErrorData
+            logTerminalErrorData($response->body, self::$enpoint . 'carriers/locations/drop-off?' . http_build_query($query_params));
+            return [
+                'code' => $response->status_code,
+                'message' => $body->message,
+                'data' => [],
+            ];
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'carriers/locations/drop-off?' . http_build_query($query_params));
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
     //get countries
     public static function get_countries()
     {

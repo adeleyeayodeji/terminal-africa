@@ -411,6 +411,21 @@ if (!function_exists('terminalFormatPhoneNumber')) {
 }
 
 /**
+ * validateTerminalRate
+ * 
+ * @param $rateid
+ * @param string $order_id
+ * @param string $shipment_id
+ * @return mixed
+ */
+if (!function_exists('validateTerminalRate')) {
+    function validateTerminalRate($rateid, $order_id = '', $shipment_id = '')
+    {
+        return terminal_africa_shipping_plugin()::validateTerminalRate($rateid, $order_id, $shipment_id);
+    }
+}
+
+/**
  * $allowed_order_statuses
  */
 $GLOBALS['terminal_allowed_order_statuses'] = terminal_africa_shipping_plugin()::$allowed_order_statuses;
