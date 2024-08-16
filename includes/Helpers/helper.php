@@ -195,9 +195,9 @@ if (!function_exists('getTerminalPackagingData')) {
 //arrangePickupAndDelivery
 if (!function_exists('arrangePickupAndDelivery')) {
     //arrange pickup and delivery
-    function arrangePickupAndDelivery($shipment_id, $rate_id)
+    function arrangePickupAndDelivery($shipment_id, $rate_id, $dropoff_id = null)
     {
-        return terminal_africa_shipping_plugin()::arrangePickupAndDelivery($shipment_id, $rate_id);
+        return terminal_africa_shipping_plugin()::arrangePickupAndDelivery($shipment_id, $rate_id, $dropoff_id);
     }
 }
 

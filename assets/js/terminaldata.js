@@ -79,6 +79,24 @@ jQuery(document).ready(function ($) {
     });
   };
 
+  /**
+   * listen to postcode change
+   * @return {void}
+   */
+  let listenToPostcodeChangeTerminal = () => {
+    try {
+      //get postcode
+      let postcode = $("#billing_postcode").val();
+      //check if postcode is not empty
+      if (postcode != "") {
+        //save to session
+        window.terminal_billing_postcode = postcode;
+      }
+    } catch (error) {
+      //do nothing
+    }
+  };
+
   //check if page url match 'order-received'
   if (window.location.href.indexOf("order-received") > -1) {
     //do nothing
@@ -89,11 +107,16 @@ jQuery(document).ready(function ($) {
     setInterval(() => {
       //check if #billing_postcode_field display none
       if ($("#billing_postcode_field").css("display") == "none") {
-        //add value to post code
-        $("#billing_postcode").val(terminal_billing_postcode);
+        //check if value is empty
+        if ($("#billing_postcode").val() == "") {
+          //add value to post code
+          $("#billing_postcode").val(window.terminal_billing_postcode);
+        }
         //fade in #billing_postcode_field
         $("#billing_postcode_field").show();
       }
+      //listen to postcode change
+      listenToPostcodeChangeTerminal();
     }, 300);
 
     //terminal postcode key focus out

@@ -587,6 +587,8 @@ class TerminalShippingForm extends React.Component {
                   confirmButtonColor: "rgb(246 146 32)",
                   cancelButtonColor: "rgb(0 0 0)",
                   iconColor: "rgb(246 146 32)",
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
                   footer: `
               <div>
                 <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
@@ -604,6 +606,8 @@ class TerminalShippingForm extends React.Component {
                         confirmButtonColor: "rgb(246 146 32)",
                         cancelButtonColor: "rgb(0 0 0)",
                         iconColor: "rgb(246 146 32)",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
                         footer: `
                     <div>
                       <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">

@@ -560,7 +560,7 @@ trait Assets
                     var terminal_billing_city = '<?php echo esc_html($billing_city); ?>';
                     var terminal_shipping_state = '<?php echo esc_html($terminal_shipping_state); ?>';
                     var terminal_shipping_city = '<?php echo esc_html($terminal_shipping_city); ?>';
-                    var terminal_billing_postcode = '<?php echo esc_html($billing_postcode); ?>';
+                    window.terminal_billing_postcode = '<?php echo esc_html($billing_postcode); ?>';
                     var terminal_shipping_postcode = '<?php echo esc_html($shipping_postcode); ?>';
                 </script>
 <?php

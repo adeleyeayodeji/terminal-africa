@@ -1086,6 +1086,8 @@ let validateTerminalShipment = (rateid, order_id, shipment_id) => {
         //check response code is 200
         switch (response.code) {
           case 200:
+            //get dropoff locations
+            var dropoff_locations = response.data;
             //show dropoff location pop up as html swal
             Swal.fire({
               title: "Dropoff Location Required",
@@ -1093,9 +1095,12 @@ let validateTerminalShipment = (rateid, order_id, shipment_id) => {
                 <div>
                   <p>Please select a dropoff location for your shipment.</p>
                   <select id="dropoff-location" class="swal2-input">
-                    <option value="location1">Location 1</option>
-                    <option value="location2">Location 2</option>
-                    <option value="location3">Location 3</option>
+                    <option value="">Select a dropoff location</option>
+                    ${dropoff_locations
+                      .map((location) => {
+                        return `<option value="${location.dropoff_id}">${location.address}</option>`;
+                      })
+                      .join("")}
                   </select>
                 </div>
               `,
@@ -1119,9 +1124,11 @@ let validateTerminalShipment = (rateid, order_id, shipment_id) => {
               }
             }).then((result) => {
               if (result.isConfirmed) {
-                // Handle the selected dropoff location
-                console.log(
-                  "Selected dropoff location:",
+                // arrange delivery now with result.value.dropoffLocation
+                arrangeTerminalDeliveryNow(
+                  rateid,
+                  order_id,
+                  shipment_id,
                   result.value.dropoffLocation
                 );
               }
@@ -1172,8 +1179,14 @@ let validateTerminalShipment = (rateid, order_id, shipment_id) => {
  * @param {string} rateid
  * @param {string} order_id
  * @param {string} shipment_id
+ * @param {string} dropoff_id
  */
-let arrangeTerminalDeliveryNow = (rateid, order_id, shipment_id) => {
+let arrangeTerminalDeliveryNow = (
+  rateid,
+  order_id,
+  shipment_id,
+  dropoff_id = "none"
+) => {
   try {
     jQuery(document).ready(function ($) {
       //ajax
@@ -1185,7 +1198,8 @@ let arrangeTerminalDeliveryNow = (rateid, order_id, shipment_id) => {
           nonce: terminal_africa.nonce,
           order_id: order_id,
           rateid: rateid,
-          shipment_id: shipment_id
+          shipment_id: shipment_id,
+          dropoff_id: dropoff_id
         },
         beforeSend: function () {
           // Swal loader

@@ -39,17 +39,16 @@ trait Shipping
             //decode body
             $body = json_decode($response->body);
 
-            //get order
-            $order = wc_get_order($order_id);
-
+            //get merchant default address
+            $terminal_africa_merchant_address = get_option('terminal_africa_merchant_address', (object)[]);
             //get country
-            $country = $order->get_billing_country();
+            $country = $terminal_africa_merchant_address->country;
             //get state
-            $state = $order->get_billing_state();
+            $state = $terminal_africa_merchant_address->state;
             //get address_id
             $merchant_address_id = get_option('terminal_africa_merchant_address_id');
-            //get carrier_reference from rate response
-            $carrier_reference = $body->data->carrier_reference;
+            //get carrier_slug from rate response
+            $carrier_slug = $body->data->carrier_slug;
             //check if response is ok
             if ($response->status_code == 200) {
                 //check if data has dropoff_required and is true
@@ -59,7 +58,7 @@ trait Shipping
                         "country" => $country,
                         "state" => $state,
                         "address_id" => $merchant_address_id,
-                        "carrier" => $carrier_reference,
+                        "carrier" => $carrier_slug,
                     ];
                     //get dropoff locations
                     $dropoff_locations = self::get_dropoff_locations($dropoff_query_params);
@@ -107,7 +106,6 @@ trait Shipping
             $body = json_decode($response->body);
             //check if response is ok
             if ($response->status_code == 200) {
-                error_log("body: " . print_r($body, true));
                 //return dropoff locations
                 return [
                     'code' => 200,
@@ -1828,7 +1826,7 @@ trait Shipping
     }
 
     //arrange pickup and delivery
-    public static function arrangePickupAndDelivery($shipment_id, $rate_id)
+    public static function arrangePickupAndDelivery($shipment_id, $rate_id, $dropoff_id = null)
     {
         try {
             //check $skkey
@@ -1840,18 +1838,24 @@ trait Shipping
                 ];
             }
 
+            //args
+            $args = [
+                "shipment_id" => $shipment_id,
+                "rate_id" => $rate_id
+            ];
+
+            //check if dropoff_id is set
+            if (!empty($dropoff_id)) {
+                $args["dropoff_id"] = $dropoff_id;
+            }
+
             $response = Requests::post(
                 self::$enpoint . 'shipments/pickup',
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
                 ] + self::$request_header,
-                json_encode(
-                    [
-                        "shipment_id" => $shipment_id,
-                        "rate_id" => $rate_id,
-                    ]
-                ),
+                json_encode($args),
                 //time out 60 seconds
                 ['timeout' => 60]
             );

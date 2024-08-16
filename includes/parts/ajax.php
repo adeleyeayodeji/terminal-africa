@@ -10,11 +10,21 @@ use Exception;
 use WpOrg\Requests\Requests;
 use TerminalLogHandler;
 
+/**
+ * Ajax Operations
+ * 
+ * @since 1.0.0
+ * @author Terminal Africa <https://terminal.africa>
+ * @package Terminal Africa
+ * @subpackage Ajax
+ */
 trait Ajax
 {
     /**
      * Init Ajax
      * 
+     * @since 1.0.0
+     * @return void
      */
     public function init_ajax()
     {
@@ -159,7 +169,8 @@ trait Ajax
                 //send response
                 wp_send_json([
                     'code' => 200,
-                    'message' => 'Terminal shipment validated successfully'
+                    'message' => 'Terminal shipment validated successfully',
+                    'data' => $validateRate['data']
                 ]);
             }
 
@@ -1358,6 +1369,7 @@ trait Ajax
             $order_id = sanitize_text_field($_POST['order_id']);
             $rateid = sanitize_text_field($_POST['rateid']);
             $shipment_id = sanitize_text_field($_POST['shipment_id']);
+            $dropoff_id = sanitize_text_field($_POST['dropoff_id']);
             //check if rate_id is empty
             if (empty($rateid) || empty($shipment_id)) {
                 //return error
@@ -1367,8 +1379,13 @@ trait Ajax
                 ]);
             }
 
+            //check if dropoff_id is none
+            if ($dropoff_id == 'none') {
+                $dropoff_id = null;
+            }
+
             //arrange delivery
-            $delivery = arrangePickupAndDelivery($shipment_id, $rateid);
+            $delivery = arrangePickupAndDelivery($shipment_id, $rateid, $dropoff_id);
             //check if delivery is arranged
             if ($delivery['code'] == 200) {
                 //add order meta

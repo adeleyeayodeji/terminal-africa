@@ -230,8 +230,8 @@ class TerminalPhoneBook extends Component {
       $tbody.find('input[name="zip_code"]').val(address.zip);
       //check if input element with name 'address_id' exist
       if ($tbody.find('input[name="address_id"]').length) {
-        //update address_id
-        $tbody.find('input[name="address_id"]').val(address.address_id);
+        // //update address_id, ignore for now
+        // $tbody.find('input[name="address_id"]').val(address.address_id);
       } else {
         //create input element
         var input = $("<input>")

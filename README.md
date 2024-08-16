@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 6.0
 Requires PHP: 5.6
 Tested up to: 6.6
-Stable tag: 1.13.3
+Stable tag: 1.13.4
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -83,9 +83,14 @@ You can get the API key from your Terminal Africa account. You can create an acc
 
 == Changelog ==
 
+= 1.13.4 =
+
+- Added support for dropoff location
+- Fixed bugs
+
 = 1.13.3 =
 
-- Fix bugs
+- Fixed bugs
 
 = 1.13.2 =
 
