@@ -529,6 +529,18 @@ if (class_exists("WC_Payment_Gateway")) {
                         'redirect_url' => $body->data->payment_url
                     ]);
                 } else {
+                    //check if data has error_code = duplicate_shipment
+                    if (isset($body->data->error_code) && $body->data->error_code == 'duplicate_shipment') {
+                        //get the payment_url
+                        $payment_url = $body->data->payment_url;
+
+                        //redirect to payment url
+                        wp_send_json_success([
+                            'message' => 'Payment initiated successfully',
+                            'redirect_url' => $payment_url
+                        ]);
+                    }
+                    //throw error
                     throw new \Exception('Payment initiation failed: ' . $body->message);
                 }
             } catch (\Exception $e) {
