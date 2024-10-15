@@ -606,31 +606,61 @@ let terminalButton = () => {
         //do nothing
         return;
       }
-      //check if terminal_delivery_html is more one
-      if (terminal_delivery_html.length > 1) {
-        //find parent li for the first index
-        var terminal_delivery_li = terminal_delivery_html.first().parent();
-      } else {
-        //find parent li
-        var terminal_delivery_li = terminal_delivery_html.parent();
-      }
+
+      //find parent li for the first index
+      var terminal_delivery_li = terminal_delivery_html.parents("li");
+
       //check if class exist woocommerce-Price-amount
       if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
-        //show error
-        Swal.fire({
-          icon: "error",
-          title: "Please select a carrier",
-          text: "Please choose your delivery option to complete your order",
-          confirmButtonColor: "rgb(246 146 32)",
-          cancelButtonColor: "rgb(0 0 0)",
-          //footer
-          footer: `
-            <div>
-                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-            </div>
-            `
-        });
-        return;
+        //get all siblings terminal_delivery_li
+        var terminal_delivery_li_siblings = terminal_delivery_li
+          .parents("ul")
+          .find("li")
+          .find(".woocommerce-Price-amount");
+
+        var parent_method_id = terminal_delivery_li_siblings
+          .parent()
+          .attr("for");
+
+        //check if parent_method_id is not matching terminal_delivery_li
+        if (/terminal/.test(parent_method_id)) {
+          //show error
+          Swal.fire({
+            icon: "error",
+            title: "Please select a carrier",
+            text: "Please choose your delivery option to complete your order",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+                `
+          });
+          //return
+          return;
+        }
+
+        //check if #payment_method_terminal_africa_payment exist
+        if ($("#payment_method_terminal_africa_payment").length) {
+          //show error
+          Swal.fire({
+            icon: "error",
+            title: "Please select a carrier",
+            text: "Please choose your delivery option to complete your order",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
+                <div>
+                    <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                </div>
+                `
+          });
+          //return
+          return;
+        }
       }
       //if all is good
       //submit form
