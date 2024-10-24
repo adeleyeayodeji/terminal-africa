@@ -200,18 +200,32 @@ trait Activation
                     $woo_payment_gateway_status = $woocommerce_terminal_africa_payment_settings['enabled'];
                 }
             }
+
             //check if enabled is no, do nothing
             if ($woo_payment_gateway_status == "no") {
                 //return
                 return;
             }
-            //unset all payment gateway except terminal_africa_payment
+
+            /**
+             * Exceptions
+             * unset all payment gateway except terminal_africa_payment, cod, cheque, bacs
+             * @var array
+             */
+            $exceptions = [
+                'terminal_africa_payment', //Terminal Africa Payment Gateway
+                'cod', //Cash on Delivery
+                'cheque', //Check Payments
+                'bacs' //Direct Bank Transfer
+            ];
+            //apply filter
+            $exceptions = apply_filters('terminal_africa_payment_gateway_exceptions', $exceptions);
             //get all payment gateway
             $payment_gateways = WC()->payment_gateways->payment_gateways;
             //loop through payment gateway
             foreach ($payment_gateways as $key => $gateway) {
                 // //check if payment gateway key is not match Terminal
-                if ($gateway->id != 'terminal_africa_payment') {
+                if (!in_array($gateway->id, $exceptions)) {
                     //update enabled to no
                     $payment_gateways[$key]->enabled = 'no';
                 }

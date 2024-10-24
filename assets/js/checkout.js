@@ -637,8 +637,11 @@ let terminalButton = () => {
           }
         }
 
-        //check if #payment_method_terminal_africa_payment exist
-        if ($("#payment_method_terminal_africa_payment").length) {
+        //check if #payment_method_terminal_africa_payment exist and is checked
+        if (
+          $("#payment_method_terminal_africa_payment").length &&
+          $("#payment_method_terminal_africa_payment").is(":checked")
+        ) {
           //check if class exist woocommerce-Price-amount
           if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
             //show error
