@@ -8,7 +8,7 @@ $site_name = get_bloginfo('name');
     <div class="t-auth-bg" style="background: url('<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/bg-svg.svg') ?>');">
         <div class="t-content-auth">
             <div class="t-form-area">
-                <img class="main-logo-image" src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-full.png') ?>" alt="">
+                <img class="main-logo-image" src="<?php echo esc_url(TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/terminal-logo.svg') ?>" alt="">
                 <p class="t-auth-header">
                     Authenticate Your Account
                 </p>

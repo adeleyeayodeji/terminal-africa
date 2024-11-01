@@ -22,8 +22,8 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
     {
         $this->id                 = 'terminal_delivery';
         $this->instance_id           = absint($instance_id);
-        $this->method_title       = __('Terminal Delivery');
-        $this->method_description = __('Get your parcels delivered better, cheaper and quicker via Terminal Delivery');
+        $this->method_title       = __('Terminal Africa Delivery');
+        $this->method_description = __('Get your parcels delivered better, cheaper and quicker via Terminal Africa Delivery');
 
         $this->supports  = array(
             'settings',
@@ -34,7 +34,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
 
         $this->init();
 
-        $this->title = 'Terminal Delivery';
+        $this->title = 'Terminal Africa Delivery';
 
         $this->enabled = $this->get_option('enabled');
     }
