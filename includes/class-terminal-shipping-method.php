@@ -34,7 +34,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
 
         $this->init();
 
-        $this->title = 'Terminal Africa Delivery';
+        $this->title = 'Terminal Africa Shipping';
 
         $this->enabled = $this->get_option('enabled');
     }
