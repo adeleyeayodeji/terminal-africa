@@ -1,6 +1,7 @@
 <?php
 //avoid direct access
 
+use App\Terminal\Core\TerminalSession;
 use SmartyStreets\PhpSdk\Request;
 use WpOrg\Requests\Requests;
 
@@ -430,15 +431,10 @@ if (class_exists("WC_Payment_Gateway")) {
                     ];
                 }
 
-                //check if session is started
-                if (session_status() == PHP_SESSION_NONE) {
-                    session_start();
-                }
-
                 //get selected carrier logo
-                $carrier_logo = isset($_SESSION['terminal_africa_carrierlogo']) ? $_SESSION['terminal_africa_carrierlogo'] : null;
+                $carrier_logo = $order->get_meta('Terminal_africa_carrierlogo');
                 //get terminal_africa_carriername
-                $carrier_name = isset($_SESSION['terminal_africa_carriername']) ? $_SESSION['terminal_africa_carriername'] : null;
+                $carrier_name = $order->get_meta('Terminal_africa_carriername');
 
                 //get site title
                 $site_title = get_bloginfo('name');

@@ -536,6 +536,8 @@ trait Assets
 
                     <?php endif; ?>
                 </style>
+                <!-- Terminal Africa Plugin Version: <?php echo TERMINAL_AFRICA_VERSION; ?> -->
+                <!-- Terminal Africa Plugin URL: https://wordpress.org/plugins/terminal-africa/ -->
                 <?php
                 $checkout = WC()->checkout();
                 //get checkout billing state

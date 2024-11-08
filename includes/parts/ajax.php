@@ -1182,18 +1182,17 @@ trait Ajax
             WC()->session->set('terminal_africa_rateid', $rateid);
             WC()->session->set('terminal_africa_pickuptime', $pickuptime);
             WC()->session->set('terminal_africa_carrierlogo', $carrierlogo);
+
             //save backup data to php session
-            //check if session is started
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
-            $_SESSION['terminal_africa_carriername'] = $carriername;
-            $_SESSION['terminal_africa_amount'] = $amount;
-            $_SESSION['terminal_africa_duration'] = $duration;
-            $_SESSION['terminal_africa_guest_email'] = $email;
-            $_SESSION['terminal_africa_rateid'] = $rateid;
-            $_SESSION['terminal_africa_pickuptime'] = $pickuptime;
-            $_SESSION['terminal_africa_carrierlogo'] = $carrierlogo;
+            $terminalSession = TerminalSession::instance();
+            $terminalSession->set('terminal_africa_carriername', $carriername);
+            $terminalSession->set('terminal_africa_amount', $amount);
+            $terminalSession->set('terminal_africa_duration', $duration);
+            $terminalSession->set('terminal_africa_guest_email', $email);
+            $terminalSession->set('terminal_africa_rateid', $rateid);
+            $terminalSession->set('terminal_africa_pickuptime', $pickuptime);
+            $terminalSession->set('terminal_africa_carrierlogo', $carrierlogo);
+
             //return
             wp_send_json([
                 'code' => 200,
@@ -1946,15 +1945,13 @@ trait Ajax
                     'message' => 'Wrong nonce, please refresh the page and try again'
                 ]);
             }
-            //check if session is started
-            if (session_status() == PHP_SESSION_NONE) {
-                session_start();
-            }
+            //terminal session
+            $terminalSession = TerminalSession::instance();
             //reset carrier data or delete session
-            WC()->session->__unset('terminal_africa_carriername');
-            WC()->session->__unset('terminal_africa_amount');
-            WC()->session->__unset('terminal_africa_duration');
-            WC()->session->__unset('terminal_africa_rateid');
+            $terminalSession->delete('terminal_africa_carriername');
+            $terminalSession->delete('terminal_africa_amount');
+            $terminalSession->delete('terminal_africa_duration');
+            $terminalSession->delete('terminal_africa_rateid');
             //return
             wp_send_json([
                 'code' => 200,

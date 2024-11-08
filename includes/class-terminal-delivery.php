@@ -378,21 +378,21 @@ class WC_Terminal_Delivery
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+        //terminal session
+        $terminalSession = TerminalSession::instance();
         //check if session exists
-        $terminal_africa_carriername = WC()->session->get('terminal_africa_carriername');
-        $terminal_africa_amount = WC()->session->get('terminal_africa_amount');
-        $terminal_africa_duration = WC()->session->get('terminal_africa_duration');
-        $guest_email = WC()->session->get('terminal_africa_guest_email');
+        $terminal_africa_carriername = $terminalSession->get('terminal_africa_carriername');
+        $terminal_africa_amount = $terminalSession->get('terminal_africa_amount');
+        $terminal_africa_duration = $terminalSession->get('terminal_africa_duration');
+        $guest_email = $terminalSession->get('terminal_africa_guest_email');
         //guest email hashed
         $guest_email_hashed = md5($guest_email);
         //terminal_africa_rateid
-        $terminal_africa_rateid = WC()->session->get('terminal_africa_rateid');
-        $terminal_africa_pickuptime = WC()->session->get('terminal_africa_pickuptime');
-        $terminal_africa_carrierlogo = WC()->session->get('terminal_africa_carrierlogo');
+        $terminal_africa_rateid = $terminalSession->get('terminal_africa_rateid');
+        $terminal_africa_pickuptime = $terminalSession->get('terminal_africa_pickuptime');
+        $terminal_africa_carrierlogo = $terminalSession->get('terminal_africa_carrierlogo');
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
         $merchant_address_id = get_option('terminal_africa_merchant_address_id');
-        //terminal session
-        $terminalSession = TerminalSession::instance();
         //check if address id is set
         $guest_address_id = $terminalSession->get('terminal_africa_guest_address_id' . $guest_email_hashed);
         //check if not empty $parcel_id 
@@ -418,6 +418,8 @@ class WC_Terminal_Delivery
                 //wc session
                 WC()->session->set('terminal_africa_shipment_id' . $guest_email, $create_shipment['data']->shipment_id);
                 $shipment_id = $create_shipment['data']->shipment_id;
+                //set session
+                $terminalSession->set('terminal_africa_shipment_id' . $guest_email, $create_shipment['data']->shipment_id);
             } else {
                 //order error note
                 $order = wc_get_order($order_id);
@@ -508,8 +510,17 @@ class WC_Terminal_Delivery
             WC()->session->__unset('terminal_africa_pickuptime');
             WC()->session->__unset('terminal_africa_shipment_id' . $guest_email_hashed);
             WC()->session->__unset('terminal_africa_carrierlogo');
+
             //delete session
-            $terminalSession->destroy();
+            $terminalSession->delete('terminal_africa_carriername');
+            $terminalSession->delete('terminal_africa_amount');
+            $terminalSession->delete('terminal_africa_duration');
+            $terminalSession->delete('terminal_africa_guest_email');
+            $terminalSession->delete('terminal_africa_rateid');
+            $terminalSession->delete('terminal_africa_pickuptime');
+            $terminalSession->delete('terminal_africa_shipment_id' . $guest_email_hashed);
+            $terminalSession->delete('terminal_africa_carrierlogo');
+
             //delete terminal_africa_parcel_id
             $terminal_africa_parcel_id = $terminalSession->get('terminal_africa_parcel_id');
             if ($terminal_africa_parcel_id) {
@@ -519,8 +530,6 @@ class WC_Terminal_Delivery
             if ($address_id) {
                 $terminalSession->unset('terminal_africa_guest_address_id' . $guest_email_hashed);
             }
-            //clear session cache
-            $terminalSession->destroy();
         } else {
             return;
         }

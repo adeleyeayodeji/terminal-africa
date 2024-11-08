@@ -48,6 +48,15 @@ class TerminalSession
     }
 
     /**
+     * Get all session
+     * @return array
+     */
+    public function getAll()
+    {
+        return $_SESSION['terminal_africa_plugin'];
+    }
+
+    /**
      * Unset session
      * @param string $key
      * @return void
@@ -62,6 +71,16 @@ class TerminalSession
         if (isset($_SESSION['terminal_africa_plugin'][$key])) {
             unset($_SESSION['terminal_africa_plugin'][$key]);
         }
+    }
+
+    /**
+     * Delete session
+     * @param string $key
+     * @return void
+     */
+    public function delete($key)
+    {
+        $this->unset($key);
     }
 
     /**

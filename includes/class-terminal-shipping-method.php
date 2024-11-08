@@ -1,5 +1,7 @@
 <?php
 
+use App\Terminal\Core\TerminalSession;
+
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
@@ -92,7 +94,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
 
 
     /**
-     * Calculate shipping by sending destination/items to Shipwire and parsing returned rates
+     * Calculate shipping by sending destination/items to Terminal Africa
      *
      * @since 1.0
      * @param array $package
@@ -103,19 +105,25 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             return;
         }
 
+        //log
+        error_log("Calculating shipping");
+
         //check if session is started
         if (session_status() == PHP_SESSION_NONE) {
             @session_start();
         }
 
+        //terminal session
+        $terminalSession = TerminalSession::instance();
+
         //check if session exists
-        $terminal_africa_carriername = sanitize_text_field(WC()->session->get('terminal_africa_carriername'));
-        $terminal_africa_amount = sanitize_text_field(WC()->session->get('terminal_africa_amount'));
-        $terminal_africa_duration = sanitize_text_field(WC()->session->get('terminal_africa_duration'));
-        $guest_email = sanitize_text_field(WC()->session->get('terminal_africa_guest_email'));
-        $terminal_africa_rateid = sanitize_text_field(WC()->session->get('terminal_africa_rateid'));
-        $terminal_africa_pickuptime = sanitize_text_field(WC()->session->get('terminal_africa_pickuptime'));
-        $terminal_africa_carrierlogo = sanitize_text_field(WC()->session->get('terminal_africa_carrierlogo'));
+        $terminal_africa_carriername = sanitize_text_field($terminalSession->get('terminal_africa_carriername'));
+        $terminal_africa_amount = sanitize_text_field($terminalSession->get('terminal_africa_amount'));
+        $terminal_africa_duration = sanitize_text_field($terminalSession->get('terminal_africa_duration'));
+        $guest_email = sanitize_text_field($terminalSession->get('terminal_africa_guest_email'));
+        $terminal_africa_rateid = sanitize_text_field($terminalSession->get('terminal_africa_rateid'));
+        $terminal_africa_pickuptime = sanitize_text_field($terminalSession->get('terminal_africa_pickuptime'));
+        $terminal_africa_carrierlogo = sanitize_text_field($terminalSession->get('terminal_africa_carrierlogo'));
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
         //check if mode is live or test
         $mode = 'test';
@@ -131,7 +139,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             //add rate
             $this->add_rate(array(
                 'id'        => $this->id . $this->instance_id,
-                'label'     => "Terminal",
+                'label'     => apply_filters('terminal_africa_shipping_method_label', "Terminal"),
                 'cost'      => 0,
                 'meta_data' => [],
             ));
@@ -164,7 +172,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         //add rate
         $this->add_rate(array(
             'id'        => $this->id . $this->instance_id,
-            'label'     => "Terminal",
+            'label'     => apply_filters('terminal_africa_shipping_method_label', "Terminal"),
             'cost'      => 0,
             'meta_data' => [],
         ));
