@@ -151,10 +151,21 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);
             }
+            //get timeline settings
+            $timeline_settings = get_option('terminal_user_carrier_shipment_timeline', 'false');
+
+            //check if timeline settings is true
+            if ($timeline_settings == 'true') {
+                //add duration to label
+                $terminal_africa_timeline_label = $terminal_africa_carriername . " - " . $terminal_africa_duration;
+            } else {
+                $terminal_africa_timeline_label = $terminal_africa_carriername;
+            }
+
             //add rate
             $this->add_rate(array(
                 'id'        => $this->id . $this->instance_id,
-                'label'     => $terminal_africa_carriername . " - " . $terminal_africa_duration,
+                'label'     => $terminal_africa_timeline_label,
                 'cost'      => $terminal_africa_amount,
                 'meta_data' => [
                     'duration' => $terminal_africa_duration,
