@@ -532,3 +532,20 @@
     }
   }
 }
+
+.terminal-new-shipment-page {
+  display: flex !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto !important;
+  width: 90% !important;
+
+  &--inner-column {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    max-width: 90%;
+  }
+}

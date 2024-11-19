@@ -9364,6 +9364,21 @@
     margin-left: 0;
   }
 }
+.terminal-new-shipment-page {
+  display: flex !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto !important;
+  width: 90% !important;
+}
+.terminal-new-shipment-page--inner-column {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  max-width: 90%;
+}
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/responsive.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************/

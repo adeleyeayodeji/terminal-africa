@@ -19,7 +19,7 @@ if (!defined('WPINC')) {
 }
 
 // Define constants.
-define('TERMINAL_AFRICA_VERSION', "1.13.8");
+define('TERMINAL_AFRICA_VERSION', time());
 define('TERMINAL_AFRICA_PLUGIN_FILE', __FILE__);
 define('TERMINAL_AFRICA_PLUGIN_BASENAME', plugin_basename(__FILE__));
 define('TERMINAL_AFRICA_PLUGIN_DIR', __DIR__);
