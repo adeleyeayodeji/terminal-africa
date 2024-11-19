@@ -2293,6 +2293,278 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
 
 /***/ }),
 
+/***/ "./src/components/pages/ShippingHomePage/ShippingHomePage.jsx":
+/*!********************************************************************!*\
+  !*** ./src/components/pages/ShippingHomePage/ShippingHomePage.jsx ***!
+  \********************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ShippingHomePage; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ShippingSkeleton_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShippingSkeleton/ShippingSkeleton */ "./src/components/pages/ShippingHomePage/ShippingSkeleton/ShippingSkeleton.jsx");
+
+
+
+
+/**
+ * ShippingHomePage component
+ * @extends Component
+ */
+class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
+  /**
+   * Constructor
+   * @param {Object} props - The component props
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
+
+  /**
+   * Lifecycle method
+   * @returns {void}
+   */
+  componentDidMount() {
+    this.setState({
+      isLoading: false
+    });
+  }
+
+  /**
+   * Render the component
+   * @returns {JSX.Element}
+   */
+  render() {
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }
+}
+
+/***/ }),
+
+/***/ "./src/components/pages/ShippingHomePage/ShippingSkeleton/ShippingSkeleton.jsx":
+/*!*************************************************************************************!*\
+  !*** ./src/components/pages/ShippingHomePage/ShippingSkeleton/ShippingSkeleton.jsx ***!
+  \*************************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ NewShippingSkeleton; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+class NewShippingSkeleton extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
+  render() {
+    // Define style objects
+    const skeletonStyle10 = {
+      height: "10px",
+      width: "90%"
+    };
+    const skeletonStyle15 = {
+      height: "15px",
+      width: "100%"
+    };
+    const skeletonStyle25 = {
+      height: "25px",
+      width: "90%"
+    };
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-row terminal-new-shipment-page"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-col-12 t-col-lg-12 t-col-md-12 t-col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle10
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-new-shipment-page--inner-column"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle15
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "terminal-skeleton",
+      style: skeletonStyle25
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      style: {
+        height: "10px"
+      }
+    })));
+  }
+}
+
+/***/ }),
+
 /***/ "./src/scss/bootstrap5.scss":
 /*!**********************************!*\
   !*** ./src/scss/bootstrap5.scss ***!
@@ -2453,6 +2725,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/TerminalPhoneBook */ "./src/components/TerminalPhoneBook.js");
 /* harmony import */ var _components_Shipping_TerminalManageShipping__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Shipping/TerminalManageShipping */ "./src/components/Shipping/TerminalManageShipping.js");
 /* harmony import */ var _components_MerchantAddress_MerchantAddressForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/MerchantAddress/MerchantAddressForm */ "./src/components/MerchantAddress/MerchantAddressForm.js");
+/* harmony import */ var _components_pages_ShippingHomePage_ShippingHomePage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/pages/ShippingHomePage/ShippingHomePage */ "./src/components/pages/ShippingHomePage/ShippingHomePage.jsx");
+
 
 
 
@@ -2484,6 +2758,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (terminalMerchantAddress) {
     //render dom MerchantAddressForm
     react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_MerchantAddress_MerchantAddressForm__WEBPACK_IMPORTED_MODULE_5__["default"], null), terminalMerchantAddress);
+  }
+
+  //check if element exist #terminal-new-shipment-page-wrapper
+  const terminalNewShipmentPageWrapper = document.getElementById("terminal-new-shipment-page-wrapper");
+
+  //check if element exist
+  if (terminalNewShipmentPageWrapper) {
+    react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_pages_ShippingHomePage_ShippingHomePage__WEBPACK_IMPORTED_MODULE_6__["default"], null), terminalNewShipmentPageWrapper);
   }
 });
 }();
