@@ -1,6 +1,6 @@
 import React, { Fragment, Component } from "react";
 import TerminalPhoneBook from "../../TerminalPhoneBook";
-import SippingStatus from "./SippingStatus";
+import ShippingStatus from "./ShippingStatus";
 
 export default class TerminalShippingHeader extends Component {
   //constructor
@@ -49,7 +49,7 @@ export default class TerminalShippingHeader extends Component {
               />
             </div>
             <div className="t-flex t-button-phonebook-mobile">
-              <SippingStatus
+              <ShippingStatus
                 className={shippingStatus.className}
                 title={shippingStatus.title}
               />

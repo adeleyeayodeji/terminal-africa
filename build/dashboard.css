@@ -9148,6 +9148,11 @@
   color: #4bc45b;
 }
 
+.t-status-in-transit {
+  background: rgba(192, 162, 230, 0.1882352941);
+  color: #c0a2e6;
+}
+
 .t-btn:hover {
   color: #fff;
 }
@@ -9381,6 +9386,154 @@
 }
 
 .t-title {
+  color: #333333;
+}
+
+#terminal-new-shipment-page-wrapper .t-terminal-dashboard-order-row {
+  height: 57px;
+}
+#terminal-new-shipment-page-wrapper .terminal-dashboard-orders-list-table-heading {
+  text-align: start !important;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Lato", sans-serif;
+  line-height: 0px;
+  color: #333333;
+  padding-top: 20px;
+}
+#terminal-new-shipment-page-wrapper .t-terminal-dashboard-order-row:hover {
+  box-shadow: rgba(0, 0, 0, 0) 0px 2px 4px 0px;
+  background: rgba(253, 238, 221, 0.4392156863) !important;
+}
+#terminal-new-shipment-page-wrapper .terminal-dashboard-orders-list-table-shipment-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--title span {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Lato", sans-serif;
+  line-height: 22px;
+  color: #333333;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--filter select {
+  border: 1px solid #e0e0e0;
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Lato", sans-serif;
+  line-height: 22px;
+  color: #333333;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  border: 1px solid #e0e0e0;
+  padding: 2px 2px;
+  border-radius: 6px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  padding-right: 11px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Lato", sans-serif;
+  line-height: 22px;
+  color: #333333;
+  background: transparent;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input input::-moz-placeholder {
+  color: #c9c9c9;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input input::placeholder {
+  color: #c9c9c9;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input svg {
+  width: 23px;
+  height: 17px;
+  cursor: pointer;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-input svg:hover {
+  opacity: 0.8;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-left: none;
+  cursor: pointer;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-icon svg {
+  width: 15px;
+  height: 16px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--left--search-icon:hover {
+  opacity: 0.8;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--right--refresh {
+  background-color: #ffffff;
+  color: #333333;
+  padding: 10px 16px;
+  gap: 10px;
+  border-radius: 6px;
+  border: 0.5px solid #e0e0e0;
+  cursor: pointer;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--right--refresh:hover {
+  opacity: 0.8;
+  color: #090707;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--right--export {
+  background-color: #000000;
+  color: white;
+  padding: 10px 16px;
+  gap: 10px;
+  border-radius: 6px;
+  border: 0.5px solid #e0e0e0;
+  cursor: pointer;
+}
+#terminal-new-shipment-page-wrapper .t-shipping--header--right--export:hover {
+  background-color: #333333;
+}
+#terminal-new-shipment-page-wrapper table thead {
+  background-color: #fbf9f7;
+}
+#terminal-new-shipment-page-wrapper table tbody td {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Lato", sans-serif;
+  line-height: 22px;
   color: #333333;
 }
 /*!*************************************************************************************************************************************************************************************************************************************************!*\

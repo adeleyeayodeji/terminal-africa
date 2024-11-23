@@ -273,6 +273,11 @@
   color: #4bc45b;
 }
 
+.t-status-in-transit {
+  background: #c0a2e630;
+  color: #c0a2e6;
+}
+
 .t-btn:hover {
   color: #fff;
 }
@@ -553,3 +558,6 @@
 .t-title {
   color: #333333;
 }
+
+//import the style from the ShippingHomePage component
+@import "../components/pages/ShippingHomePage/style/style.scss";

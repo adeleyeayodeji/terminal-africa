@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class SippingStatus extends Component {
+export default class ShippingStatus extends Component {
   render() {
     const { className, title } = this.props;
     return (
