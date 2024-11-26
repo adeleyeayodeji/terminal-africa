@@ -2250,4 +2250,54 @@ trait Shipping
             ];
         }
     }
+
+    /**
+     * Get All Shipments v2
+     * GET https://api.terminal.africa/v2/shipments
+     * @since 1.11.1
+     */
+    public static function getAllShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "",)
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            //site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
+            //param builder
+            $params = [
+                'page' => $page,
+                'perPage' => $perPage,
+                'search' => $search
+            ];
+
+            //append status if not empty
+            if (!empty($status)) {
+                $params['status'] = $status;
+            }
+
+            //get shipments
+            $response  = Requests::get(
+                "https://api.terminal.africa/v2/shipments",
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json',
+                    'domain' => $domain
+                ] + self::$request_header,
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+        } catch (\Exception $e) {
+            //
+        }
+    }
 }

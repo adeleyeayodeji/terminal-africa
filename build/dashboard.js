@@ -2344,6 +2344,12 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
   }
 
   /**
+   * Get all shipments
+   * @returns {void}
+   */
+  getAllShipments() {}
+
+  /**
    * Lifecycle method
    * @returns {void}
    */

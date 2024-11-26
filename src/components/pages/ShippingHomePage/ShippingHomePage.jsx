@@ -32,6 +32,12 @@ export default class ShippingHomePage extends Component {
   }
 
   /**
+   * Get all shipments
+   * @returns {void}
+   */
+  getAllShipments() {}
+
+  /**
    * Lifecycle method
    * @returns {void}
    */
