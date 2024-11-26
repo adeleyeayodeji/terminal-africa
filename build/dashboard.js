@@ -2326,7 +2326,8 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      shipments: []
     };
 
     /**
@@ -2347,16 +2348,42 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
    * Get all shipments
    * @returns {void}
    */
-  getAllShipments() {}
+  getAllShipments() {
+    //get all shipments
+    jQuery.ajax({
+      url: terminal_africa.ajax_url,
+      method: "GET",
+      data: {
+        action: "terminal_africa_get_all_shipments_v2",
+        nonce: terminal_africa.nonce
+      },
+      beforeSend: () => {
+        this.setState({
+          isLoading: true
+        });
+      },
+      success: response => {
+        console.log(response);
+        this.setState({
+          isLoading: false
+        });
+      },
+      error: (error, status, xhr) => {
+        this.setState({
+          isLoading: false
+        });
+        console.log(status, xhr);
+      }
+    });
+  }
 
   /**
    * Lifecycle method
    * @returns {void}
    */
   componentDidMount() {
-    this.setState({
-      isLoading: false
-    });
+    //get all shipments
+    this.getAllShipments();
   }
 
   /**

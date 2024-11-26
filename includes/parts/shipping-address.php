@@ -2253,10 +2253,17 @@ trait Shipping
 
     /**
      * Get All Shipments v2
+     * @param int $page
+     * @param int $perPage
+     * @param string $search
+     * @param string $status
+     * 
      * GET https://api.terminal.africa/v2/shipments
      * @since 1.11.1
+     * 
+     * @return array
      */
-    public static function getAllShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "",)
+    public static function getAllShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "")
     {
         try {
             //check $skkey
@@ -2277,7 +2284,8 @@ trait Shipping
             $params = [
                 'page' => $page,
                 'perPage' => $perPage,
-                'search' => $search
+                'search' => $search,
+                'domain' => $domain
             ];
 
             //append status if not empty
@@ -2287,17 +2295,40 @@ trait Shipping
 
             //get shipments
             $response  = Requests::get(
-                "https://api.terminal.africa/v2/shipments",
+                self::$v2_endpoint . 'shipments?' . http_build_query($params),
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
-                    'Content-Type' => 'application/json',
-                    'domain' => $domain
+                    'Content-Type' => 'application/json'
                 ] + self::$request_header,
                 //time out 60 seconds
                 ['timeout' => 60]
             );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $body->data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$v2_endpoint . 'shipments?' . http_build_query($params));
+                //return error
+                return [
+                    'code' => $response->status_code,
+                    'message' => $body->message,
+                    'data' => [],
+                ];
+            }
         } catch (\Exception $e) {
-            //
+            logTerminalError($e, self::$v2_endpoint . 'shipments?' . http_build_query($params));
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
         }
     }
 }

@@ -425,6 +425,22 @@ if (!function_exists('validateTerminalRate')) {
     }
 }
 
+//getAllShipmentsV2
+if (!function_exists('getAllTerminalShipmentsV2')) {
+    /**
+     * Get All Shipments V2
+     * @param int $page
+     * @param int $perPage
+     * @param string $search
+     * @param string $status
+     * @return array
+     */
+    function getAllTerminalShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "")
+    {
+        return terminal_africa_shipping_plugin()::getAllShipmentsV2($page, $perPage, $search, $status);
+    }
+}
+
 /**
  * $allowed_order_statuses
  */

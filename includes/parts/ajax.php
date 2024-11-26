@@ -137,6 +137,8 @@ trait Ajax
         add_action('wp_ajax_terminal_africa_close_notice', array($this, 'terminal_africa_close_notice'));
         //add ajax terminal_africa_validate_terminal_shipment
         add_action('wp_ajax_terminal_africa_validate_terminal_shipment', array($this, 'terminal_africa_validate_terminal_shipment'));
+        //add ajax terminal_africa_get_all_shipments_v2
+        add_action('wp_ajax_terminal_africa_get_all_shipments_v2', array($this, 'terminal_africa_get_all_shipments_v2'));
     }
 
     /**
@@ -555,26 +557,30 @@ trait Ajax
                 return [
                     'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                     'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                    'mode' => 'test'
+                    'mode' => 'test',
+                    'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
                 ];
             } else if (strpos($pk, 'live') !== false || strpos($sk, 'live') !== false) {
                 return [
                     'endpoint' => TERMINAL_AFRICA_API_ENDPOINT,
                     'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_API_ENDPOINT,
-                    'mode' => 'live'
+                    'mode' => 'live',
+                    'v2_endpoint' => TERMINAL_AFRICA_V2_API_ENDPOINT
                 ];
             }
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                 'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                'mode' => 'test'
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
             ];
         } catch (\Exception $e) {
             logTerminalError($e);
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                 'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                'mode' => 'test'
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
             ];
         }
     }
@@ -2317,6 +2323,49 @@ trait Ajax
             ]);
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_africa_get_merchant_address_data');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Get All Shipments V2
+     * 
+     */
+    public function terminal_africa_get_all_shipments_v2()
+    {
+        try {
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
+
+            //get all shipments
+            $shipments = getAllTerminalShipmentsV2();
+            //check if shipments are gotten
+            if ($shipments['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Shipments gotten successfully',
+                    'data' => $shipments['data']
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $shipments['message'],
+                    'endpoint' => 'get_all_shipments_v2',
+                    'data' => []
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_africa_get_all_shipments_v2');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
