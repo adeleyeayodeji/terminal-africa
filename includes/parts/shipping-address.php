@@ -2285,7 +2285,8 @@ trait Shipping
                 'page' => $page,
                 'perPage' => $perPage,
                 'search' => $search,
-                'domain' => $domain
+                'domain' => $domain,
+                'orderBy' => 'created_at'
             ];
 
             //append status if not empty

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import NewShippingSkeleton from "./ShippingSkeleton/ShippingSkeleton";
 import ShippingStatus from "../../Shipping/Parts/ShippingStatus";
+//import dayjs
+import dayjs from "dayjs";
 
 /**
  * ShippingHomePage component
@@ -15,7 +17,18 @@ export default class ShippingHomePage extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      shipments: []
+      shipments: [],
+      pagination: {
+        currentPage: null,
+        hasNextPage: null,
+        hasPrevPage: null,
+        nextPage: null,
+        pageCount: null,
+        pageCounter: null,
+        perPage: null,
+        prevPage: null,
+        total: null
+      }
     };
 
     /**
@@ -49,8 +62,24 @@ export default class ShippingHomePage extends Component {
         this.setState({ isLoading: true });
       },
       success: (response) => {
-        console.log(response);
         this.setState({ isLoading: false });
+        //check if response code is 200
+        if (response.code == 200) {
+          //set shipments data
+          this.setState({ shipments: response.data.shipments });
+          //set pagination data
+          this.setState({ pagination: response.data.pagination });
+        } else {
+          //show gutenberg toast
+          try {
+            wp.data
+              .dispatch("core/notices")
+              .createNotice("error", response.message, {
+                type: "snackbar",
+                isDismissible: true
+              });
+          } catch (error) {}
+        }
       },
       error: (error, status, xhr) => {
         this.setState({ isLoading: false });
@@ -73,6 +102,8 @@ export default class ShippingHomePage extends Component {
    * @returns {JSX.Element}
    */
   render() {
+    console.log(this.state.shipments);
+
     return (
       <div>
         {this.state.isLoading ? (
@@ -163,76 +194,98 @@ export default class ShippingHomePage extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  className="t-terminal-dashboard-order-row"
-                  onclick="window.location.href='https://tplug.terminal.africa/wp-admin/admin.php?page=terminal-africa&amp;action=edit&amp;id=SH-YHDKM0CVFINZBUWQ&amp;order_id=588&amp;rate_id=RT-UFKF9ZQ8N0WZOYED&amp;nonce=98940844c3'">
-                  <td style={{ width: "50px" }}>
-                    <img
-                      src="https://ucarecdn.com/fd1e1d0c-88c7-498a-9762-3ad9a3e2bedf/LONESTAR.jpg"
-                      alt=""
-                      style={this.styles.carrierLogo}
-                    />
-                  </td>
-                  <td style={{ width: "auto" }}>
-                    <div className="t-flex">
-                      <span>Jun 24 2024, 9:13am</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span
-                      className="terminal-dashboard-order-link"
-                      style={{
-                        marginBottom: "0px",
-                        fontSize: "16px",
-                        color: "black",
-                        textTransform: "capitalize"
-                      }}>
-                      #93039
-                    </span>
-                  </td>
-                  <td>
-                    <span>Ifeoma Adebayo</span>
-                  </td>
-                  <td>
-                    <div className="terminal-dashboard-orders-list-table-shipment-id">
-                      <span data-shipment-id={`SH-YHDKM0CVFINZBUWQ`}>
-                        {`SH-YHDKM0CVFINZBUWQ`.slice(0, 13) + "..."}
+                {this.state.shipments.map((shipment) => (
+                  <tr
+                    className="t-terminal-dashboard-order-row"
+                    onClick={() => {
+                      window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&amp;action=edit&amp;id=${shipment._source.shipment_id}&amp;nonce=${terminal_africa.nonce}`;
+                    }}>
+                    <td style={{ width: "50px" }}>
+                      <img
+                        src="https://ucarecdn.com/fd1e1d0c-88c7-498a-9762-3ad9a3e2bedf/LONESTAR.jpg"
+                        alt=""
+                        style={this.styles.carrierLogo}
+                      />
+                    </td>
+                    <td style={{ width: "auto" }}>
+                      <div className="t-flex">
+                        <span>
+                          {dayjs(shipment._source.created_at).format(
+                            "DD MMM YYYY"
+                          )}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span
+                        className="terminal-dashboard-order-link"
+                        style={{
+                          marginBottom: "0px",
+                          fontSize: "16px",
+                          color: "black",
+                          textTransform: "capitalize"
+                        }}>
+                        #93039
                       </span>
-                      <svg
-                        width="29"
-                        height="20"
-                        viewBox="0 0 29 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <rect
-                          x="0.5"
-                          width="28"
-                          height="20"
-                          rx="4"
-                          fill="#F7F3EF"
-                        />
-                        <path
-                          d="M16.375 12.625V14.3125C16.375 14.6232 16.1232 14.875 15.8125 14.875H10.9375C10.6268 14.875 10.375 14.6232 10.375 14.3125V7.9375C10.375 7.62684 10.6268 7.375 10.9375 7.375H11.875C12.1305 7.375 12.3811 7.3963 12.625 7.43722M16.375 12.625H18.0625C18.3732 12.625 18.625 12.3732 18.625 12.0625V9.625C18.625 7.39525 17.0033 5.54428 14.875 5.18722C14.6311 5.1463 14.3805 5.125 14.125 5.125H13.1875C12.8768 5.125 12.625 5.37684 12.625 5.6875V7.43722M16.375 12.625H13.1875C12.8768 12.625 12.625 12.3732 12.625 12.0625V7.43722M18.625 10.75V9.8125C18.625 8.88052 17.8695 8.125 16.9375 8.125H16.1875C15.8768 8.125 15.625 7.87316 15.625 7.5625V6.8125C15.625 5.88052 14.8695 5.125 13.9375 5.125H13.375"
-                          stroke="#333333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </td>
-                  <td>
-                    <ShippingStatus
-                      className="t-status-in-transit"
-                      title="In transit"
-                    />
-                  </td>
-                  <td>
-                    <img
-                      src="https://tplug.terminal.africa/wp-content/plugins/terminal-africa/assets/img/arrow-forward.svg"
-                      alt=""
-                    />
-                  </td>
-                </tr>
+                    </td>
+                    <td>
+                      <span>{shipment._source.delivery_name}</span>
+                    </td>
+                    <td>
+                      <div className="terminal-dashboard-orders-list-table-shipment-id">
+                        <span
+                          data-shipment-id={`${shipment._source.shipment_id}`}>
+                          {`${shipment._source.shipment_id}`.slice(0, 13) +
+                            "..."}
+                        </span>
+                        <a
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              shipment._source.shipment_id
+                            );
+                            //iziToast
+                            iziToast.success({
+                              title: "Copied",
+                              message: "Shipment ID copied to clipboard"
+                            });
+                          }}>
+                          <svg
+                            width="29"
+                            height="20"
+                            viewBox="0 0 29 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <rect
+                              x="0.5"
+                              width="28"
+                              height="20"
+                              rx="4"
+                              fill="#F7F3EF"
+                            />
+                            <path
+                              d="M16.375 12.625V14.3125C16.375 14.6232 16.1232 14.875 15.8125 14.875H10.9375C10.6268 14.875 10.375 14.6232 10.375 14.3125V7.9375C10.375 7.62684 10.6268 7.375 10.9375 7.375H11.875C12.1305 7.375 12.3811 7.3963 12.625 7.43722M16.375 12.625H18.0625C18.3732 12.625 18.625 12.3732 18.625 12.0625V9.625C18.625 7.39525 17.0033 5.54428 14.875 5.18722C14.6311 5.1463 14.3805 5.125 14.125 5.125H13.1875C12.8768 5.125 12.625 5.37684 12.625 5.6875V7.43722M16.375 12.625H13.1875C12.8768 12.625 12.625 12.3732 12.625 12.0625V7.43722M18.625 10.75V9.8125C18.625 8.88052 17.8695 8.125 16.9375 8.125H16.1875C15.8768 8.125 15.625 7.87316 15.625 7.5625V6.8125C15.625 5.88052 14.8695 5.125 13.9375 5.125H13.375"
+                              stroke="#333333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </a>
+                      </div>
+                    </td>
+                    <td>
+                      <ShippingStatus
+                        className={`t-status-${shipment._source.status}`}
+                        title={shipment._source.status}
+                      />
+                    </td>
+                    <td>
+                      <img
+                        src="https://tplug.terminal.africa/wp-content/plugins/terminal-africa/assets/img/arrow-forward.svg"
+                        alt="copy icon"
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
