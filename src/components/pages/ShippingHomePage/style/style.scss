@@ -84,6 +84,9 @@
               line-height: 22px;
               color: #333333;
               background: transparent;
+              border-radius: 0;
+              box-sizing: border-box;
+              box-shadow: none;
 
               &::placeholder {
                 color: #c9c9c9;

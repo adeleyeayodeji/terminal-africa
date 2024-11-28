@@ -2345,8 +2345,19 @@ trait Ajax
                 ]);
             }
 
+            //status
+            $status = sanitize_text_field($_GET['status']);
+            //search
+            $search = sanitize_text_field($_GET['search']);
+
+            //page
+            $page = sanitize_text_field($_GET['page']);
+
+            //per page
+            $per_page = sanitize_text_field($_GET['per_page']);
+
             //get all shipments
-            $shipments = getAllTerminalShipmentsV2();
+            $shipments = getAllTerminalShipmentsV2($page, $per_page, $search, $status);
             //check if shipments are gotten
             if ($shipments['code'] == 200) {
                 //return

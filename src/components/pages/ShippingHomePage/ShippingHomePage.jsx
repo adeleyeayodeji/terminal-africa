@@ -17,18 +17,22 @@ export default class ShippingHomePage extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      liteLoading: false,
+      showClearSearch: false,
       shipments: [],
       pagination: {
-        currentPage: null,
+        currentPage: 1,
         hasNextPage: null,
         hasPrevPage: null,
         nextPage: null,
         pageCount: null,
         pageCounter: null,
-        perPage: null,
+        perPage: 10,
         prevPage: null,
         total: null
-      }
+      },
+      status: "",
+      search: ""
     };
 
     /**
@@ -49,20 +53,31 @@ export default class ShippingHomePage extends Component {
    * Get all shipments
    * @returns {void}
    */
-  getAllShipments() {
+  getAllShipments(liteLoading = false) {
     //get all shipments
     jQuery.ajax({
       url: terminal_africa.ajax_url,
       method: "GET",
       data: {
         action: "terminal_africa_get_all_shipments_v2",
+        status: this.state.status,
+        search: this.state.search,
+        page: this.state.pagination.currentPage,
+        per_page: this.state.pagination.perPage,
         nonce: terminal_africa.nonce
       },
       beforeSend: () => {
-        this.setState({ isLoading: true });
+        //check if liteLoading is true
+        if (liteLoading) {
+          //set liteLoading to true
+          this.setState({ liteLoading: true });
+        } else {
+          //set isLoading to true
+          this.setState({ isLoading: true });
+        }
       },
       success: (response) => {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, liteLoading: false });
         //check if response code is 200
         if (response.code == 200) {
           //set shipments data
@@ -82,10 +97,20 @@ export default class ShippingHomePage extends Component {
         }
       },
       error: (error, status, xhr) => {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, liteLoading: false });
         console.log(status, xhr);
       }
     });
+  }
+
+  /**
+   * Handle shipment click
+   * @param {string} shipmentId - The shipment ID
+   * @returns {void}
+   */
+  handleShipmentClick(shipmentId) {
+    //redirect to shipment edit page
+    window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&action=edit&id=${shipmentId}&nonce=${terminal_africa.nonce}`;
   }
 
   /**
@@ -93,17 +118,141 @@ export default class ShippingHomePage extends Component {
    * @returns {void}
    */
   componentDidMount() {
+    // Create a debounced version of getAllShipments
+    this.debouncedGetAllShipments = this.debounce(() => {
+      this.getAllShipments(true);
+    }, 500);
+
     //get all shipments
     this.getAllShipments();
   }
+
+  /**
+   * Component did update
+   * @param {Object} prevProps - The previous props
+   * @param {Object} prevState - The previous state
+   * @returns {void}
+   */
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.liteLoading && !prevState.liteLoading) {
+      // Block the UI when liteLoading becomes true
+      jQuery(".t-shipping--table").block({
+        message: "Getting shipments...",
+        overlayCSS: {
+          background: "#fff",
+          opacity: 0.8,
+          cursor: "wait"
+        },
+        css: {
+          border: 0,
+          padding: 0,
+          backgroundColor: "transparent"
+        }
+      });
+    } else if (!this.state.liteLoading && prevState.liteLoading) {
+      // Unblock the UI when liteLoading becomes false
+      jQuery(".t-shipping--table").unblock();
+    }
+
+    // Check if status has changed
+    if (prevState.status !== this.state.status) {
+      //get all shipments
+      this.getAllShipments(true);
+    }
+
+    // Check if search has changed
+    if (prevState.search !== this.state.search) {
+      //debounce the search
+      this.debouncedGetAllShipments();
+    }
+
+    // Update showClearSearch based on the search state
+    if (prevState.search !== this.state.search) {
+      //set showClearSearch to true if search is not empty
+      this.setState({ showClearSearch: this.state.search.trim() !== "" });
+    }
+  }
+
+  /**
+   * Handle filter change
+   * @param {Object} e - The event object
+   * @returns {void}
+   */
+  handleFilterChange = (e) => {
+    //get the value
+    const filter = e.target.value;
+    //set the status
+    this.setState({ status: filter });
+  };
+
+  /**
+   * Handle search change
+   * @param {Object} e - The event object
+   * @returns {void}
+   */
+  handleSearchChange = (e) => {
+    //get the value
+    const search = e.target.value;
+    //set the search
+    this.setState({ search });
+  };
+
+  /**
+   * Debounce function to delay the execution
+   * @param {Function} func - The function to debounce
+   * @param {number} wait - The delay time in milliseconds
+   * @returns {Function}
+   */
+  debounce(func, wait) {
+    //let timeout
+    let timeout;
+    //return the debounced function
+    return function (...args) {
+      //define later function
+      const later = () => {
+        //clear timeout
+        clearTimeout(timeout);
+        //execute the function
+        func(...args);
+      };
+      //clear timeout
+      clearTimeout(timeout);
+      //set timeout
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  /**
+   * Handle clear search
+   * @returns {void}
+   */
+  handleClearSearch = () => {
+    //set the search to empty
+    this.setState({ search: "" });
+  };
+
+  /**
+   * Handle export
+   * @returns {void}
+   */
+  handleExport = () => {
+    console.log("Export");
+  };
+
+  /**
+   * Handle refresh
+   * @returns {void}
+   */
+  handleRefresh = () => {
+    //reload the page
+    window.location.reload();
+  };
 
   /**
    * Render the component
    * @returns {JSX.Element}
    */
   render() {
-    console.log(this.state.shipments);
-
     return (
       <div>
         {this.state.isLoading ? (
@@ -116,27 +265,48 @@ export default class ShippingHomePage extends Component {
                   <span>All Shipments</span>
                 </div>
                 <div className="t-shipping--header--left--filter">
-                  <select name="" id="">
+                  <select name="" id="" onChange={this.handleFilterChange}>
                     <option value="">Filter</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="in-transit">In Transit</option>
-                    <option value="draft">Draft</option>
+                    <option
+                      value="confirmed"
+                      selected={this.state.status === "confirmed"}>
+                      Confirmed
+                    </option>
+                    <option
+                      value="in-transit"
+                      selected={this.state.status === "in-transit"}>
+                      In Transit
+                    </option>
+                    <option
+                      value="draft"
+                      selected={this.state.status === "draft"}>
+                      Draft
+                    </option>
                   </select>
                 </div>
                 <div className="t-shipping--header--left--search">
                   <div className="t-shipping--header--left--search-input">
-                    <input type="text" placeholder="Search" />
-                    <svg
-                      width="13"
-                      height="12"
-                      viewBox="0 0 13 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M6.5 0.75C3.60078 0.75 1.25 3.10078 1.25 6C1.25 8.89922 3.60078 11.25 6.5 11.25C9.39922 11.25 11.75 8.89922 11.75 6C11.75 3.10078 9.39922 0.75 6.5 0.75ZM8.43828 7.99453L7.66484 7.99102L6.5 6.60234L5.33633 7.98984L4.56172 7.99336C4.51016 7.99336 4.46797 7.95234 4.46797 7.89961C4.46797 7.87734 4.47617 7.85625 4.49023 7.83867L6.01484 6.02227L4.49023 4.20703C4.47607 4.18986 4.46822 4.16835 4.46797 4.14609C4.46797 4.09453 4.51016 4.05234 4.56172 4.05234L5.33633 4.05586L6.5 5.44453L7.66367 4.05703L8.43711 4.05352C8.48867 4.05352 8.53086 4.09453 8.53086 4.14727C8.53086 4.16953 8.52266 4.19063 8.50859 4.2082L6.98633 6.02344L8.50977 7.83984C8.52383 7.85742 8.53203 7.87852 8.53203 7.90078C8.53203 7.95234 8.48984 7.99453 8.43828 7.99453Z"
-                        fill="#DDDDDD"
-                      />
-                    </svg>
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      onChange={this.handleSearchChange}
+                      value={this.state.search}
+                    />
+
+                    {this.state.showClearSearch && (
+                      <svg
+                        onClick={this.handleClearSearch}
+                        width="13"
+                        height="12"
+                        viewBox="0 0 13 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M6.5 0.75C3.60078 0.75 1.25 3.10078 1.25 6C1.25 8.89922 3.60078 11.25 6.5 11.25C9.39922 11.25 11.75 8.89922 11.75 6C11.75 3.10078 9.39922 0.75 6.5 0.75ZM8.43828 7.99453L7.66484 7.99102L6.5 6.60234L5.33633 7.98984L4.56172 7.99336C4.51016 7.99336 4.46797 7.95234 4.46797 7.89961C4.46797 7.87734 4.47617 7.85625 4.49023 7.83867L6.01484 6.02227L4.49023 4.20703C4.47607 4.18986 4.46822 4.16835 4.46797 4.14609C4.46797 4.09453 4.51016 4.05234 4.56172 4.05234L5.33633 4.05586L6.5 5.44453L7.66367 4.05703L8.43711 4.05352C8.48867 4.05352 8.53086 4.09453 8.53086 4.14727C8.53086 4.16953 8.52266 4.19063 8.50859 4.2082L6.98633 6.02344L8.50977 7.83984C8.52383 7.85742 8.53203 7.87852 8.53203 7.90078C8.53203 7.95234 8.48984 7.99453 8.43828 7.99453Z"
+                          fill="#DDDDDD"
+                        />
+                      </svg>
+                    )}
                   </div>
                   <div className="t-shipping--header--left--search-icon">
                     <svg
@@ -155,16 +325,21 @@ export default class ShippingHomePage extends Component {
                 </div>
               </div>
               <div className="t-shipping--header--right">
-                <button className="t-shipping--header--right--refresh">
+                <button
+                  className="t-shipping--header--right--refresh"
+                  onClick={this.handleRefresh}>
                   Refresh
                 </button>
-                <button className="t-shipping--header--right--export">
+                <button
+                  className="t-shipping--header--right--export"
+                  onClick={this.handleExport}>
                   Export
                 </button>
               </div>
             </div>
             <table
               width="100%"
+              className="t-shipping--table"
               style={{
                 borderCollapse: "separate",
                 borderSpacing: "0px 0px",
@@ -197,17 +372,26 @@ export default class ShippingHomePage extends Component {
                 {this.state.shipments.map((shipment) => (
                   <tr
                     className="t-terminal-dashboard-order-row"
-                    onClick={() => {
-                      window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&amp;action=edit&amp;id=${shipment._source.shipment_id}&amp;nonce=${terminal_africa.nonce}`;
-                    }}>
-                    <td style={{ width: "50px" }}>
+                    key={shipment._id}>
+                    <td
+                      style={{ width: "50px" }}
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <img
-                        src="https://ucarecdn.com/fd1e1d0c-88c7-498a-9762-3ad9a3e2bedf/LONESTAR.jpg"
+                        src={
+                          shipment._source.carrier_logo ||
+                          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMC4zIiB5PSIwLjMiIHdpZHRoPSIzOS40IiBoZWlnaHQ9IjM5LjQiIHJ4PSIxNS43IiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjQuMDUxNCAxMy43Mzg5TDI1LjQ1NzYgMTIuMzMyNkMyNi4wNjc4IDExLjcyMjUgMjcuMDU3MiAxMS43MjI1IDI3LjY2NzQgMTIuMzMyNkMyOC4yNzc1IDEyLjk0MjggMjguMjc3NSAxMy45MzIyIDI3LjY2NzQgMTQuNTQyNEwxNS42OTM1IDI2LjUxNjJDMTUuMjUyOSAyNi45NTY4IDE0LjcwOTUgMjcuMjgwNiAxNC4xMTI0IDI3LjQ1ODVMMTEuODc1IDI4LjEyNUwxMi41NDE1IDI1Ljg4NzZDMTIuNzE5NCAyNS4yOTA1IDEzLjA0MzIgMjQuNzQ3MSAxMy40ODM4IDI0LjMwNjVMMjQuMDUxNCAxMy43Mzg5Wk0yNC4wNTE0IDEzLjczODlMMjYuMjUgMTUuOTM3NSIgc3Ryb2tlPSIjMzMzMzMzIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxyZWN0IHg9IjAuMyIgeT0iMC4zIiB3aWR0aD0iMzkuNCIgaGVpZ2h0PSIzOS40IiByeD0iMTUuNyIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjAuNiIvPgo8L3N2Zz4K"
+                        }
                         alt=""
                         style={this.styles.carrierLogo}
                       />
                     </td>
-                    <td style={{ width: "auto" }}>
+                    <td
+                      style={{ width: "auto" }}
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <div className="t-flex">
                         <span>
                           {dayjs(shipment._source.created_at).format(
@@ -216,7 +400,10 @@ export default class ShippingHomePage extends Component {
                         </span>
                       </div>
                     </td>
-                    <td>
+                    <td
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <span
                         className="terminal-dashboard-order-link"
                         style={{
@@ -228,13 +415,21 @@ export default class ShippingHomePage extends Component {
                         #93039
                       </span>
                     </td>
-                    <td>
+                    <td
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <span>{shipment._source.delivery_name}</span>
                     </td>
                     <td>
                       <div className="terminal-dashboard-orders-list-table-shipment-id">
                         <span
-                          data-shipment-id={`${shipment._source.shipment_id}`}>
+                          data-shipment-id={`${shipment._source.shipment_id}`}
+                          onClick={() =>
+                            this.handleShipmentClick(
+                              shipment._source.shipment_id
+                            )
+                          }>
                           {`${shipment._source.shipment_id}`.slice(0, 13) +
                             "..."}
                         </span>

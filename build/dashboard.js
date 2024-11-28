@@ -2341,18 +2341,22 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     super(props);
     this.state = {
       isLoading: true,
+      liteLoading: false,
+      showClearSearch: false,
       shipments: [],
       pagination: {
-        currentPage: null,
+        currentPage: 1,
         hasNextPage: null,
         hasPrevPage: null,
         nextPage: null,
         pageCount: null,
         pageCounter: null,
-        perPage: null,
+        perPage: 10,
         prevPage: null,
         total: null
-      }
+      },
+      status: "",
+      search: ""
     };
 
     /**
@@ -2373,23 +2377,37 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
    * Get all shipments
    * @returns {void}
    */
-  getAllShipments() {
+  getAllShipments(liteLoading = false) {
     //get all shipments
     jQuery.ajax({
       url: terminal_africa.ajax_url,
       method: "GET",
       data: {
         action: "terminal_africa_get_all_shipments_v2",
+        status: this.state.status,
+        search: this.state.search,
+        page: this.state.pagination.currentPage,
+        per_page: this.state.pagination.perPage,
         nonce: terminal_africa.nonce
       },
       beforeSend: () => {
-        this.setState({
-          isLoading: true
-        });
+        //check if liteLoading is true
+        if (liteLoading) {
+          //set liteLoading to true
+          this.setState({
+            liteLoading: true
+          });
+        } else {
+          //set isLoading to true
+          this.setState({
+            isLoading: true
+          });
+        }
       },
       success: response => {
         this.setState({
-          isLoading: false
+          isLoading: false,
+          liteLoading: false
         });
         //check if response code is 200
         if (response.code == 200) {
@@ -2413,7 +2431,8 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       },
       error: (error, status, xhr) => {
         this.setState({
-          isLoading: false
+          isLoading: false,
+          liteLoading: false
         });
         console.log(status, xhr);
       }
@@ -2421,20 +2440,163 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
   }
 
   /**
+   * Handle shipment click
+   * @param {string} shipmentId - The shipment ID
+   * @returns {void}
+   */
+  handleShipmentClick(shipmentId) {
+    //redirect to shipment edit page
+    window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&action=edit&id=${shipmentId}&nonce=${terminal_africa.nonce}`;
+  }
+
+  /**
    * Lifecycle method
    * @returns {void}
    */
   componentDidMount() {
+    // Create a debounced version of getAllShipments
+    this.debouncedGetAllShipments = this.debounce(() => {
+      this.getAllShipments(true);
+    }, 500);
+
     //get all shipments
     this.getAllShipments();
   }
+
+  /**
+   * Component did update
+   * @param {Object} prevProps - The previous props
+   * @param {Object} prevState - The previous state
+   * @returns {void}
+   */
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.liteLoading && !prevState.liteLoading) {
+      // Block the UI when liteLoading becomes true
+      jQuery(".t-shipping--table").block({
+        message: "Getting shipments...",
+        overlayCSS: {
+          background: "#fff",
+          opacity: 0.8,
+          cursor: "wait"
+        },
+        css: {
+          border: 0,
+          padding: 0,
+          backgroundColor: "transparent"
+        }
+      });
+    } else if (!this.state.liteLoading && prevState.liteLoading) {
+      // Unblock the UI when liteLoading becomes false
+      jQuery(".t-shipping--table").unblock();
+    }
+
+    // Check if status has changed
+    if (prevState.status !== this.state.status) {
+      //get all shipments
+      this.getAllShipments(true);
+    }
+
+    // Check if search has changed
+    if (prevState.search !== this.state.search) {
+      //debounce the search
+      this.debouncedGetAllShipments();
+    }
+
+    // Update showClearSearch based on the search state
+    if (prevState.search !== this.state.search) {
+      //set showClearSearch to true if search is not empty
+      this.setState({
+        showClearSearch: this.state.search.trim() !== ""
+      });
+    }
+  }
+
+  /**
+   * Handle filter change
+   * @param {Object} e - The event object
+   * @returns {void}
+   */
+  handleFilterChange = e => {
+    //get the value
+    const filter = e.target.value;
+    //set the status
+    this.setState({
+      status: filter
+    });
+  };
+
+  /**
+   * Handle search change
+   * @param {Object} e - The event object
+   * @returns {void}
+   */
+  handleSearchChange = e => {
+    //get the value
+    const search = e.target.value;
+    //set the search
+    this.setState({
+      search
+    });
+  };
+
+  /**
+   * Debounce function to delay the execution
+   * @param {Function} func - The function to debounce
+   * @param {number} wait - The delay time in milliseconds
+   * @returns {Function}
+   */
+  debounce(func, wait) {
+    //let timeout
+    let timeout;
+    //return the debounced function
+    return function (...args) {
+      //define later function
+      const later = () => {
+        //clear timeout
+        clearTimeout(timeout);
+        //execute the function
+        func(...args);
+      };
+      //clear timeout
+      clearTimeout(timeout);
+      //set timeout
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  /**
+   * Handle clear search
+   * @returns {void}
+   */
+  handleClearSearch = () => {
+    //set the search to empty
+    this.setState({
+      search: ""
+    });
+  };
+
+  /**
+   * Handle export
+   * @returns {void}
+   */
+  handleExport = () => {
+    console.log("Export");
+  };
+
+  /**
+   * Handle refresh
+   * @returns {void}
+   */
+  handleRefresh = () => {
+    //reload the page
+    window.location.reload();
+  };
 
   /**
    * Render the component
    * @returns {JSX.Element}
    */
   render() {
-    console.log(this.state.shipments);
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, this.state.isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_2__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2447,23 +2609,30 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       className: "t-shipping--header--left--filter"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
       name: "",
-      id: ""
+      id: "",
+      onChange: this.handleFilterChange
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
       value: ""
     }, "Filter"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: "confirmed"
+      value: "confirmed",
+      selected: this.state.status === "confirmed"
     }, "Confirmed"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: "in-transit"
+      value: "in-transit",
+      selected: this.state.status === "in-transit"
     }, "In Transit"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: "draft"
+      value: "draft",
+      selected: this.state.status === "draft"
     }, "Draft"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping--header--left--search"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping--header--left--search-input"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
-      placeholder: "Search"
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      placeholder: "Search",
+      onChange: this.handleSearchChange,
+      value: this.state.search
+    }), this.state.showClearSearch && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      onClick: this.handleClearSearch,
       width: "13",
       height: "12",
       viewBox: "0 0 13 12",
@@ -2487,11 +2656,14 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping--header--right"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-      className: "t-shipping--header--right--refresh"
+      className: "t-shipping--header--right--refresh",
+      onClick: this.handleRefresh
     }, "Refresh"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-      className: "t-shipping--header--right--export"
+      className: "t-shipping--header--right--export",
+      onClick: this.handleExport
     }, "Export"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
       width: "100%",
+      className: "t-shipping--table",
       style: {
         borderCollapse: "separate",
         borderSpacing: "0px 0px",
@@ -2516,24 +2688,26 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       className: "terminal-dashboard-orders-list-table-heading"
     }, "Status"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, this.state.shipments.map(shipment => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
       className: "t-terminal-dashboard-order-row",
-      onClick: () => {
-        window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&amp;action=edit&amp;id=${shipment._source.shipment_id}&amp;nonce=${terminal_africa.nonce}`;
-      }
+      key: shipment._id
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       style: {
         width: "50px"
-      }
+      },
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: "https://ucarecdn.com/fd1e1d0c-88c7-498a-9762-3ad9a3e2bedf/LONESTAR.jpg",
+      src: shipment._source.carrier_logo || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMC4zIiB5PSIwLjMiIHdpZHRoPSIzOS40IiBoZWlnaHQ9IjM5LjQiIHJ4PSIxNS43IiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjQuMDUxNCAxMy43Mzg5TDI1LjQ1NzYgMTIuMzMyNkMyNi4wNjc4IDExLjcyMjUgMjcuMDU3MiAxMS43MjI1IDI3LjY2NzQgMTIuMzMyNkMyOC4yNzc1IDEyLjk0MjggMjguMjc3NSAxMy45MzIyIDI3LjY2NzQgMTQuNTQyNEwxNS42OTM1IDI2LjUxNjJDMTUuMjUyOSAyNi45NTY4IDE0LjcwOTUgMjcuMjgwNiAxNC4xMTI0IDI3LjQ1ODVMMTEuODc1IDI4LjEyNUwxMi41NDE1IDI1Ljg4NzZDMTIuNzE5NCAyNS4yOTA1IDEzLjA0MzIgMjQuNzQ3MSAxMy40ODM4IDI0LjMwNjVMMjQuMDUxNCAxMy43Mzg5Wk0yNC4wNTE0IDEzLjczODlMMjYuMjUgMTUuOTM3NSIgc3Ryb2tlPSIjMzMzMzMzIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxyZWN0IHg9IjAuMyIgeT0iMC4zIiB3aWR0aD0iMzkuNCIgaGVpZ2h0PSIzOS40IiByeD0iMTUuNyIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjAuNiIvPgo8L3N2Zz4K",
       alt: "",
       style: this.styles.carrierLogo
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       style: {
         width: "auto"
-      }
+      },
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, dayjs__WEBPACK_IMPORTED_MODULE_4___default()(shipment._source.created_at).format("DD MMM YYYY")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, dayjs__WEBPACK_IMPORTED_MODULE_4___default()(shipment._source.created_at).format("DD MMM YYYY")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "terminal-dashboard-order-link",
       style: {
         marginBottom: "0px",
@@ -2541,10 +2715,13 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         color: "black",
         textTransform: "capitalize"
       }
-    }, "#93039")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, shipment._source.delivery_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, "#93039")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, shipment._source.delivery_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "terminal-dashboard-orders-list-table-shipment-id"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-      "data-shipment-id": `${shipment._source.shipment_id}`
+      "data-shipment-id": `${shipment._source.shipment_id}`,
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, `${shipment._source.shipment_id}`.slice(0, 13) + "..."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
       onClick: () => {
         navigator.clipboard.writeText(shipment._source.shipment_id);
