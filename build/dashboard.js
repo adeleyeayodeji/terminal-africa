@@ -2446,7 +2446,7 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
    */
   handleShipmentClick(shipmentId) {
     //redirect to shipment edit page
-    window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&action=edit&id=${shipmentId}&nonce=${terminal_africa.nonce}`;
+    window.location.href = `${terminal_africa.site_url}/wp-admin/admin.php?page=terminal-africa&action=edit&id=${shipmentId}&nonce=${terminal_africa.terminal_africa_edit_shipment_nonce}`;
   }
 
   /**

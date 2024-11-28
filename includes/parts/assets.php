@@ -93,7 +93,8 @@ trait Assets
             'support_inactive_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/support-inactive.svg',
             'shipping_active_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon.svg',
             'shipping_inactive_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon-inactive.svg',
-            'site_url' => get_site_url()
+            'site_url' => get_site_url(),
+            'terminal_africa_edit_shipment_nonce' => wp_create_nonce('terminal_africa_edit_shipment')
         ));
     }
 
