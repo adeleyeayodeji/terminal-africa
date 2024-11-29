@@ -3,6 +3,7 @@ import NewShippingSkeleton from "./ShippingSkeleton/ShippingSkeleton";
 import ShippingStatus from "../../Shipping/Parts/ShippingStatus";
 //import dayjs
 import dayjs from "dayjs";
+import ShipmentsPagination from "./Inner/ShipmentsPagination";
 
 /**
  * ShippingHomePage component
@@ -25,11 +26,11 @@ export default class ShippingHomePage extends Component {
         hasNextPage: null,
         hasPrevPage: null,
         nextPage: null,
-        pageCount: null,
+        pageCount: 0,
         pageCounter: null,
         perPage: 10,
         prevPage: null,
-        total: null
+        total: 0
       },
       status: "",
       search: ""
@@ -84,15 +85,16 @@ export default class ShippingHomePage extends Component {
           this.setState({ shipments: response.data.shipments });
           //set pagination data
           this.setState({ pagination: response.data.pagination });
+          //log response.data.pagination
+          console.log(response.data.pagination);
         } else {
           //show gutenberg toast
           try {
-            wp.data
-              .dispatch("core/notices")
-              .createNotice("error", response.message, {
-                type: "snackbar",
-                isDismissible: true
-              });
+            //iziToast
+            iziToast.error({
+              title: "Error",
+              message: response.message
+            });
           } catch (error) {}
         }
       },
@@ -171,6 +173,16 @@ export default class ShippingHomePage extends Component {
       //set showClearSearch to true if search is not empty
       this.setState({ showClearSearch: this.state.search.trim() !== "" });
     }
+
+    //check for pagination change
+    if (
+      prevState.pagination.currentPage !== this.state.pagination.currentPage
+    ) {
+      //log
+      console.log("Pagination changed", this.state.pagination.currentPage);
+      //get all shipments
+      this.getAllShipments(true);
+    }
   }
 
   /**
@@ -246,6 +258,36 @@ export default class ShippingHomePage extends Component {
   handleRefresh = () => {
     //reload the page
     window.location.reload();
+  };
+
+  /**
+   * Handle pagination change
+   * @param {number} page - The page number
+   * @returns {void}
+   */
+  handlePaginationChange = (page) => {
+    //check if page is greater than total pages
+    if (page > this.state.pagination.pageCount) {
+      //toast
+      iziToast.error({
+        title: "Error",
+        message: "Page number is greater than total pages"
+      });
+      return;
+    }
+    //check if page is less than 1
+    if (page < 1) {
+      //toast
+      iziToast.error({
+        title: "Error",
+        message: "Page number is less than 1"
+      });
+      return;
+    }
+    //set the current page
+    this.setState({
+      pagination: { ...this.state.pagination, currentPage: page }
+    });
   };
 
   /**
@@ -483,6 +525,13 @@ export default class ShippingHomePage extends Component {
                 ))}
               </tbody>
             </table>
+            <ShipmentsPagination
+              pagination={this.state.pagination}
+              handlePaginationChange={this.handlePaginationChange}
+              currentPage={this.state.pagination.currentPage}
+              totalPages={this.state.pagination.pageCount}
+              perPage={this.state.pagination.perPage}
+            />
           </div>
         )}
       </div>

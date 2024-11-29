@@ -180,3 +180,66 @@
     }
   }
 }
+
+.t-shipments-pagination {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+
+  &--left {
+    span {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 16.8px;
+      font-family: "Lato", sans-serif;
+      color: #b3b3b3;
+    }
+  }
+
+  &--right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    &--prev-icon {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    &--next-icon {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    &--page-number {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      &--item {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 16.8px;
+        font-family: "Lato", sans-serif;
+        color: #b3b3b3;
+        background-color: #f4f4f4;
+        padding: 4px 7px;
+        border-radius: 8px;
+
+        &:hover {
+          background-color: #f7941e;
+          color: #ffffff;
+        }
+
+        &.active {
+          background-color: #f7941e;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}

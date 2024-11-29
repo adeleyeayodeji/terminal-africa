@@ -2302,6 +2302,105 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
 
 /***/ }),
 
+/***/ "./src/components/pages/ShippingHomePage/Inner/ShipmentsPagination.jsx":
+/*!*****************************************************************************!*\
+  !*** ./src/components/pages/ShippingHomePage/Inner/ShipmentsPagination.jsx ***!
+  \*****************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+/**
+ * ShipmentsPagination component
+ *
+ * @extends Component
+ */
+class ShipmentsPagination extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  /**
+   * @returns {JSX.Element}
+   */
+  render() {
+    const {
+      perPage,
+      currentPage,
+      totalPages
+    } = this.props;
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination--left"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Showing ", perPage * (currentPage - 1) + 1, " to ", perPage * currentPage, " ", "of ", totalPages * perPage)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination--right"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination--right--prev-icon"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "17",
+      height: "16",
+      viewBox: "0 0 17 16",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg",
+      onClick: () => this.props.handlePaginationChange(currentPage - 1)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      "fill-rule": "evenodd",
+      "clip-rule": "evenodd",
+      d: "M10.9716 3.52876C11.2319 3.78911 11.2319 4.21122 10.9716 4.47157L7.44297 8.00016L10.9716 11.5288C11.2319 11.7891 11.2319 12.2112 10.9716 12.4716C10.7112 12.7319 10.2891 12.7319 10.0288 12.4716L6.02876 8.47157C5.76841 8.21122 5.76841 7.78911 6.02876 7.52876L10.0288 3.52876C10.2891 3.26841 10.7112 3.26841 10.9716 3.52876Z",
+      fill: "#F7941E"
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination--right--page-number"
+    }, Array.from({
+      length: totalPages
+    }, (_, indexRaw) => {
+      let index = indexRaw + 1;
+      if (index < 4 ||
+      // First three pages
+      index >= totalPages - 1 ||
+      // Last two pages
+      index === currentPage // Current page
+      ) {
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+          key: index,
+          className: `t-shipments-pagination--right--page-number--item ${index === currentPage ? "active" : ""}`,
+          onClick: () => this.props.handlePaginationChange(index)
+        }, index);
+      } else if (index === 4) {
+        // Ellipsis after the first three pages
+        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+          key: "ellipsis1"
+        }, "...");
+      }
+      return null;
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipments-pagination--right--next-icon"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "17",
+      height: "16",
+      viewBox: "0 0 17 16",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg",
+      onClick: () => this.props.handlePaginationChange(currentPage + 1)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      "fill-rule": "evenodd",
+      "clip-rule": "evenodd",
+      d: "M6.02876 3.52876C5.76841 3.78911 5.76841 4.21122 6.02876 4.47157L9.55735 8.00016L6.02876 11.5288C5.76841 11.7891 5.76841 12.2112 6.02876 12.4716C6.28911 12.7319 6.71122 12.7319 6.97157 12.4716L10.9716 8.47157C11.2319 8.21122 11.2319 7.78911 10.9716 7.52876L6.97157 3.52876C6.71122 3.26841 6.28911 3.26841 6.02876 3.52876Z",
+      fill: "#F7941E"
+    })))));
+  }
+}
+/* harmony default export */ __webpack_exports__["default"] = (ShipmentsPagination);
+
+/***/ }),
+
 /***/ "./src/components/pages/ShippingHomePage/ShippingHomePage.jsx":
 /*!********************************************************************!*\
   !*** ./src/components/pages/ShippingHomePage/ShippingHomePage.jsx ***!
@@ -2321,11 +2420,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Shipping_Parts_ShippingStatus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Shipping/Parts/ShippingStatus */ "./src/components/Shipping/Parts/ShippingStatus.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _Inner_ShipmentsPagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Inner/ShipmentsPagination */ "./src/components/pages/ShippingHomePage/Inner/ShipmentsPagination.jsx");
 
 
 
 
 //import dayjs
+
 
 
 /**
@@ -2349,11 +2450,11 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         hasNextPage: null,
         hasPrevPage: null,
         nextPage: null,
-        pageCount: null,
+        pageCount: 0,
         pageCounter: null,
         perPage: 10,
         prevPage: null,
-        total: null
+        total: 0
       },
       status: "",
       search: ""
@@ -2419,12 +2520,15 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
           this.setState({
             pagination: response.data.pagination
           });
+          //log response.data.pagination
+          console.log(response.data.pagination);
         } else {
           //show gutenberg toast
           try {
-            wp.data.dispatch("core/notices").createNotice("error", response.message, {
-              type: "snackbar",
-              isDismissible: true
+            //iziToast
+            iziToast.error({
+              title: "Error",
+              message: response.message
             });
           } catch (error) {}
         }
@@ -2509,6 +2613,14 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         showClearSearch: this.state.search.trim() !== ""
       });
     }
+
+    //check for pagination change
+    if (prevState.pagination.currentPage !== this.state.pagination.currentPage) {
+      //log
+      console.log("Pagination changed", this.state.pagination.currentPage);
+      //get all shipments
+      this.getAllShipments(true);
+    }
   }
 
   /**
@@ -2590,6 +2702,39 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
   handleRefresh = () => {
     //reload the page
     window.location.reload();
+  };
+
+  /**
+   * Handle pagination change
+   * @param {number} page - The page number
+   * @returns {void}
+   */
+  handlePaginationChange = page => {
+    //check if page is greater than total pages
+    if (page > this.state.pagination.pageCount) {
+      //toast
+      iziToast.error({
+        title: "Error",
+        message: "Page number is greater than total pages"
+      });
+      return;
+    }
+    //check if page is less than 1
+    if (page < 1) {
+      //toast
+      iziToast.error({
+        title: "Error",
+        message: "Page number is less than 1"
+      });
+      return;
+    }
+    //set the current page
+    this.setState({
+      pagination: {
+        ...this.state.pagination,
+        currentPage: page
+      }
+    });
   };
 
   /**
@@ -2754,7 +2899,13 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
       src: "https://tplug.terminal.africa/wp-content/plugins/terminal-africa/assets/img/arrow-forward.svg",
       alt: "copy icon"
-    }))))))));
+    })))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Inner_ShipmentsPagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      pagination: this.state.pagination,
+      handlePaginationChange: this.handlePaginationChange,
+      currentPage: this.state.pagination.currentPage,
+      totalPages: this.state.pagination.pageCount,
+      perPage: this.state.pagination.perPage
+    })));
   }
 }
 

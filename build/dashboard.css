@@ -9539,6 +9539,59 @@
   line-height: 22px;
   color: #333333;
 }
+
+.t-shipments-pagination {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+.t-shipments-pagination--left span {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.8px;
+  font-family: "Lato", sans-serif;
+  color: #b3b3b3;
+}
+.t-shipments-pagination--right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.t-shipments-pagination--right--prev-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.t-shipments-pagination--right--next-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.t-shipments-pagination--right--page-number {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.t-shipments-pagination--right--page-number--item {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16.8px;
+  font-family: "Lato", sans-serif;
+  color: #b3b3b3;
+  background-color: #f4f4f4;
+  padding: 4px 7px;
+  border-radius: 8px;
+}
+.t-shipments-pagination--right--page-number--item:hover {
+  background-color: #f7941e;
+  color: #ffffff;
+}
+.t-shipments-pagination--right--page-number--item.active {
+  background-color: #f7941e;
+  color: #ffffff;
+}
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/responsive.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************/
