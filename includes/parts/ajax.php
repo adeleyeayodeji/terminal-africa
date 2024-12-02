@@ -123,6 +123,8 @@ trait Ajax
         add_action('wp_ajax_nopriv_terminal_africa_get_transactions', array($this, 'terminal_africa_get_transactions'));
         //ajax terminal_africa_get_shipping_api_data
         add_action('wp_ajax_terminal_africa_get_shipping_api_data', array($this, 'terminal_africa_get_shipping_api_data'));
+        //ajax terminal_africa_get_shipping_api_data_v2
+        add_action('wp_ajax_terminal_africa_get_shipping_api_data_v2', array($this, 'terminal_africa_get_shipping_api_data_v2'));
         //ajax terminal_africa_get_merchant_address_data
         add_action('wp_ajax_terminal_africa_get_merchant_address_data', array($this, 'terminal_africa_get_merchant_address_data'));
         //update_user_terminal_payment_gateway
@@ -2189,12 +2191,21 @@ trait Ajax
             }
             //sanitize
             $shipping_id = sanitize_text_field($_GET['id']);
+            //get shipping data from v2 api
+            $shipping_data = getTerminalShippingData($shipping_id);
+            //check if shipping data code is not 200
+            if ($shipping_data['code'] != 200) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $shipping_data['message'],
+                ]);
+            }
             //sanitize
-            $order_id = sanitize_text_field($_GET['order_id']);
+            $order_id = $shipping_data['data']->metadata->order_id;
             //get order
             $order = wc_get_order($order_id);
             //rate_id
-            $rate_id = sanitize_text_field($_GET['rate_id']);
+            $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
             //get rate data
             $get_rate_data = getTerminalRateData($rate_id);
             //order date

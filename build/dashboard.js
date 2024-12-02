@@ -1717,10 +1717,6 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
   getApiData = () => {
     //get url param id
     const id = this.getUrlParams("id");
-    //get order_id
-    const order_id = this.getUrlParams("order_id");
-    //rate_id
-    const rate_id = this.getUrlParams("rate_id");
 
     //get api data
     jQuery(document).ready($ => {
@@ -1730,8 +1726,6 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
         data: {
           action: "terminal_africa_get_shipping_api_data",
           id,
-          order_id,
-          rate_id,
           nonce: terminal_africa.nonce
         },
         dataType: "json",
@@ -2520,8 +2514,8 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
           this.setState({
             pagination: response.data.pagination
           });
-          //log response.data.pagination
-          console.log(response.data.pagination);
+          //log response.data
+          console.log(response.data);
         } else {
           //show gutenberg toast
           try {
@@ -2897,8 +2891,9 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       className: `t-status-${shipment._source.status}`,
       title: shipment._source.status
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: "https://tplug.terminal.africa/wp-content/plugins/terminal-africa/assets/img/arrow-forward.svg",
-      alt: "copy icon"
+      src: `${terminal_africa.plugin_url}/img/arrow-forward.svg`,
+      alt: "Shipment Details",
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     })))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Inner_ShipmentsPagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
       pagination: this.state.pagination,
       handlePaginationChange: this.handlePaginationChange,

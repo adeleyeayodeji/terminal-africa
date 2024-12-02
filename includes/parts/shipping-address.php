@@ -2332,4 +2332,59 @@ trait Shipping
             ];
         }
     }
+
+    /**
+     * Get Shipping Data
+     * 
+     * @param string|int $shipping_id
+     * @return array
+     * 
+     */
+    public static function getShippingData($shipping_id)
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            $response = Requests::get(
+                self::$enpoint . 'shipments/' . $shipping_id,
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ] + self::$request_header,
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $body->data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'shipments/' . $shipping_id);
+                return [
+                    'code' => $response->status_code,
+                    'message' => $body->message,
+                    'data' => [],
+                ];
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/' . $shipping_id);
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
 }

@@ -85,8 +85,8 @@ export default class ShippingHomePage extends Component {
           this.setState({ shipments: response.data.shipments });
           //set pagination data
           this.setState({ pagination: response.data.pagination });
-          //log response.data.pagination
-          console.log(response.data.pagination);
+          //log response.data
+          console.log(response.data);
         } else {
           //show gutenberg toast
           try {
@@ -517,8 +517,11 @@ export default class ShippingHomePage extends Component {
                     </td>
                     <td>
                       <img
-                        src="https://tplug.terminal.africa/wp-content/plugins/terminal-africa/assets/img/arrow-forward.svg"
-                        alt="copy icon"
+                        src={`${terminal_africa.plugin_url}/img/arrow-forward.svg`}
+                        alt="Shipment Details"
+                        onClick={() =>
+                          this.handleShipmentClick(shipment._source.shipment_id)
+                        }
                       />
                     </td>
                   </tr>

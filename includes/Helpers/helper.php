@@ -441,6 +441,19 @@ if (!function_exists('getAllTerminalShipmentsV2')) {
     }
 }
 
+//getTerminalShippingData
+if (!function_exists('getTerminalShippingData')) {
+    /**
+     * Get Terminal Shipping Data
+     * @param string|int $shipping_id
+     * @return array
+     */
+    function getTerminalShippingData($shipping_id)
+    {
+        return terminal_africa_shipping_plugin()::getShippingData($shipping_id);
+    }
+}
+
 /**
  * $allowed_order_statuses
  */

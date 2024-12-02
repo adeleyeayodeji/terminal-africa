@@ -34,10 +34,6 @@ class TerminalManageShipping extends React.Component {
   getApiData = () => {
     //get url param id
     const id = this.getUrlParams("id");
-    //get order_id
-    const order_id = this.getUrlParams("order_id");
-    //rate_id
-    const rate_id = this.getUrlParams("rate_id");
 
     //get api data
     jQuery(document).ready(($) => {
@@ -47,8 +43,6 @@ class TerminalManageShipping extends React.Component {
         data: {
           action: "terminal_africa_get_shipping_api_data",
           id,
-          order_id,
-          rate_id,
           nonce: terminal_africa.nonce
         },
         dataType: "json",
