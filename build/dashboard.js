@@ -1791,10 +1791,9 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     jQuery(document).ready($ => {
       const {
         shipping_id,
-        order_id
+        order_id,
+        rate_id
       } = this.state.shippingData;
-      //get rate_id
-      const rate_id = this.getUrlParams("rate_id");
 
       //ajax
       $.ajax({
@@ -1923,7 +1922,7 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
       shippingStatus,
       shippingTrackingNumber
     } = this.state;
-    const rate_id = this.getUrlParams("rate_id");
+    const rate_id = shippingData.rate_id;
     const trackingLink = "";
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_5__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-row"
@@ -2739,7 +2738,10 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, this.state.isLoading ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingSkeleton_ShippingSkeleton__WEBPACK_IMPORTED_MODULE_2__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-shipping--header"
+      className: "t-shipping--header",
+      style: {
+        flexWrap: "wrap"
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping--header--left"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -2887,13 +2889,16 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       stroke: "#333333",
       "stroke-linecap": "round",
       "stroke-linejoin": "round"
-    }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Shipping_Parts_ShippingStatus__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Shipping_Parts_ShippingStatus__WEBPACK_IMPORTED_MODULE_3__["default"], {
       className: `t-status-${shipment._source.status}`,
       title: shipment._source.status
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: `${terminal_africa.plugin_url}/img/arrow-forward.svg`,
-      alt: "Shipment Details",
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+      src: `${terminal_africa.plugin_url}/img/arrow-forward.svg`,
+      alt: "Shipment Details"
     })))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Inner_ShipmentsPagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
       pagination: this.state.pagination,
       handlePaginationChange: this.handlePaginationChange,

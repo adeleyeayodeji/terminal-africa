@@ -123,8 +123,6 @@ trait Ajax
         add_action('wp_ajax_nopriv_terminal_africa_get_transactions', array($this, 'terminal_africa_get_transactions'));
         //ajax terminal_africa_get_shipping_api_data
         add_action('wp_ajax_terminal_africa_get_shipping_api_data', array($this, 'terminal_africa_get_shipping_api_data'));
-        //ajax terminal_africa_get_shipping_api_data_v2
-        add_action('wp_ajax_terminal_africa_get_shipping_api_data_v2', array($this, 'terminal_africa_get_shipping_api_data_v2'));
         //ajax terminal_africa_get_merchant_address_data
         add_action('wp_ajax_terminal_africa_get_merchant_address_data', array($this, 'terminal_africa_get_merchant_address_data'));
         //update_user_terminal_payment_gateway
@@ -2270,7 +2268,7 @@ trait Ajax
                 $saved_others ? wc_price($shipping_cost, ['currency' => $order_currency]) : 0;
 
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id');
 
             //return data
             wp_send_json([

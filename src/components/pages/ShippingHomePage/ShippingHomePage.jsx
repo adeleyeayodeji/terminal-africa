@@ -301,7 +301,7 @@ export default class ShippingHomePage extends Component {
           <NewShippingSkeleton />
         ) : (
           <div className="t-shipping">
-            <div className="t-shipping--header">
+            <div className="t-shipping--header" style={{ flexWrap: "wrap" }}>
               <div className="t-shipping--header--left">
                 <div className="t-shipping--header--left--title">
                   <span>All Shipments</span>
@@ -509,19 +509,22 @@ export default class ShippingHomePage extends Component {
                         </a>
                       </div>
                     </td>
-                    <td>
+                    <td
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <ShippingStatus
                         className={`t-status-${shipment._source.status}`}
                         title={shipment._source.status}
                       />
                     </td>
-                    <td>
+                    <td
+                      onClick={() =>
+                        this.handleShipmentClick(shipment._source.shipment_id)
+                      }>
                       <img
                         src={`${terminal_africa.plugin_url}/img/arrow-forward.svg`}
                         alt="Shipment Details"
-                        onClick={() =>
-                          this.handleShipmentClick(shipment._source.shipment_id)
-                        }
                       />
                     </td>
                   </tr>

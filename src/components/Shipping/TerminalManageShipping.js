@@ -100,9 +100,7 @@ class TerminalManageShipping extends React.Component {
   //get shipping status
   getShippingStatus = () => {
     jQuery(document).ready(($) => {
-      const { shipping_id, order_id } = this.state.shippingData;
-      //get rate_id
-      const rate_id = this.getUrlParams("rate_id");
+      const { shipping_id, order_id, rate_id } = this.state.shippingData;
 
       //ajax
       $.ajax({
@@ -240,7 +238,7 @@ class TerminalManageShipping extends React.Component {
   render() {
     const { isLoading, shippingData, shippingStatus, shippingTrackingNumber } =
       this.state;
-    const rate_id = this.getUrlParams("rate_id");
+    const rate_id = shippingData.rate_id;
     const trackingLink = "";
 
     return (

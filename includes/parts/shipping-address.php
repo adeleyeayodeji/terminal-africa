@@ -2286,7 +2286,7 @@ trait Shipping
                 'perPage' => $perPage,
                 'search' => $search,
                 'domain' => $domain,
-                'orderBy' => 'created_at'
+                'orderBy' => '-created_at'
             ];
 
             //append status if not empty
@@ -2374,7 +2374,7 @@ trait Shipping
                 logTerminalErrorData($response->body, self::$enpoint . 'shipments/' . $shipping_id);
                 return [
                     'code' => $response->status_code,
-                    'message' => $body->message,
+                    'message' => empty($body->message) ? "Something went wrong, please try again" : $body->message,
                     'data' => [],
                 ];
             }

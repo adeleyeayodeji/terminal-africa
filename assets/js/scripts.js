@@ -1135,6 +1135,9 @@ let validateTerminalShipment = (rateid, order_id, shipment_id) => {
             });
             break;
           case 402:
+            //log
+            console.log("log", rateid, order_id, shipment_id);
+
             //arrange delivery now
             arrangeTerminalDeliveryNow(rateid, order_id, shipment_id);
             break;
