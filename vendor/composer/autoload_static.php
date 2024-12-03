@@ -35,6 +35,7 @@ class ComposerStaticInit012b3d2bb5957aa31b7322cb6d523bc1
     public static $classMap = array (
         'App\\Terminal\\Core\\TemplateLoader' => __DIR__ . '/../..' . '/app/Terminal/Core/TemplateLoader.php',
         'App\\Terminal\\Core\\TerminalCore' => __DIR__ . '/../..' . '/app/Terminal/Core/TerminalCore.php',
+        'App\\Terminal\\Core\\TerminalSession' => __DIR__ . '/../..' . '/app/Terminal/Core/TerminalSession.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Roots\\Composer\\WordPressCoreInstaller' => __DIR__ . '/..' . '/roots/wordpress-core-installer/src/WordPressCoreInstaller.php',
         'Roots\\Composer\\WordPressCorePlugin' => __DIR__ . '/..' . '/roots/wordpress-core-installer/src/WordPressCorePlugin.php',
