@@ -2856,7 +2856,7 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         color: "black",
         textTransform: "capitalize"
       }
-    }, "#93039")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    }, "#", shipment._source.order_id)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, shipment._source.delivery_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "terminal-dashboard-orders-list-table-shipment-id"

@@ -454,7 +454,7 @@ export default class ShippingHomePage extends Component {
                           color: "black",
                           textTransform: "capitalize"
                         }}>
-                        #93039
+                        #{shipment._source.order_id}
                       </span>
                     </td>
                     <td
