@@ -1102,7 +1102,81 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
         });
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-12"
+      className: "col-lg-3 col-md-3 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "country"
+    }, "Country"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-country t-terminal-country",
+      required: true,
+      name: "country",
+      id: "country"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select"), terminal_africa?.terminal_africal_countries.map((country, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: country.isoCode,
+      "data-flag": country.flag,
+      selected: country.isoCode === saved_address?.country ? "selected" : ""
+    }, country.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-3 col-md-3 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "state"
+    }, "State"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-state t-terminal-state",
+      required: true,
+      name: "state",
+      id: "state"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select"), shippingData?.states?.map((state, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: state.name,
+      "data-statecode": state.isoCode,
+      selected: state.name === saved_address?.state ? "selected" : ""
+    }, state.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-3 col-md-3 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "zipcode"
+    }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      name: "zip_code",
+      id: "zipcode",
+      className: "form-control t-zip-new",
+      placeholder: "Zip Code",
+      value: saved_address?.zip,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            zip: e.target.value
+          }
+        });
+      }
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-3 col-md-3 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "lga"
+    }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-city t-terminal-city",
+      required: true,
+      name: "lga",
+      id: "lga"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select"), shippingData?.cities?.data?.map((city, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: city.name,
+      selected: city.name === saved_address?.city ? "selected" : ""
+    }, city.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
@@ -1131,66 +1205,16 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
         });
       }
     })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-lg-4 col-md-4 col-sm-12"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "form-group"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-      htmlFor: "country"
-    }, "Country"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-country t-terminal-country",
-      required: true,
-      name: "country",
-      id: "country"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: ""
-    }, "Select"), terminal_africa?.terminal_africal_countries.map((country, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: key,
-      value: country.isoCode,
-      "data-flag": country.flag,
-      selected: country.isoCode === saved_address?.country ? "selected" : ""
-    }, country.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-lg-4 col-md-4 col-sm-12"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "form-group"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-      htmlFor: "state"
-    }, "State"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-state t-terminal-state",
-      required: true,
-      name: "state",
-      id: "state"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: ""
-    }, "Select"), shippingData?.states?.map((state, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: key,
-      value: state.name,
-      "data-statecode": state.isoCode,
-      selected: state.name === saved_address?.state ? "selected" : ""
-    }, state.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-lg-4 col-md-4 col-sm-12"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "form-group"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-      htmlFor: "lga"
-    }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-city t-terminal-city",
-      required: true,
-      name: "lga",
-      id: "lga"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: ""
-    }, "Select"), shippingData?.cities?.data?.map((city, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: key,
-      value: city.name,
-      selected: city.name === saved_address?.city ? "selected" : ""
-    }, city.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
       htmlFor: "phone"
     }, "Phone Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "d-flex"
+      className: "d-flex",
+      style: {
+        marginTop: 9
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-phone-new-select-container"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
@@ -1221,27 +1245,6 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
         });
       }
     }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-lg-6 col-md-6 col-sm-12"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "form-group"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-      htmlFor: "zipcode"
-    }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-      type: "text",
-      name: "zip_code",
-      id: "zipcode",
-      className: "form-control t-zip-new",
-      placeholder: "Zip Code",
-      value: saved_address?.zip,
-      onChange: e => {
-        this.setState({
-          saved_address: {
-            ...this.state.saved_address,
-            zip: e.target.value
-          }
-        });
-      }
-    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex",
@@ -1808,25 +1811,23 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
         },
         dataType: "json",
         beforeSend: () => {
-          // Swal loader
-          Swal.fire({
-            title: "Please wait...",
-            text: "We are fetching your shipment status",
-            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            showConfirmButton: false,
-            footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
+          jQuery("#manage-terminal-shipping").block({
+            message: "Getting shipments...",
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.8,
+              cursor: "wait"
+            },
+            css: {
+              border: 0,
+              padding: 0,
+              backgroundColor: "transparent"
+            }
           });
         },
         success: response => {
           //close   Swal loader
-          Swal.close();
+          jQuery("#manage-terminal-shipping").unblock();
           //check if response code is 200
           if (response.code === 200) {
             //shippingStatus
@@ -1911,6 +1912,22 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
             `
             });
           }
+        },
+        error: (xhr, status, error) => {
+          jQuery("#manage-terminal-shipping").unblock();
+          console.log(xhr, status, error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!: " + xhr.responseText,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+          });
         }
       });
     });
@@ -2284,11 +2301,14 @@ class TerminalPhoneBook extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       className: "t-phonebook-scrolled-to-bottom-message"
     }, isLoadingNew ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Loader__WEBPACK_IMPORTED_MODULE_6__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, "You've reached the end of the list."))))))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       className: "t-manage-shipping-button",
-      onClick: this.showModal
+      onClick: this.showModal,
+      style: {
+        color: "#F7941E"
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: terminal_africa.plugin_url + "/img/phone-book.svg",
-      alt: "Phone Book"
-    }), "Import Address"));
+      src: terminal_africa.plugin_url + "/img/import-address.svg",
+      alt: "Import Address"
+    }), "Import address"));
   }
 }
 /* harmony default export */ __webpack_exports__["default"] = (TerminalPhoneBook);
@@ -2766,7 +2786,10 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, "Draft"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-shipping--header--left--search"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-shipping--header--left--search-input"
+      className: "t-shipping--header--left--search-input",
+      style: {
+        height: 30
+      }
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
       placeholder: "Search",
@@ -2799,10 +2822,7 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
       className: "t-shipping--header--right--refresh",
       onClick: this.handleRefresh
-    }, "Refresh"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-      className: "t-shipping--header--right--export",
-      onClick: this.handleExport
-    }, "Export"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
+    }, "Refresh"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
       width: "100%",
       className: "t-shipping--table",
       style: {
@@ -2832,7 +2852,8 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       key: shipment._id
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       style: {
-        width: "50px"
+        width: "50px",
+        cursor: "pointer"
       },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
@@ -2841,12 +2862,16 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       style: this.styles.carrierLogo
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       style: {
-        width: "auto"
+        width: "auto",
+        cursor: "pointer"
       },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, dayjs__WEBPACK_IMPORTED_MODULE_4___default()(shipment._source.created_at).format("DD MMM YYYY")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      style: {
+        cursor: "pointer"
+      },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
       className: "terminal-dashboard-order-link",
@@ -2856,7 +2881,10 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
         color: "black",
         textTransform: "capitalize"
       }
-    }, "#", shipment._source.order_id)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    }, shipment._source.order_id ? `#${shipment._source.order_id}` : "--")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      style: {
+        cursor: "pointer"
+      },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, shipment._source.delivery_name)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "terminal-dashboard-orders-list-table-shipment-id"
@@ -2890,11 +2918,17 @@ class ShippingHomePage extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       "stroke-linecap": "round",
       "stroke-linejoin": "round"
     }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      style: {
+        cursor: "pointer"
+      },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Shipping_Parts_ShippingStatus__WEBPACK_IMPORTED_MODULE_3__["default"], {
       className: `t-status-${shipment._source.status}`,
       title: shipment._source.status
     })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+      style: {
+        cursor: "pointer"
+      },
       onClick: () => this.handleShipmentClick(shipment._source.shipment_id)
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
       src: `${terminal_africa.plugin_url}/img/arrow-forward.svg`,

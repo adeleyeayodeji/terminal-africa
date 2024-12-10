@@ -22,9 +22,7 @@
                          <?php echo esc_html(ucfirst($mode)); ?> Mode
                      </p>
                      <a href="javascript:;" id="t-sign-out" class="t-sign-out">
-                         <p class="t-m-p-0">
-                             <i class="fa fa-power-off t-font-sign-out" aria-hidden="true"></i>
-                         </p>
+                         Sign Out
                      </a>
                  </div>
              </div>

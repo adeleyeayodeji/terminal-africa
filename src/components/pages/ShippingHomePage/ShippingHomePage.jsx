@@ -327,7 +327,9 @@ export default class ShippingHomePage extends Component {
                   </select>
                 </div>
                 <div className="t-shipping--header--left--search">
-                  <div className="t-shipping--header--left--search-input">
+                  <div
+                    className="t-shipping--header--left--search-input"
+                    style={{ height: 30 }}>
                     <input
                       type="text"
                       placeholder="Search"
@@ -372,11 +374,11 @@ export default class ShippingHomePage extends Component {
                   onClick={this.handleRefresh}>
                   Refresh
                 </button>
-                <button
+                {/* <button
                   className="t-shipping--header--right--export"
                   onClick={this.handleExport}>
                   Export
-                </button>
+                </button> */}
               </div>
             </div>
             <table
@@ -416,7 +418,7 @@ export default class ShippingHomePage extends Component {
                     className="t-terminal-dashboard-order-row"
                     key={shipment._id}>
                     <td
-                      style={{ width: "50px" }}
+                      style={{ width: "50px", cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
@@ -430,7 +432,7 @@ export default class ShippingHomePage extends Component {
                       />
                     </td>
                     <td
-                      style={{ width: "auto" }}
+                      style={{ width: "auto", cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
@@ -443,6 +445,7 @@ export default class ShippingHomePage extends Component {
                       </div>
                     </td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
@@ -454,10 +457,13 @@ export default class ShippingHomePage extends Component {
                           color: "black",
                           textTransform: "capitalize"
                         }}>
-                        #{shipment._source.order_id}
+                        {shipment._source.order_id
+                          ? `#${shipment._source.order_id}`
+                          : "--"}
                       </span>
                     </td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
@@ -510,6 +516,7 @@ export default class ShippingHomePage extends Component {
                       </div>
                     </td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
@@ -519,6 +526,7 @@ export default class ShippingHomePage extends Component {
                       />
                     </td>
                     <td
+                      style={{ cursor: "pointer" }}
                       onClick={() =>
                         this.handleShipmentClick(shipment._source.shipment_id)
                       }>
