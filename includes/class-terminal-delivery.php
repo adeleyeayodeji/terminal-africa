@@ -109,6 +109,9 @@ class WC_Terminal_Delivery
     //init
     public function init()
     {
+        //get all shipping zones for validation
+        $this->validateWooComerceShippingZones();
+
         //check if checkout-for-woocommerce/checkout-for-woocommerce.php is active
         if (in_array('checkout-for-woocommerce/checkout-for-woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             //filter the postal code
@@ -120,6 +123,81 @@ class WC_Terminal_Delivery
             //wp head
             add_action('wp_head', array($this, 'filter_postal_code'), PHP_INT_MAX);
             //filter checkout wc
+        }
+    }
+
+    /**
+     * Validate WooCommerce Shipping Zones
+     * 
+     * @return void|mixed
+     */
+    function validateWooComerceShippingZones()
+    {
+        try {
+            //terminal_delivery_active
+            $terminal_delivery_active = [];
+
+            //get all shipping zones
+            $shipping_zones = WC_Shipping_Zones::get_zones();
+
+            //loop through shipping zones
+            foreach ($shipping_zones as $shipping_zone) {
+                //get zone id
+                $zone_id = $shipping_zone['zone_id'];
+                //get zone
+                $zone = new WC_Shipping_Zone($zone_id);
+                //zone name
+                $zone_name = $shipping_zone['zone_name'];
+                //check if shipping zone has terminal_delivery method 
+                $shipping_methods = $zone->get_shipping_methods();
+                //check if shipping methods is not empty
+                if (empty($shipping_methods)) {
+                    //skip
+                    continue;
+                }
+                //loop through shipping methods
+                foreach ($shipping_methods as $shipping_method) {
+                    //check if shipping method id is terminal_delivery
+                    if ($shipping_method->id == 'terminal_delivery') {
+                        //enable shipping method for the zone
+                        $zone->add_shipping_method('terminal_delivery');
+                        //save
+                        $zone->save();
+                        //add to terminal_delivery_active
+                        $terminal_delivery_active[] = (object)[
+                            'zone_id' => $zone_id,
+                            'zone_name' => $zone_name
+                        ];
+                    }
+                }
+            }
+
+            error_log("shipping_zones" . print_r($shipping_zones, true));
+            //log terminal_delivery_active
+            error_log("terminal_delivery_active" . print_r($terminal_delivery_active, true));
+
+            //check if terminal_delivery_active is empty
+            if (empty($terminal_delivery_active) && !empty($shipping_zones)) {
+                //get the first shipping zone
+                $shipping_zone = $shipping_zones[0];
+                //log 
+                error_log('terminal_delivery_active is empty' . print_r($shipping_zone, true));
+                //set terminal delivery method for the first shipping zone
+                $new_shipping_zone = new WC_Shipping_Zone($shipping_zone['zone_id']);
+                $new_shipping_zone->add_shipping_method('terminal_delivery');
+                //save
+                $new_shipping_zone->save();
+            }
+
+            //get terminal session
+            $terminalSession = TerminalSession::instance();
+            //set terminal_delivery_active
+            $terminalSession->set('terminal_delivery_active', $terminal_delivery_active);
+            //return terminal_delivery_active
+            return $terminal_delivery_active;
+        } catch (\Exception $e) {
+            //log
+            logTerminalError($e, 'validate_woocommerce_shipping_zones');
         }
     }
 
