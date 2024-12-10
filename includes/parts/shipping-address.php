@@ -2250,4 +2250,141 @@ trait Shipping
             ];
         }
     }
+
+    /**
+     * Get All Shipments v2
+     * @param int $page
+     * @param int $perPage
+     * @param string $search
+     * @param string $status
+     * 
+     * GET https://api.terminal.africa/v2/shipments
+     * @since 1.11.1
+     * 
+     * @return array
+     */
+    public static function getAllShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "")
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            //site url
+            $site_url = site_url();
+            //get the domain
+            $domain = parse_url($site_url, PHP_URL_HOST);
+
+            //param builder
+            $params = [
+                'page' => $page,
+                'perPage' => $perPage,
+                'search' => $search,
+                'domain' => $domain,
+                'orderBy' => '-created_at'
+            ];
+
+            //append status if not empty
+            if (!empty($status)) {
+                $params['status'] = $status;
+            }
+
+            //get shipments
+            $response  = Requests::get(
+                self::$v2_endpoint . 'shipments?' . http_build_query($params),
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ] + self::$request_header,
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $body->data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$v2_endpoint . 'shipments?' . http_build_query($params));
+                //return error
+                return [
+                    'code' => $response->status_code,
+                    'message' => $body->message,
+                    'data' => [],
+                ];
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$v2_endpoint . 'shipments?' . http_build_query($params));
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
+    /**
+     * Get Shipping Data
+     * 
+     * @param string|int $shipping_id
+     * @return array
+     * 
+     */
+    public static function getShippingData($shipping_id)
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            $response = Requests::get(
+                self::$enpoint . 'shipments/' . $shipping_id,
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ] + self::$request_header,
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $body->data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$enpoint . 'shipments/' . $shipping_id);
+                return [
+                    'code' => $response->status_code,
+                    'message' => empty($body->message) ? "Something went wrong, please try again" : $body->message,
+                    'data' => [],
+                ];
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/' . $shipping_id);
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
 }

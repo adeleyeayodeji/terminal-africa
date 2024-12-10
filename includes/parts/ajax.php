@@ -137,6 +137,8 @@ trait Ajax
         add_action('wp_ajax_terminal_africa_close_notice', array($this, 'terminal_africa_close_notice'));
         //add ajax terminal_africa_validate_terminal_shipment
         add_action('wp_ajax_terminal_africa_validate_terminal_shipment', array($this, 'terminal_africa_validate_terminal_shipment'));
+        //add ajax terminal_africa_get_all_shipments_v2
+        add_action('wp_ajax_terminal_africa_get_all_shipments_v2', array($this, 'terminal_africa_get_all_shipments_v2'));
     }
 
     /**
@@ -555,26 +557,30 @@ trait Ajax
                 return [
                     'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                     'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                    'mode' => 'test'
+                    'mode' => 'test',
+                    'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
                 ];
             } else if (strpos($pk, 'live') !== false || strpos($sk, 'live') !== false) {
                 return [
                     'endpoint' => TERMINAL_AFRICA_API_ENDPOINT,
                     'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_API_ENDPOINT,
-                    'mode' => 'live'
+                    'mode' => 'live',
+                    'v2_endpoint' => TERMINAL_AFRICA_V2_API_ENDPOINT
                 ];
             }
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                 'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                'mode' => 'test'
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
             ];
         } catch (\Exception $e) {
             logTerminalError($e);
             return [
                 'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
                 'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
-                'mode' => 'test'
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
             ];
         }
     }
@@ -2183,12 +2189,21 @@ trait Ajax
             }
             //sanitize
             $shipping_id = sanitize_text_field($_GET['id']);
+            //get shipping data from v2 api
+            $shipping_data = getTerminalShippingData($shipping_id);
+            //check if shipping data code is not 200
+            if ($shipping_data['code'] != 200) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $shipping_data['message'],
+                ]);
+            }
             //sanitize
-            $order_id = sanitize_text_field($_GET['order_id']);
+            $order_id = $shipping_data['data']->metadata->order_id;
             //get order
             $order = wc_get_order($order_id);
             //rate_id
-            $rate_id = sanitize_text_field($_GET['rate_id']);
+            $rate_id = get_post_meta($order_id, 'Terminal_africa_rateid', true);
             //get rate data
             $get_rate_data = getTerminalRateData($rate_id);
             //order date
@@ -2253,7 +2268,7 @@ trait Ajax
                 $saved_others ? wc_price($shipping_cost, ['currency' => $order_currency]) : 0;
 
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id');
 
             //return data
             wp_send_json([
@@ -2317,6 +2332,60 @@ trait Ajax
             ]);
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_africa_get_merchant_address_data');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Get All Shipments V2
+     * 
+     */
+    public function terminal_africa_get_all_shipments_v2()
+    {
+        try {
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
+
+            //status
+            $status = sanitize_text_field($_GET['status']);
+            //search
+            $search = sanitize_text_field($_GET['search']);
+
+            //page
+            $page = sanitize_text_field($_GET['page']);
+
+            //per page
+            $per_page = sanitize_text_field($_GET['per_page']);
+
+            //get all shipments
+            $shipments = getAllTerminalShipmentsV2($page, $per_page, $search, $status);
+            //check if shipments are gotten
+            if ($shipments['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Shipments gotten successfully',
+                    'data' => $shipments['data']
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $shipments['message'],
+                    'endpoint' => 'get_all_shipments_v2',
+                    'data' => []
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_africa_get_all_shipments_v2');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),

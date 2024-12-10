@@ -425,6 +425,35 @@ if (!function_exists('validateTerminalRate')) {
     }
 }
 
+//getAllShipmentsV2
+if (!function_exists('getAllTerminalShipmentsV2')) {
+    /**
+     * Get All Shipments V2
+     * @param int $page
+     * @param int $perPage
+     * @param string $search
+     * @param string $status
+     * @return array
+     */
+    function getAllTerminalShipmentsV2($page = 1, $perPage = 10, $search = "", $status = "")
+    {
+        return terminal_africa_shipping_plugin()::getAllShipmentsV2($page, $perPage, $search, $status);
+    }
+}
+
+//getTerminalShippingData
+if (!function_exists('getTerminalShippingData')) {
+    /**
+     * Get Terminal Shipping Data
+     * @param string|int $shipping_id
+     * @return array
+     */
+    function getTerminalShippingData($shipping_id)
+    {
+        return terminal_africa_shipping_plugin()::getShippingData($shipping_id);
+    }
+}
+
 /**
  * $allowed_order_statuses
  */

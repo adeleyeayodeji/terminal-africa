@@ -38,6 +38,10 @@ define('TERMINAL_AFRICA_TRACKING_URL_LIVE', 'https://app.terminal.africa/shipmen
 define('TERMINAL_AFRICA_SINGLE_AUTH_URL', 'https://dashboard.terminal.africa/auth/authorize/wordpress/');
 //plugin wp admin url
 define('TERMINAL_AFRICA_PLUGIN_WP_ADMIN_URL', admin_url('admin.php?page=terminal-africa'));
+//v2 api endpoint
+define('TERMINAL_AFRICA_V2_API_ENDPOINT', 'https://api.terminal.africa/v2/');
+//test v2 api endpoint
+define('TERMINAL_AFRICA_TEST_V2_API_ENDPOINT', 'https://sandbox.terminal.africa/v2/');
 //Terminal Africa Payment API
 define('TERMINAL_AFRICA_PAYMENT_API_ENDPOINT', 'https://pay.terminal.africa/v1/payments/');
 define('TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT', 'https://sandboxpay.terminal.africa/v1/payments/');

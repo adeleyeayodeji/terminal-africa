@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@wordpress/element": "^5.19.0",
+    "dayjs": "^1.11.13",
     "react": "^18.2.0",
     "react-select": "^5.7.5",
     "fs-extra": "^11.2.0",

@@ -345,12 +345,15 @@ class TerminalPhoneBook extends Component {
             </div>
           </Modal>
         )}
-        <button className="t-manage-shipping-button" onClick={this.showModal}>
+        <button
+          className="t-manage-shipping-button"
+          onClick={this.showModal}
+          style={{ color: "#F7941E" }}>
           <img
-            src={terminal_africa.plugin_url + "/img/phone-book.svg"}
-            alt="Phone Book"
+            src={terminal_africa.plugin_url + "/img/import-address.svg"}
+            alt="Import Address"
           />
-          Import Address
+          Import address
         </button>
       </>
     );

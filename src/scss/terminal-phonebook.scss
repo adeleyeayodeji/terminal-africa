@@ -273,6 +273,11 @@
   color: #4bc45b;
 }
 
+.t-status-in-transit {
+  background: #c0a2e630;
+  color: #c0a2e6;
+}
+
 .t-btn:hover {
   color: #fff;
 }
@@ -532,3 +537,27 @@
     }
   }
 }
+
+.terminal-new-shipment-page {
+  display: flex !important;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto !important;
+  width: 90% !important;
+
+  &--inner-column {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    max-width: 90%;
+  }
+}
+
+.t-title {
+  color: #333333;
+}
+
+//import the style from the ShippingHomePage component
+@import "../components/pages/ShippingHomePage/style/style.scss";

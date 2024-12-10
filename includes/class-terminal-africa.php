@@ -83,6 +83,13 @@ class TerminalAfricaShippingPlugin
     public static $endpoint;
 
     /**
+     * V2 Endpoint
+     * @since 1.13.8
+     * @var string
+     */
+    public static $v2_endpoint;
+
+    /**
      * Plugin Mode
      * @since 1.10.19
      * @var string
@@ -139,6 +146,8 @@ class TerminalAfricaShippingPlugin
             self::$enpoint = $validate_keys['endpoint'];
             //set the value
             self::$endpoint = $validate_keys['endpoint'];
+            //set v2 endpoint
+            self::$v2_endpoint = $validate_keys['v2_endpoint'];
             self::$plugin_mode = $validate_keys['mode'];
             //set payment endpoint
             self::$payment_endpoint = $validate_keys['payment_endpoint'];
@@ -151,6 +160,7 @@ class TerminalAfricaShippingPlugin
             self::$enpoint = TERMINAL_AFRICA_API_ENDPOINT;
             //set the value
             self::$endpoint = TERMINAL_AFRICA_API_ENDPOINT;
+            self::$v2_endpoint = TERMINAL_AFRICA_TEST_V2_API_ENDPOINT;
             self::$plugin_mode = 'test';
             //set payment endpoint
             self::$payment_endpoint = TERMINAL_AFRICA_PAYMENT_API_ENDPOINT;

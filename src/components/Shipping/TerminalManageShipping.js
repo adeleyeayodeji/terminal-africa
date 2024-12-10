@@ -34,10 +34,6 @@ class TerminalManageShipping extends React.Component {
   getApiData = () => {
     //get url param id
     const id = this.getUrlParams("id");
-    //get order_id
-    const order_id = this.getUrlParams("order_id");
-    //rate_id
-    const rate_id = this.getUrlParams("rate_id");
 
     //get api data
     jQuery(document).ready(($) => {
@@ -47,8 +43,6 @@ class TerminalManageShipping extends React.Component {
         data: {
           action: "terminal_africa_get_shipping_api_data",
           id,
-          order_id,
-          rate_id,
           nonce: terminal_africa.nonce
         },
         dataType: "json",
@@ -106,9 +100,7 @@ class TerminalManageShipping extends React.Component {
   //get shipping status
   getShippingStatus = () => {
     jQuery(document).ready(($) => {
-      const { shipping_id, order_id } = this.state.shippingData;
-      //get rate_id
-      const rate_id = this.getUrlParams("rate_id");
+      const { shipping_id, order_id, rate_id } = this.state.shippingData;
 
       //ajax
       $.ajax({
@@ -123,25 +115,23 @@ class TerminalManageShipping extends React.Component {
         },
         dataType: "json",
         beforeSend: () => {
-          // Swal loader
-          Swal.fire({
-            title: "Please wait...",
-            text: "We are fetching your shipment status",
-            imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            allowEnterKey: false,
-            showConfirmButton: false,
-            footer: `
-        <div>
-          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
-        </div>
-      `
+          jQuery("#manage-terminal-shipping").block({
+            message: "Getting shipments...",
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.8,
+              cursor: "wait"
+            },
+            css: {
+              border: 0,
+              padding: 0,
+              backgroundColor: "transparent"
+            }
           });
         },
         success: (response) => {
           //close   Swal loader
-          Swal.close();
+          jQuery("#manage-terminal-shipping").unblock();
           //check if response code is 200
           if (response.code === 200) {
             //shippingStatus
@@ -238,6 +228,22 @@ class TerminalManageShipping extends React.Component {
             `
             });
           }
+        },
+        error: (xhr, status, error) => {
+          jQuery("#manage-terminal-shipping").unblock();
+          console.log(xhr, status, error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!: " + xhr.responseText,
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            footer: `
+                    <div>
+                        <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+                    </div>
+                    `
+          });
         }
       });
     });
@@ -246,7 +252,7 @@ class TerminalManageShipping extends React.Component {
   render() {
     const { isLoading, shippingData, shippingStatus, shippingTrackingNumber } =
       this.state;
-    const rate_id = this.getUrlParams("rate_id");
+    const rate_id = shippingData.rate_id;
     const trackingLink = "";
 
     return (

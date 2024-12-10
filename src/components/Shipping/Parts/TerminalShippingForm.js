@@ -783,7 +783,100 @@ class TerminalShippingForm extends React.Component {
                   />
                 </div>
               </div>
-              <div className="col-12">
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="form-group">
+                  <label htmlFor="country">Country</label>
+                  <select
+                    className="form-control terminal-country t-terminal-country"
+                    required
+                    name="country"
+                    id="country">
+                    <option value="">Select</option>
+                    {terminal_africa?.terminal_africal_countries.map(
+                      (country, key) => (
+                        <option
+                          key={key}
+                          value={country.isoCode}
+                          data-flag={country.flag}
+                          selected={
+                            country.isoCode === saved_address?.country
+                              ? "selected"
+                              : ""
+                          }>
+                          {country.name}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="form-group">
+                  <label htmlFor="state">State</label>
+                  <select
+                    className="form-control terminal-state t-terminal-state"
+                    required
+                    name="state"
+                    id="state">
+                    <option value="">Select</option>
+                    {shippingData?.states?.map((state, key) => (
+                      <option
+                        key={key}
+                        value={state.name}
+                        data-statecode={state.isoCode}
+                        selected={
+                          state.name === saved_address?.state ? "selected" : ""
+                        }>
+                        {state.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="form-group">
+                  <label htmlFor="zipcode">Zip Code</label>
+                  <input
+                    type="text"
+                    name="zip_code"
+                    id="zipcode"
+                    className="form-control t-zip-new"
+                    placeholder="Zip Code"
+                    value={saved_address?.zip}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          zip: e.target.value
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="form-group">
+                  <label htmlFor="lga">City</label>
+                  <select
+                    className="form-control terminal-city t-terminal-city"
+                    required
+                    name="lga"
+                    id="lga">
+                    <option value="">Select</option>
+                    {shippingData?.cities?.data?.map((city, key) => (
+                      <option
+                        key={key}
+                        value={city.name}
+                        selected={
+                          city.name === saved_address?.city ? "selected" : ""
+                        }>
+                        {city.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="form-group">
                   <label htmlFor="email">Email address</label>
                   <div class="input-group mb-3">
@@ -814,82 +907,10 @@ class TerminalShippingForm extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-4 col-sm-12">
-                <div className="form-group">
-                  <label htmlFor="country">Country</label>
-                  <select
-                    className="form-control terminal-country t-terminal-country"
-                    required
-                    name="country"
-                    id="country">
-                    <option value="">Select</option>
-                    {terminal_africa?.terminal_africal_countries.map(
-                      (country, key) => (
-                        <option
-                          key={key}
-                          value={country.isoCode}
-                          data-flag={country.flag}
-                          selected={
-                            country.isoCode === saved_address?.country
-                              ? "selected"
-                              : ""
-                          }>
-                          {country.name}
-                        </option>
-                      )
-                    )}
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-4 col-md-4 col-sm-12">
-                <div className="form-group">
-                  <label htmlFor="state">State</label>
-                  <select
-                    className="form-control terminal-state t-terminal-state"
-                    required
-                    name="state"
-                    id="state">
-                    <option value="">Select</option>
-                    {shippingData?.states?.map((state, key) => (
-                      <option
-                        key={key}
-                        value={state.name}
-                        data-statecode={state.isoCode}
-                        selected={
-                          state.name === saved_address?.state ? "selected" : ""
-                        }>
-                        {state.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-4 col-md-4 col-sm-12">
-                <div className="form-group">
-                  <label htmlFor="lga">City</label>
-                  <select
-                    className="form-control terminal-city t-terminal-city"
-                    required
-                    name="lga"
-                    id="lga">
-                    <option value="">Select</option>
-                    {shippingData?.cities?.data?.map((city, key) => (
-                      <option
-                        key={key}
-                        value={city.name}
-                        selected={
-                          city.name === saved_address?.city ? "selected" : ""
-                        }>
-                        {city.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="form-group">
                   <label htmlFor="phone">Phone Number</label>
-                  <div className="d-flex">
+                  <div className="d-flex" style={{ marginTop: 9 }}>
                     <div className="t-phone-new-select-container">
                       <select
                         name="country_code"
@@ -932,27 +953,6 @@ class TerminalShippingForm extends React.Component {
                       />
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="col-lg-6 col-md-6 col-sm-12">
-                <div className="form-group">
-                  <label htmlFor="zipcode">Zip Code</label>
-                  <input
-                    type="text"
-                    name="zip_code"
-                    id="zipcode"
-                    className="form-control t-zip-new"
-                    placeholder="Zip Code"
-                    value={saved_address?.zip}
-                    onChange={(e) => {
-                      this.setState({
-                        saved_address: {
-                          ...this.state.saved_address,
-                          zip: e.target.value
-                        }
-                      });
-                    }}
-                  />
                 </div>
               </div>
               <div className="col-12">
