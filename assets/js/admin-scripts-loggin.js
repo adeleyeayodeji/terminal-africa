@@ -9,6 +9,7 @@ class TerminalAfricaAdminLoggin {
    */
   constructor() {
     this.init();
+    this.getTerminalPackaging();
   }
 
   /**
@@ -44,6 +45,39 @@ class TerminalAfricaAdminLoggin {
       })
       .catch((err) => {
         console.log(err);
+      });
+  }
+
+  /**
+   * Get terminal packaging
+   * @return {void}
+   */
+  getTerminalPackaging() {
+    //check if terminal_packaging_id is yes
+    if (terminal_africa.terminal_packaging_id == "yes") {
+      //return
+      return;
+    }
+
+    const ajaxUrl = `${terminal_africa.ajax_url}?action=get_terminal_packaging&nonce=${terminal_africa.nonce}`;
+
+    fetch(ajaxUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-WP-Nonce": terminal_africa.nonce
+      },
+      credentials: "same-origin",
+      mode: "cors",
+      cache: "default"
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 }

@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Terminal\\Core\\TemplateLoader' => $baseDir . '/app/Terminal/Core/TemplateLoader.php',
     'App\\Terminal\\Core\\TerminalCore' => $baseDir . '/app/Terminal/Core/TerminalCore.php',
+    'App\\Terminal\\Core\\TerminalSession' => $baseDir . '/app/Terminal/Core/TerminalSession.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Roots\\Composer\\WordPressCoreInstaller' => $vendorDir . '/roots/wordpress-core-installer/src/WordPressCoreInstaller.php',
     'Roots\\Composer\\WordPressCorePlugin' => $vendorDir . '/roots/wordpress-core-installer/src/WordPressCorePlugin.php',

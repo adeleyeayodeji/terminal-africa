@@ -14,6 +14,8 @@ class TerminalDataParcel {
     this.listenToCart();
     //remove available carriers
     this.clearCarrierData();
+    //get terminal packaging
+    this.getTerminalPackaging();
   }
 
   /**
@@ -161,6 +163,40 @@ class TerminalDataParcel {
         }, 3000);
       }
     });
+  }
+
+  /**
+   * Get terminal packaging
+   * @return {void}
+   */
+  getTerminalPackaging() {
+    //check if terminal_packaging_id is yes
+    if (terminal_africa_parcel.terminal_packaging_id == "yes") {
+      //return
+      return;
+    }
+
+    //get terminal packaging
+    const ajaxUrl = `${terminal_africa_parcel.ajax_url}?action=get_terminal_packaging&nonce=${terminal_africa_parcel.nonce}`;
+
+    fetch(ajaxUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-WP-Nonce": terminal_africa_parcel.nonce
+      },
+      credentials: "same-origin",
+      mode: "cors",
+      cache: "default"
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
 

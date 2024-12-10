@@ -109,6 +109,8 @@ trait Assets
             wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
             //init add to cart ajax
             wp_enqueue_script('terminal-africa-terminaldata-for-parcel-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/terminaldata-parcel.js', array('jquery', 'select2'), TERMINAL_AFRICA_VERSION, true);
+            //get terminal packaging
+            $terminal_packaging = get_option('terminal_default_packaging_id');
             //localize scripts
             wp_localize_script('terminal-africa-terminaldata-for-parcel-scripts', 'terminal_africa_parcel', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
@@ -120,7 +122,8 @@ trait Assets
                 'is_cart_empty' => empty($cart_item) ? 'yes' : 'no',
                 'terminal_user_carrier_shipment_timeline' => get_option('terminal_user_carrier_shipment_timeline', 'false'),
                 'update_user_carrier_shipment_rate_terminal' => get_option('update_user_carrier_shipment_rate_terminal', 'false'),
-                'terminal_autoload_merchant_address' => terminal_autoload_merchant_address()
+                'terminal_autoload_merchant_address' => terminal_autoload_merchant_address(),
+                'terminal_packaging_id' => !empty($terminal_packaging) ? "yes" : "no"
             ));
 
             //check if checkiut page
@@ -214,6 +217,8 @@ trait Assets
                 esc_html__('Switch to classic checkout', 'text-domain')
             );
         }
+        //get terminal packaging
+        $packaging_id = get_option('terminal_default_packaging_id');
         //localize scripts
         wp_localize_script('terminal-africa-checkout-scripts', 'terminal_africa', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -227,7 +232,8 @@ trait Assets
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
             'multicurrency' => self::wooMulticurrency(),
-            'edit_checkout_page_link' => $wc_checkout_block_notice
+            'edit_checkout_page_link' => $wc_checkout_block_notice,
+            'terminal_packaging_id' => !empty($packaging_id) ? "yes" : "no"
         ));
     }
 
