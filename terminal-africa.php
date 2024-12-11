@@ -13,6 +13,8 @@
  * Requires Plugins: woocommerce
  */
 
+use App\Terminal\Core\TerminalSession;
+
 // If this file is called directly, abort.
 if (!defined('WPINC')) {
     die('Direct access is not allowed');
@@ -174,9 +176,19 @@ class WC_Terminal_Delivery_Loader
     {
         $class = 'notice notice-error';
         $message = __('Terminal Delivery is disabled. Please enable it to use the plugin.', 'terminal-africa');
-        $link = admin_url('admin.php?page=wc-settings&tab=shipping&section=terminal_delivery');
+        $link = admin_url('admin.php?page=terminal-africa');
 
         printf('<div class="%1$s"><p>%2$s <a href="%3$s">Enable</a></p></div>', esc_attr($class), esc_html($message), esc_url($link));
+    }
+
+    /**
+     * Show error when terminal_delivery_inactive is set for shipping zones
+     */
+    public function terminal_delivery_inactive_notice()
+    {
+        $class = 'notice notice-error';
+        $message = __('Terminal Africa Delivery is not active for any shipping zones, please set Terminal Delivery as a shipping method for at least one shipping zone in woocommerce shipping zones.', 'terminal-africa');
+        printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
     }
 
     /**
