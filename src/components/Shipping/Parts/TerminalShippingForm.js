@@ -835,27 +835,6 @@ class TerminalShippingForm extends React.Component {
               </div>
               <div className="col-lg-3 col-md-3 col-sm-12">
                 <div className="form-group">
-                  <label htmlFor="zipcode">Zip Code</label>
-                  <input
-                    type="text"
-                    name="zip_code"
-                    id="zipcode"
-                    className="form-control t-zip-new"
-                    placeholder="Zip Code"
-                    value={saved_address?.zip}
-                    onChange={(e) => {
-                      this.setState({
-                        saved_address: {
-                          ...this.state.saved_address,
-                          zip: e.target.value
-                        }
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-3 col-sm-12">
-                <div className="form-group">
                   <label htmlFor="lga">City</label>
                   <select
                     className="form-control terminal-city t-terminal-city"
@@ -874,6 +853,27 @@ class TerminalShippingForm extends React.Component {
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div className="form-group">
+                  <label htmlFor="zipcode">Zip Code</label>
+                  <input
+                    type="text"
+                    name="zip_code"
+                    id="zipcode"
+                    className="form-control t-zip-new"
+                    placeholder="Zip Code"
+                    value={saved_address?.zip}
+                    onChange={(e) => {
+                      this.setState({
+                        saved_address: {
+                          ...this.state.saved_address,
+                          zip: e.target.value
+                        }
+                      });
+                    }}
+                  />
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12">

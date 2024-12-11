@@ -134,6 +134,15 @@ class WC_Terminal_Delivery
     function validateWooComerceShippingZones()
     {
         try {
+            //get terminal_africa_merchant_id
+            $terminal_africa_merchant_id = get_option("terminal_africa_merchant_id", "");
+
+            //check if terminal_africa_merchant_id is empty
+            if (empty($terminal_africa_merchant_id)) {
+                //return false
+                return false;
+            }
+
             //terminal_delivery_active
             $terminal_delivery_active = [];
 
@@ -159,10 +168,6 @@ class WC_Terminal_Delivery
                 foreach ($shipping_methods as $shipping_method) {
                     //check if shipping method id is terminal_delivery
                     if ($shipping_method->id == 'terminal_delivery') {
-                        //enable shipping method for the zone
-                        $zone->add_shipping_method('terminal_delivery');
-                        //save
-                        $zone->save();
                         //add to terminal_delivery_active
                         $terminal_delivery_active[] = (object)[
                             'zone_id' => $zone_id,
@@ -172,29 +177,47 @@ class WC_Terminal_Delivery
                 }
             }
 
-            error_log("shipping_zones" . print_r($shipping_zones, true));
-            //log terminal_delivery_active
-            error_log("terminal_delivery_active" . print_r($terminal_delivery_active, true));
-
             //check if terminal_delivery_active is empty
             if (empty($terminal_delivery_active) && !empty($shipping_zones)) {
                 //get the first shipping zone
-                $shipping_zone = $shipping_zones[0];
-                //log 
-                error_log('terminal_delivery_active is empty' . print_r($shipping_zone, true));
+                $shipping_zone = array_shift($shipping_zones);
                 //set terminal delivery method for the first shipping zone
                 $new_shipping_zone = new WC_Shipping_Zone($shipping_zone['zone_id']);
-                $new_shipping_zone->add_shipping_method('terminal_delivery');
-                //save
-                $new_shipping_zone->save();
+                //check if shipping zone is not empty
+                if (!empty($new_shipping_zone)) {
+                    //check if terminal_delivery is not in shipping methods
+                    if (!in_array('terminal_delivery', array_column($new_shipping_zone->get_shipping_methods(), 'id'))) {
+                        //add shipping method
+                        $new_shipping_zone->add_shipping_method('terminal_delivery');
+                        /**
+                         * Completes the saving process for options.
+                         *
+                         * @since 7.8.0
+                         */
+                        do_action('woocommerce_update_options');
+                    }
+                }
             }
 
-            //get terminal session
-            $terminalSession = TerminalSession::instance();
-            //set terminal_delivery_active
-            $terminalSession->set('terminal_delivery_active', $terminal_delivery_active);
-            //return terminal_delivery_active
-            return $terminal_delivery_active;
+            //check if both are empty
+            if (empty($terminal_delivery_active) && empty($shipping_zones)) {
+                //set terminal delivery for zone 0
+                $new_shipping_zone = new WC_Shipping_Zone(0);
+                //check if terminal_delivery is not in shipping methods
+                $shipping_methods = $new_shipping_zone->get_shipping_methods();
+                if (!in_array('terminal_delivery', array_column($shipping_methods, 'id'))) {
+                    //add shipping method
+                    $new_shipping_zone->add_shipping_method('terminal_delivery');
+                    /**
+                     * Completes the saving process for options.
+                     *
+                     * @since 7.8.0
+                     */
+                    do_action('woocommerce_update_options');
+                }
+            }
+
+            return true;
         } catch (\Exception $e) {
             //log
             logTerminalError($e, 'validate_woocommerce_shipping_zones');

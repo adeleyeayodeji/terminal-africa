@@ -1142,6 +1142,23 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "lga"
+    }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+      className: "form-control terminal-city t-terminal-city",
+      required: true,
+      name: "lga",
+      id: "lga"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      value: ""
+    }, "Select"), shippingData?.cities?.data?.map((city, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+      key: key,
+      value: city.name,
+      selected: city.name === saved_address?.city ? "selected" : ""
+    }, city.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-3 col-md-3 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
       htmlFor: "zipcode"
     }, "Zip Code"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       type: "text",
@@ -1159,23 +1176,6 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
         });
       }
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "col-lg-3 col-md-3 col-sm-12"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "form-group"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-      htmlFor: "lga"
-    }, "City"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-      className: "form-control terminal-city t-terminal-city",
-      required: true,
-      name: "lga",
-      id: "lga"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      value: ""
-    }, "Select"), shippingData?.cities?.data?.map((city, key) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-      key: key,
-      value: city.name,
-      selected: city.name === saved_address?.city ? "selected" : ""
-    }, city.name))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"

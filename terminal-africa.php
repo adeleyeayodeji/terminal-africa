@@ -164,16 +164,6 @@ class WC_Terminal_Delivery_Loader
         }
         //add settings page
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array('TerminalAfricaShippingPlugin', 'add_settings_link'));
-
-        //get terminal session
-        $terminalSession = TerminalSession::instance();
-        //get terminal_delivery_active
-        $terminal_delivery_active = $terminalSession->get('terminal_delivery_active');
-        //check if terminal_delivery_active is empty
-        if (empty($terminal_delivery_active)) {
-            //show terminal_delivery_inactive_notice
-            add_action('admin_notices', array($this, 'terminal_delivery_inactive_notice'));
-        }
     }
 
     public function wc_active_check()
@@ -186,7 +176,7 @@ class WC_Terminal_Delivery_Loader
     {
         $class = 'notice notice-error';
         $message = __('Terminal Delivery is disabled. Please enable it to use the plugin.', 'terminal-africa');
-        $link = admin_url('admin.php?page=wc-settings&tab=shipping&section=terminal_delivery');
+        $link = admin_url('admin.php?page=terminal-africa');
 
         printf('<div class="%1$s"><p>%2$s <a href="%3$s">Enable</a></p></div>', esc_attr($class), esc_html($message), esc_url($link));
     }
