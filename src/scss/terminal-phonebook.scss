@@ -111,8 +111,8 @@
 
 .t-shipment-header {
   background: #ffffff;
-  padding: 35px 41px;
-  border-radius: 20px;
+  padding: 24px 30px;
+  border-radius: 13px;
   box-shadow: 1px 0px 6px -5px black;
 
   h1 {
@@ -144,7 +144,7 @@
 
 .t-shipping-side {
   background: #ffffff;
-  padding: 40px 46px;
+  padding: 21px 32px;
   border-radius: 20px;
   box-shadow: 1px 0px 6px -5px black;
 
@@ -169,8 +169,8 @@
 
 .t-shipping-form-new {
   background: #ffffff;
-  padding: 35px 41px;
-  border-radius: 20px;
+  padding: 24px 30px;
+  border-radius: 12px;
   box-shadow: 1px 0px 6px -5px black;
   margin-top: 5px;
 
@@ -561,3 +561,4 @@
 
 //import the style from the ShippingHomePage component
 @import "../components/pages/ShippingHomePage/style/style.scss";
+@import "./styles.scss";

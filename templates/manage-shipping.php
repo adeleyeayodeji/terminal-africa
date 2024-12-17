@@ -3,7 +3,7 @@
 defined('ABSPATH') or die('No script kiddies please!');
 ?>
 <div class="t-container">
-    <?php terminal_header("fas fa-shopping-cart", "Manage Shipment"); ?>
+    <?php terminal_header("fas fa-shopping-cart", "Shipment Details"); ?>
     <div class="t-body" id="manage-terminal-shipping">
         <div class="t-row" style="margin-left: 25px;">
             <div class="t-col-8 t-col-lg-8 t-col-md-8 t-col-sm-12">

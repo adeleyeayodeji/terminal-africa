@@ -3,6 +3,7 @@ import TerminalShippingHeader from "./Parts/TerminalShippingHeader";
 import TerminalShippingSide from "./Parts/TerminalShippingSide";
 import TerminalShippingForm from "./Parts/TerminalShippingForm";
 import ShippingSkeleton from "./ShippingSkeleton";
+import BreadCrumb from "./Parts/BreadCrumb";
 
 class TerminalManageShipping extends React.Component {
   constructor(props) {
@@ -261,6 +262,9 @@ class TerminalManageShipping extends React.Component {
           <ShippingSkeleton />
         ) : (
           <div className="t-row">
+            <div className="t-col-12">
+              <BreadCrumb />
+            </div>
             <div className="t-col-8 t-col-lg-8 t-col-md-12 t-col-sm-12">
               <div className="t-ml-5 t-side-left">
                 <TerminalShippingHeader
