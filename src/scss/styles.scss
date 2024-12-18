@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 .t-breadcrumb {
   display: flex;
   align-items: center;
@@ -13,6 +15,16 @@
     font-weight: 500;
     line-height: 22px;
     font-family: Lato, sans-serif;
+  }
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      color: #c97207;
+      text-decoration: underline;
+    }
   }
 
   &--separator {
@@ -41,5 +53,345 @@
   svg {
     width: 10px;
     height: 10px;
+  }
+}
+
+#t_carriers_location {
+  margin-top: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  #t-carrier-change-button {
+    padding: 13px 5px !important;
+    text-align: center;
+    background-color: transparent;
+    color: #f90;
+    border: 1px solid #f90;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: rgb(190, 119, 13);
+      border: 1px solid rgb(190, 119, 13);
+    }
+  }
+
+  .t-carrier-arrange-button {
+    background-color: #f90 !important;
+    color: #fff !important;
+    border: 1px solid #f90 !important;
+
+    &:hover {
+      color: #fff !important;
+      border: 1px solid rgb(190, 119, 13) !important;
+      background-color: rgb(190, 119, 13) !important;
+    }
+  }
+
+  #t-carrier-cancel-shipment-button {
+    padding: 13px 5px !important;
+    text-align: center;
+    background-color: transparent !important;
+    color: #ff4d4d !important;
+    border: 1px solid #ff4d4d !important;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: #fff !important;
+      border: 1px solid #e60000 !important;
+    }
+  }
+}
+
+.t-manage-shipping-button {
+  border-radius: 8px !important;
+}
+
+button.t-address-save {
+  border-radius: 8px !important;
+}
+
+.t-processed-shipment-view {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  &--sender-receiver {
+    display: flex;
+    gap: 20px;
+
+    &--sender,
+    &--receiver {
+      flex: 1; // This ensures that both sender and receiver take up equal space
+    }
+
+    &--sender,
+    &--receiver {
+      background-color: #fbf9f7;
+      padding: 20px;
+      border-radius: 8px;
+
+      h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+        font-family: Lato, sans-serif;
+        color: #343434;
+        margin-bottom: 10px;
+      }
+
+      &--details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h5 {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 22px;
+          font-family: Lato, sans-serif;
+          color: #343434;
+          margin: 0;
+        }
+
+        &--contact {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin: 0;
+
+          a {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 20px;
+            font-family: Lato, sans-serif;
+            color: #343434;
+            text-decoration: none;
+
+            &:hover {
+              color: #c97207;
+            }
+          }
+        }
+
+        &--address {
+          margin: 0;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 20px;
+          font-family: "Public Sans", sans-serif;
+          color: #343434;
+        }
+      }
+    }
+
+    &--parcel-information {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #fbf9f7;
+      padding: 20px;
+      border-radius: 8px;
+
+      &--details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h3 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 20px;
+          font-family: Lato, sans-serif;
+          color: #343434;
+        }
+
+        p {
+          margin: 0;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 20px;
+          font-family: "Public Sans", sans-serif;
+          color: #343434;
+        }
+      }
+
+      &--items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h3 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 20px;
+          font-family: Lato, sans-serif;
+          color: #343434;
+        }
+
+        p {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          span {
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 20px;
+            font-family: "Public Sans", sans-serif;
+            color: #343434;
+          }
+        }
+      }
+    }
+  }
+
+  &--parcel-information {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #fbf9f7;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+
+    &--details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+        font-family: Lato, sans-serif;
+        color: #343434;
+      }
+
+      p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 20px;
+        font-family: "Public Sans", sans-serif;
+        color: #343434;
+      }
+    }
+
+    &--items {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+
+      h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 20px;
+        font-family: Lato, sans-serif;
+        color: #f7941e;
+        text-transform: uppercase;
+      }
+
+      p {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        span {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 20px;
+          font-family: "Public Sans", sans-serif;
+          color: #343434;
+        }
+      }
+    }
+  }
+
+  &--courier {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    background-color: #fbf9f7;
+    padding: 20px;
+    border-radius: 8px;
+
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+      font-family: Lato, sans-serif;
+      color: #343434;
+    }
+
+    &--courier-information {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+
+      &--courier-details {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+
+        img {
+          width: 40px;
+          height: 40px;
+          object-fit: contain;
+          object-position: center;
+        }
+
+        h5 {
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 20px;
+          font-family: Lato, sans-serif;
+          color: #343434;
+          margin: 0;
+        }
+
+        p {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 20px;
+          font-family: "Public Sans", sans-serif;
+          color: #808080;
+          margin: 0;
+        }
+      }
+
+      &--courier-tracking-number {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+
+        svg {
+          width: 44px;
+          height: 44px;
+
+          &:hover {
+            cursor: pointer;
+
+            path {
+              stroke: #c97207;
+            }
+
+            rect {
+              stroke: #c97207;
+            }
+          }
+        }
+      }
+    }
   }
 }

@@ -2,6 +2,10 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/terminal-phonebook.scss ***!
   \*********************************************************************************************************************************************************************************************************************************************************/
 @import url(https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700;800&display=swap);
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/terminal-phonebook.scss (1) ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap);
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/bootstrap5.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************/
@@ -8904,7 +8908,7 @@
   }
 }
 /*!*************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/terminal-phonebook.scss (1) ***!
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/terminal-phonebook.scss (2) ***!
   \*************************************************************************************************************************************************************************************************************************************************************/
 .t-scroll-area-div::-webkit-scrollbar {
   width: 5px !important;
@@ -9609,6 +9613,14 @@
   line-height: 22px;
   font-family: Lato, sans-serif;
 }
+.t-breadcrumb a {
+  cursor: pointer;
+  text-decoration: none;
+}
+.t-breadcrumb a:hover {
+  color: #c97207;
+  text-decoration: underline;
+}
 .t-breadcrumb--separator {
   color: rgba(0, 0, 0, 0.4509803922);
   font-size: 14px;
@@ -9633,6 +9645,302 @@
 .t-shipment-wc-link svg {
   width: 10px;
   height: 10px;
+}
+
+#t_carriers_location {
+  margin-top: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#t_carriers_location #t-carrier-change-button {
+  padding: 13px 5px !important;
+  text-align: center;
+  background-color: transparent;
+  color: #f90;
+  border: 1px solid #f90;
+  transition: all 0.3s ease-in-out;
+}
+#t_carriers_location #t-carrier-change-button:hover {
+  color: rgb(190, 119, 13);
+  border: 1px solid rgb(190, 119, 13);
+}
+#t_carriers_location .t-carrier-arrange-button {
+  background-color: #f90 !important;
+  color: #fff !important;
+  border: 1px solid #f90 !important;
+}
+#t_carriers_location .t-carrier-arrange-button:hover {
+  color: #fff !important;
+  border: 1px solid rgb(190, 119, 13) !important;
+  background-color: rgb(190, 119, 13) !important;
+}
+#t_carriers_location #t-carrier-cancel-shipment-button {
+  padding: 13px 5px !important;
+  text-align: center;
+  background-color: transparent !important;
+  color: #ff4d4d !important;
+  border: 1px solid #ff4d4d !important;
+  transition: all 0.3s ease-in-out;
+}
+#t_carriers_location #t-carrier-cancel-shipment-button:hover {
+  color: #fff !important;
+  border: 1px solid #e60000 !important;
+}
+
+.t-manage-shipping-button {
+  border-radius: 8px !important;
+}
+
+button.t-address-save {
+  border-radius: 8px !important;
+}
+
+.t-processed-shipment-view {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+.t-processed-shipment-view--sender-receiver {
+  display: flex;
+  gap: 20px;
+}
+.t-processed-shipment-view--sender-receiver--sender, .t-processed-shipment-view--sender-receiver--receiver {
+  flex: 1;
+}
+.t-processed-shipment-view--sender-receiver--sender, .t-processed-shipment-view--sender-receiver--receiver {
+  background-color: #fbf9f7;
+  padding: 20px;
+  border-radius: 8px;
+}
+.t-processed-shipment-view--sender-receiver--sender h3, .t-processed-shipment-view--sender-receiver--receiver h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+  margin-bottom: 10px;
+}
+.t-processed-shipment-view--sender-receiver--sender--details, .t-processed-shipment-view--sender-receiver--receiver--details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--sender-receiver--sender--details h5, .t-processed-shipment-view--sender-receiver--receiver--details h5 {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+  margin: 0;
+}
+.t-processed-shipment-view--sender-receiver--sender--details--contact, .t-processed-shipment-view--sender-receiver--receiver--details--contact {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+}
+.t-processed-shipment-view--sender-receiver--sender--details--contact a, .t-processed-shipment-view--sender-receiver--receiver--details--contact a {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+  text-decoration: none;
+}
+.t-processed-shipment-view--sender-receiver--sender--details--contact a:hover, .t-processed-shipment-view--sender-receiver--receiver--details--contact a:hover {
+  color: #c97207;
+}
+.t-processed-shipment-view--sender-receiver--sender--details--address, .t-processed-shipment-view--sender-receiver--receiver--details--address {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fbf9f7;
+  padding: 20px;
+  border-radius: 8px;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--details h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--details p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--items h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--items p {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--sender-receiver--parcel-information--items p span {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--parcel-information {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fbf9f7;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+.t-processed-shipment-view--parcel-information--details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--parcel-information--details h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--parcel-information--details p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--parcel-information--items {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+.t-processed-shipment-view--parcel-information--items h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #f7941e;
+  text-transform: uppercase;
+}
+.t-processed-shipment-view--parcel-information--items p {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-processed-shipment-view--parcel-information--items p span {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--courier {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  background-color: #fbf9f7;
+  padding: 20px;
+  border-radius: 8px;
+}
+.t-processed-shipment-view--courier h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+}
+.t-processed-shipment-view--courier--courier-information {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.t-processed-shipment-view--courier--courier-information--courier-details {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.t-processed-shipment-view--courier--courier-information--courier-details img {
+  width: 40px;
+  height: 40px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -o-object-position: center;
+     object-position: center;
+}
+.t-processed-shipment-view--courier--courier-information--courier-details h5 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  font-family: Lato, sans-serif;
+  color: #343434;
+  margin: 0;
+}
+.t-processed-shipment-view--courier--courier-information--courier-details p {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: "Public Sans", sans-serif;
+  color: #808080;
+  margin: 0;
+}
+.t-processed-shipment-view--courier--courier-information--courier-tracking-number {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.t-processed-shipment-view--courier--courier-information--courier-tracking-number svg {
+  width: 44px;
+  height: 44px;
+}
+.t-processed-shipment-view--courier--courier-information--courier-tracking-number svg:hover {
+  cursor: pointer;
+}
+.t-processed-shipment-view--courier--courier-information--courier-tracking-number svg:hover path {
+  stroke: #c97207;
+}
+.t-processed-shipment-view--courier--courier-information--courier-tracking-number svg:hover rect {
+  stroke: #c97207;
 }
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/responsive.scss ***!

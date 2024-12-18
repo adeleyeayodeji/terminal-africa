@@ -94,7 +94,8 @@ trait Assets
             'shipping_active_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon.svg',
             'shipping_inactive_img' => TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/card-shipping-icon-inactive.svg',
             'site_url' => get_site_url(),
-            'terminal_africa_edit_shipment_nonce' => wp_create_nonce('terminal_africa_edit_shipment')
+            'terminal_africa_edit_shipment_nonce' => wp_create_nonce('terminal_africa_edit_shipment'),
+            'terminal_plugin_page' => admin_url('admin.php?page=terminal-africa')
         ));
     }
 
@@ -233,7 +234,8 @@ trait Assets
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
             'multicurrency' => self::wooMulticurrency(),
             'edit_checkout_page_link' => $wc_checkout_block_notice,
-            'terminal_packaging_id' => !empty($packaging_id) ? "yes" : "no"
+            'terminal_packaging_id' => !empty($packaging_id) ? "yes" : "no",
+            'terminal_plugin_page' => TERMINAL_AFRICA_PLUGIN_URL
         ));
     }
 

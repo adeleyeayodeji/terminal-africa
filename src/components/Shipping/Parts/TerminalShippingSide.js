@@ -12,7 +12,9 @@ export default class TerminalShippingSide extends Component {
    *
    * @returns void
    */
-  gotoWCOrder = () => {
+  gotoWCOrder = (event) => {
+    event.preventDefault();
+
     try {
       //block ui
       jQuery.blockUI({
@@ -58,8 +60,8 @@ export default class TerminalShippingSide extends Component {
         <div style={{ padding: "0px 30px" }}>
           <div className="t-shipping-side">
             <div className="t-flex t-flex t-mb-2">
-              <h3>Manage Order</h3>
-              <button
+              <h3>Order Details</h3>
+              {/* <button
                 className="t-manage-shipping-button"
                 onClick={this.gotoTracking}>
                 Track{" "}
@@ -70,7 +72,7 @@ export default class TerminalShippingSide extends Component {
                   alt="Track Shipment"
                   style={{ marginLeft: 10 }}
                 />
-              </button>
+              </button> */}
             </div>
             <div className="t-flex">
               <h4>Order Date</h4>
@@ -80,9 +82,16 @@ export default class TerminalShippingSide extends Component {
               <h4>Order Number</h4>
               <p>#{shippingData.order_id}</p>
             </div>
+            <div className="t-flex">
+              <h4>Order Value</h4>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: shippingData.order_value
+                }}></p>
+            </div>
             <div className="t-flex" style={{ marginTop: 10 }}>
               <a
-                href="javascript:;"
+                href={shippingData.order_url}
                 className="t-shipment-wc-link"
                 onClick={this.gotoWCOrder}>
                 <span>View Order</span>
@@ -102,7 +111,7 @@ export default class TerminalShippingSide extends Component {
               </a>
             </div>
           </div>
-          <div className="t-shipping-side" style={{ marginTop: 40 }}>
+          <div className="t-shipping-side" style={{ marginTop: 20 }}>
             <div className="t-flex t-flex t-mb-2">
               <h3>Manage Shipping</h3>
             </div>
