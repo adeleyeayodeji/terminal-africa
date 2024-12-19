@@ -293,6 +293,8 @@ class TerminalManageShipping extends React.Component {
                 shippingData={shippingData}
                 shippingTrackingNumber={shippingTrackingNumber}
                 trackingLink={trackingLink}
+                shippingStatus={shippingStatus}
+                rate_id={rate_id}
               />
             </div>
           </div>

@@ -496,6 +496,112 @@ const ProcessedShipment = () => {
 
 /***/ }),
 
+/***/ "./src/components/Shipping/Parts/ProcessedShipmentSide.jsx":
+/*!*****************************************************************!*\
+  !*** ./src/components/Shipping/Parts/ProcessedShipmentSide.jsx ***!
+  \*****************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ProcessedShipmentSide; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function ProcessedShipmentSide() {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside--header"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside--header--icon"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: terminal_africa.plugin_url + "/img/payment-details-icon.svg",
+    alt: ""
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    className: "t-processed-shipment-aside--header--title"
+  }, "Payment Details"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside--header--price"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "\u20A6"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "2,556.00"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside--content"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Reference"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "1234567890")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Shipping"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "\u20A6 2,556.00")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Insurance"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "\u20A6 0.00")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("hr", null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Total"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "\u20A6 2,556.00"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-processed-shipment-aside--footer"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: "#"
+  }, "Cancel Shipment")));
+}
+
+/***/ }),
+
+/***/ "./src/components/Shipping/Parts/ShippingAsideDraft.jsx":
+/*!**************************************************************!*\
+  !*** ./src/components/Shipping/Parts/ShippingAsideDraft.jsx ***!
+  \**************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ ShippingAsideDraft; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function ShippingAsideDraft({
+  shippingData,
+  shippingTrackingNumber
+}) {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-shipping-side",
+    style: {
+      marginTop: 20
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-flex t-flex t-mb-2"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Manage Shipping")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-flex"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    style: {
+      marginRight: "25%"
+    }
+  }, "Carrier"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-flex"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
+    src: shippingData?.saved_others?.carrier_logo,
+    alt: "Carrier Logo",
+    style: {
+      height: 15,
+      marginBottom: 8,
+      marginRight: 5
+    }
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, shippingData?.saved_others?.carrier_name, " ", shippingData?.saved_others?.carrier_rate_description))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-flex"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Tracking Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "t-new-tracking-number"
+  }, shippingTrackingNumber)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "t-flex"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Shipping price"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    dangerouslySetInnerHTML: {
+      __html: shippingData.shipping_price
+    }
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    style: {
+      marginTop: 13
+    },
+    id: "t_carriers_location"
+  }));
+}
+
+/***/ }),
+
 /***/ "./src/components/Shipping/Parts/ShippingStatus.js":
 /*!*********************************************************!*\
   !*** ./src/components/Shipping/Parts/ShippingStatus.js ***!
@@ -1507,7 +1613,13 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
       shippingStatus
     } = this.props;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-shipment-header t-flex"
+      className: "t-shipment-header",
+      style: {
+        flexDirection: "column",
+        gap: 25
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-flex"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       onClick: this.copyShippingIdToClipboard,
       className: "t-flex",
@@ -1525,9 +1637,69 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
       title: shippingStatus.title
     }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-button-phonebook-mobile-inner"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, shippingStatus.title == "draft" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: shippingData.tracking_link,
+      target: "_blank",
+      className: "t-track-shipment-link"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "20",
+      height: "20",
+      viewBox: "0 0 20 20",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ellipse", {
+      cx: "10",
+      cy: "6.6665",
+      rx: "2.5",
+      ry: "2.5",
+      stroke: "white",
+      "stroke-width": "1.5"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M13.8969 10.0953C14.4838 9.20062 15 8.07763 15 6.84835C15 3.9865 12.7614 1.6665 10 1.6665C7.23858 1.6665 5 3.9865 5 6.84835C5 7.93141 5.32061 8.93687 5.86885 9.76834L9.31968 15.4855C9.59695 15.9449 10.2408 15.95 10.5249 15.4951L13.8969 10.0953Z",
+      stroke: "white",
+      "stroke-width": "1.5"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M7.5 17.5H12.5",
+      stroke: "white",
+      "stroke-width": "1.5",
+      "stroke-linecap": "round"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Track shipment"))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-flex t-button-phonebook"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null))));
+    }, shippingStatus.title == "draft" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_TerminalPhoneBook__WEBPACK_IMPORTED_MODULE_2__["default"], null) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: shippingData?.tracking_link,
+      target: "_blank",
+      className: "t-track-shipment-link"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
+      width: "20",
+      height: "20",
+      viewBox: "0 0 20 20",
+      fill: "none",
+      xmlns: "http://www.w3.org/2000/svg"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ellipse", {
+      cx: "10",
+      cy: "6.6665",
+      rx: "2.5",
+      ry: "2.5",
+      stroke: "white",
+      "stroke-width": "1.5"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M13.8969 10.0953C14.4838 9.20062 15 8.07763 15 6.84835C15 3.9865 12.7614 1.6665 10 1.6665C7.23858 1.6665 5 3.9865 5 6.84835C5 7.93141 5.32061 8.93687 5.86885 9.76834L9.31968 15.4855C9.59695 15.9449 10.2408 15.95 10.5249 15.4951L13.8969 10.0953Z",
+      stroke: "white",
+      "stroke-width": "1.5"
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("path", {
+      d: "M7.5 17.5H12.5",
+      stroke: "white",
+      "stroke-width": "1.5",
+      "stroke-linecap": "round"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Track shipment")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-waybill-actions"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: shippingData?.waybill_link,
+      target: "_blank"
+    }, "View Invoice"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+      href: shippingData?.waybill_link,
+      target: "_blank"
+    }, "View Waybill"))));
   }
 }
 
@@ -1548,6 +1720,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ShippingAsideDraft__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ShippingAsideDraft */ "./src/components/Shipping/Parts/ShippingAsideDraft.jsx");
+/* harmony import */ var _ProcessedShipmentSide__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProcessedShipmentSide */ "./src/components/Shipping/Parts/ProcessedShipmentSide.jsx");
+
+
 
 
 class TerminalShippingSide extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
@@ -1605,7 +1781,9 @@ class TerminalShippingSide extends react__WEBPACK_IMPORTED_MODULE_1__.Component 
   render() {
     const {
       shippingData,
-      shippingTrackingNumber
+      shippingTrackingNumber,
+      shippingStatus,
+      rate_id
     } = this.props;
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       style: {
@@ -1645,45 +1823,14 @@ class TerminalShippingSide extends react__WEBPACK_IMPORTED_MODULE_1__.Component 
       "clip-rule": "evenodd",
       d: "M0.21967 9.78033C0.512563 10.0732 0.987437 10.0732 1.28033 9.78033L8.5 2.56066V8.25C8.5 8.66421 8.83579 9 9.25 9C9.66421 9 10 8.66421 10 8.25V0.75C10 0.335787 9.66421 0 9.25 0H1.75C1.33579 0 1 0.335787 1 0.75C1 1.16421 1.33579 1.5 1.75 1.5H7.43934L0.21967 8.71967C-0.0732233 9.01256 -0.0732233 9.48744 0.21967 9.78033Z",
       fill: "#F7941E"
-    }))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-shipping-side",
-      style: {
-        marginTop: 20
-      }
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex t-flex t-mb-2"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Manage Shipping")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-      style: {
-        marginRight: "25%"
-      }
-    }, "Carrier"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-      src: shippingData?.saved_others?.carrier_logo,
-      alt: "Carrier Logo",
-      style: {
-        height: 15,
-        marginBottom: 8,
-        marginRight: 5
-      }
-    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, shippingData?.saved_others?.carrier_name, " ", shippingData?.saved_others?.carrier_rate_description))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Tracking Number"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      className: "t-new-tracking-number"
-    }, shippingTrackingNumber)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      className: "t-flex"
-    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "Shipping price"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-      dangerouslySetInnerHTML: {
-        __html: shippingData.shipping_price
-      }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-      style: {
-        marginTop: 13
-      },
-      id: "t_carriers_location"
-    }))));
+    }))))), shippingStatus.title == "draft" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingAsideDraft__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      shippingData: shippingData,
+      shippingTrackingNumber: shippingTrackingNumber
+    }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ProcessedShipmentSide__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      saved_address: shippingData.saved_address,
+      rate_id: rate_id,
+      shippingData: shippingData
+    })));
   }
 }
 
@@ -2145,7 +2292,9 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingSide__WEBPACK_IMPORTED_MODULE_3__["default"], {
       shippingData: shippingData,
       shippingTrackingNumber: shippingTrackingNumber,
-      trackingLink: trackingLink
+      trackingLink: trackingLink,
+      shippingStatus: shippingStatus,
+      rate_id: rate_id
     }))));
   }
 }
