@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function ProcessedShipmentSide() {
+export default function ProcessedShipmentSide({
+  saved_address,
+  rate_id,
+  shippingData
+}) {
+  console.log(saved_address, rate_id, shippingData);
+
   return (
     <div className="t-processed-shipment-aside">
       <div className="t-processed-shipment-aside--header">

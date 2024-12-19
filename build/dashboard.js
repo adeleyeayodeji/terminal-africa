@@ -513,7 +513,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 
 
-function ProcessedShipmentSide() {
+function ProcessedShipmentSide({
+  saved_address,
+  rate_id,
+  shippingData
+}) {
+  console.log(saved_address, rate_id, shippingData);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-aside"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
