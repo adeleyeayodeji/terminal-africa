@@ -124,6 +124,7 @@ export default class TerminalShippingSide extends Component {
               saved_address={shippingData.saved_address}
               rate_id={rate_id}
               shippingData={shippingData}
+              shippingStatus={shippingStatus}
             />
           )}
         </div>

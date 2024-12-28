@@ -506,6 +506,10 @@ button.t-address-save {
       margin-top: 10px;
       width: fit-content;
 
+      .woocommerce-Price-currencySymbol {
+        display: none;
+      }
+
       span:first-child {
         font-size: 12.5px;
         font-weight: 500;
@@ -514,12 +518,16 @@ button.t-address-save {
         color: #f7941e;
       }
 
-      span:last-child {
-        font-size: 28px;
-        font-weight: 700;
-        line-height: 32px;
-        font-family: Lato, sans-serif;
-        color: #f7941e;
+      p {
+        .woocommerce-Price-amount {
+          font-size: 28px;
+          font-weight: 700;
+          line-height: 32px;
+          font-family: Lato, sans-serif;
+          color: #f7941e;
+          margin: 0;
+          padding: 0;
+        }
       }
     }
   }

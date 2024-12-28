@@ -3,10 +3,9 @@ import React from "react";
 export default function ProcessedShipmentSide({
   saved_address,
   rate_id,
-  shippingData
+  shippingData,
+  shippingStatus
 }) {
-  console.log(shippingData.all_shipping_data);
-
   return (
     <div className="t-processed-shipment-aside">
       <div className="t-processed-shipment-aside--header">
@@ -21,17 +20,23 @@ export default function ProcessedShipmentSide({
         </h4>
         <div className="t-processed-shipment-aside--header--price">
           <span>₦</span>
-          <span>2,556.00</span>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: shippingData.shipping_price
+            }}></p>
         </div>
       </div>
       <div className="t-processed-shipment-aside--content">
         <p>
           <span>Reference</span>
-          <span>1234567890</span>
+          <span>{shippingData.shipping_id}</span>
         </p>
         <p>
           <span>Shipping</span>
-          <span>₦ 2,556.00</span>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: shippingData.shipping_price
+            }}></p>
         </p>
         <p>
           <span>Insurance</span>
@@ -40,12 +45,24 @@ export default function ProcessedShipmentSide({
         <hr />
         <p>
           <span>Total</span>
-          <span>₦ 2,556.00</span>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: shippingData.shipping_price
+            }}></p>
         </p>
       </div>
-      <div className="t-processed-shipment-aside--footer">
-        <a href="#">Cancel Shipment</a>
-      </div>
+      {shippingStatus.title == "comfirmed" && (
+        <div className="t-processed-shipment-aside--footer">
+          <a
+            href="javascript:;"
+            id="t-carrier-cancel-shipment-button"
+            data-shipment_id={shippingData.shipping_id}
+            data-order_id={shippingData.order_id}
+            onclick="cancelTerminalShipment(this, event)">
+            Cancel Shipment
+          </a>
+        </div>
+      )}
     </div>
   );
 }
