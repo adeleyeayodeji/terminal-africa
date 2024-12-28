@@ -114,7 +114,7 @@ export default class TerminalShippingSide extends Component {
               </a>
             </div>
           </div>
-          {shippingStatus.title == "draft" ? (
+          {shippingStatus.title == "draft" || shippingStatus.title == "--" ? (
             <ShippingAsideDraft
               shippingData={shippingData}
               shippingTrackingNumber={shippingTrackingNumber}

@@ -5,7 +5,7 @@ export default function ProcessedShipmentSide({
   rate_id,
   shippingData
 }) {
-  console.log(saved_address, rate_id, shippingData);
+  console.log(shippingData.all_shipping_data);
 
   return (
     <div className="t-processed-shipment-aside">

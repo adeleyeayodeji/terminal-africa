@@ -1,38 +1,52 @@
 import React from "react";
 
-const ProcessedShipment = () => {
+const ProcessedShipment = ({ saved_address, rate_id, shippingData }) => {
+  const all_shipping_data = shippingData.all_shipping_data;
+
   return (
     <div className="t-processed-shipment-view">
       <div className="t-processed-shipment-view--sender-receiver">
         <div className="t-processed-shipment-view--sender-receiver--sender">
           <h3>Sender</h3>
           <div className="t-processed-shipment-view--sender-receiver--sender--details">
-            <h5>Timothy Odunubi</h5>
+            <h5>
+              {all_shipping_data?.address_from?.first_name +
+                " " +
+                all_shipping_data?.address_from?.last_name}
+            </h5>
             <p className="t-processed-shipment-view--sender-receiver--sender--details--contact">
-              <a href="mailto:timothy@terminalafrica.com">
-                timothy@terminalafrica.com
+              <a href={`mailto:${all_shipping_data?.address_from?.email}`}>
+                {all_shipping_data?.address_from?.email}
               </a>
-              <a href="tel:+2348165555555">+2348165555555</a>
+              <a href={`tel:${all_shipping_data?.address_from?.phone}`}>
+                {all_shipping_data?.address_from?.phone}
+              </a>
             </p>
             <p className="t-processed-shipment-view--sender-receiver--sender--details--address">
-              Ogba Multipurpose Shopping Complex, Abiodun J, Ikeja, Agege,
-              Lagos, NGA, 101233
+              {all_shipping_data?.address_from?.line1}
+              {all_shipping_data?.address_from?.line2}
             </p>
           </div>
         </div>
         <div className="t-processed-shipment-view--sender-receiver--receiver">
           <h3>Receiver</h3>
           <div className="t-processed-shipment-view--sender-receiver--receiver--details">
-            <h5>Timothy Odunubi</h5>
+            <h5>
+              {all_shipping_data?.address_to?.first_name +
+                " " +
+                all_shipping_data?.address_to?.last_name}
+            </h5>
             <p className="t-processed-shipment-view--sender-receiver--receiver--details--contact">
-              <a href="mailto:timothy@terminalafrica.com">
-                timothy@terminalafrica.com
+              <a href={`mailto:${all_shipping_data?.address_to?.email}`}>
+                {all_shipping_data?.address_to?.email}
               </a>
-              <a href="tel:+2348165555555">+2348165555555</a>
+              <a href={`tel:${all_shipping_data?.address_to?.phone}`}>
+                {all_shipping_data?.address_to?.phone}
+              </a>
             </p>
             <p className="t-processed-shipment-view--sender-receiver--receiver--details--address">
-              Ogba Multipurpose Shopping Complex, Abiodun J, Ikeja, Agege,
-              Lagos, NGA, 101233
+              {all_shipping_data?.address_to?.line1}
+              {all_shipping_data?.address_to?.line2}
             </p>
           </div>
         </div>
@@ -41,19 +55,20 @@ const ProcessedShipment = () => {
         <div className="t-processed-shipment-view--parcel-information--details">
           <h3>Parcel Information</h3>
           <p>
-            Purpose: Commercial (Items are for sale), Total weight: 2kg, Total
-            Value: ₦25,000
+            Purpose: {all_shipping_data?.parcel?.description}, Total weight:{" "}
+            {all_shipping_data?.parcel?.total_weight}kg, Total Value: ₦
+            {all_shipping_data?.parcel?.total_value}
           </p>
         </div>
         <div className="t-processed-shipment-view--parcel-information--items">
           <h3>Parcel Items</h3>
           <p>
-            <span>
-              iPad, Apple Pencil and keyboard, 1pieces. 1kg, ₦1,000,000.00, NGA
-            </span>
-            <span>
-              iPad, Apple Pencil and keyboard, 1pieces. 1kg, ₦1,000,000.00, NGA
-            </span>
+            {all_shipping_data?.parcel?.items?.map((item) => (
+              <span>
+                {item?.name}, {item?.quantity}pieces. {item?.weight}kg, ₦
+                {item?.value}
+              </span>
+            ))}
           </p>
         </div>
       </div>
@@ -62,11 +77,11 @@ const ProcessedShipment = () => {
         <div className="t-processed-shipment-view--courier--courier-information">
           <div className="t-processed-shipment-view--courier--courier-information--courier-details">
             <div>
-              <img src={terminal_africa.plugin_url + "/img/dhl.png"} alt="" />
+              <img src={shippingData?.saved_others?.carrier_logo} alt="" />
             </div>
             <div>
-              <h5>DHL</h5>
-              <p>Express Domestic</p>
+              <h5>{shippingData?.saved_others?.carrier_name}</h5>
+              <p>{shippingData?.saved_others?.carrier_rate_description}</p>
             </div>
           </div>
           <div className="t-processed-shipment-view--courier--courier-information--courier-tracking-number">

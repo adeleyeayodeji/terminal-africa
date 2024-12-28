@@ -135,14 +135,16 @@ export default class TerminalShippingHeader extends Component {
               )}
             </div>
           </div>
-          <div className="t-waybill-actions">
-            <a href={shippingData?.waybill_link} target="_blank">
-              View Invoice
-            </a>
-            <a href={shippingData?.waybill_link} target="_blank">
-              View Waybill
-            </a>
-          </div>
+          {shippingStatus.title != "draft" && shippingStatus.title != "--" && (
+            <div className="t-waybill-actions">
+              <a href={shippingData?.waybill_link} target="_blank">
+                View Invoice
+              </a>
+              <a href={shippingData?.waybill_link} target="_blank">
+                View Waybill
+              </a>
+            </div>
+          )}
         </div>
       </Fragment>
     );

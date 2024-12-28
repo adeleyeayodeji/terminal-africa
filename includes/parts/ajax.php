@@ -2270,8 +2270,11 @@ trait Ajax
             //order total
             $order_value = wc_price($order->get_total());
 
+            //all shipping data
+            $all_shipping_data = $shipping_data['data'];
+
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id', 'order_value');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id', 'order_value', 'all_shipping_data');
 
             //return data
             wp_send_json([

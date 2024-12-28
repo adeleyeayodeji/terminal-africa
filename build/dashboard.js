@@ -404,7 +404,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 
 
-const ProcessedShipment = () => {
+const ProcessedShipment = ({
+  saved_address,
+  rate_id,
+  shippingData
+}) => {
+  const all_shipping_data = shippingData.all_shipping_data;
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -413,42 +418,42 @@ const ProcessedShipment = () => {
     className: "t-processed-shipment-view--sender-receiver--sender"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Sender"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--sender-receiver--sender--details"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Timothy Odunubi"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, all_shipping_data?.address_from?.first_name + " " + all_shipping_data?.address_from?.last_name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "t-processed-shipment-view--sender-receiver--sender--details--contact"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "mailto:timothy@terminalafrica.com"
-  }, "timothy@terminalafrica.com"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "tel:+2348165555555"
-  }, "+2348165555555")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    href: `mailto:${all_shipping_data?.address_from?.email}`
+  }, all_shipping_data?.address_from?.email), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: `tel:${all_shipping_data?.address_from?.phone}`
+  }, all_shipping_data?.address_from?.phone)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "t-processed-shipment-view--sender-receiver--sender--details--address"
-  }, "Ogba Multipurpose Shopping Complex, Abiodun J, Ikeja, Agege, Lagos, NGA, 101233"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, all_shipping_data?.address_from?.line1, all_shipping_data?.address_from?.line2))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--sender-receiver--receiver"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Receiver"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--sender-receiver--receiver--details"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Timothy Odunubi"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, all_shipping_data?.address_to?.first_name + " " + all_shipping_data?.address_to?.last_name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "t-processed-shipment-view--sender-receiver--receiver--details--contact"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "mailto:timothy@terminalafrica.com"
-  }, "timothy@terminalafrica.com"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "tel:+2348165555555"
-  }, "+2348165555555")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    href: `mailto:${all_shipping_data?.address_to?.email}`
+  }, all_shipping_data?.address_to?.email), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
+    href: `tel:${all_shipping_data?.address_to?.phone}`
+  }, all_shipping_data?.address_to?.phone)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "t-processed-shipment-view--sender-receiver--receiver--details--address"
-  }, "Ogba Multipurpose Shopping Complex, Abiodun J, Ikeja, Agege, Lagos, NGA, 101233")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, all_shipping_data?.address_to?.line1, all_shipping_data?.address_to?.line2)))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--parcel-information"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--parcel-information--details"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Parcel Information"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Purpose: Commercial (Items are for sale), Total weight: 2kg, Total Value: \u20A625,000")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Parcel Information"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Purpose: ", all_shipping_data?.parcel?.description, ", Total weight:", " ", all_shipping_data?.parcel?.total_weight, "kg, Total Value: \u20A6", all_shipping_data?.parcel?.total_value)), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--parcel-information--items"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Parcel Items"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "iPad, Apple Pencil and keyboard, 1pieces. 1kg, \u20A61,000,000.00, NGA"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "iPad, Apple Pencil and keyboard, 1pieces. 1kg, \u20A61,000,000.00, NGA")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Parcel Items"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, all_shipping_data?.parcel?.items?.map(item => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, item?.name, ", ", item?.quantity, "pieces. ", item?.weight, "kg, \u20A6", item?.value))))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--courier"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "Courier Information"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--courier--courier-information"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--courier--courier-information--courier-details"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
-    src: terminal_africa.plugin_url + "/img/dhl.png",
+    src: shippingData?.saved_others?.carrier_logo,
     alt: ""
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "DHL"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Express Domestic"))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, shippingData?.saved_others?.carrier_name), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, shippingData?.saved_others?.carrier_rate_description))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-view--courier--courier-information--courier-tracking-number"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("svg", {
     width: "44",
@@ -518,7 +523,7 @@ function ProcessedShipmentSide({
   rate_id,
   shippingData
 }) {
-  console.log(saved_address, rate_id, shippingData);
+  console.log(shippingData.all_shipping_data);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "t-processed-shipment-aside"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -676,12 +681,10 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       this.loadSelect2();
       //initFormSelectEvent
       this.initFormSelectEvent();
-    }
 
-    // Update saved address
-    if (this.props.saved_address !== prevProps.saved_address && this.props.saved_address) {
+      // Update saved address when shippingData changes
       this.setState({
-        saved_address: this.props.saved_address
+        saved_address: this.props.shippingData.all_shipping_data.address_to
       });
     }
   }
@@ -1696,7 +1699,7 @@ class TerminalShippingHeader extends react__WEBPACK_IMPORTED_MODULE_1__.Componen
       stroke: "white",
       "stroke-width": "1.5",
       "stroke-linecap": "round"
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Track shipment")))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "Track shipment")))), shippingStatus.title != "draft" && shippingStatus.title != "--" && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "t-waybill-actions"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
       href: shippingData?.waybill_link,
@@ -1828,7 +1831,7 @@ class TerminalShippingSide extends react__WEBPACK_IMPORTED_MODULE_1__.Component 
       "clip-rule": "evenodd",
       d: "M0.21967 9.78033C0.512563 10.0732 0.987437 10.0732 1.28033 9.78033L8.5 2.56066V8.25C8.5 8.66421 8.83579 9 9.25 9C9.66421 9 10 8.66421 10 8.25V0.75C10 0.335787 9.66421 0 9.25 0H1.75C1.33579 0 1 0.335787 1 0.75C1 1.16421 1.33579 1.5 1.75 1.5H7.43934L0.21967 8.71967C-0.0732233 9.01256 -0.0732233 9.48744 0.21967 9.78033Z",
       fill: "#F7941E"
-    }))))), shippingStatus.title == "draft" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingAsideDraft__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }))))), shippingStatus.title == "draft" || shippingStatus.title == "--" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShippingAsideDraft__WEBPACK_IMPORTED_MODULE_2__["default"], {
       shippingData: shippingData,
       shippingTrackingNumber: shippingTrackingNumber
     }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ProcessedShipmentSide__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -2283,7 +2286,7 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingHeader__WEBPACK_IMPORTED_MODULE_2__["default"], {
       shippingData: shippingData,
       shippingStatus: shippingStatus
-    }), shippingStatus.title === "draft" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }), shippingStatus.title == "draft" || shippingStatus.title == "--" ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_TerminalShippingForm__WEBPACK_IMPORTED_MODULE_4__["default"], {
       saved_address: shippingData.saved_address,
       rate_id: rate_id,
       shippingData: shippingData,

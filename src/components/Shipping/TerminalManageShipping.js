@@ -272,7 +272,8 @@ class TerminalManageShipping extends React.Component {
                   shippingData={shippingData}
                   shippingStatus={shippingStatus}
                 />
-                {shippingStatus.title === "draft" ? (
+                {shippingStatus.title == "draft" ||
+                shippingStatus.title == "--" ? (
                   <TerminalShippingForm
                     saved_address={shippingData.saved_address}
                     rate_id={rate_id}
