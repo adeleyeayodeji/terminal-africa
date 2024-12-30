@@ -25,7 +25,9 @@ export default function ShippingAsideDraft({
       </div>
       <div className="t-flex">
         <h4>Tracking Number</h4>
-        <p className="t-new-tracking-number">{shippingTrackingNumber}</p>
+        <p className="t-new-tracking-number">
+          {shippingTrackingNumber || "N/A"}
+        </p>
       </div>
       <div className="t-flex">
         <h4>Shipping price</h4>

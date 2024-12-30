@@ -27,7 +27,7 @@ class TerminalShippingForm extends React.Component {
 
       // Update saved address when shippingData changes
       this.setState({
-        saved_address: this.props.shippingData.all_shipping_data.address_to
+        saved_address: this.props?.shippingData?.all_shipping_data?.address_to
       });
     }
   }

@@ -17,8 +17,16 @@
       display: block;
     }
 
+    .t-button-phonebook-mobile {
+      display: block;
+    }
+
     .t-shipment-header h1 {
       font-size: 20px;
+    }
+
+    .t-waybill-actions {
+      justify-content: space-between;
     }
   }
 
@@ -37,6 +45,10 @@
     }
 
     .t-button-phonebook-mobile-inner {
+      display: block;
+    }
+
+    .t-button-phonebook-mobile {
       display: block;
     }
 
@@ -63,8 +75,20 @@
       display: block;
     }
 
+    .t-button-phonebook-mobile {
+      display: block;
+    }
+
     .t-shipment-header h1 {
       font-size: 31px;
+    }
+  }
+
+  //max 768
+  @media screen and (max-width: 980px) {
+    .t-button-phonebook-mobile-custom {
+      margin-bottom: 15px;
+      margin-top: 3px;
     }
   }
 
@@ -87,8 +111,26 @@
       display: none;
     }
 
+    .t-button-phonebook-mobile {
+      display: none;
+    }
+
     .t-shipment-header h1 {
       font-size: 31px;
+    }
+  }
+
+  //max 1199
+  @media screen and (max-width: 1199px) {
+    .t-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 auto;
+      margin-bottom: 0px;
+      width: 100%;
+      max-width: 93%;
+      justify-content: center;
     }
   }
 
@@ -109,6 +151,10 @@
     }
 
     .t-button-phonebook-mobile-inner {
+      display: none;
+    }
+
+    .t-button-phonebook-mobile {
       display: none;
     }
 
@@ -167,5 +213,12 @@
         line-height: inherit;
       }
     }
+  }
+}
+
+//max 1199
+@media screen and (max-width: 1199px) {
+  .t-body {
+    padding-top: 20px;
   }
 }

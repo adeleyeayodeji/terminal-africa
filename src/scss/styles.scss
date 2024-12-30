@@ -120,6 +120,7 @@ button.t-address-save {
   &--sender-receiver {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 
     &--sender,
     &--receiver {
@@ -405,6 +406,10 @@ button.t-address-save {
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
+  outline: none !important;
+  border: none !important;
+  transition: all 0.3s ease-in-out;
+  box-shadow: none !important;
 
   svg {
     width: 20px;
@@ -440,12 +445,21 @@ button.t-address-save {
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    outline: none !important;
+    box-shadow: none !important;
 
     &:hover {
       color: #c97207;
       border: 1px solid #c97207;
     }
   }
+}
+
+.t-processed-shipment-cta {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .t-shipping-side {
@@ -511,7 +525,7 @@ button.t-address-save {
       }
 
       span:first-child {
-        font-size: 12.5px;
+        font-size: 17.5px;
         font-weight: 500;
         line-height: 20px;
         font-family: Lato, sans-serif;
@@ -519,6 +533,9 @@ button.t-address-save {
       }
 
       p {
+        padding: 0;
+        margin: 0;
+
         .woocommerce-Price-amount {
           font-size: 28px;
           font-weight: 700;
@@ -596,4 +613,9 @@ button.t-address-save {
       }
     }
   }
+}
+
+.t-button-phonebook-mobile-custom {
+  margin-bottom: 0px;
+  margin-top: 0px;
 }

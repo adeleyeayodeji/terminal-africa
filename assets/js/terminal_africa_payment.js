@@ -9,6 +9,8 @@ jQuery(document).ready(function ($) {
       this.auto_load();
       //payment status
       this.payment_status();
+      //payment button
+      this.payment_button();
     },
     //payment status
     payment_status: function () {
@@ -56,6 +58,10 @@ jQuery(document).ready(function ($) {
           //update the dom
           terminalAfricaPaymentStatus.innerHTML =
             "Something went wrong: " + xhr.responseText;
+        },
+        complete: function () {
+          //unblock ui
+          terminalAfricaPaymentStatus.unblock();
         }
       });
     },
@@ -71,6 +77,8 @@ jQuery(document).ready(function ($) {
 
       $(terminalAfricaPaymentForm).on("submit", function (e) {
         e.preventDefault();
+        //unblock ui
+        $.unblockUI();
         //get the form element
         var form = $(this);
         //send ajax request
@@ -150,8 +158,29 @@ jQuery(document).ready(function ($) {
                 </div>
               `
             });
+          },
+          complete: function () {
+            //unblock ui
+            $.unblockUI();
           }
         });
+      });
+    },
+    //payment button event
+    payment_button: function () {
+      //check if elem exist .terminal_africa_payment_form_class
+      const buttonElement = $(
+        "#wc-terminal_africa_payment-payment-gateway-button"
+      );
+
+      //check if elem does not exist
+      if (!buttonElement) return;
+
+      //add event listener
+      buttonElement.on("click", (e) => {
+        e.preventDefault();
+        //trigger auto load
+        this.auto_load();
       });
     },
     //trigger on page load

@@ -9705,6 +9705,7 @@ button.t-address-save {
 .t-processed-shipment-view--sender-receiver {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 .t-processed-shipment-view--sender-receiver--sender, .t-processed-shipment-view--sender-receiver--receiver {
   flex: 1;
@@ -9952,6 +9953,10 @@ button.t-address-save {
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
+  outline: none !important;
+  border: none !important;
+  transition: all 0.3s ease-in-out;
+  box-shadow: none !important;
 }
 .t-track-shipment-link svg {
   width: 20px;
@@ -9984,10 +9989,19 @@ button.t-address-save {
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  outline: none !important;
+  box-shadow: none !important;
 }
 .t-waybill-actions a:hover {
   color: #c97207;
   border: 1px solid #c97207;
+}
+
+.t-processed-shipment-cta {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .t-shipping-side {
@@ -10052,11 +10066,15 @@ button.t-address-save {
   display: none;
 }
 .t-processed-shipment-aside--header--price span:first-child {
-  font-size: 12.5px;
+  font-size: 17.5px;
   font-weight: 500;
   line-height: 20px;
   font-family: Lato, sans-serif;
   color: #f7941e;
+}
+.t-processed-shipment-aside--header--price p {
+  padding: 0;
+  margin: 0;
 }
 .t-processed-shipment-aside--header--price p .woocommerce-Price-amount {
   font-size: 28px;
@@ -10125,6 +10143,11 @@ button.t-address-save {
   border: 1px solid #e60000 !important;
   text-decoration: underline;
 }
+
+.t-button-phonebook-mobile-custom {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/responsive.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************/
@@ -10148,8 +10171,14 @@ button.t-address-save {
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
     display: block;
   }
+  #manage-terminal-shipping .t-button-phonebook-mobile {
+    display: block;
+  }
   #manage-terminal-shipping .t-shipment-header h1 {
     font-size: 20px;
+  }
+  #manage-terminal-shipping .t-waybill-actions {
+    justify-content: space-between;
   }
 }
 @media only screen and (min-width: 600px) {
@@ -10163,6 +10192,9 @@ button.t-address-save {
     display: none;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
+    display: block;
+  }
+  #manage-terminal-shipping .t-button-phonebook-mobile {
     display: block;
   }
   #manage-terminal-shipping .t-shipment-header h1 {
@@ -10182,8 +10214,17 @@ button.t-address-save {
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
     display: block;
   }
+  #manage-terminal-shipping .t-button-phonebook-mobile {
+    display: block;
+  }
   #manage-terminal-shipping .t-shipment-header h1 {
     font-size: 31px;
+  }
+}
+@media screen and (max-width: 980px) {
+  #manage-terminal-shipping .t-button-phonebook-mobile-custom {
+    margin-bottom: 15px;
+    margin-top: 3px;
   }
 }
 @media only screen and (min-width: 992px) {
@@ -10200,8 +10241,23 @@ button.t-address-save {
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
     display: none;
   }
+  #manage-terminal-shipping .t-button-phonebook-mobile {
+    display: none;
+  }
   #manage-terminal-shipping .t-shipment-header h1 {
     font-size: 31px;
+  }
+}
+@media screen and (max-width: 1199px) {
+  #manage-terminal-shipping .t-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+    margin-bottom: 0px;
+    width: 100%;
+    max-width: 93%;
+    justify-content: center;
   }
 }
 @media only screen and (min-width: 1200px) {
@@ -10217,6 +10273,9 @@ button.t-address-save {
     display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
+    display: none;
+  }
+  #manage-terminal-shipping .t-button-phonebook-mobile {
     display: none;
   }
   #manage-terminal-shipping .t-shipment-header h1 {
@@ -10259,6 +10318,12 @@ button.t-address-save {
   #terminal-merchant-address .t-merchant-page-header h2 {
     font-size: 32px;
     line-height: inherit;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .t-body {
+    padding-top: 20px;
   }
 }
 
