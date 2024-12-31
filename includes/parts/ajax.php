@@ -998,6 +998,9 @@ trait Ajax
                         'message' => 'Parcel updated successfully',
                     ]);
                 } else {
+                    //possibly the parcel is already cleared, delete the parcel
+                    $terminalSession->delete('terminal_africa_parcel_id');
+                    //send error
                     wp_send_json([
                         'code' => 401,
                         'type' => 'percel',
@@ -1019,6 +1022,9 @@ trait Ajax
                     'message' => 'Parcel created successfully',
                 ]);
             } else {
+                //possibly the parcel is already cleared, delete the parcel
+                $terminalSession->delete('terminal_africa_parcel_id');
+                //send error
                 wp_send_json([
                     'code' => 401,
                     'message' => $response['message'] . " or clear your browser cache and try again"
