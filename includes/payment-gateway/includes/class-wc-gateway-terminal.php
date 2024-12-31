@@ -46,6 +46,8 @@ if (class_exists("WC_Payment_Gateway")) {
                 'subscription_payment_method_change_admin',
                 'multiple_subscriptions',
             );
+            //init ajax
+            $this->init_ajax();
             // Load the form fields
             $this->init_form_fields();
             // Load the settings
@@ -80,16 +82,8 @@ if (class_exists("WC_Payment_Gateway")) {
                 )
             );
 
-            //ajax terminal_africa_payment_status
-            add_action('wp_ajax_terminal_africa_payment_status', array($this, 'terminal_africa_payment_status'));
-
             //woocommerce_thankyou
             add_action('woocommerce_thankyou_' . $this->id, array($this, 'terminal_africa_payment_thankyou'));
-
-            //add ajax terminal_africa_payment_init
-            add_action('wp_ajax_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
-            // no priv
-            add_action('wp_ajax_nopriv_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
 
             //add terminal gateway notice
             add_action('admin_notices', array($this, 'terminal_africa_payment_notice'));
@@ -98,6 +92,23 @@ if (class_exists("WC_Payment_Gateway")) {
             if (!$this->is_valid_for_use()) {
                 $this->enabled = false;
             }
+        }
+
+        //init ajax
+        public function init_ajax()
+        {
+            //add ajax terminal_africa_payment_init
+            add_action('wp_ajax_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
+            // no priv
+            add_action('wp_ajax_nopriv_terminal_africa_payment_init', array($this, 'terminal_africa_payment_init'));
+
+            //ajax terminal_africa_payment_status
+            add_action(
+                'wp_ajax_terminal_africa_payment_status',
+                array($this, 'terminal_africa_payment_status')
+            );
+            // no priv
+            add_action('wp_ajax_nopriv_terminal_africa_payment_status', array($this, 'terminal_africa_payment_status'));
         }
 
         public function init_form_fields()
@@ -362,6 +373,8 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public function terminal_africa_payment_init()
         {
+            //log
+            error_log("Am working now after ajax");
             try {
                 //verify nonce
                 if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wc_terminal_africa_payment_nonce')) {
