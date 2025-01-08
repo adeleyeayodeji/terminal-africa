@@ -22,6 +22,9 @@ function terminal_africa_payment_method_init()
     add_action('admin_notices', 'wc_terminal_africa_payment_testmode_notice');
 
     add_filter("woocommerce_payment_gateways", "terminal_africa_payment_method_init_payment_gateway");
+
+    //init ajax
+    WC_Terminal_Payment_Gateway::init_ajax();
 }
 
 
