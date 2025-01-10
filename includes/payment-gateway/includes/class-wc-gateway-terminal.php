@@ -105,7 +105,7 @@ if (class_exists("WC_Payment_Gateway")) {
              * @return WC_Terminal_Payment_Gateway
              * 
              */
-            $class_instance = new self();
+            $class_instance = self::class;
 
             //add ajax terminal_africa_payment_init
             add_action('wp_ajax_terminal_africa_payment_init', array($class_instance, 'terminal_africa_payment_init'));
@@ -287,7 +287,7 @@ if (class_exists("WC_Payment_Gateway")) {
          * 
          * @return void
          */
-        public function terminal_africa_payment_status()
+        public static function terminal_africa_payment_status()
         {
             try {
                 //very nonce
@@ -322,7 +322,7 @@ if (class_exists("WC_Payment_Gateway")) {
 
                 //get payment status from terminal africa
                 $request = Requests::get(
-                    $this->apiURL . $payment_id,
+                    $terminal_africa_shipping_plugin::$payment_endpoint . $payment_id,
                     array(
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . $skkey
@@ -381,7 +381,7 @@ if (class_exists("WC_Payment_Gateway")) {
          * terminal_africa_payment_init
          * 
          */
-        public function terminal_africa_payment_init()
+        public static function terminal_africa_payment_init()
         {
             try {
                 //verify nonce
@@ -409,7 +409,8 @@ if (class_exists("WC_Payment_Gateway")) {
                 $terminal_africa_settings = get_option('terminal_africa_settings');
 
                 //checkout success url
-                $success_url = $this->get_return_url($order);
+                $success_url =
+                    $order->get_checkout_order_received_url();
 
                 //checkout cancel url
                 $cancel_url = $order->get_cancel_order_url();
@@ -528,7 +529,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 ) + $terminal_africa_shipping_plugin::$request_header;
 
                 //request
-                $request = Requests::post($this->apiURL, $headers, $request_data, array('timeout' => 60));
+                $request = Requests::post($terminal_africa_shipping_plugin::$payment_endpoint, $headers, $request_data, array('timeout' => 60));
 
                 //check if request was successful
                 if (!$request->success) {

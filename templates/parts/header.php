@@ -29,3 +29,18 @@
          </div>
      </div>
  </div>
+ <?php
+    $TerminalAfricaShippingPlugin = TerminalAfricaShippingPlugin::instance();
+    //check if plugin update is available
+    if ($TerminalAfricaShippingPlugin->check_plugin_update()):
+        //create update link with nonce
+        $update_link = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=') . "terminal-africa/terminal-africa.php", 'upgrade-plugin_' . "terminal-africa/terminal-africa.php");
+    ?>
+     <div class="t-check-plugin-update">
+         <p>
+             A new version of Terminal Africa is available. Click <a href="<?php echo esc_url($update_link); ?>" id="t-check-plugin-update">here</a> to update.
+         </p>
+     </div>
+ <?php
+    endif;
+    ?>
