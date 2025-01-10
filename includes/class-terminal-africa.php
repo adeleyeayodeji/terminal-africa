@@ -282,8 +282,13 @@ class TerminalAfricaShippingPlugin
      */
     public function clear_plugin_update_session()
     {
-        //check if current page matched plugins.php
-        if (strpos($_SERVER['REQUEST_URI'], 'plugins.php') !== false) {
+        //check current page is admin
+        if (!is_admin()) {
+            return;
+        }
+
+        //check if current page does not match page=terminal-africa
+        if (strpos($_SERVER['REQUEST_URI'], 'terminal-africa') === false) {
             //check if session is started
             if (session_status() == PHP_SESSION_NONE) {
                 //start session
