@@ -998,6 +998,9 @@ trait Ajax
                         'message' => 'Parcel updated successfully',
                     ]);
                 } else {
+                    //possibly the parcel is already cleared, delete the parcel
+                    $terminalSession->delete('terminal_africa_parcel_id');
+                    //send error
                     wp_send_json([
                         'code' => 401,
                         'type' => 'percel',
@@ -1019,6 +1022,9 @@ trait Ajax
                     'message' => 'Parcel created successfully',
                 ]);
             } else {
+                //possibly the parcel is already cleared, delete the parcel
+                $terminalSession->delete('terminal_africa_parcel_id');
+                //send error
                 wp_send_json([
                     'code' => 401,
                     'message' => $response['message'] . " or clear your browser cache and try again"
@@ -2267,8 +2273,14 @@ trait Ajax
             $shipping_price =
                 $saved_others ? wc_price($shipping_cost, ['currency' => $order_currency]) : 0;
 
+            //order total
+            $order_value = wc_price($order->get_total());
+
+            //all shipping data
+            $all_shipping_data = $shipping_data['data'];
+
             //compact all data
-            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id');
+            $data = compact('shipping_id', 'order_id', 'order_date', 'order_time', 'order_status', 'order_url', 'order_shipping_method', 'order_shipping_price', 'items', 'saved_address', 'saved_others', 'states', 'order_currency', 'shipping_cost', 'cities', 'shipping_price', 'rate_id', 'order_value', 'all_shipping_data');
 
             //return data
             wp_send_json([

@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from "react";
+import ShippingAsideDraft from "./ShippingAsideDraft";
+import ProcessedShipmentSide from "./ProcessedShipmentSide";
 
 export default class TerminalShippingSide extends Component {
   //constructor
@@ -12,7 +14,9 @@ export default class TerminalShippingSide extends Component {
    *
    * @returns void
    */
-  gotoWCOrder = () => {
+  gotoWCOrder = (event) => {
+    event.preventDefault();
+
     try {
       //block ui
       jQuery.blockUI({
@@ -51,15 +55,16 @@ export default class TerminalShippingSide extends Component {
   };
 
   render() {
-    const { shippingData, shippingTrackingNumber } = this.props;
+    const { shippingData, shippingTrackingNumber, shippingStatus, rate_id } =
+      this.props;
 
     return (
       <Fragment>
         <div style={{ padding: "0px 30px" }}>
           <div className="t-shipping-side">
             <div className="t-flex t-flex t-mb-2">
-              <h3>Manage Order</h3>
-              <button
+              <h3>Order Details</h3>
+              {/* <button
                 className="t-manage-shipping-button"
                 onClick={this.gotoTracking}>
                 Track{" "}
@@ -70,7 +75,7 @@ export default class TerminalShippingSide extends Component {
                   alt="Track Shipment"
                   style={{ marginLeft: 10 }}
                 />
-              </button>
+              </button> */}
             </div>
             <div className="t-flex">
               <h4>Order Date</h4>
@@ -80,9 +85,16 @@ export default class TerminalShippingSide extends Component {
               <h4>Order Number</h4>
               <p>#{shippingData.order_id}</p>
             </div>
+            <div className="t-flex">
+              <h4>Order Value</h4>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: shippingData.order_value
+                }}></p>
+            </div>
             <div className="t-flex" style={{ marginTop: 10 }}>
               <a
-                href="javascript:;"
+                href={shippingData.order_url}
                 className="t-shipment-wc-link"
                 onClick={this.gotoWCOrder}>
                 <span>View Order</span>
@@ -102,37 +114,19 @@ export default class TerminalShippingSide extends Component {
               </a>
             </div>
           </div>
-          <div className="t-shipping-side" style={{ marginTop: 40 }}>
-            <div className="t-flex t-flex t-mb-2">
-              <h3>Manage Shipping</h3>
-            </div>
-            <div className="t-flex">
-              <h4 style={{ marginRight: "25%" }}>Carrier</h4>
-              <div className="t-flex">
-                <img
-                  src={shippingData?.saved_others?.carrier_logo}
-                  alt="Carrier Logo"
-                  style={{ height: 15, marginBottom: 8, marginRight: 5 }}
-                />
-                <p>
-                  {shippingData?.saved_others?.carrier_name}{" "}
-                  {shippingData?.saved_others?.carrier_rate_description}
-                </p>
-              </div>
-            </div>
-            <div className="t-flex">
-              <h4>Tracking Number</h4>
-              <p className="t-new-tracking-number">{shippingTrackingNumber}</p>
-            </div>
-            <div className="t-flex">
-              <h4>Shipping price</h4>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: shippingData.shipping_price
-                }}></p>
-            </div>
-            <div style={{ marginTop: 13 }} id="t_carriers_location"></div>
-          </div>
+          {shippingStatus.title == "draft" || shippingStatus.title == "--" ? (
+            <ShippingAsideDraft
+              shippingData={shippingData}
+              shippingTrackingNumber={shippingTrackingNumber}
+            />
+          ) : (
+            <ProcessedShipmentSide
+              saved_address={shippingData.saved_address}
+              rate_id={rate_id}
+              shippingData={shippingData}
+              shippingStatus={shippingStatus}
+            />
+          )}
         </div>
       </Fragment>
     );

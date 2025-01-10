@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import TerminalPhoneBook from "./components/TerminalPhoneBook";
 import TerminalManageShipping from "./components/Shipping/TerminalManageShipping";
 import MerchantAddressForm from "./components/MerchantAddress/MerchantAddressForm";
@@ -10,7 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const terminalPhoneBookDiv = document.getElementById("t-phonebook-container");
   //check if element exist
   if (terminalPhoneBookDiv) {
-    ReactDOM.render(<TerminalPhoneBook />, terminalPhoneBookDiv);
+    ReactDOM.render(
+      <BrowserRouter>
+        <TerminalPhoneBook />
+      </BrowserRouter>,
+      terminalPhoneBookDiv
+    );
   }
 
   //load manage-terminal-shipping
@@ -21,7 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
   //check if element exist
   if (manageTerminalShipping) {
     //render dom TerminalManageShipping
-    ReactDOM.render(<TerminalManageShipping />, manageTerminalShipping);
+    ReactDOM.render(
+      <BrowserRouter>
+        <TerminalManageShipping />
+      </BrowserRouter>,
+      manageTerminalShipping
+    );
   }
 
   //load terminal-merchant-address
@@ -32,7 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
   //check if element exist
   if (terminalMerchantAddress) {
     //render dom MerchantAddressForm
-    ReactDOM.render(<MerchantAddressForm />, terminalMerchantAddress);
+    ReactDOM.render(
+      <BrowserRouter>
+        <MerchantAddressForm />
+      </BrowserRouter>,
+      terminalMerchantAddress
+    );
   }
 
   //check if element exist #terminal-new-shipment-page-wrapper
@@ -42,6 +58,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //check if element exist
   if (terminalNewShipmentPageWrapper) {
-    ReactDOM.render(<ShippingHomePage />, terminalNewShipmentPageWrapper);
+    ReactDOM.render(
+      <BrowserRouter>
+        <ShippingHomePage />
+      </BrowserRouter>,
+      terminalNewShipmentPageWrapper
+    );
   }
 });

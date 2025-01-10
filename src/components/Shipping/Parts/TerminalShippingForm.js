@@ -24,15 +24,10 @@ class TerminalShippingForm extends React.Component {
       this.loadSelect2();
       //initFormSelectEvent
       this.initFormSelectEvent();
-    }
 
-    // Update saved address
-    if (
-      this.props.saved_address !== prevProps.saved_address &&
-      this.props.saved_address
-    ) {
+      // Update saved address when shippingData changes
       this.setState({
-        saved_address: this.props.saved_address
+        saved_address: this.props?.shippingData?.all_shipping_data?.address_to
       });
     }
   }

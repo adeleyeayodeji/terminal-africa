@@ -229,6 +229,8 @@ class TerminalAfricaShippingPlugin
             $this->initPaymentGateway();
             //activate terminal
             $this->activate_terminal_init();
+            //clear plugin update session
+            $this->clear_plugin_update_session();
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
@@ -271,6 +273,28 @@ class TerminalAfricaShippingPlugin
             array_slice($columns, 2, count($columns) - 2, true);
 
         return $columns;
+    }
+
+    /**
+     * Clear plugin update session
+     * @since 1.13.12
+     * @return void
+     */
+    public function clear_plugin_update_session()
+    {
+        //check if current page matched plugins.php
+        if (strpos($_SERVER['REQUEST_URI'], 'plugins.php') !== false) {
+            //check if session is started
+            if (session_status() == PHP_SESSION_NONE) {
+                //start session
+                session_start();
+            }
+            //check if terminal_africa_plugin_update is set
+            if (isset($_SESSION['terminal_africa_plugin_update'])) {
+                //clear plugin update session
+                unset($_SESSION['terminal_africa_plugin_update']);
+            }
+        }
     }
 
     /**
@@ -527,6 +551,86 @@ class TerminalAfricaShippingPlugin
                     WC()->session->__unset($key);
                 }
             }
+        }
+    }
+
+    /**
+     * Get plugin updates
+     * @since 1.13.10
+     * @return array
+     */
+    public function get_plugin_updates()
+    {
+        //get all plugins
+        $all_plugins     = get_plugins();
+        //upgrade plugins
+        $upgrade_plugins = array();
+        //current
+        $current         = get_site_transient('update_plugins');
+        //loop through all plugins
+        foreach ((array) $all_plugins as $plugin_file => $plugin_data) {
+            //check if plugin is terminal-africa
+            if ($plugin_file == "terminal-africa/terminal-africa.php") {
+                //check if plugin is in current
+                if (isset($current->response[$plugin_file])) {
+                    //add plugin to upgrade plugins
+                    $upgrade_plugins[$plugin_file]         = (object) $plugin_data;
+                    //add plugin update to upgrade plugins
+                    $upgrade_plugins[$plugin_file]->update = $current->response[$plugin_file];
+                } else {
+                    //check if session is started
+                    if (session_status() == PHP_SESSION_NONE) {
+                        //start session
+                        session_start();
+                    }
+                    //check if terminal_africa_plugin_update is set
+                    if (isset($_SESSION['terminal_africa_plugin_update'])) {
+                        //clear plugin update
+                        unset($_SESSION['terminal_africa_plugin_update']);
+                    }
+                }
+            }
+        }
+        //return upgrade plugins
+        return $upgrade_plugins;
+    }
+
+    /**
+     * Check for plugin update
+     * @since 1.13.12
+     * @return bool
+     */
+    public function check_plugin_update()
+    {
+        try {
+            //check if php session is started
+            if (session_status() == PHP_SESSION_NONE) {
+                //start session
+                session_start();
+            }
+            //check if terminal_africa_plugin_update is set
+            if (isset($_SESSION['terminal_africa_plugin_update'])) {
+                //return true
+                return true;
+            }
+            //get plugin updates
+            $plugin_updates = $this->get_plugin_updates();
+            //check if plugin updates is not empty
+            if (!empty($plugin_updates)) {
+                //check if terminal-africa is in plugin updates
+                if (isset($plugin_updates['terminal-africa/terminal-africa.php']) && isset($plugin_updates['terminal-africa/terminal-africa.php']->update)) {
+                    //save to temporary variable
+                    $_SESSION['terminal_africa_plugin_update'] = true;
+                    //return true
+                    return true;
+                }
+            }
+            //return false
+            return false;
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_check_plugin_update');
+            //return false
+            return false;
         }
     }
 }

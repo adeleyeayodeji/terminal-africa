@@ -4,6 +4,7 @@ import TerminalShippingSide from "./Parts/TerminalShippingSide";
 import TerminalShippingForm from "./Parts/TerminalShippingForm";
 import ShippingSkeleton from "./ShippingSkeleton";
 import BreadCrumb from "./Parts/BreadCrumb";
+import ProcessedShipment from "./Parts/ProcessedShipment";
 
 class TerminalManageShipping extends React.Component {
   constructor(props) {
@@ -263,7 +264,7 @@ class TerminalManageShipping extends React.Component {
         ) : (
           <div className="t-row">
             <div className="t-col-12">
-              <BreadCrumb />
+              <BreadCrumb shipmentId={shippingData.shipping_id} />
             </div>
             <div className="t-col-8 t-col-lg-8 t-col-md-12 t-col-sm-12">
               <div className="t-ml-5 t-side-left">
@@ -271,12 +272,21 @@ class TerminalManageShipping extends React.Component {
                   shippingData={shippingData}
                   shippingStatus={shippingStatus}
                 />
-                <TerminalShippingForm
-                  saved_address={shippingData.saved_address}
-                  rate_id={rate_id}
-                  shippingData={shippingData}
-                  action_type="customer"
-                />
+                {shippingStatus.title == "draft" ||
+                shippingStatus.title == "--" ? (
+                  <TerminalShippingForm
+                    saved_address={shippingData.saved_address}
+                    rate_id={rate_id}
+                    shippingData={shippingData}
+                    action_type="customer"
+                  />
+                ) : (
+                  <ProcessedShipment
+                    saved_address={shippingData.saved_address}
+                    rate_id={rate_id}
+                    shippingData={shippingData}
+                  />
+                )}
               </div>
             </div>
             <div className="t-col-4 t-col-lg-4 t-col-md-12 t-col-sm-12">
@@ -284,6 +294,8 @@ class TerminalManageShipping extends React.Component {
                 shippingData={shippingData}
                 shippingTrackingNumber={shippingTrackingNumber}
                 trackingLink={trackingLink}
+                shippingStatus={shippingStatus}
+                rate_id={rate_id}
               />
             </div>
           </div>
