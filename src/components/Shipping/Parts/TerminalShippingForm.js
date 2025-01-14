@@ -17,8 +17,8 @@ class TerminalShippingForm extends React.Component {
   componentDidUpdate(prevProps) {
     // Listen for the update event of shippingData
     if (
-      this.props.shippingData !== prevProps.shippingData &&
-      this.props.shippingData
+      this.props.saved_address !== prevProps.saved_address &&
+      this.props.saved_address
     ) {
       // Trigger event from script.js
       this.loadSelect2();
@@ -27,7 +27,7 @@ class TerminalShippingForm extends React.Component {
 
       // Update saved address when shippingData changes
       this.setState({
-        saved_address: this.props?.shippingData?.all_shipping_data?.address_to
+        saved_address: this.props?.saved_address
       });
     }
   }
