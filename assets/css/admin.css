@@ -1,0 +1,9 @@
+.status-tpending {
+  background: #f7941f4d;
+  color: #454545;
+}
+
+.status-tdelivered {
+  background: #c8d7e1;
+  color: #003d66;
+}

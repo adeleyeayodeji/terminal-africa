@@ -11,7 +11,12 @@ class TerminalShippingForm extends React.Component {
   /**
    * Dom loaded
    */
-  componentDidMount() {}
+  componentDidMount() {
+    // Trigger event from script.js
+    this.loadSelect2();
+    //initFormSelectEvent
+    this.initFormSelectEvent();
+  }
 
   //did update
   componentDidUpdate(prevProps) {
@@ -20,11 +25,6 @@ class TerminalShippingForm extends React.Component {
       this.props.saved_address !== prevProps.saved_address &&
       this.props.saved_address
     ) {
-      // Trigger event from script.js
-      this.loadSelect2();
-      //initFormSelectEvent
-      this.initFormSelectEvent();
-
       // Update saved address when shippingData changes
       this.setState({
         saved_address: this.props?.saved_address

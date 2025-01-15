@@ -343,6 +343,43 @@ if (class_exists("WC_Payment_Gateway")) {
                 //get status
                 $status = $response->data->status;
 
+                //check if status is successful
+                if ($status == 'successful') {
+                    //check if order is not paid
+                    if (!$order->is_paid()) {
+                        //set wc note
+                        $order->add_order_note('Payment successful with Terminal Africa Payment Gateway - ' . $response->data->platform);
+                        //add platform_reference to order note
+                        $order->add_order_note('Platform Reference: ' . $response->data->platform_reference);
+                        //add payment_id to order note
+                        $order->add_order_note('Payment ID: ' . $response->data->payment_id);
+
+                        //save to order meta
+                        $order->update_meta_data('terminal_africa_payment_id', $response->data->payment_id);
+
+                        //save to order meta platform
+                        $order->update_meta_data('terminal_africa_payment_platform', $response->data->platform);
+
+                        //save to order meta platform_reference
+                        $order->update_meta_data('terminal_africa_payment_platform_reference', $response->data->platform_reference);
+
+                        //save order
+                        $order->save();
+
+                        //update order status
+                        $order->update_status('completed');
+
+                        //set payment complete
+                        $order->payment_complete();
+
+                        //set status to tpending
+                        $order->update_status('tpending');
+
+                        //save order
+                        $order->save();
+                    }
+                }
+
                 //return status
                 wp_send_json_success([
                     'status' => ucfirst($status)
@@ -682,6 +719,11 @@ if (class_exists("WC_Payment_Gateway")) {
                 //get the order
                 $order = wc_get_order($params['data']['metadata']['order_id']);
 
+                //check if order is already paid
+                if ($order->is_paid()) {
+                    throw new \Exception('Order has already been paid for');
+                }
+
                 //check if order is valid
                 if (!$order) {
                     throw new \Exception('Invalid order, please try again');
@@ -706,11 +748,20 @@ if (class_exists("WC_Payment_Gateway")) {
                         //save to order meta platform_reference
                         $order->update_meta_data('terminal_africa_payment_platform_reference', $params['data']['platform_reference']);
 
+                        //update order status
+                        $order->update_status('completed');
+
                         //save order
                         $order->save();
 
-                        //update order status
-                        $order->update_status('completed');
+                        //set payment complete
+                        $order->payment_complete();
+
+                        //set status to tpending
+                        $order->update_status('tpending');
+
+                        //save order
+                        $order->save();
 
                         break;
 

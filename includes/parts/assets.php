@@ -16,6 +16,8 @@ trait Assets
         wp_enqueue_script('terminal-africa-sweet-alert-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/sweetalert2.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //admin.js
         wp_enqueue_script('terminal-africa-admin-scripts', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/js/admin.js', array('jquery', 'jquery-blockui'), TERMINAL_AFRICA_VERSION, true);
+        //admin.css
+        wp_enqueue_style('terminal-africa-admin-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/admin.css', array(), TERMINAL_AFRICA_VERSION);
         //localize scripts
         wp_localize_script('terminal-africa-admin-scripts', 'terminal_africa_admin', array(
             'ajax_url' => admin_url('admin-ajax.php'),

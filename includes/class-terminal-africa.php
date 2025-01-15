@@ -333,7 +333,8 @@ class TerminalAfricaShippingPlugin
             //check if order status is processing, on-hold, completed, pending
             $default_status = ['processing', 'on-hold', 'completed', 'pending'];
             //append terminal_allowed_order_statuses to default_status
-            $default_status = $default_status + $terminal_allowed_order_statuses;
+            $default_status = array_merge($default_status, $terminal_allowed_order_statuses);
+            //check if order status is in default_status
             if (in_array($order_status, $default_status)) {
                 //get terminal shipment status
                 $terminal_shipment_id = get_post_meta($post_id, 'Terminal_africa_shipment_id', true);

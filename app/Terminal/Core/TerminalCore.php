@@ -32,8 +32,13 @@ class TerminalCore
                     $mode = $TerminalAfricaShippingPlugin::$plugin_mode;
                 }
             }
+
+            //status
+            $status = array_merge(['wc-processing', 'completed', 'on-hold', 'pending'], $terminal_allowed_order_statuses);
+
+            //args
             $args = [
-                'status' => array_merge(['wc-processing', 'completed', 'on-hold', 'pending'], $terminal_allowed_order_statuses),
+                'status' => $status,
                 'limit' => 10,
                 'paginate' => true,
                 'page' => $terminal_page,
