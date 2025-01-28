@@ -384,7 +384,7 @@ class WC_Terminal_Delivery
         //check if terminal_africa_api_ping is yes
         if ($terminal_africa_api_ping == 'yes') {
             //update the shipping cost to the api amount
-            $shipping_cost = get_post_meta($order_id, "Terminal_africa_amount", true) ?: $shipping_cost;
+            $shipping_cost = get_post_meta($order_id, "Terminal_africa_initial_amount", true) ?: $shipping_cost;
         }
 
         //if terminal method is not active
@@ -485,6 +485,7 @@ class WC_Terminal_Delivery
         $terminal_africa_carriername = $terminalSession->get('terminal_africa_carriername');
         $terminal_africa_amount = $terminalSession->get('terminal_africa_amount');
         $terminal_africa_duration = $terminalSession->get('terminal_africa_duration');
+        $terminal_africa_initial_amount = $terminalSession->get('terminal_africa_initial_amount');
         $guest_email = $terminalSession->get('terminal_africa_guest_email');
         //guest email hashed
         $guest_email_hashed = md5($guest_email);
@@ -508,7 +509,7 @@ class WC_Terminal_Delivery
             }
         }
         //if exist
-        if ($merchant_address_id && $terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
+        if ($merchant_address_id && $terminal_africa_carriername && $terminal_africa_initial_amount && $terminal_africa_duration && $guest_email && $terminal_africa_rateid) {
 
             //create shipment
             $create_shipment = createTerminalShipment($merchant_address_id, $guest_address_id, $parcel_id, $order_id);
@@ -545,9 +546,14 @@ class WC_Terminal_Delivery
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);
             }
+            //check if $terminal_africa_initial_amount is not string
+            if (is_string($terminal_africa_initial_amount)) {
+                $terminal_africa_initial_amount = floatval($terminal_africa_initial_amount);
+            }
             //sanitize data
             $terminal_africa_carriername = sanitize_text_field($terminal_africa_carriername);
             $terminal_africa_amount = sanitize_text_field($terminal_africa_amount);
+            $terminal_africa_initial_amount = sanitize_text_field($terminal_africa_initial_amount);
             $terminal_africa_duration = sanitize_text_field($terminal_africa_duration);
             $guest_email = sanitize_text_field($guest_email);
             $terminal_africa_rateid = sanitize_text_field($terminal_africa_rateid);
@@ -558,6 +564,7 @@ class WC_Terminal_Delivery
             //save
             update_post_meta($order_id, 'Terminal_africa_carriername', $terminal_africa_carriername);
             update_post_meta($order_id, 'Terminal_africa_amount', $terminal_africa_amount);
+            update_post_meta($order_id, 'Terminal_africa_initial_amount', $terminal_africa_initial_amount);
             update_post_meta($order_id, 'Terminal_africa_duration', $terminal_africa_duration);
             update_post_meta($order_id, 'Terminal_africa_guest_email', $guest_email);
             update_post_meta($order_id, 'Terminal_africa_rateid', $terminal_africa_rateid);
@@ -572,6 +579,7 @@ class WC_Terminal_Delivery
                 //save 
                 $order->update_meta_data('Terminal_africa_carriername', $terminal_africa_carriername);
                 $order->update_meta_data('Terminal_africa_amount', $terminal_africa_amount);
+                $order->update_meta_data('Terminal_africa_initial_amount', $terminal_africa_initial_amount);
                 $order->update_meta_data('Terminal_africa_duration', $terminal_africa_duration);
                 $order->update_meta_data('Terminal_africa_guest_email', $guest_email);
                 $order->update_meta_data('Terminal_africa_rateid', $terminal_africa_rateid);
@@ -590,6 +598,7 @@ class WC_Terminal_Delivery
                 //save
                 $order->update_meta_data('Terminal_africa_carriername', $terminal_africa_carriername);
                 $order->update_meta_data('Terminal_africa_amount', $terminal_africa_amount);
+                $order->update_meta_data('Terminal_africa_initial_amount', $terminal_africa_initial_amount);
                 $order->update_meta_data('Terminal_africa_duration', $terminal_africa_duration);
                 $order->update_meta_data('Terminal_africa_guest_email', $guest_email);
                 $order->update_meta_data('Terminal_africa_rateid', $terminal_africa_rateid);
@@ -605,6 +614,7 @@ class WC_Terminal_Delivery
             //delete session
             WC()->session->__unset('terminal_africa_carriername');
             WC()->session->__unset('terminal_africa_amount');
+            WC()->session->__unset('terminal_africa_initial_amount');
             WC()->session->__unset('terminal_africa_duration');
             WC()->session->__unset('terminal_africa_guest_email');
             WC()->session->__unset('terminal_africa_rateid');
@@ -615,6 +625,7 @@ class WC_Terminal_Delivery
             //delete session
             $terminalSession->delete('terminal_africa_carriername');
             $terminalSession->delete('terminal_africa_amount');
+            $terminalSession->delete('terminal_africa_initial_amount');
             $terminalSession->delete('terminal_africa_duration');
             $terminalSession->delete('terminal_africa_guest_email');
             $terminalSession->delete('terminal_africa_rateid');

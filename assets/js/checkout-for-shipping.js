@@ -224,6 +224,18 @@ function terminalsetValue2_terminalShipping(elem) {
                 //  minimumFractionDigits: 0
               }).format(default_amount);
             }
+
+            //set initial amount
+            window.initial_amount = default_amount;
+
+            //check if free shipping above specific amount is enabled
+            if (response.enable_free_shipping == "true") {
+              //set amount to 0
+              amount = "Free";
+              //set default_amount to 0
+              default_amount = 0;
+            }
+
             //append to terminal_html
             terminal_html += `
                 <div class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${default_amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">

@@ -194,7 +194,7 @@ if ($woocommerce_terminal_africa_payment_settings) {
                     <div class="t-flex t-settings-page-card t-mb-4">
                         <div class="t-settings-first">
                             <p class="t-settings-page-card-title">
-                                Custom price mark up
+                                Custom Price Mark Up
                             </p>
                             <p class="t-settings-page-card-description">
                                 Set your own price markup for all your shipments as a percentage (%).
@@ -218,6 +218,28 @@ if ($woocommerce_terminal_africa_payment_settings) {
                             <a href="javascript:;" class="t-switch-api-keys t-sign-out">
                                 Switch API Mode
                             </a>
+                        </div>
+                    </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div class="t-settings-first">
+                            <p class="t-settings-page-card-title">
+                                Enable Free Shipping Above Specific Amount
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                When enabled, customers will get free shipping above a specific amount.
+                            </p>
+                        </div>
+                        <div style="display: flex;align-items: center;flex-direction: column;align-items: center;">
+                            <div class="t-carrier-embed w-embed">
+                                <label class="t-switch t-carrier-switch">
+                                    <input type="checkbox" class="t-carrier-checkbox" name="Enable_Free_Shipping_Above_Specific_Amount" id="Enable_Free_Shipping_Above_Specific_Amount" <?php echo get_option('Enable_Free_Shipping_Above_Specific_Amount') == 'true' ? 'checked' : ''; ?>>
+                                    <span class="t-slider round"></span>
+                                </label>
+                            </div>
+                            <div class="t-free-shipping-above-specific-amount-input" style="display: <?php echo get_option('Enable_Free_Shipping_Above_Specific_Amount') == 'true' ? 'block' : 'none'; ?>;">
+                                <input type="number" class="t-form-control" name="Free_Shipping_Above_Specific_Amount" id="Free_Shipping_Above_Specific_Amount" value="<?php echo esc_html(get_option('Free_Shipping_Above_Specific_Amount')); ?>" placeholder="e.g 10000">
+                            </div>
                         </div>
                     </div>
                 </div>

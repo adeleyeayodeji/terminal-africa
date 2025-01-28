@@ -125,6 +125,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
         $terminal_africa_pickuptime = sanitize_text_field($terminalSession->get('terminal_africa_pickuptime'));
         $terminal_africa_carrierlogo = sanitize_text_field($terminalSession->get('terminal_africa_carrierlogo'));
         $terminal_africa_merchant_id = sanitize_text_field(get_option('terminal_africa_merchant_id'));
+        $terminal_africa_initial_amount = sanitize_text_field($terminalSession->get('terminal_africa_initial_amount'));
         //check if mode is live or test
         $mode = 'test';
         //check if class exist TerminalAfricaShippingPlugin
@@ -146,7 +147,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             return;
         }
         //if exist
-        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $terminal_africa_rateid) {
+        if ($terminal_africa_carriername && $terminal_africa_amount && $terminal_africa_duration && $terminal_africa_rateid || empty($terminal_africa_amount)) {
             //check if $terminal_africa_amount is not string
             if (is_string($terminal_africa_amount)) {
                 $terminal_africa_amount = floatval($terminal_africa_amount);
@@ -171,6 +172,7 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                     'duration' => $terminal_africa_duration,
                     'carrier' => $terminal_africa_carriername,
                     'amount' => $terminal_africa_amount,
+                    'initial_amount' => $terminal_africa_initial_amount,
                     'rate_id' => $terminal_africa_rateid,
                     'pickup_time' => $terminal_africa_pickuptime,
                     'carrier_logo' => $terminal_africa_carrierlogo,

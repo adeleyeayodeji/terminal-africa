@@ -139,6 +139,46 @@ trait Ajax
         add_action('wp_ajax_terminal_africa_validate_terminal_shipment', array($this, 'terminal_africa_validate_terminal_shipment'));
         //add ajax terminal_africa_get_all_shipments_v2
         add_action('wp_ajax_terminal_africa_get_all_shipments_v2', array($this, 'terminal_africa_get_all_shipments_v2'));
+        //add ajax update_user_carrier_free_shipping_above_specific_amount_terminal
+        add_action('wp_ajax_update_user_carrier_free_shipping_above_specific_amount_terminal', array($this, 'update_user_carrier_free_shipping_above_specific_amount_terminal'));
+    }
+
+    /**
+     * update_user_carrier_free_shipping_above_specific_amount_terminal
+     * 
+     */
+    public function update_user_carrier_free_shipping_above_specific_amount_terminal()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get status
+            $status = sanitize_text_field($_POST['status']);
+            //get free shipping above specific amount
+            $free_shipping_above_specific_amount = sanitize_text_field($_POST['free_shipping_above_specific_amount']);
+
+            //update free shipping above specific amount
+            update_option('Enable_Free_Shipping_Above_Specific_Amount', $status);
+            update_option('Free_Shipping_Above_Specific_Amount', $free_shipping_above_specific_amount);
+
+            //send response
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Free shipping above specific amount updated successfully'
+            ]);
+        } catch (Exception $e) {
+            logTerminalError($e, 'update_user_carrier_free_shipping_above_specific_amount_terminal');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -1125,6 +1165,27 @@ trait Ajax
                     }
                 }
 
+                $enable_free_shipping = 'false';
+
+                if (function_exists('WC')) {
+                    //get free shipping above specific amount is enabled
+                    $free_shipping_above_specific_amount_is_enabled = get_option('Enable_Free_Shipping_Above_Specific_Amount', 'false');
+                    //get free shipping above specific amount
+                    $free_shipping_above_specific_amount_value = get_option('Free_Shipping_Above_Specific_Amount', '0');
+                    //get cart total
+                    $cart_total = WC()->cart->get_cart_contents_total();
+                    //convert to number
+                    $free_shipping_above_specific_amount_value = floatval($free_shipping_above_specific_amount_value);
+                    //check if free shipping above specific amount is enabled
+                    if ($free_shipping_above_specific_amount_is_enabled == 'true') {
+                        //check if cart total is greater than free shipping above specific amount
+                        if ($cart_total >= $free_shipping_above_specific_amount_value) {
+                            //set free shipping above specific amount to true
+                            $enable_free_shipping = 'true';
+                        }
+                    }
+                }
+
                 $address_from = $merchant_address_id;
                 $address_to = $address_id;
                 $parcel = $parcel_id;
@@ -1137,6 +1198,7 @@ trait Ajax
                     wp_send_json([
                         'code' => 200,
                         'message' => 'Rates gotten successfully',
+                        'enable_free_shipping' => $enable_free_shipping,
                         'terminal_price_markup' => $terminal_price_markup,
                         'data' => $get_rates['data']
                     ]);
@@ -1186,6 +1248,7 @@ trait Ajax
             $rateid = sanitize_text_field($_POST['rateid']);
             $pickuptime = sanitize_text_field($_POST['pickup']);
             $carrierlogo = sanitize_text_field($_POST['carrierlogo']);
+            $initial_amount = sanitize_text_field($_POST['initial_amount']);
             //wc session
             WC()->session->set('terminal_africa_carriername', $carriername);
             WC()->session->set('terminal_africa_amount', $amount);
@@ -1194,7 +1257,7 @@ trait Ajax
             WC()->session->set('terminal_africa_rateid', $rateid);
             WC()->session->set('terminal_africa_pickuptime', $pickuptime);
             WC()->session->set('terminal_africa_carrierlogo', $carrierlogo);
-
+            WC()->session->set('terminal_africa_initial_amount', $initial_amount);
             //save backup data to php session
             $terminalSession = TerminalSession::instance();
             $terminalSession->set('terminal_africa_carriername', $carriername);
@@ -1204,6 +1267,7 @@ trait Ajax
             $terminalSession->set('terminal_africa_rateid', $rateid);
             $terminalSession->set('terminal_africa_pickuptime', $pickuptime);
             $terminalSession->set('terminal_africa_carrierlogo', $carrierlogo);
+            $terminalSession->set('terminal_africa_initial_amount', $initial_amount);
 
             //return
             wp_send_json([
@@ -1964,6 +2028,7 @@ trait Ajax
             $terminalSession->delete('terminal_africa_amount');
             $terminalSession->delete('terminal_africa_duration');
             $terminalSession->delete('terminal_africa_rateid');
+            $terminalSession->delete('terminal_africa_initial_amount');
             //return
             wp_send_json([
                 'code' => 200,

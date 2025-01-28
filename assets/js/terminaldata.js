@@ -246,6 +246,7 @@ let terminalSetShippingCrarrier = function (elem, e) {
     let email = $('input[name="billing_email"]').val();
     let rateid = $(elem).attr("data-rateid");
     let carrierlogo = $(elem).attr("data-image-url");
+    let initial_amount = window.initial_amount;
     //save to session
     $.ajax({
       type: "POST",
@@ -259,7 +260,8 @@ let terminalSetShippingCrarrier = function (elem, e) {
         email: email,
         rateid: rateid,
         pickup: pickup,
-        carrierlogo: carrierlogo
+        carrierlogo: carrierlogo,
+        initial_amount: initial_amount
       },
       dataType: "json",
       beforeSend: function () {

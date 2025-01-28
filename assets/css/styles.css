@@ -2128,3 +2128,11 @@ Responsive for t-transaction-header-right-t-flex
   color: #f7941f;
   text-decoration: underline;
 }
+
+#Free_Shipping_Above_Specific_Amount {
+  height: 41px;
+  width: 125px;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  font-size: 14px;
+}

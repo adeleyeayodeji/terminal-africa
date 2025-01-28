@@ -877,6 +877,18 @@ let changeTerminalCarrier = (elem, e) => {
                 //  minimumFractionDigits: 0
               }).format(default_amount);
             }
+
+            //set initial amount
+            window.initial_amount = default_amount;
+
+            //check if free shipping above specific amount is enabled
+            if (response.enable_free_shipping == "true") {
+              //set amount to 0
+              amount = "Free";
+              //set default_amount to 0
+              default_amount = 0;
+            }
+
             //append to terminal_html
             terminal_html += `
                 <div class="t-checkout-single" onclick="terminalSetShippingCrarrier2(this, event)" data-carrier-name="${value.carrier_name}" data-amount="${default_amount}" data-duration="${value.delivery_time}" data-pickup="${value.pickup_time}" data-order-id="${order_id}" data-rateid="${value.rate_id}" data-image-url="${value.carrier_logo}">
@@ -955,6 +967,7 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
     var rateid = $(elem).data("rateid");
     var order_id = $(elem).data("order-id");
     let carrierlogo = $(elem).attr("data-image-url");
+    let initial_amount = window.initial_amount;
     //do ajax
     //ajax
     $.ajax({
@@ -969,7 +982,8 @@ let terminalSetShippingCrarrier2 = (elem, e) => {
         pickup: pickup,
         rateid: rateid,
         order_id: order_id,
-        carrierlogo: carrierlogo
+        carrierlogo: carrierlogo,
+        initial_amount: initial_amount
       },
       dataType: "json",
       beforeSend: function () {
@@ -2433,6 +2447,172 @@ jQuery(document).ready(function ($) {
       }
     });
   });
+
+  /**
+   * Enable_Free_Shipping_Above_Specific_Amount
+   */
+  $("input[name=Enable_Free_Shipping_Above_Specific_Amount]").on(
+    "change",
+    function (e) {
+      e.preventDefault();
+      //get parent
+      let parent = $(this).parent();
+      //checked
+      let free_shipping = $(this).is(":checked") ? "true" : "false";
+      //set t-free-shipping-above-specific-amount-input display
+      if (free_shipping == "true") {
+        $(".t-free-shipping-above-specific-amount-input").show();
+      } else {
+        $(".t-free-shipping-above-specific-amount-input").hide();
+      }
+      //get free shipping above specific amount
+      let free_shipping_above_specific_amount = $(
+        "input[name=Free_Shipping_Above_Specific_Amount]"
+      ).val();
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action:
+            "update_user_carrier_free_shipping_above_specific_amount_terminal",
+          nonce: terminal_africa.nonce,
+          status: free_shipping,
+          free_shipping_above_specific_amount
+        },
+        dataType: "json",
+        beforeSend: () => {
+          //block element
+          $(parent).block({
+            message: "<i class='fa fa-spinner fa-spin'></i>",
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.8,
+              cursor: "wait"
+            },
+            css: {
+              border: 0,
+              padding: 0,
+              backgroundColor: "transparent"
+            }
+          });
+        },
+        success: function (response) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast success if response code is 200
+          if (response.code == 200) {
+            iziToast.info({
+              title: "Success",
+              message: response.message,
+              position: "topRight",
+              timeout: 3000,
+              transitionIn: "flipInX",
+              transitionOut: "flipOutX"
+            });
+          } else {
+            //izitoast error
+            iziToast.error({
+              title: "Error",
+              message: response.message,
+              position: "topRight"
+            });
+          }
+        },
+        error: function (error) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast error
+          iziToast.error({
+            title: "Error",
+            message: "Something went wrong!: " + error.responseText,
+            position: "topRight"
+          });
+        }
+      });
+    }
+  );
+
+  /**
+   * Free_Shipping_Above_Specific_Amount
+   */
+  $("input[name=Free_Shipping_Above_Specific_Amount]").on(
+    "change",
+    function (e) {
+      e.preventDefault();
+      //get parent
+      let parent = $(this).parent();
+      //get value
+      let value = $(this).val();
+      //get toggle checkbox
+      let toggle_checkbox = $(
+        "input[name=Enable_Free_Shipping_Above_Specific_Amount]"
+      );
+      //get status
+      let status = toggle_checkbox.is(":checked") ? "true" : "false";
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action:
+            "update_user_carrier_free_shipping_above_specific_amount_terminal",
+          nonce: terminal_africa.nonce,
+          free_shipping_above_specific_amount: value,
+          status: status
+        },
+        dataType: "json",
+        beforeSend: () => {
+          //block element
+          $(parent).block({
+            message: "<i class='fa fa-spinner fa-spin'></i>",
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.8,
+              cursor: "wait"
+            },
+            css: {
+              border: 0,
+              padding: 0,
+              backgroundColor: "transparent"
+            }
+          });
+        },
+        success: function (response) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast success if response code is 200
+          if (response.code == 200) {
+            iziToast.info({
+              title: "Success",
+              message: response.message,
+              position: "topRight",
+              timeout: 3000,
+              transitionIn: "flipInX",
+              transitionOut: "flipOutX"
+            });
+          } else {
+            //izitoast error
+            iziToast.error({
+              title: "Error",
+              message: response.message,
+              position: "topRight"
+            });
+          }
+        },
+        error: function (error) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast error
+          iziToast.error({
+            title: "Error",
+            message: "Something went wrong!: " + error.responseText,
+            position: "topRight"
+          });
+        }
+      });
+    }
+  );
 
   /**
    * enable_terminal_payment_gateway

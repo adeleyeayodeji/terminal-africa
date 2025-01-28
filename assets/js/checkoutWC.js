@@ -369,6 +369,7 @@ let terminalCheckoutWC = {
       let email = $('input[name="billing_email"]').val();
       let rateid = $(elem).attr("data-rateid");
       let carrierlogo = $(elem).attr("data-image-url");
+      let initial_amount = window.initial_amount;
       //save to session
       $.ajax({
         type: "POST",
@@ -382,7 +383,8 @@ let terminalCheckoutWC = {
           email: email,
           rateid: rateid,
           pickup: pickup,
-          carrierlogo: carrierlogo
+          carrierlogo: carrierlogo,
+          initial_amount: initial_amount
         },
         dataType: "json",
         beforeSend: function () {
@@ -1085,33 +1087,45 @@ let terminalCheckoutWC = {
                   //  minimumFractionDigits: 0
                 }).format(default_amount_for_handler);
               }
+
+              //set initial amount
+              window.initial_amount = default_amount;
+
+              //check if free shipping above specific amount is enabled
+              if (response.enable_free_shipping == "true") {
+                //set amount to 0
+                amount = "Free";
+                //set default_amount to 0
+                default_amount = 0;
+              }
+
               //append to terminal_html
               terminal_html += `
                 <div class="t-checkout-single" onclick="terminalCheckoutWC.terminalSetShippingCrarrier(this, event)" data-carrier-name="${
                   value.carrier_name
                 }" data-amount="${default_amount}" data-duration="${
-                  value.delivery_time
-                }" data-pickup="${value.pickup_time}" data-rateid="${
-                  value.rate_id
-                }" data-image-url="${value.carrier_logo}">
+                value.delivery_time
+              }" data-pickup="${value.pickup_time}" data-rateid="${
+                value.rate_id
+              }" data-image-url="${value.carrier_logo}">
                 <label for="shipping">
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${
                     value.carrier_name
                   }" title="${
-                    value.carrier_name
-                  }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
-                    value.carrier_logo
-                  }">
+                value.carrier_name
+              }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
+                value.carrier_logo
+              }">
                   <p style=""> 
                         <span style="font-weight: bolder;">${
                           value.carrier_name
                         }</span> ${"- " + amount}  ${
-                          terminal_africa_parcel.terminal_user_carrier_shipment_timeline !=
-                          "true"
-                            ? ""
-                            : "- " + value.delivery_time
-                        }
+                terminal_africa_parcel.terminal_user_carrier_shipment_timeline !=
+                "true"
+                  ? ""
+                  : "- " + value.delivery_time
+              }
                     </p>
                 </div>
                 </label>
