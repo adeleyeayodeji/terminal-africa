@@ -105,9 +105,6 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
             return;
         }
 
-        //log
-        error_log("Calculating shipping");
-
         //check if session is started
         if (session_status() == PHP_SESSION_NONE) {
             @session_start();
