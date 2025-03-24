@@ -289,6 +289,7 @@ if (class_exists("WC_Payment_Gateway")) {
          */
         public static function terminal_africa_payment_status()
         {
+            //MARK: PAYMENT STATUS
             try {
                 //very nonce
                 if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
@@ -366,11 +367,11 @@ if (class_exists("WC_Payment_Gateway")) {
                         //save order
                         $order->save();
 
-                        //update order status
-                        $order->update_status('completed');
+                        //update order status to processing
+                        $order->update_status('processing');
 
                         //set payment complete
-                        $order->payment_complete();
+                        // $order->payment_complete();
 
                         //set status to tpending
                         $order->update_status('tpending');
@@ -417,9 +418,11 @@ if (class_exists("WC_Payment_Gateway")) {
         /**
          * terminal_africa_payment_init
          * 
+         * @return mixed
          */
         public static function terminal_africa_payment_init()
         {
+            //MARK: PAYMENT INITIATION
             try {
                 //verify nonce
                 if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wc_terminal_africa_payment_nonce')) {
@@ -446,8 +449,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 $terminal_africa_settings = get_option('terminal_africa_settings');
 
                 //checkout success url
-                $success_url =
-                    $order->get_checkout_order_received_url();
+                $success_url = $order->get_checkout_order_received_url();
 
                 //checkout cancel url
                 $cancel_url = $order->get_cancel_order_url();
@@ -474,17 +476,23 @@ if (class_exists("WC_Payment_Gateway")) {
                     //get product image
                     $product_image = get_the_post_thumbnail_url($product_id);
 
+                    //get weight
+                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+
+                    //get quantity
+                    $quantity = intval($item->get_quantity()) ?: 1;
+
                     //pass the data
                     $data_items[] = [
                         "product_id" => $product_id,
                         'plugin_product_id' => $product_id,
                         "name" => $item->get_name(),
-                        "quantity" => intval($item->get_quantity()) ?: 1,
+                        "quantity" => $quantity,
                         "value" => $item->get_total(),
-                        "description" => "{$item->get_quantity()} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
+                        "description" => "{$quantity} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
                         "type" => "parcel",
                         "currency" => get_woocommerce_currency(),
-                        "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
+                        "weight" => $weight * $quantity,
                         'image' => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
                         'hs_code' => $terminal_hscode
                     ];
@@ -686,10 +694,13 @@ if (class_exists("WC_Payment_Gateway")) {
 
         /**
          * Verify Terminal payment.
+         * 
+         * @param WP_REST_Request $request
+         * @return mixed
          */
         public function terminal_africa_payment_verify_payment(WP_REST_Request $request)
         {
-            //MARK: WEBHOOK 
+            //MARK: WEBHOOK VERIFICATION
             try {
                 //get header
                 $headerSignature = $request->get_header("X-Terminal-Signature");
@@ -748,14 +759,14 @@ if (class_exists("WC_Payment_Gateway")) {
                         //save to order meta platform_reference
                         $order->update_meta_data('terminal_africa_payment_platform_reference', $params['data']['platform_reference']);
 
-                        //update order status
-                        $order->update_status('completed');
+                        //update order status to processing
+                        $order->update_status('processing');
 
                         //save order
                         $order->save();
 
                         //set payment complete
-                        $order->payment_complete();
+                        // $order->payment_complete();
 
                         //set status to tpending
                         $order->update_status('tpending');

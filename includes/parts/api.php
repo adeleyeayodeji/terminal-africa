@@ -774,14 +774,21 @@ trait TerminalRESTAPI
                 foreach ($items as $product_id => $item) {
                     //convert to int $product_id
                     $product_id = intval($product_id);
+
+                    //get quantity
+                    $quantity = intval($item->get_quantity()) ?: 1;
+
+                    //get weight
+                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+
                     $products[] = [
                         "name" => $item->get_name(),
-                        "quantity" => intval($item->get_quantity()) ?: 1,
+                        "quantity" => $quantity,
                         "value" => $item->get_total(),
-                        "description" => "{$item->get_quantity()} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
+                        "description" => "{$quantity} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
                         "type" => "parcel",
                         "currency" => get_woocommerce_currency(),
-                        "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1
+                        "weight" => $weight * $quantity
                     ];
                 }
                 //check if order has Terminal_africa_shipment_id
@@ -868,14 +875,19 @@ trait TerminalRESTAPI
             foreach ($items as $product_id => $item) {
                 //convert to int $product_id
                 $product_id = intval($product_id);
+                //get quantity
+                $quantity = intval($item->get_quantity()) ?: 1;
+                //get weight
+                $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+
                 $products[] = [
                     "name" => $item->get_name(),
-                    "quantity" => intval($item->get_quantity()) ?: 1,
+                    "quantity" => $quantity,
                     "value" => $item->get_total(),
-                    "description" => "{$item->get_quantity()} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
+                    "description" => "{$quantity} of {$item->get_name()} at {$item->get_total()} each for a total of {$item->get_total()}",
                     "type" => "parcel",
                     "currency" => get_woocommerce_currency(),
-                    "weight" => (float)get_post_meta($product_id, '_weight', true) ?: 0.1
+                    "weight" => $weight * $quantity
                 ];
             }
             //check if order has Terminal_africa_shipment_id

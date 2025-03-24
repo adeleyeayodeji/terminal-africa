@@ -506,9 +506,35 @@ trait Assets
         $domainExceptions = [
             'www.milipays.com'
         ];
+
+        /**
+         * Check if WooCommerce is active
+         * 
+         */
         if (function_exists('WC')) {
-            if (is_checkout()) {
+            /**
+             * Cart
+             * check if its cart page
+             * 
+             */
+            if (is_cart()) {
         ?>
+                <style>
+                    .wc-block-components-shipping-rates-control__package__description--free {
+                        display: none !important;
+                    }
+                </style>
+            <?php
+            }
+
+
+            /**
+             * Checkout
+             * check if its checkout page
+             * 
+             */
+            if (is_checkout()) {
+            ?>
                 <style>
                     .select2-container {
                         width: 100% !important;

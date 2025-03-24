@@ -978,15 +978,21 @@ trait Ajax
                 //get product image
                 $product_image = get_the_post_thumbnail_url($product_id);
 
+                //get weight
+                $weight = !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : 0.1;
+
+                //get quantity
+                $quantity = !empty($item['quantity']) ? intval($item['quantity']) : 1;
+
                 //data items
                 $data_items[] = [
                     'name' => $item['data']->get_name(),
-                    'quantity' => !empty($item['quantity']) ? intval($item['quantity']) : 1,
+                    'quantity' => $quantity,
                     'value' => $item['line_total'],
-                    'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
+                    'description' => "{$quantity} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
                     'type' => 'parcel',
                     'currency' => get_woocommerce_currency(),
-                    'weight' => !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : 0.1,
+                    'weight' => $weight * $quantity,
                     'hs_code' => $terminal_hscode,
                     'image' => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
                     'plugin_product_id' => $product_id

@@ -1026,8 +1026,6 @@ trait Shipping
             if ($response->status_code == 200) {
                 //return countries
                 $data = $body->data;
-                //log $data
-                error_log("rate" . " " . print_r($data, true));
                 //return data
                 return [
                     'code' => 200,

@@ -210,7 +210,7 @@ class TerminalAfricaShippingPlugin
             //listen to add to cart
             add_action('woocommerce_add_to_cart', array($this, 'add_to_cart_event'), 10, 6);
             //listen to update cart
-            // add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
+            add_action('woocommerce_after_cart_item_quantity_update', array($this, 'update_cart_event'), 10, 3);
             //listen to remove cart
             add_action('woocommerce_cart_item_removed', array($this, 'remove_cart_event'), 10, 2);
             //add new column to shop order page
@@ -469,14 +469,19 @@ class TerminalAfricaShippingPlugin
             $data_items = [];
             //loop through cart items
             foreach ($cart_item as $item) {
+                //get quantity
+                $quantity = intval($item['quantity']) ?: 1;
+                //get weight
+                $weight = (float)$item['data']->get_weight() ?: 0.1;
+
                 $data_items[] = [
                     'name' => $item['data']->get_name(),
-                    'quantity' => $item['quantity'],
+                    'quantity' => $quantity,
                     'value' => $item['line_total'],
-                    'description' => "{$item['quantity']} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
+                    'description' => "{$quantity} of {$item['data']->get_name()} at {$item['data']->get_price()} each for a total of {$item['line_total']}",
                     'type' => 'parcel',
                     'currency' => get_woocommerce_currency(),
-                    'weight' => (float)$item['data']->get_weight() ?: 0.1,
+                    'weight' => $weight * $quantity,
                 ];
             }
             //check if terminal_default_packaging_id is set
