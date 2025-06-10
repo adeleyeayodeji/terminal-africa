@@ -615,15 +615,24 @@ let terminalButton = () => {
       var terminal_delivery_html = $(".Terminal-delivery-logo");
       //check if terminal_delivery_html exist
       if (!terminal_delivery_html.length) {
+        //go ahead and submit the form
+        form.submit();
         //do nothing
         return;
       }
 
       //find parent li for the first index
       var terminal_delivery_li = terminal_delivery_html.parents("li");
+      //find parent li for the second index
+      var terminal_delivery_ul = terminal_delivery_li.parent();
+      //always check the count of all shipping options, so if there is only one shipping option, it will be checked by default
+      var terminal_delivery_li_count = terminal_delivery_ul.find("li").length;
 
       //check if input is checked
-      if (terminal_delivery_li.find("input").is(":checked")) {
+      if (
+        terminal_delivery_li.find("input").is(":checked") ||
+        terminal_delivery_li_count >= 1
+      ) {
         var parent_method_id = terminal_delivery_li.find("input").val();
 
         //check if parent_method_id is not matching terminal_delivery_li
