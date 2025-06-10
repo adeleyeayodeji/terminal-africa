@@ -5,8 +5,8 @@ Author URI: http://www.terminal.africa
 Author: Terminal
 Requires at least: 6.0
 Requires PHP: 5.6
-Tested up to: 6.7
-Stable tag: 1.13.17
+Tested up to: 6.8
+Stable tag: 1.13.19
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -59,6 +59,14 @@ Yes. Terminal Africa has an address validation process that automatically verifi
 You can get the API key from your Terminal Africa account. You can create an account [here](https://app.terminal.africa/sign-up/).
 
 == Changelog ==
+
+= 1.13.19 =
+
+- Added support for WordPress latest version
+
+= 1.13.18 =
+
+- Added support for WooCommerce latest version
 
 = 1.13.17 =
 
