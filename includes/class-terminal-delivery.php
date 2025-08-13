@@ -865,7 +865,7 @@ class WC_Terminal_Delivery
             $billing_email = sanitize_text_field($formdata['billing_email']);
             $billing_phone = sanitize_text_field($formdata['billing_phone']);
             //company name
-            $billing_company = sanitize_text_field($formdata['billing_company']);
+            $billing_company = isset($formdata['billing_company']) ? sanitize_text_field($formdata['billing_company']) : '';
 
             //Street address
             $billing_address_1 = sanitize_text_field($formdata['billing_address_1']);

@@ -141,6 +141,51 @@ trait Ajax
         add_action('wp_ajax_terminal_africa_get_all_shipments_v2', array($this, 'terminal_africa_get_all_shipments_v2'));
         //add ajax update_user_carrier_free_shipping_above_specific_amount_terminal
         add_action('wp_ajax_update_user_carrier_free_shipping_above_specific_amount_terminal', array($this, 'update_user_carrier_free_shipping_above_specific_amount_terminal'));
+        //add ajax save_terminal_default_shipping_weight
+        add_action('wp_ajax_save_terminal_default_shipping_weight', array($this, 'save_terminal_default_shipping_weight'));
+    }
+
+    /**
+     * save_terminal_default_shipping_weight
+     * 
+     */
+    public function save_terminal_default_shipping_weight()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get weight
+            $weight = sanitize_text_field($_POST['weight']);
+
+            //check if weight is not empty
+            if (empty($weight)) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Weight is required, please enter a valid weight'
+                ]);
+            }
+
+            //update terminal_default_shipping_weight
+            update_option('terminal_default_shipping_weight', $weight);
+
+            //send response
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Default shipping weight updated successfully'
+            ]);
+        } catch (Exception $e) {
+            logTerminalError($e, 'save_terminal_default_shipping_weight_terminal');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -979,7 +1024,7 @@ trait Ajax
                 $product_image = get_the_post_thumbnail_url($product_id);
 
                 //get weight
-                $weight = !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : 0.1;
+                $weight = !empty($item['data']->get_weight()) ? (float)$item['data']->get_weight() : (float)get_option('terminal_default_shipping_weight', 0.1);
 
                 //get quantity
                 $quantity = !empty($item['quantity']) ? intval($item['quantity']) : 1;

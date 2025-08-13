@@ -30,6 +30,8 @@ if ($woocommerce_terminal_africa_payment_settings) {
         $woo_payment_gateway_status = $woocommerce_terminal_africa_payment_settings['enabled'];
     }
 }
+//terminal_default_shipping_weight
+$terminal_default_shipping_weight = get_option('terminal_default_shipping_weight', 0.1);
 ?>
 <div class="t-container">
     <?php terminal_header("fas fa-cog", "Settings"); ?>
@@ -202,6 +204,20 @@ if ($woocommerce_terminal_africa_payment_settings) {
                         </div>
                         <div style="margin-right: 30px;width: 170px;">
                             <input type="number" class="t-form-control" name="terminal_custom_price_mark_up" placeholder="e.g 10 for 10%" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>" style="height: 49px;">
+                        </div>
+                    </div>
+
+                    <div class="t-flex t-settings-page-card t-mb-4">
+                        <div class="t-settings-first">
+                            <p class="t-settings-page-card-title">
+                                Default Shipping Weight
+                            </p>
+                            <p class="t-settings-page-card-description">
+                                Set the default shipping weight for all your shipments.
+                            </p>
+                        </div>
+                        <div style="margin-right: 30px;width: 170px;">
+                            <input type="number" class="t-form-control" name="terminal_default_shipping_weight" placeholder="e.g 10 for 10kg" id="terminal_default_shipping_weight" value="<?php echo esc_html($terminal_default_shipping_weight); ?>" style="height: 39px;">
                         </div>
                     </div>
 

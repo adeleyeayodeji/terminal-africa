@@ -150,6 +150,15 @@ jQuery(document).ready(function ($) {
   }
 });
 
+//pass the default value to billing_postcode
+if (window.terminal_billing_postcode) {
+  jQuery("#billing_postcode").val(window.terminal_billing_postcode);
+}
+//pass the default value to shipping_postcode
+if (window.terminal_shipping_postcode) {
+  jQuery("#shipping_postcode").val(window.terminal_shipping_postcode);
+}
+
 //terminal phone keyup event
 function billing_phone_terminal_focus_out() {
   jQuery(document).ready(function ($) {

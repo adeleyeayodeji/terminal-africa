@@ -477,7 +477,7 @@ if (class_exists("WC_Payment_Gateway")) {
                     $product_image = get_the_post_thumbnail_url($product_id);
 
                     //get weight
-                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: (float)get_option('terminal_default_shipping_weight', 0.1);
 
                     //get quantity
                     $quantity = intval($item->get_quantity()) ?: 1;

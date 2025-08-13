@@ -2114,6 +2114,70 @@ jQuery(document).ready(function ($) {
     });
   });
 
+  //listen to #terminal_default_shipping_weight on focus out
+  $("#terminal_default_shipping_weight").on("focusout", function (e) {
+    //get value
+    let value = $(this).val();
+    //ajax
+    $.ajax({
+      type: "POST",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "save_terminal_default_shipping_weight",
+        nonce: terminal_africa.nonce,
+        weight: value
+      },
+      dataType: "json",
+      beforeSend: () => {
+        //izitoast
+        iziToast.show({
+          theme: "dark",
+          title: "Saving default shipping weight",
+          position: "topRight",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown",
+          timeout: false
+        });
+      },
+      success: function (response) {
+        //close izitoast
+        iziToast.destroy();
+        if (response.code == 200) {
+          //izitoast
+          iziToast.success({
+            title: "Success",
+            message: response.message,
+            position: "topRight",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        } else {
+          //izitoast
+          iziToast.error({
+            theme: "dark",
+            title: "Error",
+            message: response.message,
+            position: "topCenter",
+            progressBarColor: "rgb(246 146 32)",
+            transitionIn: "fadeInDown"
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        //close izitoast
+        iziToast.destroy();
+        iziToast.error({
+          theme: "dark",
+          title: "Error",
+          message: "Something went wrong: " + xhr.responseText,
+          position: "topCenter",
+          progressBarColor: "rgb(246 146 32)",
+          transitionIn: "fadeInDown"
+        });
+      }
+    });
+  });
+
   //each element
   $(".t-carrier-switch").each(function (i, v) {
     //find input checkbox and change event

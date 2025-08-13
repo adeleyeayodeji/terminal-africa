@@ -472,7 +472,7 @@ class TerminalAfricaShippingPlugin
                 //get quantity
                 $quantity = intval($item['quantity']) ?: 1;
                 //get weight
-                $weight = (float)$item['data']->get_weight() ?: 0.1;
+                $weight = (float)$item['data']->get_weight() ?: (float)get_option('terminal_default_shipping_weight', 0.1);
 
                 $data_items[] = [
                     'name' => $item['data']->get_name(),

@@ -523,7 +523,7 @@ trait TerminalRESTAPI
                     "sale_price" => $product['sale_price'],
                     "thumbnail" => $product_image ? $product_image : TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/img/logo-footer.png',
                     "weight" =>
-                    (float)get_post_meta($product_id, '_weight', true) ?: 0.1,
+                    (float)get_post_meta($product_id, '_weight', true) ?: (float)get_option('terminal_default_shipping_weight', 0.1),
                     "length" => $product['length'],
                     "width" => $product['width'],
                     "height" => $product['height'],
@@ -779,7 +779,7 @@ trait TerminalRESTAPI
                     $quantity = intval($item->get_quantity()) ?: 1;
 
                     //get weight
-                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+                    $weight = (float)get_post_meta($product_id, '_weight', true) ?: (float)get_option('terminal_default_shipping_weight', 0.1);
 
                     $products[] = [
                         "name" => $item->get_name(),
@@ -878,7 +878,7 @@ trait TerminalRESTAPI
                 //get quantity
                 $quantity = intval($item->get_quantity()) ?: 1;
                 //get weight
-                $weight = (float)get_post_meta($product_id, '_weight', true) ?: 0.1;
+                $weight = (float)get_post_meta($product_id, '_weight', true) ?: (float)get_option('terminal_default_shipping_weight', 0.1);
 
                 $products[] = [
                     "name" => $item->get_name(),
