@@ -334,11 +334,33 @@ trait Assets
     }
 
     /**
-     * WooCommerce Multi Currency 
-     * check if multi currency is available
-     * @return array
+     * FOX Currency Switcher
+     * 
      */
-    public static function wooMulticurrency()
+    public static function fox_currency_switcher()
+    {
+        //check if fox currency switcher is active
+        if (!class_exists('WOOCS')) {
+            //return empty array
+            return [];
+        }
+        //get current currency rate
+        global $WOOCS;
+        $currencies = $WOOCS->get_currencies();
+        $rate = floatval($currencies[get_woocommerce_currency()]['rate']);
+        //init array holder
+        $rate_holder = [
+            $rate,
+            0
+        ];
+        return $rate_holder;
+    }
+
+    /**
+     * WOOMULTI_CURRENCY switcher
+     * 
+     */
+    public static function wooMultiCurrencySwitcher()
     {
         //check if multi currency class exist 'WOOMULTI_CURRENCY' or 'WOOMULTI_CURRENCY_F'
         if (!class_exists('WOOMULTI_CURRENCY') && !class_exists('WOOMULTI_CURRENCY_F')) {
@@ -355,6 +377,29 @@ trait Assets
             $rate[$value] = $var;
         }
         return $rate[get_woocommerce_currency()];
+    }
+
+    /**
+     * WooCommerce Multi Currency 
+     * check if multi currency is available
+     * @return array
+     */
+    public static function wooMulticurrency()
+    {
+        //check if multi currency class exist 'WOOMULTI_CURRENCY' or 'WOOMULTI_CURRENCY_F'
+        if (class_exists('WOOMULTI_CURRENCY') && class_exists('WOOMULTI_CURRENCY_F')) {
+            // return wooMultiCurrencySwitcher
+            return self::wooMultiCurrencySwitcher();
+        }
+
+        //check if fox currency switcher is active
+        if (class_exists('WOOCS')) {
+            // return fox_currency_switcher
+            return self::fox_currency_switcher();
+        }
+
+        //return empty array
+        return [];
     }
 
     /**
