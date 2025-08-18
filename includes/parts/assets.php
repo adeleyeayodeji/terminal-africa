@@ -381,7 +381,7 @@ trait Assets
 
     /**
      * WooCommerce Multi Currency 
-     * check if multi currency is available
+     * check if multi currency is available or fox currency switcher is active
      * @return array
      */
     public static function wooMulticurrency()
