@@ -6,7 +6,7 @@ Author: Terminal
 Requires at least: 6.0
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 1.13.20
+Stable tag: 1.13.21
 License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: terminal-africa
@@ -59,6 +59,14 @@ Yes. Terminal Africa has an address validation process that automatically verifi
 You can get the API key from your Terminal Africa account. You can create an account [here](https://app.terminal.africa/sign-up/).
 
 == Changelog ==
+
+= 1.13.21 =
+
+- Resolved issue with currency conversion
+
+= 1.13.20 =
+
+- Added update to the checkout page
 
 = 1.13.20 =
 

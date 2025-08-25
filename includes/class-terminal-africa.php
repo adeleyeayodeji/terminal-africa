@@ -231,10 +231,6 @@ class TerminalAfricaShippingPlugin
             $this->activate_terminal_init();
             //clear plugin update session
             $this->clear_plugin_update_session();
-
-            global $WOOCS;
-            $res = $WOOCS->woocs_exchange_value("5000");
-            error_log("logs: " . print_r($res, true));
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
