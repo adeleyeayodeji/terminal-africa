@@ -1193,6 +1193,9 @@ trait Ajax
                         $terminalSession->set('terminal_africa_guest_address_id' . $guest_email_hashed, $create_address['data']->address_id);
                         $address_id = $create_address['data']->address_id;
                     } else {
+                        //delete terminal_africa_guest_address_id
+                        $terminalSession->delete('terminal_africa_guest_address_id' . $guest_email_hashed);
+                        //send error
                         wp_send_json([
                             'code' => 400,
                             'message' => $create_address['message'],
@@ -1208,6 +1211,9 @@ trait Ajax
                         $terminalSession->set('terminal_africa_guest_address_id' . $guest_email_hashed, $update_address['data']->address_id);
                         $address_id = $update_address['data']->address_id;
                     } else {
+                        //delete terminal_africa_guest_address_id
+                        $terminalSession->delete('terminal_africa_guest_address_id' . $guest_email_hashed);
+                        //send error
                         wp_send_json([
                             'code' => 400,
                             'message' => $update_address['message'],

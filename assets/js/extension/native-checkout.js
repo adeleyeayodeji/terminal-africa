@@ -105,7 +105,7 @@ class TerminalNativeWoocommerce {
         this.terminal_autoload_merchant_address["cities"]
       );
       //save to local storage this.terminal_autoload_merchant_address["cities"]
-      localStorage.setItem("terminal_delivery_cities", cities);
+      localStorage.setItem("terminal_delivery_cities", "discountinued"); //discountinued use of this
     }, 1000);
   }
 

@@ -875,7 +875,7 @@ jQuery(document).ready(function ($) {
         //stringify
         var cities = JSON.stringify(response.cities);
         //save to local storage response.cities
-        localStorage.setItem("terminal_delivery_cities", cities);
+        localStorage.setItem("terminal_delivery_cities", "discountinued"); //discountinued use of this
         do_terminal_calculation(response.cities);
       },
       error: function (xhr, status, error) {
