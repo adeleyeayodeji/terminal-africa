@@ -43,7 +43,7 @@ final class WC_Terminal_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 	 */
 	public function get_payment_method_script_handles()
 	{
-		$asset_path   = plugin_dir_path(WC_TERMINAL_PAYMENT_MAIN_FILE) . 'assets/js/block/block.asset.php';
+		$asset_path   = plugin_dir_path(WC_TERMINAL_PAYMENT_MAIN_FILE) . 'includes/assets/js/block/block.asset.php';
 		$version      = null;
 		$dependencies = array();
 		if (file_exists($asset_path)) {
@@ -54,7 +54,7 @@ final class WC_Terminal_Payment_Gateway_Blocks_Support extends AbstractPaymentMe
 
 		wp_register_script(
 			'wc-terminal_africa_payment-blocks-integration',
-			plugin_dir_url(WC_TERMINAL_PAYMENT_MAIN_FILE) . 'assets/js/block/block.js',
+			plugin_dir_url(WC_TERMINAL_PAYMENT_MAIN_FILE) . 'includes/assets/js/block/block.js',
 			$dependencies,
 			$version,
 			true

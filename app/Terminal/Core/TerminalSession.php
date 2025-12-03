@@ -36,15 +36,16 @@ class TerminalSession
     /**
      * Get session
      * @param string $key
+     * @param mixed $default
      * @return mixed
      */
-    public function get($key)
+    public function get($key, $default = null)
     {
         //check if session is available
         if (!session_id()) {
             session_start();
         }
-        return isset($_SESSION['terminal_africa_plugin'][$key]) ? $_SESSION['terminal_africa_plugin'][$key] : null;
+        return isset($_SESSION['terminal_africa_plugin'][$key]) ? $_SESSION['terminal_africa_plugin'][$key] : $default;
     }
 
     /**

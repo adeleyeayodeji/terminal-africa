@@ -71,8 +71,7 @@ if (class_exists("WC_Payment_Gateway")) {
             add_action('woocommerce_available_payment_gateways', array($this, 'add_gateway_to_checkout'));
             add_action('admin_enqueue_scripts', array($this, 'admin_scripts'));
             add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
-            //register webhook api init
-            add_action('rest_api_init', array($this, 'register_api_init'));
+
             add_action(
                 'woocommerce_update_options_payment_gateways_' . $this->id,
                 array(
@@ -95,7 +94,7 @@ if (class_exists("WC_Payment_Gateway")) {
 
         /**
          * init_ajax
-         * 
+         * //MARK: INIT AJAX and REST API
          */
         public static function init_ajax()
         {
@@ -119,6 +118,9 @@ if (class_exists("WC_Payment_Gateway")) {
             );
             // no priv
             add_action('wp_ajax_nopriv_terminal_africa_payment_status', array($class_instance, 'terminal_africa_payment_status'));
+
+            //register webhook api init
+            add_action('rest_api_init', array($class_instance, 'register_api_init'));
         }
 
         public function init_form_fields()
@@ -402,7 +404,7 @@ if (class_exists("WC_Payment_Gateway")) {
          * register_api_init
          * 
          */
-        public function register_api_init()
+        public static function register_api_init()
         {
             //route
             register_rest_route(
@@ -410,7 +412,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 '/terminal_africa_payment_verify_payment',
                 array(
                     'methods' => WP_REST_Server::ALLMETHODS,
-                    'callback' => array($this, 'terminal_africa_payment_verify_payment'),
+                    'callback' => array(self::class, 'terminal_africa_payment_verify_payment'),
                 )
             );
         }
@@ -622,7 +624,7 @@ if (class_exists("WC_Payment_Gateway")) {
          * @param $secret_key
          * @return string
          */
-        public function generate_header_hash($request_data, $secret_key)
+        public static function generate_header_hash($request_data, $secret_key)
         {
             return hash_hmac('sha512', $request_data, $secret_key);
         }
@@ -698,7 +700,7 @@ if (class_exists("WC_Payment_Gateway")) {
          * @param WP_REST_Request $request
          * @return mixed
          */
-        public function terminal_africa_payment_verify_payment(WP_REST_Request $request)
+        public static function terminal_africa_payment_verify_payment(WP_REST_Request $request)
         {
             //MARK: WEBHOOK VERIFICATION
             try {
@@ -712,7 +714,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 $terminal_africa_shipping_plugin = TerminalAfricaShippingPlugin::instance();
 
                 //generate hash from request
-                $hashKey = $this->generate_header_hash(
+                $hashKey = self::generate_header_hash(
                     json_encode($params, JSON_UNESCAPED_SLASHES),
                     $terminal_africa_shipping_plugin::$skkey
                 );
@@ -879,7 +881,7 @@ if (class_exists("WC_Payment_Gateway")) {
                 'nonce' => wp_create_nonce('wc_terminal_africa_payment_admin_nonce'),
             );
 
-            wp_enqueue_script('wc_terminal_africa_payment_admin', plugins_url('assets/js/terminal_africa_payment-admin.js', WC_TERMINAL_PAYMENT_MAIN_FILE), array(), WC_TERMINAL_PAYMENT_VERSION, true);
+            wp_enqueue_script('wc_terminal_africa_payment_admin', plugin_dir_url(WC_TERMINAL_PAYMENT_MAIN_FILE) . 'includes/assets/js/terminal_africa_payment-admin.js', array(), WC_TERMINAL_PAYMENT_VERSION, true);
 
             wp_localize_script('wc_terminal_africa_payment_admin', 'wc_terminal_africa_payment_admin_params', $terminal_africa_payment_admin_params);
         }

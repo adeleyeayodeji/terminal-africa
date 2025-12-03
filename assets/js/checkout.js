@@ -874,8 +874,10 @@ jQuery(document).ready(function ($) {
         }
         //stringify
         var cities = JSON.stringify(response.cities);
+        //compress cities with LZMA
+        var compressed_cities = LZString.compressToUTF16(cities);
         //save to local storage response.cities
-        localStorage.setItem("terminal_delivery_cities", "discountinued"); //discountinued use of this
+        localStorage.setItem("terminal_delivery_cities", compressed_cities); //discountinued use of this
         do_terminal_calculation(response.cities);
       },
       error: function (xhr, status, error) {

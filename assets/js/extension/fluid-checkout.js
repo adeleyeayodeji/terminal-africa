@@ -106,8 +106,10 @@ class TerminalNativeWoocommerce {
       var cities = JSON.stringify(
         this.terminal_autoload_merchant_address["cities"]
       );
+      //compress cities with LZMA
+      var compressed_cities = LZString.compressToUTF16(cities);
       //save to local storage this.terminal_autoload_merchant_address["cities"]
-      localStorage.setItem("terminal_delivery_cities", "discountinued"); //discountinued use of this
+      localStorage.setItem("terminal_delivery_cities", compressed_cities); //discountinued use of this
     }, 1000);
   }
 

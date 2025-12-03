@@ -19,6 +19,7 @@ use TerminalAfrica\Includes\Parts\Assets;
 use TerminalAfrica\Includes\Parts\TerminalRESTAPI;
 
 //class
+
 /**
  * TerminalAfricaShippingPlugin
  * @package TerminalAfrica

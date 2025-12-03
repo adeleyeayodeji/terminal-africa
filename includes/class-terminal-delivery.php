@@ -486,7 +486,7 @@ class WC_Terminal_Delivery
         $terminal_africa_amount = $terminalSession->get('terminal_africa_amount');
         $terminal_africa_duration = $terminalSession->get('terminal_africa_duration');
         $terminal_africa_initial_amount = $terminalSession->get('terminal_africa_initial_amount');
-        $guest_email = $terminalSession->get('terminal_africa_guest_email');
+        $guest_email = $terminalSession->get('terminal_africa_guest_email', 'guest@' . time());
         //guest email hashed
         $guest_email_hashed = md5($guest_email);
         //terminal_africa_rateid

@@ -10,6 +10,8 @@ trait Assets
     //enqueue_scripts
     public static function enqueue_scripts()
     {
+        //import LZMA
+        wp_enqueue_script('terminal-africa-lzma-scripts', 'https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
         //sweet alert styles
         wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
         //sweet alert scripts
@@ -111,6 +113,8 @@ trait Assets
     {
         if (function_exists('WC')) {
             $cart_item = WC()->cart->get_cart();
+            //import LZMA
+            wp_enqueue_script('terminal-africa-lzma-scripts', 'https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js', array('jquery'), TERMINAL_AFRICA_VERSION, true);
             //sweet alert styles
             wp_enqueue_style('terminal-africa-sweet-alert-styles', TERMINAL_AFRICA_PLUGIN_ASSETS_URL . '/css/sweetalert2.min.css', array(), TERMINAL_AFRICA_VERSION);
             //sweet alert scripts
