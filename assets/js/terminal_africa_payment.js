@@ -144,11 +144,21 @@ jQuery(document).ready(function ($) {
           error: function (xhr, status, error) {
             //unblock ui
             $.unblockUI();
+            let errorMsg = xhr.responseText;
+            try {
+              const json = JSON.parse(xhr.responseText);
+              if (json && json.message) {
+                errorMsg = json.message;
+              }
+            } catch (e) {
+              // Not JSON, keep original responseText
+              errorMsg = "Something went wrong!: " + xhr.responseText;
+            }
             //swal error
             Swal.fire({
               icon: "error",
               title: "Oops...",
-              text: "Something went wrong!: " + xhr.responseText,
+              text: errorMsg,
               confirmButtonColor: "rgb(246 146 32)",
               cancelButtonColor: "rgb(0 0 0)",
               //footer

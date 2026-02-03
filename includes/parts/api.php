@@ -984,6 +984,19 @@ trait TerminalRESTAPI
                 $order->save();
                 //trigger the order status change
                 do_action('woocommerce_order_status_' . $order_status, $order_id);
+                //check if new order status is 'wc-tdelivered' or 'tdelivered'
+                if ($order_status == 'wc-tdelivered' || $order_status == 'tdelivered') {
+                    //mark the order as completed
+                    $order->update_status('completed');
+                    //add customer order note
+                    $order->add_order_note(
+                        sprintf(
+                            __('Your order has been delivered, order status has been updated to completed', 'terminal-africa'),
+                        )
+                    );
+                    //save the order
+                    $order->save();
+                }
                 //response
                 $response = [
                     "status" => 200,

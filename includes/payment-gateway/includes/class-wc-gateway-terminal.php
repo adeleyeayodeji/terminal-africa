@@ -580,6 +580,18 @@ if (class_exists("WC_Payment_Gateway")) {
 
                 //check if request was successful
                 if (!$request->success) {
+                    //get the body
+                    $body = $request->body;
+                    //check if body is not empty
+                    if (!empty($body)) {
+                        //get the body
+                        $body = json_decode($body);
+                        //return message
+                        wp_send_json_error([
+                            'message' => $body->message
+                        ]);
+                    }
+                    //throw error
                     throw new \Exception('Something went wrong: ' . $request->body);
                 }
 
