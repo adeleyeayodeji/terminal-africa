@@ -19,7 +19,12 @@ export default class MerchantAddressForm extends Component {
         phone: "",
         zip: "",
         states: [],
-        cities: []
+        cities: [],
+        store_pickup: false,
+        metadata: {
+          location_name: "",
+          collection_timeline: 0
+        }
       },
       shippingData: {},
       isLoading: true,

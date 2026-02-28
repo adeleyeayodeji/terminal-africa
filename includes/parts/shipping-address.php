@@ -475,13 +475,6 @@ trait Shipping
                     //set --
                     $addressFields[$key] = '--';
                 }
-                // //check key phone and count the number
-                // if ($key == 'phone') {
-                //     //count the value and remove is length is less 6
-                //     if (strlen($value) < 6) {
-                //         unset($addressFields[$key]);
-                //     }
-                // }
             }
 
             $response = Requests::post(
@@ -567,7 +560,14 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
+                'store_pickup' => true,
+                'metadata' => [
+                    'location_name' => 'Store Pickup',
+                    'collection_timeline' => 4320
+                ]
             ];
+
+            error_log("Address Fields: " . print_r($addressFields, true));
 
             //check the address fields and remove empty fields
             foreach ($addressFields as $key => $value) {
@@ -575,13 +575,6 @@ trait Shipping
                     //set --
                     $addressFields[$key] = '--';
                 }
-                //check key phone and count the number
-                // if ($key == 'phone') {
-                //     //count the value and remove is length is less 6
-                //     if (strlen($value) < 6) {
-                //         unset($addressFields[$key]);
-                //     }
-                // }
             }
 
             //request 
@@ -596,6 +589,7 @@ trait Shipping
             );
             //decode response
             $body = json_decode($response->body);
+            error_log("Update Address Response: " . print_r($body, true));
             //check if response is ok
             if ($response->status_code == 200) {
                 //return countries
