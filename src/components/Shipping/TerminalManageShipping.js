@@ -279,6 +279,7 @@ class TerminalManageShipping extends React.Component {
                     rate_id={rate_id}
                     shippingData={shippingData}
                     action_type="customer"
+                    show_pickup_form={false}
                   />
                 ) : (
                   <ProcessedShipment

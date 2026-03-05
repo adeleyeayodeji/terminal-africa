@@ -126,6 +126,7 @@ export default class MerchantAddressForm extends Component {
                 rate_id={0}
                 shippingData={shippingData}
                 merchant_address_id={merchant_address_id}
+                show_pickup_form={true}
                 action_type="merchant">
                 <p className="t-note">
                   Please fill in your address details below. This address will

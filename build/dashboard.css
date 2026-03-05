@@ -10148,6 +10148,12 @@ button.t-address-save {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
+.t-shipping-line {
+  border-top: 1px solid rgb(238, 238, 238);
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/scss/responsive.scss ***!
   \*************************************************************************************************************************************************************************************************************************************************/
@@ -10235,7 +10241,7 @@ button.t-address-save {
     display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook {
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {
@@ -10269,7 +10275,7 @@ button.t-address-save {
     display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook {
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
   }
   #manage-terminal-shipping .t-button-phonebook-mobile-inner {

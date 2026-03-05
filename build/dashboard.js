@@ -181,6 +181,7 @@ class MerchantAddressForm extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       rate_id: 0,
       shippingData: shippingData,
       merchant_address_id: merchant_address_id,
+      show_pickup_form: true,
       action_type: "merchant"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
       className: "t-note"
@@ -1315,7 +1316,8 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
     const {
       rate_id,
       shippingData,
-      action_type
+      action_type,
+      show_pickup_form
     } = this.props;
     const {
       saved_address
@@ -1339,7 +1341,95 @@ class TerminalShippingForm extends (react__WEBPACK_IMPORTED_MODULE_1___default()
       className: "row"
     }, this.props.children ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-12"
-    }, this.props.children) : "", (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    }, this.props.children) : "", show_pickup_form && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-flex",
+      style: {
+        alignItems: "baseline",
+        marginBottom: "15px",
+        justifyContent: "flex-start",
+        gap: "30px"
+      }
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "store_pickup",
+      style: {
+        marginBottom: 0
+      }
+    }, "Enable Store Pickup For This Address"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      className: "t-switch"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "checkbox",
+      id: "store_pickup",
+      name: "store_pickup",
+      checked: saved_address?.store_pickup || false,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            store_pickup: e.target.checked
+          }
+        });
+      }
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+      className: "t-slider round"
+    })))), saved_address?.store_pickup && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "row"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "location_name"
+    }, "Location Name"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      className: "form-control",
+      name: "location_name",
+      id: "location_name",
+      placeholder: "Location Name",
+      value: saved_address?.metadata?.location_name || "",
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            metadata: {
+              ...this.state.saved_address.metadata,
+              location_name: e.target.value
+            }
+          }
+        });
+      }
+    }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-lg-6 col-md-6 col-sm-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "form-group"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+      htmlFor: "collection_timeline"
+    }, "Collection Timeline (hours)"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "number",
+      className: "form-control",
+      name: "collection_timeline",
+      id: "collection_timeline",
+      placeholder: "Collection Timeline",
+      value: saved_address?.metadata?.collection_timeline || 0,
+      onChange: e => {
+        this.setState({
+          saved_address: {
+            ...this.state.saved_address,
+            metadata: {
+              ...this.state.saved_address.metadata,
+              collection_timeline: parseInt(e.target.value) || 0
+            }
+          }
+        });
+      }
+    })))))), saved_address?.store_pickup && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "col-12"
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      className: "t-shipping-line"
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "col-lg-6 col-md-6 col-sm-12"
     }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "form-group"
@@ -2388,7 +2478,8 @@ class TerminalManageShipping extends (react__WEBPACK_IMPORTED_MODULE_1___default
       saved_address: shippingData.saved_address,
       rate_id: rate_id,
       shippingData: shippingData,
-      action_type: "customer"
+      action_type: "customer",
+      show_pickup_form: false
     }) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Parts_ProcessedShipment__WEBPACK_IMPORTED_MODULE_7__["default"], {
       saved_address: shippingData.saved_address,
       rate_id: rate_id,

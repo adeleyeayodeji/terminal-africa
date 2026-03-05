@@ -665,7 +665,7 @@ class TerminalShippingForm extends React.Component {
 
   //render
   render() {
-    const { rate_id, shippingData, action_type } = this.props;
+    const { rate_id, shippingData, action_type, show_pickup_form } = this.props;
     const { saved_address } = this.state;
 
     return (
@@ -693,6 +693,108 @@ class TerminalShippingForm extends React.Component {
                 <div className="col-12">{this.props.children}</div>
               ) : (
                 ""
+              )}
+              {show_pickup_form && (
+                <div className="col-12">
+                  <div className="form-group">
+                    <div
+                      className="t-flex"
+                      style={{
+                        alignItems: "baseline",
+                        marginBottom: "15px",
+                        justifyContent: "flex-start",
+                        gap: "30px"
+                      }}>
+                      <label htmlFor="store_pickup" style={{ marginBottom: 0 }}>
+                        Enable Store Pickup For This Address
+                      </label>
+                      <label className="t-switch">
+                        <input
+                          type="checkbox"
+                          id="store_pickup"
+                          name="store_pickup"
+                          checked={saved_address?.store_pickup || false}
+                          onChange={(e) => {
+                            this.setState({
+                              saved_address: {
+                                ...this.state.saved_address,
+                                store_pickup: e.target.checked
+                              }
+                            });
+                          }}
+                        />
+                        <span className="t-slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                  {saved_address?.store_pickup && (
+                    <>
+                      <div className="row">
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label htmlFor="location_name">Location Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="location_name"
+                              id="location_name"
+                              placeholder="Location Name"
+                              value={
+                                saved_address?.metadata?.location_name || ""
+                              }
+                              onChange={(e) => {
+                                this.setState({
+                                  saved_address: {
+                                    ...this.state.saved_address,
+                                    metadata: {
+                                      ...this.state.saved_address.metadata,
+                                      location_name: e.target.value
+                                    }
+                                  }
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-6 col-sm-12">
+                          <div className="form-group">
+                            <label htmlFor="collection_timeline">
+                              Collection Timeline (hours)
+                            </label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              name="collection_timeline"
+                              id="collection_timeline"
+                              placeholder="Collection Timeline"
+                              value={
+                                saved_address?.metadata?.collection_timeline ||
+                                0
+                              }
+                              onChange={(e) => {
+                                this.setState({
+                                  saved_address: {
+                                    ...this.state.saved_address,
+                                    metadata: {
+                                      ...this.state.saved_address.metadata,
+                                      collection_timeline:
+                                        parseInt(e.target.value) || 0
+                                    }
+                                  }
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+              {saved_address?.store_pickup && (
+                <div className="col-12">
+                  <div className="t-shipping-line"></div>
+                </div>
               )}
               <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="form-group">
