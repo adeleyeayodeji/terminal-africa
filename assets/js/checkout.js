@@ -287,28 +287,28 @@ function terminalsetValue2(elem) {
                 <div class="t-checkout-single" onclick="terminalSetShippingCrarrier(this, event)" data-carrier-name="${
                   value.carrier_name
                 }" data-amount="${default_amount}" data-duration="${
-              value.delivery_time
-            }" data-pickup="${value.pickup_time}" data-rateid="${
-              value.rate_id
-            }" data-image-url="${value.carrier_logo}">
+                  value.delivery_time
+                }" data-pickup="${value.pickup_time}" data-rateid="${
+                  value.rate_id
+                }" data-image-url="${value.carrier_logo}">
                 <label for="shipping">
                 <div style="display: flex;justify-content: start;align-items: center;    padding: 10px;">
                   <img class="Terminal-carrier-delivery-logo" alt="${
                     value.carrier_name
                   }" title="${
-              value.carrier_name
-            }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
-              value.carrier_logo
-            }">
+                    value.carrier_name
+                  }" style="width: auto;height: auto;margin-right: 10px;    max-width: 30px;" src="${
+                    value.carrier_logo
+                  }">
                   <p style=""> 
                         <span style="font-weight: bolder;">${
                           value.carrier_name
                         }</span> ${"- " + amount}  ${
-              terminal_africa_parcel.terminal_user_carrier_shipment_timeline !=
-              "true"
-                ? ""
-                : "- " + value.delivery_time
-            }
+                          terminal_africa_parcel.terminal_user_carrier_shipment_timeline !=
+                          "true"
+                            ? ""
+                            : "- " + value.delivery_time
+                        }
                     </p>
                 </div>
                 </label>
@@ -639,22 +639,29 @@ let terminalButton = () => {
         if (/terminal/.test(parent_method_id)) {
           //check if class exist woocommerce-Price-amount
           if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
-            //show error
-            Swal.fire({
-              icon: "error",
-              title: "Please select a carrier",
-              text: "Please choose your delivery option to complete your order",
-              confirmButtonColor: "rgb(246 146 32)",
-              cancelButtonColor: "rgb(0 0 0)",
-              //footer
-              footer: `
+            //check if store pickup is active from label
+            let labelText = terminal_delivery_li.find("label").text().trim();
+
+            let isStorePickup = labelText.includes("Store Pickup");
+
+            if (!isStorePickup) {
+              //show error
+              Swal.fire({
+                icon: "error",
+                title: "Please select a carrier",
+                text: "Please choose your delivery option to complete your order",
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
                 <div>
                     <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
                 </div>
                 `
-            });
-            //return
-            return;
+              });
+              //return
+              return;
+            }
           }
         }
 
@@ -665,22 +672,29 @@ let terminalButton = () => {
         ) {
           //check if class exist woocommerce-Price-amount
           if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
-            //show error
-            Swal.fire({
-              icon: "error",
-              title: "Please select a carrier",
-              text: "Please choose your delivery option to complete your order",
-              confirmButtonColor: "rgb(246 146 32)",
-              cancelButtonColor: "rgb(0 0 0)",
-              //footer
-              footer: `
+            //check if store pickup is active from label
+            let labelText = terminal_delivery_li.find("label").text().trim();
+
+            let isStorePickup = labelText.includes("Store Pickup");
+
+            if (!isStorePickup) {
+              //show error
+              Swal.fire({
+                icon: "error",
+                title: "Please select a carrier",
+                text: "Please choose your delivery option to complete your order",
+                confirmButtonColor: "rgb(246 146 32)",
+                cancelButtonColor: "rgb(0 0 0)",
+                //footer
+                footer: `
                 <div>
                     <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
                 </div>
                 `
-            });
-            //return
-            return;
+              });
+              //return
+              return;
+            }
           }
         }
       }

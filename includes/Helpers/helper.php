@@ -48,18 +48,27 @@ if (!function_exists('get_terminal_cities')) {
 //createTerminalAddress
 if (!function_exists('createTerminalAddress')) {
     //create terminal address
-    function createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
+    function createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name = "", $collection_timeline = "", $store_pickup = "off")
     {
-        return terminal_africa_shipping_plugin()::createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+        return terminal_africa_shipping_plugin()::createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup);
     }
 }
 
 //updateTerminalAddress
 if (!function_exists('updateTerminalAddress')) {
     //update terminal address
-    function updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
+    function updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name = "", $collection_timeline = "", $store_pickup = "off")
     {
-        return terminal_africa_shipping_plugin()::updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+        return terminal_africa_shipping_plugin()::updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup);
+    }
+}
+
+//mark Terminal Shipment Collected
+if (!function_exists('markTerminalShipmentCollected')) {
+    //mark terminal shipment collected
+    function markTerminalShipmentCollected($shipment_id)
+    {
+        return terminal_africa_shipping_plugin()::markShipmentCollected($shipment_id);
     }
 }
 

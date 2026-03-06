@@ -6,6 +6,8 @@ export default function ProcessedShipmentSide({
   shippingData,
   shippingStatus
 }) {
+  //get selected carrier from shippingData.all_shipping_data.carrier.slug
+  const selectedCarrier = shippingData.all_shipping_data?.carrier?.slug || "";
   return (
     <div className="t-processed-shipment-aside">
       <div className="t-processed-shipment-aside--header">
@@ -51,16 +53,34 @@ export default function ProcessedShipmentSide({
             }}></p>
         </p>
       </div>
-      {shippingStatus.title == "comfirmed" && (
+      {shippingStatus.title == "confirmed" && (
         <div className="t-processed-shipment-aside--footer">
           <a
             href="javascript:;"
             id="t-carrier-cancel-shipment-button"
             data-shipment_id={shippingData.shipping_id}
             data-order_id={shippingData.order_id}
-            onclick="cancelTerminalShipment(this, event)">
+            onClick={(event) =>
+              cancelTerminalShipment(event.currentTarget, event)
+            }>
             Cancel Shipment
           </a>
+
+          {selectedCarrier == "store-pickup" && (
+            <a
+              href="javascript:;"
+              className="t-btn t-btn-primary t-btn-sm t-carrier-arrange-button markascollected"
+              id="t-carrier-change-button"
+              data-shipment_id={shippingData.shipping_id}
+              data-rate-id={rate_id}
+              data-order-id={shippingData.order_id}
+              onClick={(event) =>
+                markTerminalShipmentCollected(event.currentTarget, event)
+              }
+              style={{ padding: "8px 8px" }}>
+              Mark as collected
+            </a>
+          )}
         </div>
       )}
     </div>

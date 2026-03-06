@@ -536,6 +536,7 @@ class TerminalShippingForm extends React.Component {
           phone = phone.replace("+", plussign);
           //get form serialized
           let formSerialized = form.serialize();
+
           //replace form input 'phone' with new phone number
           formSerialized = formSerialized.replace(
             /phone=[^&]+/,
@@ -766,7 +767,7 @@ class TerminalShippingForm extends React.Component {
                               className="form-control"
                               name="collection_timeline"
                               id="collection_timeline"
-                              placeholder="Collection Timeline"
+                              placeholder="Collection Timeline (hours)"
                               value={
                                 saved_address?.metadata?.collection_timeline ||
                                 0

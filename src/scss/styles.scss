@@ -588,6 +588,7 @@ button.t-address-save {
 
   &--footer {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     gap: 10px;
     align-items: center;
@@ -607,9 +608,21 @@ button.t-address-save {
       text-decoration: none;
 
       &:hover {
-        color: #fff !important;
-        border: 1px solid #e60000 !important;
+        color: #343434 !important;
+        border: 1px solid #343434 !important;
         text-decoration: underline;
+      }
+
+      &.markascollected {
+        background-color: transparent !important;
+        color: #f90 !important;
+        border: 1px solid #f90 !important;
+
+        &:hover {
+          color: rgb(190, 119, 13) !important;
+          border: 1px solid rgb(190, 119, 13) !important;
+          text-decoration: underline;
+        }
       }
     }
   }
@@ -624,4 +637,9 @@ button.t-address-save {
   border-top: 1px solid rgb(238 238 238);
   margin-bottom: 20px;
   margin-top: 5px;
+}
+
+.swal2-title {
+  font-size: 30px !important;
+  line-height: 33px !important;
 }

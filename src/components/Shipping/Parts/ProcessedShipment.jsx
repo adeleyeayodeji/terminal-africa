@@ -3,8 +3,6 @@ import React from "react";
 const ProcessedShipment = ({ saved_address, rate_id, shippingData }) => {
   const all_shipping_data = shippingData.all_shipping_data;
 
-  console.log(shippingData);
-
   const handleCarrierCallClick = () => {
     //redirect to carrier call link
     window.open(`tel:${all_shipping_data?.carrier?.contact?.phone}`);

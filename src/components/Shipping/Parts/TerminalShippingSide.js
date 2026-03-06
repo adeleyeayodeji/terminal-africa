@@ -64,18 +64,6 @@ export default class TerminalShippingSide extends Component {
           <div className="t-shipping-side">
             <div className="t-flex t-flex t-mb-2">
               <h3>Order Details</h3>
-              {/* <button
-                className="t-manage-shipping-button"
-                onClick={this.gotoTracking}>
-                Track{" "}
-                <img
-                  src={
-                    terminal_africa.plugin_url + "/img/arrow-forward-new.svg"
-                  }
-                  alt="Track Shipment"
-                  style={{ marginLeft: 10 }}
-                />
-              </button> */}
             </div>
             <div className="t-flex">
               <h4>Order Date</h4>

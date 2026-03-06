@@ -1647,6 +1647,94 @@ let cancelTerminalShipment = (elem, e) => {
   });
 };
 
+/**
+ * Mark shipment as collected
+ */
+let markTerminalShipmentCollected = (elem, e) => {
+  e.preventDefault();
+  jQuery(document).ready(function ($) {
+    //get shipment id
+    var shipment_id = $(elem).data("shipment_id");
+    var rate_id = $(elem).data("rate-id");
+    var order_id = $(elem).data("order-id");
+
+    //ajax
+    $.ajax({
+      type: "GET",
+      url: terminal_africa.ajax_url,
+      data: {
+        action: "mark_terminal_shipment_collected",
+        nonce: terminal_africa.nonce,
+        shipment_id: shipment_id,
+        order_id: order_id,
+        rate_id: rate_id
+      },
+      dataType: "json",
+      beforeSend: function () {
+        //loader
+        Swal.fire({
+          title: "Marking as Collected...",
+          imageUrl: terminal_africa.plugin_url + "/img/loader.gif",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          footer: `
+        <div>
+          <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+        </div>
+      `
+        });
+      },
+      success: function (response) {
+        //close loader
+        Swal.close();
+        //check if response is success
+        if (response.code == 200) {
+          //Swal success
+          Swal.fire({
+            icon: "success",
+            title: "Shipment Marked as Collected!",
+            confirmButtonColor: "rgb(246 146 32)",
+            //confirm button text
+            confirmButtonText: "Continue",
+            text: "Your shipment has been marked as collected.",
+            footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+          }).then(() => {
+            //reload page
+            window.location.reload();
+          });
+        } else {
+          //Swal error
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            confirmButtonColor: "rgb(246 146 32)",
+            //confirm button text
+            confirmButtonText: "Continue",
+            text: response.message,
+            footer: `
+              <div>
+                <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
+              </div>
+            `
+          });
+        }
+      }
+    });
+  });
+};
+
+/**
+ * Get Shipments Status
+ * @param {*} shipment_id
+ * @param {*} order_id
+ * @param {*} rate_id
+ */
 let getShipmentStatus = (shipment_id, order_id, rate_id) => {
   jQuery(document).ready(function ($) {
     //ajax

@@ -560,21 +560,28 @@ let terminalButton_terminalShipping = () => {
       }
       //check if class exist woocommerce-Price-amount
       if (!terminal_delivery_li.find(".woocommerce-Price-amount").length) {
-        //show error
-        Swal.fire({
-          icon: "error",
-          title: "Please select a carrier",
-          text: "Please choose your delivery option to complete your order",
-          confirmButtonColor: "rgb(246 146 32)",
-          cancelButtonColor: "rgb(0 0 0)",
-          //footer
-          footer: `
+        //check if store pickup is active from label
+        let labelText = terminal_delivery_li.find("label").text().trim();
+
+        let isStorePickup = labelText.includes("Store Pickup");
+
+        if (!isStorePickup) {
+          //show error
+          Swal.fire({
+            icon: "error",
+            title: "Please select a carrier",
+            text: "Please choose your delivery option to complete your order",
+            confirmButtonColor: "rgb(246 146 32)",
+            cancelButtonColor: "rgb(0 0 0)",
+            //footer
+            footer: `
             <div>
                 <img src="${terminal_africa.plugin_url}/img/logo-footer.png" style="height: 30px;" alt="Terminal Africa">
             </div>
             `
-        });
-        return;
+          });
+          return;
+        }
       }
       //if all is good
       //submit form

@@ -444,7 +444,7 @@ trait Shipping
     }
 
     //create address
-    public static function createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
+    public static function createAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup)
     {
         try {
             if (!self::$skkey) {
@@ -453,6 +453,14 @@ trait Shipping
                     'message' => "Invalid API Key",
                     'data' => [],
                 ];
+            }
+
+            //check if collection_timeline is not null
+            if (!empty($collection_timeline)) {
+                //calculate collection_timeline in minutes
+                $collection_timeline = $collection_timeline * 60;
+            } else {
+                $collection_timeline = 0;
             }
 
             //address fields
@@ -467,11 +475,16 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
+                'store_pickup' => $store_pickup === 'on' ? true : false,
+                'metadata' => [
+                    'location_name' => $location_name,
+                    'collection_timeline' => $collection_timeline
+                ]
             ];
 
             //check the address fields and remove empty fields
             foreach ($addressFields as $key => $value) {
-                if (empty($value)) {
+                if (empty($value) && $value !== false) {
                     //set --
                     $addressFields[$key] = '--';
                 }
@@ -519,6 +532,9 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
+                'location_name' => $location_name,
+                'collection_timeline' => $collection_timeline,
+                'store_pickup' => $store_pickup === 'on' ? true : false
             ]));
             return [
                 'code' => 500,
@@ -529,7 +545,7 @@ trait Shipping
     }
 
     //update address
-    public static function updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code)
+    public static function updateAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup)
     {
         try {
             if (!self::$skkey) {
@@ -548,6 +564,14 @@ trait Shipping
                 ];
             }
 
+            //check if collection_timeline is not null
+            if (!empty($collection_timeline)) {
+                //calculate collection_timeline in minutes
+                $collection_timeline = $collection_timeline * 60;
+            } else {
+                $collection_timeline = 0;
+            }
+
             //address fields 
             $addressFields = [
                 'first_name' => $first_name,
@@ -560,18 +584,16 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
-                'store_pickup' => true,
+                'store_pickup' => $store_pickup === 'on' ? true : false,
                 'metadata' => [
-                    'location_name' => 'Store Pickup',
-                    'collection_timeline' => 4320
+                    'location_name' => $location_name,
+                    'collection_timeline' => $collection_timeline
                 ]
             ];
 
-            error_log("Address Fields: " . print_r($addressFields, true));
-
             //check the address fields and remove empty fields
             foreach ($addressFields as $key => $value) {
-                if (empty($value)) {
+                if (empty($value) && $value !== false) {
                     //set --
                     $addressFields[$key] = '--';
                 }
@@ -589,7 +611,7 @@ trait Shipping
             );
             //decode response
             $body = json_decode($response->body);
-            error_log("Update Address Response: " . print_r($body, true));
+
             //check if response is ok
             if ($response->status_code == 200) {
                 //return countries
@@ -621,6 +643,9 @@ trait Shipping
                 'state' => $state,
                 'country' => $country,
                 'zip' => $zip_code,
+                'location_name' => $location_name,
+                'collection_timeline' => $collection_timeline,
+                'store_pickup' => $store_pickup === 'on' ? true : false
             ]));
             return [
                 'code' => 500,
@@ -2374,6 +2399,71 @@ trait Shipping
             }
         } catch (\Exception $e) {
             logTerminalError($e, self::$enpoint . 'shipments/' . $shipping_id);
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
+    /**
+     * markShipmentCollected
+     * @param string|int $shipment_id
+     * @return array
+     */
+    public static function markShipmentCollected($shipment_id)
+    {
+        try {
+            //check $skkey
+            if (!self::$skkey) {
+                return [
+                    'code' => 404,
+                    'message' => "Invalid API Key",
+                    'data' => [],
+                ];
+            }
+
+            $response = Requests::post(
+                self::$enpoint . 'shipments/store-pickup',
+                [
+                    'Authorization' => 'Bearer ' . self::$skkey,
+                    'Content-Type' => 'application/json'
+                ] + self::$request_header,
+                json_encode(
+                    [
+                        "shipment_id" => $shipment_id
+                    ]
+                ),
+                //time out 60 seconds
+                ['timeout' => 60]
+            );
+            $body = json_decode($response->body);
+            //check if response is ok
+            if ($response->status_code == 200) {
+                //return countries
+                $data = $body->data;
+                //return data
+                return [
+                    'code' => 200,
+                    'message' => 'success',
+                    'data' => $data,
+                ];
+            } else {
+                //logTerminalErrorData
+                logTerminalErrorData($response->body, self::$endpoint . 'shipments/store-pickup?' . http_build_query([
+                    "shipment_id" => $shipment_id,
+                ]));
+                return [
+                    'code' => $response->status_code,
+                    'message' => $body->message,
+                    'data' => [],
+                ];
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, self::$enpoint . 'shipments/store-pickup?' . http_build_query([
+                "shipment_id" => $shipment_id,
+            ]));
             return [
                 'code' => 500,
                 'message' => $e->getMessage(),

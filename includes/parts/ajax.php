@@ -143,6 +143,8 @@ trait Ajax
         add_action('wp_ajax_update_user_carrier_free_shipping_above_specific_amount_terminal', array($this, 'update_user_carrier_free_shipping_above_specific_amount_terminal'));
         //add ajax save_terminal_default_shipping_weight
         add_action('wp_ajax_save_terminal_default_shipping_weight', array($this, 'save_terminal_default_shipping_weight'));
+        //add ajax mark_terminal_shipment_collected
+        add_action('wp_ajax_mark_terminal_shipment_collected', array($this, 'mark_terminal_shipment_collected'));
     }
 
     /**
@@ -692,6 +694,12 @@ trait Ajax
             $state = sanitize_text_field($_POST['state']);
             $country = sanitize_text_field($_POST['country']);
             $zip_code = sanitize_text_field($_POST['zip_code']);
+            //check if isset store_pickup
+            $store_pickup = isset($_POST['store_pickup']) ? sanitize_text_field($_POST['store_pickup']) : 'off';
+            //get metadata -> location_name
+            $location_name = isset($_POST['location_name']) ? sanitize_text_field($_POST['location_name']) : '';
+            //get metadata -> collection_timeline
+            $collection_timeline = isset($_POST['collection_timeline']) ? absint($_POST['collection_timeline']) : '';
 
             ////////////// address_id///////////
             if (isset($_POST['address_id'])) {
@@ -718,7 +726,7 @@ trait Ajax
             $merchant_address_id = get_option('terminal_africa_merchant_address_id');
             if (empty($merchant_address_id)) {
                 //create address
-                $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+                $create_address = createTerminalAddress($first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup);
                 //check if address is created
                 if ($create_address['code'] == 200) {
                     //save address id
@@ -738,7 +746,7 @@ trait Ajax
                 }
             } else {
                 //update address
-                $update_address = updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code);
+                $update_address = updateTerminalAddress($merchant_address_id, $first_name, $last_name, $email, $phone, $line_1, $line_2, $city, $state, $country, $zip_code, $location_name, $collection_timeline, $store_pickup);
                 //check if address is updated
                 if ($update_address['code'] == 200) {
                     //save address
@@ -2450,6 +2458,16 @@ trait Ajax
             $stateIso = array_filter($states, function ($state) use ($saved_address_state) {
                 return $state->name == $saved_address_state;
             });
+
+            //check if metadata is in saved_address
+            if (isset($saved_address->metadata->collection_timeline)) {
+                //convert to hours
+                $collection_timeline = isset($saved_address->metadata->collection_timeline) ? $saved_address->metadata->collection_timeline : 0;
+                $collection_timeline = $collection_timeline / 60;
+                //update metadata
+                $saved_address->metadata->collection_timeline = $collection_timeline;
+            }
+
             //shift the state isoCode
             $stateIso = array_shift($stateIso);
 
@@ -2520,6 +2538,47 @@ trait Ajax
             }
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_africa_get_all_shipments_v2');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Mark Terminal Shipment Collected
+     * 
+     */
+    public function mark_terminal_shipment_collected()
+    {
+        try {
+            $nonce = sanitize_text_field($_GET['nonce']);
+            if (!wp_verify_nonce($nonce, 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please try again'
+                ]);
+            }
+            //shipment id
+            $shipment_id = sanitize_text_field($_GET['shipment_id']);
+            //mark shipment collected
+            $mark_collected = markTerminalShipmentCollected($shipment_id);
+            //check if shipment is marked collected
+            if ($mark_collected['code'] == 200) {
+                //return
+                wp_send_json([
+                    'code' => 200,
+                    'message' => 'Shipment marked collected successfully',
+                ]);
+            } else {
+                //return error
+                wp_send_json([
+                    'code' => 400,
+                    'message' => $mark_collected['message'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_mark_shipment_collected');
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
