@@ -1032,7 +1032,7 @@ trait Shipping
             //query builder
             $query = http_build_query($query);
             $response = Requests::get(
-                self::$enpoint . 'rates/shipment?' . $query,
+                self::$enpoint . 'rates/shipment/?' . $query,
                 [
                     'Authorization' => 'Bearer ' . self::$skkey,
                     'Content-Type' => 'application/json'
