@@ -232,10 +232,58 @@ class TerminalAfricaShippingPlugin
             $this->activate_terminal_init();
             //clear plugin update session
             $this->clear_plugin_update_session();
+
+            //apply filter to dokan_cart_shipping_packages
+            add_filter('dokan_cart_shipping_packages', array($this, 'split_shipping_packages'), 10, 1);
+            //apply filter to dokan_shipping_package_name
+            add_filter('dokan_shipping_package_name', array($this, 'change_shipping_pack_name'), 10, 3);
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
     }
+
+
+    /**
+     * split_shipping_packages
+     * @param array $packages
+     * @return array
+     */
+    public function split_shipping_packages($packages)
+    {
+        try {
+            //check if packages is empty
+            if (empty($packages)) {
+                return $packages;
+            }
+            //get the first package
+            $firstPackage = reset($packages);
+            //return as new array
+            return [$firstPackage];
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_split_shipping_packages_issue');
+            return $packages;
+        }
+    }
+
+
+    /**
+     * change_shipping_pack_name
+     * @param string $package_name
+     * @param array $package
+     * @param int $index
+     * @return string
+     */
+    public function change_shipping_pack_name($package_name, $package, $index)
+    {
+        try {
+            //return custom package name
+            return "Shipping";
+        } catch (\Exception $e) {
+            logTerminalError($e, 'terminal_change_shipping_pack_name_issue');
+            return $package_name;
+        }
+    }
+
 
     /**
      * Init Payment Gateway
