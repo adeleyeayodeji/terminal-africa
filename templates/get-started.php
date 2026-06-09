@@ -74,10 +74,10 @@ if (isset($terminal_africa_settings['others']->user->payment_gateway_status)) {
                             </p>
                             <div class="t-get-started-support-actions-link">
                                 <p>
-                                    <a target="_blank" href="https://calendly.com/terminal-africa/terminal-support-session" class="t-support-actions-link t-call">Schedule a call</a>
+                                    <a target="_blank" href="https://calendar.app.google/i7B57HGtkFYAh1nbA" class="t-support-actions-link t-call">Schedule a call</a>
                                 </p>
                                 <p style="margin-left: 25px;">
-                                    <a href="mailto:support@terminal.africa" class="t-support-actions-link">Send an email</a>
+                                    <a href="mailto:product@terminal.africa" class="t-support-actions-link">Send an email</a>
                                 </p>
                             </div>
                         </div>

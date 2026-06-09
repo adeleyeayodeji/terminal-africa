@@ -1055,11 +1055,12 @@ trait Shipping
                 //logTerminalErrorData
                 logTerminalErrorData($response->body, self::$enpoint . 'rates/shipment' . "?" . http_build_query([
                     'shipment_id' => $shipment_id,
-                    'merchant_address_id' => $merchant_address_id,
-                    'customer_address_id' => $customer_address_id,
-                    'parcel' => $parcel,
+                    'pickup_address' => $merchant_address_id,
+                    'delivery_address' => $customer_address_id,
+                    'parcel_id' => $parcel,
                     'source' => 'wordpress',
                     'currency' => get_woocommerce_currency(),
+                    'domain' => $domain
                 ]));
                 return [
                     'code' => $response->status_code,
@@ -1070,11 +1071,12 @@ trait Shipping
         } catch (\Exception $e) {
             logTerminalError($e, self::$enpoint . 'rates/shipment' . "?" . http_build_query([
                 'shipment_id' => $shipment_id,
-                'merchant_address_id' => $merchant_address_id,
-                'customer_address_id' => $customer_address_id,
-                'parcel' => $parcel,
+                'pickup_address' => $merchant_address_id,
+                'delivery_address' => $customer_address_id,
+                'parcel_id' => $parcel,
                 'source' => 'wordpress',
                 'currency' => get_woocommerce_currency(),
+                'domain' => $domain
             ]));
             return [
                 'code' => 500,

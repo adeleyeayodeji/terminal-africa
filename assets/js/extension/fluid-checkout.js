@@ -109,7 +109,26 @@ class TerminalNativeWoocommerce {
       //compress cities with LZMA
       var compressed_cities = LZString.compressToUTF16(cities);
       //save to local storage this.terminal_autoload_merchant_address["cities"]
-      localStorage.setItem("terminal_delivery_cities", compressed_cities); //discountinued use of this
+      try {
+        //clear old delivery html before storing new cities
+        localStorage.removeItem("terminal_delivery_html");
+        localStorage.setItem("terminal_delivery_cities", compressed_cities);
+      } catch (e) {
+        if (e.name === "QuotaExceededError") {
+          console.warn("localStorage quota exceeded, clearing old data");
+          //clear old data
+          localStorage.clear();
+          //try again
+          try {
+            localStorage.setItem("terminal_delivery_cities", compressed_cities);
+          } catch (e2) {
+            console.error(
+              "Failed to save cities even after clearing storage:",
+              e2
+            );
+          }
+        }
+      }
     }, 1000);
   }
 
