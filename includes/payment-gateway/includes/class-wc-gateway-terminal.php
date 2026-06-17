@@ -178,7 +178,7 @@ if (class_exists("WC_Payment_Gateway")) {
             $terminal_africa_notice_closed = get_option('terminal_africa_notice_closed');
             //check if the notice suppression date has not yet passed
             if (!empty($terminal_africa_notice_closed) && strtotime($terminal_africa_notice_closed) > time()) {
-                // return;
+                return;
             }
 
             //learn more url
