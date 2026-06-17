@@ -237,9 +237,26 @@ class TerminalAfricaShippingPlugin
             add_filter('dokan_cart_shipping_packages', array($this, 'split_shipping_packages'), 10, 1);
             //apply filter to dokan_shipping_package_name
             add_filter('dokan_shipping_package_name', array($this, 'change_shipping_pack_name'), 10, 3);
+            //set shipping to default terminal africa shipping method
+            add_filter('woocommerce_cart_shipping_packages', array($this, 'dokan_custom_split_shipping_packages'), 2, 1);
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
+    }
+
+    /**
+     * dokan_custom_split_shipping_packages
+     *  @param array $packages
+     *  @return array
+     */
+    public function dokan_custom_split_shipping_packages($packages)
+    {
+        //terminal session
+        $terminalSession = TerminalSession::instance();
+        //set or update packages in session
+        $terminalSession->set('terminal_africa_shipping_packages', $packages);
+        //return default terminal africa shipping package
+        return $packages;
     }
 
 
@@ -251,13 +268,22 @@ class TerminalAfricaShippingPlugin
     public function split_shipping_packages($packages)
     {
         try {
+            //get terminal session
+            $terminalSession = TerminalSession::instance();
+            $initialPackages = $terminalSession->get('terminal_africa_shipping_packages');
+            //check if not empty
+            if (!empty($initialPackages)) {
+                return $initialPackages;
+            }
             //check if packages is empty
             if (empty($packages)) {
                 return $packages;
             }
             //get the first package
             $firstPackage = reset($packages);
-            //return as new array
+            //set seller_id to 0 for full terminal africa integration
+            $firstPackage['seller_id'] = 0;
+            //return as new array with only the first package as a fallback
             return [$firstPackage];
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_split_shipping_packages_issue');

@@ -302,11 +302,8 @@ trait Ajax
                 ]);
             }
 
-            //get terminal_africa_notice_closed
-            $terminal_africa_notice_closed = get_option('terminal_africa_notice_closed', date('Y-m-d'));
-
-            //add 3 days to terminal_africa_notice_closed
-            $terminal_africa_notice_closed = date('Y-m-d', strtotime($terminal_africa_notice_closed . ' + 3 days'));
+            // Set the next notice display date to one month from now.
+            $terminal_africa_notice_closed = date('Y-m-d', strtotime('+1 month'));
             //update terminal_africa_notice_closed
             update_option('terminal_africa_notice_closed', $terminal_africa_notice_closed);
 

@@ -176,14 +176,9 @@ if (class_exists("WC_Payment_Gateway")) {
 
             //get terminal_africa_notice_closed
             $terminal_africa_notice_closed = get_option('terminal_africa_notice_closed');
-            //check if terminal_africa_notice_closed is empty
-            if (!empty($terminal_africa_notice_closed)) {
-                //convert to date
-                $terminal_africa_notice_closed = date('Y-m-d', strtotime($terminal_africa_notice_closed));
-                //check if terminal_africa_notice_closed is less than today
-                if ($terminal_africa_notice_closed > date('Y-m-d')) {
-                    return;
-                }
+            //check if the notice suppression date has not yet passed
+            if (!empty($terminal_africa_notice_closed) && strtotime($terminal_africa_notice_closed) > time()) {
+                // return;
             }
 
             //learn more url
