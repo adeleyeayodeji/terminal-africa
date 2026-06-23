@@ -234,15 +234,39 @@ class TerminalAfricaShippingPlugin
             $this->clear_plugin_update_session();
 
             //apply filter to dokan_cart_shipping_packages
-            add_filter('dokan_cart_shipping_packages', array($this, 'split_shipping_packages'), 10, 1);
+            add_filter('dokan_cart_shipping_packages', array($this, 'split_shipping_packages'), PHP_INT_MAX, 1);
             //apply filter to dokan_shipping_package_name
-            add_filter('dokan_shipping_package_name', array($this, 'change_shipping_pack_name'), 10, 3);
+            add_filter('dokan_shipping_package_name', array($this, 'change_shipping_pack_name'), PHP_INT_MAX, 3);
             //set shipping to default terminal africa shipping method
-            add_filter('woocommerce_cart_shipping_packages', array($this, 'dokan_custom_split_shipping_packages'), 2, 1);
+            add_filter('woocommerce_cart_shipping_packages', array($this, 'dokan_custom_split_shipping_packages'), PHP_INT_MAX, 1);
+            //apply filter to dokan_shipping_packages
+            add_filter('dokan_shipping_packages', array($this, 'dokan_custom_split_shipping_packages_filter'), PHP_INT_MAX, 2);
         } catch (\Exception $e) {
             logTerminalError($e, 'terminal_init_issue');
         }
     }
+
+    /**
+     * dokan_custom_split_shipping_packages_filter
+     *  @param array $packages
+     *  @param array $package_to_keep
+     *  @return array
+     */
+    public function dokan_custom_split_shipping_packages_filter($packages, $package_to_keep)
+    {
+
+        //check if packages is empty
+        if (empty($packages)) {
+            return $packages;
+        }
+        //get the first package
+        $firstPackage = reset($packages);
+        //set seller_id to 0 for full terminal africa integration
+        $firstPackage['seller_id'] = 0;
+        //return as new array with only the first package as a fallback
+        return [$firstPackage];
+    }
+
 
     /**
      * dokan_custom_split_shipping_packages
@@ -271,8 +295,6 @@ class TerminalAfricaShippingPlugin
             $firstPackage = reset($packages);
             //set seller_id to 0 for full terminal africa integration
             $firstPackage['seller_id'] = 0;
-            //log $firstPackage
-            error_log('Terminal Africa Shipping Package: ' . print_r($firstPackage, true));
             //return as new array with only the first package as a fallback
             return [$firstPackage];
         } catch (\Exception $e) {
