@@ -145,6 +145,9 @@ trait Ajax
         add_action('wp_ajax_save_terminal_default_shipping_weight', array($this, 'save_terminal_default_shipping_weight'));
         //add ajax mark_terminal_shipment_collected
         add_action('wp_ajax_mark_terminal_shipment_collected', array($this, 'mark_terminal_shipment_collected'));
+        //add ajax update_terminal_africa_dokan_integration_enabled
+        add_action('wp_ajax_update_terminal_africa_dokan_integration_enabled', array($this, 'update_terminal_africa_dokan_integration_enabled'));
+        add_action('wp_ajax_nopriv_update_terminal_africa_dokan_integration_enabled', array($this, 'update_terminal_africa_dokan_integration_enabled'));
     }
 
     /**
@@ -2579,6 +2582,41 @@ trait Ajax
             wp_send_json([
                 'code' => 400,
                 'message' => "Error: " . $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Update Terminal Africa Dokan Integration
+     * 
+     */
+    public function update_terminal_africa_dokan_integration_enabled()
+    {
+        try {
+            //verify nonce
+            if (!wp_verify_nonce($_POST['nonce'], 'terminal_africa_nonce')) {
+                wp_send_json([
+                    'code' => 400,
+                    'message' => 'Wrong nonce, please refresh the page and try again'
+                ]);
+            }
+
+            //get status
+            $status = sanitize_text_field($_POST['status']);
+
+            //update terminal_africa_dokan_integration_enabled
+            update_option('terminal_africa_dokan_integration_enabled', $status);
+
+            //send response
+            wp_send_json([
+                'code' => 200,
+                'message' => 'Dokan integration updated successfully'
+            ]);
+        } catch (Exception $e) {
+            logTerminalError($e, 'update_terminal_africa_dokan_integration_enabled');
+            wp_send_json([
+                'code' => 400,
+                'message' => "Something went wrong: " . $e->getMessage()
             ]);
         }
     }

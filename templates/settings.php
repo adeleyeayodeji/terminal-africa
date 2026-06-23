@@ -258,6 +258,38 @@ $terminal_default_shipping_weight = get_option('terminal_default_shipping_weight
                             </div>
                         </div>
                     </div>
+
+                    <?php
+                    // Check if Dokan plugin is active (free or pro version)
+                    $dokan_free_active = is_plugin_active('dokan-lite/dokan.php');
+                    $dokan_pro_active = is_plugin_active('dokan-pro/dokan-pro.php');
+                    $dokan_active = $dokan_free_active || $dokan_pro_active;
+
+                    if ($dokan_active) {
+                        // Get the saved setting for Dokan integration
+                        $dokan_integration_enabled = get_option('terminal_africa_dokan_integration_enabled', 'false');
+                    ?>
+                        <div class="t-flex t-settings-page-card t-mb-4">
+                            <div class="t-settings-first">
+                                <p class="t-settings-page-card-title">
+                                    Enable Dokan Integration
+                                </p>
+                                <p class="t-settings-page-card-description">
+                                    When enabled, Terminal Africa shipping will integrate with Dokan multivendor marketplace.
+                                </p>
+                            </div>
+                            <div>
+                                <div class="t-carrier-embed w-embed">
+                                    <label class="t-switch t-carrier-switch">
+                                        <input type="checkbox" class="t-carrier-checkbox" name="terminal_africa_dokan_integration_enabled" id="terminal_africa_dokan_integration_enabled" <?php echo $dokan_integration_enabled === 'true' ? 'checked' : ''; ?>>
+                                        <span class="t-slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>

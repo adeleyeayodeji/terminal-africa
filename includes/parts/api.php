@@ -400,6 +400,50 @@ trait TerminalRESTAPI
                 'permission_callback' => [$this, 'api_permission']
             ]
         );
+
+        /**
+         * Get current terminal settings
+         */
+        register_rest_route(
+            'terminal-africa/v1',
+            '/get-terminal-settings',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'get_terminal_settings'],
+                'permission_callback' => [$this, 'api_permission']
+            ]
+        );
+
+        /**
+         * Update terminal settings
+         */
+        register_rest_route(
+            'terminal-africa/v1',
+            '/update-terminal-settings',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_terminal_settings_data'],
+                'permission_callback' => [$this, 'api_permission'],
+                'args' => [
+                    'settings' => [
+                        'required' => true,
+                        'type' => 'object',
+                        'description' => 'Terminal Africa settings object',
+                        'validate_callback' => function ($param) {
+                            return is_array($param) || is_object($param);
+                        }
+                    ],
+                    'default_address_id' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'description' => 'Default merchant address ID',
+                        'validate_callback' => function ($param) {
+                            return !empty($param);
+                        }
+                    ]
+                ]
+            ]
+        );
     }
 
     /**
@@ -447,6 +491,75 @@ trait TerminalRESTAPI
         //return custom error
         return new \WP_Error('invalid_token', 'Invalid user token', ['status' => 401]);
     }
+
+    /**
+     * get_terminal_settings
+     * 
+     */
+    public function get_terminal_settings()
+    {
+        try {
+            //get the settings
+            $settings = get_option('terminal_africa_settings', []);
+            //get terminal_africa_merchant_id
+            $default_address_id = get_option('terminal_africa_merchant_id', '');
+            //return the settings
+            return new WP_REST_Response([
+                'status' => 200,
+                'message' => 'Terminal settings fetched successfully',
+                'data' => [
+                    'settings' => $settings,
+                    'default_address_id' => $default_address_id
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //return error
+            return new WP_REST_Response([
+                'status' => 500,
+                'message' => 'Error fetching terminal settings: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * update_terminal_settings_data
+     * @param WP_REST_Request $request
+     * @return WP_REST_Response
+     */
+    public function update_terminal_settings_data(WP_REST_Request $request)
+    {
+        try {
+            //get the settings
+            $settings = $request->get_param('settings');
+            //sanitize the settings
+            $settings = sanitize_array($settings);
+            //get default_address_id
+            $default_address_id = $request->get_param('default_address_id');
+            //update the settings
+            update_option('terminal_africa_settings', $settings);
+            update_option('terminal_africa_merchant_id', $default_address_id);
+            //return success
+            return new WP_REST_Response([
+                'status' => 200,
+                'message' => 'Terminal settings updated successfully',
+                'data' => [
+                    'settings' => $settings,
+                    'default_address_id' => $default_address_id
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            logTerminalError($e);
+            //return error
+            return new WP_REST_Response([
+                'status' => 500,
+                'message' => 'Error updating terminal settings: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
+
 
     /**
      * Pull products from terminal africa

@@ -3537,4 +3537,77 @@ jQuery(document).ready(function ($) {
       }
     });
   });
+
+  /**
+   * terminal_africa_dokan_integration_enabled
+   */
+  $("input[name=terminal_africa_dokan_integration_enabled]").on(
+    "change",
+    function (e) {
+      e.preventDefault();
+      //get parent
+      let parent = $(this).parent();
+      //checked
+      let dokan_integration_status = $(this).is(":checked") ? "true" : "false";
+      //ajax
+      $.ajax({
+        type: "POST",
+        url: terminal_africa.ajax_url,
+        data: {
+          action: "update_terminal_africa_dokan_integration_enabled",
+          nonce: terminal_africa.nonce,
+          status: dokan_integration_status
+        },
+        dataType: "json",
+        beforeSend: () => {
+          //block element
+          $(parent).block({
+            message: "<i class='fa fa-spinner fa-spin'></i>",
+            overlayCSS: {
+              background: "#fff",
+              opacity: 0.8,
+              cursor: "wait"
+            },
+            css: {
+              border: 0,
+              padding: 0,
+              backgroundColor: "transparent"
+            }
+          });
+        },
+        success: function (response) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast success if response code is 200
+          if (response.code == 200) {
+            iziToast.info({
+              title: "Success",
+              message: response.message,
+              position: "topRight",
+              timeout: 3000,
+              transitionIn: "flipInX",
+              transitionOut: "flipOutX"
+            });
+          } else {
+            //izitoast error
+            iziToast.error({
+              title: "Error",
+              message: response.message,
+              position: "topRight"
+            });
+          }
+        },
+        error: function (error) {
+          //unblock element
+          $(parent).unblock();
+          //izitoast error
+          iziToast.error({
+            title: "Error",
+            message: "Something went wrong!: " + error.responseText,
+            position: "topRight"
+          });
+        }
+      });
+    }
+  );
 });

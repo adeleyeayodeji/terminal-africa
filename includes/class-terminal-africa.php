@@ -247,6 +247,28 @@ class TerminalAfricaShippingPlugin
     }
 
     /**
+     * Terminal Dokan Integration
+     * @since 1.13.25
+     * @return bool
+     */
+    public function isDokanActive()
+    {
+        // Check if Dokan plugin is active (free or pro version)
+        $dokan_free_active = is_plugin_active('dokan-lite/dokan.php');
+        $dokan_pro_active = is_plugin_active('dokan-pro/dokan-pro.php');
+        $dokan_active = $dokan_free_active || $dokan_pro_active;
+
+        if ($dokan_active) {
+            // Get the saved setting for Dokan integration
+            $dokan_integration_enabled = get_option('terminal_africa_dokan_integration_enabled', 'false');
+            return $dokan_integration_enabled === 'true';
+        }
+        //return false if dokan is not active or integration is not enabled
+        return false;
+    }
+
+
+    /**
      * dokan_custom_split_shipping_packages_filter
      *  @param array $packages
      *  @param array $package_to_keep
@@ -254,6 +276,11 @@ class TerminalAfricaShippingPlugin
      */
     public function dokan_custom_split_shipping_packages_filter($packages, $package_to_keep)
     {
+        //check if dokan is not active or integration is not enabled
+        if (!$this->isDokanActive()) {
+            //return default packages
+            return $packages;
+        }
 
         //check if packages is empty
         if (empty($packages)) {
@@ -287,6 +314,12 @@ class TerminalAfricaShippingPlugin
     public function split_shipping_packages($packages)
     {
         try {
+            //check if dokan is not active or integration is not enabled
+            if (!$this->isDokanActive()) {
+                //return default packages
+                return $packages;
+            }
+
             //check if packages is empty
             if (empty($packages)) {
                 return $packages;
@@ -314,6 +347,12 @@ class TerminalAfricaShippingPlugin
     public function change_shipping_pack_name($package_name, $package, $index)
     {
         try {
+            //check if dokan is not active or integration is not enabled
+            if (!$this->isDokanActive()) {
+                //return default package name
+                return $package_name;
+            }
+
             //return custom package name
             return "Shipping";
         } catch (\Exception $e) {
