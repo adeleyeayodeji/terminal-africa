@@ -283,6 +283,8 @@ class TerminalAfricaShippingPlugin
             $firstPackage = reset($packages);
             //set seller_id to 0 for full terminal africa integration
             $firstPackage['seller_id'] = 0;
+            //log $firstPackage
+            error_log('Terminal Africa Shipping Package: ' . print_r($firstPackage, true));
             //return as new array with only the first package as a fallback
             return [$firstPackage];
         } catch (\Exception $e) {

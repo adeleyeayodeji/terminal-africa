@@ -254,14 +254,19 @@ class TerminalCore
             $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
             //confirm if endpoint is url
             if (filter_var($endpoint, FILTER_VALIDATE_URL)) {
-                //extract the parsed parameters on the endoint
+                //extract the parsed parameters from endpoint
                 $url_components = parse_url($endpoint);
-                parse_str($url_components['query'], $body);
-                //get url 
-                $endpoint = $url_components['path'];
+                //parse query parameters if they exist
+                $body = isset($url_components['query']) ? [] : [];
+                if (isset($url_components['query'])) {
+                    parse_str($url_components['query'], $body);
+                }
+                //extract path from url
+                $endpoint = $url_components['path'] ?? $endpoint;
             } else {
                 $body = [];
             }
+
             //request to terminal africa api
             $response = wp_remote_post('https://api.terminal.africa/v1/error-log', [
                 'headers' => [
