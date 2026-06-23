@@ -251,11 +251,6 @@ class TerminalAfricaShippingPlugin
      */
     public function dokan_custom_split_shipping_packages($packages)
     {
-        //terminal session
-        $terminalSession = TerminalSession::instance();
-        //set or update packages in session
-        $terminalSession->set('terminal_africa_shipping_packages', $packages);
-        //return default terminal africa shipping package
         return $packages;
     }
 
@@ -268,13 +263,6 @@ class TerminalAfricaShippingPlugin
     public function split_shipping_packages($packages)
     {
         try {
-            //get terminal session
-            $terminalSession = TerminalSession::instance();
-            $initialPackages = $terminalSession->get('terminal_africa_shipping_packages');
-            //check if not empty
-            if (!empty($initialPackages)) {
-                return $initialPackages;
-            }
             //check if packages is empty
             if (empty($packages)) {
                 return $packages;
