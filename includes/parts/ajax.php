@@ -1259,12 +1259,15 @@ trait Ajax
                 //check if rates is gotten
                 if ($get_rates['code'] == 200) {
                     $terminal_price_markup = get_option('terminal_custom_price_mark_up', '');
+                    //get mode
+                    $markupmode = get_option('terminal_custom_price_mark_up_mode', 'percentage');
                     //return
                     wp_send_json([
                         'code' => 200,
                         'message' => 'Rates gotten successfully',
                         'enable_free_shipping' => $enable_free_shipping,
                         'terminal_price_markup' => $terminal_price_markup,
+                        'markupmode' => $markupmode,
                         'data' => $get_rates['data']
                     ]);
                 } else {
@@ -2001,12 +2004,15 @@ trait Ajax
                     'message' => 'Wrong nonce, please refresh the page and try again'
                 ]);
             }
-            //data
-            $percentage = sanitize_text_field($_POST['percentage']);
+            //value
+            $value = sanitize_text_field($_POST['value']);
+            $markUpMode = sanitize_text_field($_POST['markUpMode']);
             //save custom price mark up
-            update_option('terminal_custom_price_mark_up', $percentage);
-            //check if percentage is empty
-            if (empty($percentage)) {
+            update_option('terminal_custom_price_mark_up', $value);
+            //save custom price mark up mode
+            update_option('terminal_custom_price_mark_up_mode', $markUpMode);
+            //check if value is empty
+            if (empty($value)) {
                 //return error
                 wp_send_json([
                     'code' => 200,

@@ -7,6 +7,8 @@ $countries = get_terminal_countries();
 $saved_currency = get_option("terminal_default_currency_code", ['isoCode' => 'NG', 'currency_code' => 'NGN']);
 //terminal_custom_price_mark_up
 $terminal_custom_price_mark_up = get_option('terminal_custom_price_mark_up', '');
+//terminal_custom_price_mark_up_mode
+$terminal_custom_price_mark_up_mode = get_option('terminal_custom_price_mark_up_mode', 'percentage');
 //create link 'admin.php?page=wc-settings&tab=shipping'
 $settings_link = admin_url('admin.php?page=wc-settings&tab=shipping');
 //terminal_africa_settings
@@ -202,8 +204,12 @@ $terminal_default_shipping_weight = get_option('terminal_default_shipping_weight
                                 Set your own price markup for all your shipments as a percentage (%).
                             </p>
                         </div>
-                        <div style="margin-right: 30px;width: 170px;">
-                            <input type="number" class="t-form-control" name="terminal_custom_price_mark_up" placeholder="e.g 10 for 10%" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>" style="height: 49px;">
+                        <div style="margin-right: 30px;width: 100%;max-width: 266px;display: flex;align-items: center;justify-content: space-between;gap:2px;">
+                            <select name="markup-mode" id="markup-mode" class="t-form-control" style="height: 49px;">
+                                <option value="flat" <?php echo $terminal_custom_price_mark_up_mode === 'flat' ? 'selected' : ''; ?>>Flat fee</option>
+                                <option value="percentage" <?php echo $terminal_custom_price_mark_up_mode === 'percentage' ? 'selected' : ''; ?>>Percentage</option>
+                            </select>
+                            <input type="number" class="t-form-control" name="terminal_custom_price_mark_up" placeholder="enter value" id="terminal_custom_price_mark_up" value="<?php echo esc_html($terminal_custom_price_mark_up); ?>" style="height: 49px;">
                         </div>
                     </div>
 

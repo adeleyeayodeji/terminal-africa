@@ -243,6 +243,7 @@ trait Assets
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'terminal_price_markup_mode' => get_option('terminal_custom_price_mark_up_mode', 'percentage'),
             'multicurrency' => self::wooMulticurrency(),
             'edit_checkout_page_link' => $wc_checkout_block_notice,
             'terminal_packaging_id' => !empty($packaging_id) ? "yes" : "no",
@@ -275,6 +276,7 @@ trait Assets
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'terminal_price_markup_mode' => get_option('terminal_custom_price_mark_up_mode', 'percentage'),
             'multicurrency' => self::wooMulticurrency()
         ));
     }
@@ -306,6 +308,7 @@ trait Assets
             'terminal_africal_countries' => get_terminal_countries(),
             'terminal_check_checkout_product_for_shipping_support' => self::check_checkout_product_for_shipping_support(),
             'terminal_price_markup' => get_option('terminal_custom_price_mark_up', ''),
+            'terminal_price_markup_mode' => get_option('terminal_custom_price_mark_up_mode', 'percentage'),
             'multicurrency' => self::wooMulticurrency()
         ));
     }

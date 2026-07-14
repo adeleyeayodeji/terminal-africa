@@ -1041,22 +1041,42 @@ let terminalCheckoutWC = {
                 response.terminal_price_markup;
               //check if not empty
               if (terminalAfricaPriceMarkUpPercentage) {
-                //parse to int
-                terminalAfricaPriceMarkUpPercentage = parseInt(
-                  terminalAfricaPriceMarkUpPercentage
-                );
-                //apply percentage
-                value.amount =
-                  value.amount +
-                  (value.amount * terminalAfricaPriceMarkUpPercentage) / 100;
+                //get markupmode
+                let markupmode = response.markupmode;
+                //check if the value is percentage
+                if (markupmode === "percentage") {
+                  //parse to int
+                  terminalAfricaPriceMarkUpPercentage = parseInt(
+                    terminalAfricaPriceMarkUpPercentage
+                  );
+                  //apply percentage
+                  value.amount =
+                    value.amount +
+                    (value.amount * terminalAfricaPriceMarkUpPercentage) / 100;
 
-                //do same to default_amount
-                if (value.default_amount) {
-                  value.default_amount =
-                    value.default_amount +
-                    (value.default_amount *
-                      terminalAfricaPriceMarkUpPercentage) /
-                      100;
+                  //do same to default_amount
+                  if (value.default_amount) {
+                    value.default_amount =
+                      value.default_amount +
+                      (value.default_amount *
+                        terminalAfricaPriceMarkUpPercentage) /
+                        100;
+                  }
+                } else if (markupmode === "flat") {
+                  //parse to float
+                  terminalAfricaPriceMarkUpPercentage = parseFloat(
+                    terminalAfricaPriceMarkUpPercentage
+                  );
+                  //apply flat amount
+                  value.amount =
+                    value.amount + terminalAfricaPriceMarkUpPercentage;
+
+                  //do same to default_amount
+                  if (value.default_amount) {
+                    value.default_amount =
+                      value.default_amount +
+                      terminalAfricaPriceMarkUpPercentage;
+                  }
                 }
               }
               //////Display handler ///////

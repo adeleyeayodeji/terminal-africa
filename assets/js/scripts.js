@@ -2148,9 +2148,32 @@ if (terminal_africa.packaging_id == "no") {
 //.t-carrier-switch
 jQuery(document).ready(function ($) {
   //listen to #terminal_custom_price_mark_up on focus out
-  $("#terminal_custom_price_mark_up").on("focusout", function (e) {
+  $("#terminal_custom_price_mark_up, #markup-mode").on("blur", function (e) {
     //get value
-    let value = $(this).val();
+    let value = $("#terminal_custom_price_mark_up").val();
+    //get the method
+    let markUpMode = $("#markup-mode").val();
+    //check if value is empty
+    if (
+      value === "" ||
+      value === undefined ||
+      value === null ||
+      markUpMode === "" ||
+      markUpMode === undefined ||
+      markUpMode === null
+    ) {
+      //izitoast
+      iziToast.error({
+        theme: "dark",
+        title: "Error",
+        message: "Please enter a value and select a mark up mode",
+        position: "topCenter",
+        progressBarColor: "rgb(246 146 32)",
+        transitionIn: "fadeInDown"
+      });
+      return;
+    }
+
     //ajax
     $.ajax({
       type: "POST",
@@ -2158,7 +2181,8 @@ jQuery(document).ready(function ($) {
       data: {
         action: "save_terminal_custom_price_mark_up",
         nonce: terminal_africa.nonce,
-        percentage: value
+        value: value,
+        markUpMode: markUpMode
       },
       dataType: "json",
       beforeSend: () => {
