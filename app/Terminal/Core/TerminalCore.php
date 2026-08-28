@@ -174,6 +174,60 @@ class TerminalCore
         }
     }
 
+    //checkKeys
+    public function checkKeys($pk, $sk)
+    {
+        try {
+
+            //check if keys has test in them
+            if (strpos($pk, 'test') !== false || strpos($sk, 'test') !== false) {
+                return [
+                    'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                    'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
+                    'mode' => 'test',
+                    'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
+                ];
+            } else if (strpos($pk, 'live') !== false || strpos($sk, 'live') !== false) {
+                return [
+                    'endpoint' => TERMINAL_AFRICA_API_ENDPOINT,
+                    'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_API_ENDPOINT,
+                    'mode' => 'live',
+                    'v2_endpoint' => TERMINAL_AFRICA_V2_API_ENDPOINT
+                ];
+            }
+            return [
+                'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
+            ];
+        } catch (\Exception $e) {
+            return [
+                'endpoint' => TERMINAL_AFRICA_TEST_API_ENDPOINT,
+                'payment_endpoint' => TERMINAL_AFRICA_PAYMENT_TEST_API_ENDPOINT,
+                'mode' => 'test',
+                'v2_endpoint' => TERMINAL_AFRICA_TEST_V2_API_ENDPOINT
+            ];
+        }
+    }
+
+    /**
+     * Get Terminal Mode Before Server loads
+     * @return string
+     */
+    function getTerminalModeServer(): string
+    {
+        //check if terminal_africa_settings is set
+        if ($settings = get_option("terminal_africa_settings")) {
+            //set endpoint
+            $validate_keys = $this->checkKeys($settings["public_key"], $settings["secret_key"]);
+            //return mode
+            return $validate_keys["mode"];
+        } else {
+            return "test";
+        }
+    }
+
     /**
      * Error logs
      * @param \Exception $e
@@ -189,6 +243,14 @@ class TerminalCore
                 //return true
                 return true;
             }
+
+            $mode = $this->getTerminalModeServer();
+            //alloq if mode is production
+            if ($mode == "test") {
+                //ignore logs
+                return true;
+            };
+
             //get merchant id
             $terminal_africa_merchant_id = get_option('terminal_africa_merchant_id');
             //confirm if endpoint is url

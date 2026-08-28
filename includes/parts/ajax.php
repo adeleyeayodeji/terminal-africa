@@ -501,7 +501,8 @@ trait Ajax
             } else {
                 wp_send_json([
                     'code' => 400,
-                    'message' => $body->message
+                    'message' => $body->message,
+                    'response_body' => $response
                 ]);
             }
         } catch (\Exception $e) {
