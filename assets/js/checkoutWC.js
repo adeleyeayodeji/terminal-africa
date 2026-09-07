@@ -1210,7 +1210,8 @@ let terminalCheckoutWC = {
         //check if store pickup is active from label
         let labelText = img.parent().find("label").text().trim();
 
-        let isStorePickup = labelText.includes("Store Pickup");
+        let isStorePickup =
+          labelText.includes("Store Pickup") || labelText.includes("Free");
 
         if (!isStorePickup) {
           //show error

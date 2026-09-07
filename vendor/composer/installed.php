@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'terminalafrica/terminal-africa',
-        'pretty_version' => '1.11.6',
-        'version' => '1.11.6.0',
+        'pretty_version' => '1.13.27',
+        'version' => '1.13.27.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -44,8 +44,8 @@
             'dev_requirement' => false,
         ),
         'terminalafrica/terminal-africa' => array(
-            'pretty_version' => '1.11.6',
-            'version' => '1.11.6.0',
+            'pretty_version' => '1.13.27',
+            'version' => '1.13.27.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',

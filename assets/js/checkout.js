@@ -662,7 +662,8 @@ let terminalButton = () => {
             //check if store pickup is active from label
             let labelText = terminal_delivery_li.find("label").text().trim();
 
-            let isStorePickup = labelText.includes("Store Pickup");
+            let isStorePickup =
+              labelText.includes("Store Pickup") || labelText.includes("Free");
 
             if (!isStorePickup) {
               //show error
@@ -695,7 +696,8 @@ let terminalButton = () => {
             //check if store pickup is active from label
             let labelText = terminal_delivery_li.find("label").text().trim();
 
-            let isStorePickup = labelText.includes("Store Pickup");
+            let isStorePickup =
+              labelText.includes("Store Pickup") || labelText.includes("Free");
 
             if (!isStorePickup) {
               //show error

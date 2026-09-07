@@ -151,7 +151,8 @@ class FluidCheckoutTerminal {
         .text()
         .trim();
 
-      let isStorePickup = labelText.includes("Store Pickup");
+      let isStorePickup =
+        labelText.includes("Store Pickup") || labelText.includes("Free");
 
       if (!isStorePickup) {
         //show error

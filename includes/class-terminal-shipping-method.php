@@ -160,6 +160,12 @@ class WC_Terminal_Delivery_Shipping_Method extends WC_Shipping_Method
                 $terminal_africa_timeline_label = $terminal_africa_carriername;
             }
 
+            //check if $terminal_africa_amount is zero
+            if (empty($terminal_africa_amount)) {
+                //add free label
+                $terminal_africa_timeline_label .= " - " . __("Free", "terminal-africa-shipping");
+            }
+
             //add rate
             $this->add_rate(array(
                 'id'        => $this->id . $this->instance_id,
